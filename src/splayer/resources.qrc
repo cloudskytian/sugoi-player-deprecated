@@ -1,0 +1,50 @@
+<RCC>
+  <qresource prefix="/images">
+    <file alias="add.svg">resources/add.svg</file>
+    <file alias="album-art.png">resources/album-art.png</file>
+    <file alias="checked.svg">resources/checked.svg</file>
+    <file alias="default_mute.svg">resources/default_mute.svg</file>
+    <file alias="default_next.svg">resources/default_next.svg</file>
+    <file alias="default_open.svg">resources/default_open.svg</file>
+    <file alias="default_pause.svg">resources/default_pause.svg</file>
+    <file alias="default_play.svg">resources/default_play.svg</file>
+    <file alias="default_playlist.svg">resources/default_playlist.svg</file>
+    <file alias="default_previous.svg">resources/default_previous.svg</file>
+    <file alias="default_reverse.svg">resources/default_reverse.svg</file>
+    <file alias="default_unmute.svg">resources/default_unmute.svg</file>
+    <file alias="disabled_hide_files.svg">resources/disabled_hide_files.svg</file>
+    <file alias="disabled_next.svg">resources/disabled_next.svg</file>
+    <file alias="disabled_pause.svg">resources/disabled_pause.svg</file>
+    <file alias="disabled_play.svg">resources/disabled_play.svg</file>
+    <file alias="disabled_playlist.svg">resources/disabled_playlist.svg</file>
+    <file alias="disabled_previous.svg">resources/disabled_previous.svg</file>
+    <file alias="disabled_reverse.svg">resources/disabled_reverse.svg</file>
+    <file alias="down-arrow.svg">resources/down-arrow.svg</file>
+    <file alias="download.svg">resources/download.svg</file>
+    <file alias="edit.svg">resources/edit.svg</file>
+    <file alias="enabled_hide_files.svg">resources/enabled_hide_files.svg</file>
+    <file alias="exists.svg">resources/exists.svg</file>
+    <file alias="splayer.ico">resources/splayer.ico</file>
+    <file alias="splayer.svg">resources/splayer.svg</file>
+    <file alias="logo.png">resources/logo.png</file>
+    <file alias="splayer.png">resources/splayer.png</file>
+    <file alias="not_exists.svg">resources/not_exists.svg</file>
+    <file alias="refresh_view.svg">resources/refresh_view.svg</file>
+    <file alias="paste.svg">resources/paste.svg</file>
+    <file alias="remove.svg">resources/remove.svg</file>
+    <file alias="repeat.svg">resources/repeat.svg</file>
+    <file alias="select_current.svg">resources/select_current.svg</file>
+    <file alias="selected.svg">resources/selected.svg</file>
+    <file alias="shuffle.svg">resources/shuffle.svg</file>
+    <file alias="up-arrow.svg">resources/up-arrow.svg</file>
+    <file alias="tool-play.ico">resources/tool-play.ico</file>
+    <file alias="tool-previous.ico">resources/tool-previous.ico</file>
+    <file alias="tool-next.ico">resources/tool-next.ico</file>
+    <file alias="tool-pause.ico">resources/tool-pause.ico</file>
+  </qresource>
+  <qresource prefix="/licenses">
+    <file alias="gpl-3.0.en.html">licenses/gpl-3.0.en.html</file>
+    <file alias="gpl-3.0.zh_CN.html">licenses/gpl-3.0.zh_CN.html</file>
+    <file alias="gpl-3.0.zh_TW.html">licenses/gpl-3.0.zh_TW.html</file>
+  </qresource>
+</RCC>

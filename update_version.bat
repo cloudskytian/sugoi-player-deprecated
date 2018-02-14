@@ -1,0 +1,15 @@
+ IF EXIST version.h DEL /F version.h
+ ECHO #ifndef APPVEYOR_VERSION_H>version.h
+ ECHO #define APPVEYOR_VERSION_H>>version.h
+ ECHO #define SPLAYER_VERSION_MAJOR 1 >>version.h
+ ECHO #define SPLAYER_VERSION_MINOR 1 >>version.h
+ ECHO #define SPLAYER_VERSION_PATCH 0 >>version.h
+ ECHO #define SPLAYER_VERSION_BUILD %APPVEYOR_BUILD_NUMBER% >>version.h
+ ECHO #ifndef ISPP_INVOKED>>version.h
+ ECHO #define SPLAYER_VERSION_NUM   SPLAYER_VERSION_MAJOR,SPLAYER_VERSION_MINOR,SPLAYER_VERSION_PATCH,SPLAYER_VERSION_BUILD>>version.h
+ ECHO #define SPLAYER_VERSION_STR   _T("%APPVEYOR_BUILD_VERSION%")>>version.h
+ ECHO #define SPLAYER_COMMIT_ID_STR _T("%APPVEYOR_REPO_COMMIT%")>>version.h
+ ECHO #endif>>version.h
+ ECHO #endif>>version.h
+ IF EXIST version.pri DEL /F version.pri
+ ECHO VERSION=%APPVEYOR_BUILD_VERSION% >version.pri

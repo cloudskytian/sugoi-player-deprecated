@@ -1,0 +1,99 @@
+version: 1.1.0.{build}
+
+branches:
+  only:
+    - master
+  except:
+    - gh-pages
+
+skip_tags: false
+
+skip_commits:
+  files:
+    - doc/*
+    - '**/*.html'
+    - '**/*.md'
+    - '**/*.txt'
+    - '**/*.bat'
+    - '**/*.pro'
+    - '**/*.ts'
+    - '**/*.qm'
+    - '**/*.iss'
+    - '**/*.jpg'
+    - '**/*.png'
+    - '**/*.svg'
+    - '**/*.ico'
+    - '**/*.ui'
+    - '**/*.psd'
+    - '**/*.xml'
+
+image: Visual Studio 2017
+
+clone_folder: C:\SPlayer
+
+shallow_clone: true
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - platform: x64
+      configuration: Release
+  exclude:
+    - platform: x86
+    - configuration: Debug
+
+platform: x64
+
+configuration: Release
+
+before_build:
+  - CALL "C:\Qt\5.10.0\msvc2017_64\bin\qtenv2.bat"
+  - CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  - SET "PATH=%APPVEYOR_BUILD_FOLDER%\3rdparty\jom;%PATH%"
+  - CD /D "%APPVEYOR_BUILD_FOLDER%"
+  - IF EXIST bin64 RD /S /Q bin64
+
+build_script:
+  - CALL update_version.bat
+  - qmake "splayer.pro" -spec win32-msvc "CONFIG+=release"
+  - jom qmake_all
+  - jom && jom install
+  - 7z a -tzip SPlayer_V%APPVEYOR_BUILD_VERSION%_x64_Portable.zip .\bin64\Release\*
+  - SET "PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%"
+  - ISCC /Dx64 /DAPPVEYOR /O"%APPVEYOR_BUILD_FOLDER%" /F"SPlayer_V%APPVEYOR_BUILD_VERSION%_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\splayer.iss"
+  - jom distclean
+  - IF EXIST bin64 RD /S /Q bin64
+
+on_failure:
+  - jom distclean
+  - IF EXIST "%APPVEYOR_BUILD_FOLDER%\bin64" RD /S /Q "%APPVEYOR_BUILD_FOLDER%\bin64"
+
+test: off
+
+artifacts:
+  - path: SPlayer_V$(appveyor_build_version)_x64_Portable.zip
+    name: SPlayer_x64_Portable.zip
+  - path: SPlayer_V$(appveyor_build_version)_x64_Setup.exe
+    name: SPlayer_x64_Setup.exe
+
+deploy:
+  release: SPlayer V$(appveyor_build_version)
+  description: 'New stable release.'
+  provider: GitHub
+  auth_token:
+    secure: mt/+eFXl/beOPLHdhWm9XmBeb9RCCDPUU19omxC4ra66Aj9EwwHPzi9CUvGJMn3i
+  artifact: SPlayer_x64_Portable.zip, SPlayer_x64_Setup.exe
+  draft: false
+  prerelease: false
+  force_update: true
+  on:
+    branch: master
+    appveyor_repo_tag: true
+
+notifications:
+  - provider: Email
+    to:
+      - '{{commitAuthorEmail}}'
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: false
