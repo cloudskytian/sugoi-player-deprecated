@@ -76,7 +76,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     <message>
         <source>&lt;h2&gt;SPlayer&lt;/h2&gt;
 </source>
-        <translation>&lt;h2&gt;SPlayer&lt;/h2&gt;
+        <translation type="vanished">&lt;h2&gt;SPlayer&lt;/h2&gt;
 </translation>
     </message>
     <message>
@@ -189,7 +189,39 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Commit</source>
-        <translation>提交</translation>
+        <translation type="vanished">提交</translation>
+    </message>
+    <message>
+        <source>SPlayer</source>
+        <translation>SPlayer</translation>
+    </message>
+    <message>
+        <source>Architecture</source>
+        <translation>架构</translation>
+    </message>
+    <message>
+        <source>Compiler</source>
+        <translation>编译器</translation>
+    </message>
+    <message>
+        <source>Commit ID</source>
+        <translation>提交 ID</translation>
+    </message>
+    <message>
+        <source>Commit author</source>
+        <translation>提交作者</translation>
+    </message>
+    <message>
+        <source>Commit author e-mail</source>
+        <translation>提交作者电子邮箱</translation>
+    </message>
+    <message>
+        <source>Commit time</source>
+        <translation>提交时间</translation>
+    </message>
+    <message>
+        <source>Commit message</source>
+        <translation>提交信息</translation>
     </message>
 </context>
 <context>

@@ -168,10 +168,10 @@ SET "_INNO_SETUP_DIR=C:\Program Files (x86)\Inno Setup 5"
    ```bat
    REM Open cmd, call qtenv2.bat in your Qt bin dir
    REM For example:
-   CALL "C:\Qt\Qt5.10.0\5.10.0\msvc2017_64\bin\qtenv2.bat"
+   CALL "C:\Qt\Qt5.10.1\5.10.1\msvc2017_64\bin\qtenv2.bat"
    REM Then call vcvarsall.bat x64 or vcvarsall.bat x86 in your VC build dir
    REM For example:
-   CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
+   CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
    REM If your project TEMPLATE is "subdirs", use this:
    REM qmake -r -tp vc xxx.pro
    REM Other templates use this:

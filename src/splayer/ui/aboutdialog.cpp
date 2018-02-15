@@ -11,11 +11,9 @@ AboutDialog::AboutDialog(QString lang, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->aboutText->setOpenExternalLinks(true);
+    ui->compilerText->setText(compilerText_HTML());
     ui->aboutText->setText(aboutText_HTML());
-    ui->creditsText->setOpenExternalLinks(true);
     ui->creditsText->setText(creditsText_HTML());
-    ui->licenseText->setOpenExternalLinks(true);
     ui->licenseText->setText(licenseText_HTML(lang));
 
     connect(ui->closeButton, SIGNAL(clicked()),
@@ -33,17 +31,37 @@ void AboutDialog::about(QString lang, QWidget *parent)
     dialog.exec();
 }
 
+QString AboutDialog::compilerText_HTML()
+{
+#ifndef CI
+    static QString text = QString::fromLatin1("<h2>%1</h2>\n<h3>%2: %3</h3>\n<h3>%4: %5</h3>\n<h3>%6: %7</h3>")
+                     .arg(tr("SPlayer"))
+                     .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
+                     .arg(tr("Architecture").arg(QString::fromStdWString(SPLAYER_ARCH_STR)))
+                     .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
+#else
+    static QString text = QString::fromLatin1("<h2>%1</h2>\n<h3>%2: %3</h3>\n<h3>%4: %5</h3>\n<h3>%6: %7</h3>\n<h3>%8: %9</h3>\n<h3>%10: %11</h3>\n<h3>%12: %13</h3>\n<h3>%14: %15</h3>\n<h3>%16: %17</h3>")
+                     .arg(tr("SPlayer"))
+                     .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
+                     .arg(tr("Commit ID")).arg(QString::fromStdWString(SPLAYER_COMMIT_ID_STR))
+                     .arg(tr("Commit author")).arg(QString::fromStdWString(SPLAYER_COMMIT_AUTHOR_STR))
+                     .arg(tr("Commit author e-mail")).arg(QString::fromStdWString(SPLAYER_COMMIT_AUTHOR_EMAIL_STR))
+                     .arg(tr("Commit time")).arg(QString::fromStdWString(SPLAYER_COMMIT_TIMESTAMP_STR))
+                     .arg(tr("Commit message")).arg(QString::fromStdWString(SPLAYER_COMMIT_MESSAGE_STR))
+                     .arg(tr("Architecture").arg(QString::fromStdWString(SPLAYER_ARCH_STR)))
+                     .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
+#endif
+    return text;
+}
+
+QString AboutDialog::compilerText_PlainText()
+{
+    return compilerText_HTML().remove(QRegExp(QStringLiteral("<[^>]*>")));
+}
+
 QString AboutDialog::aboutText_HTML()
 {
-#ifndef APPVEYOR
-    QString headInfo = QString::fromLatin1("%1<h3>%2: %3</h3>").arg(tr("<h2>SPlayer</h2>\n"))
-                     .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR));
-#else
-    QString headInfo = QString::fromLatin1("%1<h3>%2: %3 (%4: %5)</h3>").arg(tr("<h2>SPlayer</h2>\n"))
-                     .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
-                     .arg(tr("Commit")).arg(QString::fromStdWString(SPLAYER_COMMIT_ID_STR));
-#endif
-    QString mainInfo = tr("<p><b>SPlayer</b> is a multimedia player based on "
+    static QString text = tr("<p><b>SPlayer</b> is a multimedia player based on "
                           "<b>libmpv</b> and <b>Qt</b> for Microsoft Windows 7+.</p>\n"
                           "<p>People should know that <b>SPlayer</b> is a fork of "
                           "<a href='https://github.com/u8sand/Baka-MPlayer'><b>Baka MPlayer</b></a>. "
@@ -56,7 +74,6 @@ QString AboutDialog::aboutText_HTML()
                           "and his team.</p>\n"
                           "<p>GitHub repository: <a href='https://github.com/wangwenx190/SPlayer'>"
                           "https://github.com/wangwenx190/SPlayer</a></p>");
-    static QString text = QString::fromLatin1("%1\n%2").arg(headInfo).arg(mainInfo);
     return text;
 }
 

@@ -1,0 +1,83 @@
+﻿SPlayer
+==========
+
+SPlayer is a free and open source multimedia player
+for Windows 7+ based on libmpv and Qt.
+
+People should know that SPlayer is a fork of Baka MPlayer.
+Baka MPlayer is a free and open source, cross-platform,
+libmpv based multimedia player. Its simple design reflects
+the idea for an uncluttered, simple, and enjoyable
+environment for watching tv shows. Thanks to the great work
+of Baka MPlayer's original developers. Without their hard
+work, there won't be SPlayer anymore. I really appreciate
+u8sand and his team.
+
+
+Features
+------------
+
+* Beautiful and modern interface
+* High DPI support
+* Internationalization support
+* Play online media streams
+* Download online media streams from websites such as YouTube
+* Support play almost all kinds of video and audio files
+* High performance
+* Much more to be found :)
+
+
+System requirements
+---------------------
+
+A not too ancient Linux, Windows 7 or later,
+or OSX 10.8 or later.
+
+A somewhat capable CPU. Hardware decoding might help if
+the CPU is too slow to decode video in realtime, but
+must be explicitly enabled with the --hwdec option.
+
+A not too crappy GPU. SPlayer is not intended to be
+used with bad GPUs. There are many caveats with drivers
+or system compositors causing tearing, stutter, etc.
+On Windows, you might want to make sure the graphics
+drivers are current. In some cases, ancient fallback
+video output methods can help (such as --vo=xv on Linux),
+but this use is not recommended or supported.
+
+
+Bug reports & Feature requests
+--------------------------------
+
+Please use the issues tracker provided by GitHub
+(https://github.com/wangwenx190/SPlayer/issues) to
+send us bug reports or feature requests. Follow the
+template's instructions or the issue will likely be
+ignored or closed as invalid.
+
+
+Contributors
+--------------
+
+See "Contributors.txt" for more information.
+
+
+License
+-----------
+
+Distribute under the terms of GPLv3, see "License.txt"
+for more information.
+
+
+Contact
+------------
+
+e-mail: chymxuan@foxmail.com
+
+For Chinese users and developers:
+QQ group number: 643590794
+
+NOTE
+Do NOT contact me through my private QQ number.
+Contact me through e-mail and QQ group ONLY.
+All messages from my private QQ are ignored.

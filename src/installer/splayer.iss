@@ -299,6 +299,7 @@ Filename: "{app}\{#MyAppExeName}"; Parameters: "--unregall"; WorkingDir: "{app}"
 #endif
 
 [InstallDelete]
+Type: files; Name: "{app}\*.md"
 Type: filesandordirs; Name: "{app}\script-settings"
 Type: filesandordirs; Name: "{app}\scripts"
 

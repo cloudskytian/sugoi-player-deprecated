@@ -10,7 +10,7 @@
 #endif
 #endif
 
-#ifdef APPVEYOR
+#ifdef CI
 #include "../version.h"
 #else
 #define SPLAYER_VERSION_MAJOR 1

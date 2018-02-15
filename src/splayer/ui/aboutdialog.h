@@ -19,6 +19,8 @@ public:
     static void about(QString lang = QString::fromLatin1("en"), QWidget *parent = 0);
 
 private:
+    QString compilerText_HTML();
+    QString compilerText_PlainText();
     QString aboutText_HTML();
     QString aboutText_PlainText();
     QString creditsText_HTML();

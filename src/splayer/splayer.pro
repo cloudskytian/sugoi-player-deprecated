@@ -30,7 +30,7 @@ LIBS += -lUser32 -lShell32 -lKernel32 \
 !exists($${ROOTDIR}/version.pri) {
     VERSION = 1.1.0.0
 } else {
-    DEFINES += APPVEYOR
+    DEFINES += CI
     include($${ROOTDIR}/version.pri)
 }
 
@@ -54,9 +54,8 @@ QMAKE_POST_LINK += $$quote(md \"$${DESTDIR}\\translations\"$$escape_expand(\\n\\
 QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\translations\\*.qm\" \"$${DESTDIR}\\translations\"$$escape_expand(\\n\\t))
 
 CONFIG(release, debug|release) {
-    QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\README.md\" \"$${DESTDIR}\\README.md\"$$escape_expand(\\n\\t))
-    QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\LICENSE.md\" \"$${DESTDIR}\\LICENSE.md\"$$escape_expand(\\n\\t))
-    QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\doc\\CHANGELOG.md\" \"$${DESTDIR}\\CHANGELOG.md\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\doc\\ReadMe.txt.deploy\" \"$${DESTDIR}\\ReadMe.txt\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\doc\\License.txt.deploy\" \"$${DESTDIR}\\License.txt\"$$escape_expand(\\n\\t))
     QMAKE_POST_LINK += $$quote(if exist \"$${DESTDIR}\\licenses\" rd /s /q \"$${DESTDIR}\\licenses\"$$escape_expand(\\n\\t))
     QMAKE_POST_LINK += $$quote(xcopy /e /i /r /y \"$${ROOTDIR}\\doc\\licenses\" \"$${DESTDIR}\\licenses\"$$escape_expand(\\n\\t))
 }
