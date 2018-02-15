@@ -37,10 +37,10 @@ QString AboutDialog::compilerText_HTML()
     static QString text = QString::fromLatin1("<h2>%1</h2>\n<h3>%2: %3</h3>\n<h3>%4: %5</h3>\n<h3>%6: %7</h3>")
                      .arg(tr("SPlayer"))
                      .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
-                     .arg(tr("Architecture").arg(QString::fromStdWString(SPLAYER_ARCH_STR)))
+                     .arg(tr("Architecture")).arg(QString::fromStdWString(SPLAYER_ARCH_STR))
                      .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
 #else
-    static QString text = QString::fromLatin1("<h2>%1</h2>\n<h3>%2: %3</h3>\n<h3>%4: %5</h3>\n<h3>%6: %7</h3>\n<h3>%8: %9</h3>\n<h3>%10: %11</h3>\n<h3>%12: %13</h3>\n<h3>%14: %15</h3>\n<h3>%16: %17</h3>")
+    static QString text = QString::fromLatin1("<h2>%1</h2>\n<p><b>%2</b>: %3\n<b>%4</b>: %5\n<b>%6</b>: %7\n<b>%8</b>: %9\n<b>%10</b>: %11\n<b>%12</b>: %13\n<b>%14</b>: %15\n<b>%16</b>: %17</p>")
                      .arg(tr("SPlayer"))
                      .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
                      .arg(tr("Commit ID")).arg(QString::fromStdWString(SPLAYER_COMMIT_ID_STR))
@@ -48,7 +48,7 @@ QString AboutDialog::compilerText_HTML()
                      .arg(tr("Commit author e-mail")).arg(QString::fromStdWString(SPLAYER_COMMIT_AUTHOR_EMAIL_STR))
                      .arg(tr("Commit time")).arg(QString::fromStdWString(SPLAYER_COMMIT_TIMESTAMP_STR))
                      .arg(tr("Commit message")).arg(QString::fromStdWString(SPLAYER_COMMIT_MESSAGE_STR))
-                     .arg(tr("Architecture").arg(QString::fromStdWString(SPLAYER_ARCH_STR)))
+                     .arg(tr("Architecture")).arg(QString::fromStdWString(SPLAYER_ARCH_STR))
                      .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
 #endif
     return text;
