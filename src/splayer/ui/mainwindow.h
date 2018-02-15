@@ -62,6 +62,7 @@ public:
     bool getOSDShowLocalTime()   { return osdShowLocalTime; }
     bool getPauseWhenMinimized() { return pauseWhenMinimized; }
     bool getShowVideoPreview()   { return showVideoPreview; }
+    bool getAllowRunInBackground() { return allowRunInBackground; }
 
     Ui::MainWindow  *ui;
     QImage albumArt;
@@ -115,6 +116,7 @@ private:
     bool pauseWhenMinimized = true;
     bool osdShowLocalTime = true;
     bool showVideoPreview = true;
+    bool allowRunInBackground = true;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar;
@@ -167,6 +169,7 @@ public slots:
     void setShowFullscreenIndicator(bool b) { emit showFullscreenIndicatorChanged(showFullscreenIndicator = b); }
     void setOSDShowLocalTime(bool b)  { emit osdShowLocalTimeChanged(osdShowLocalTime = b); }
     void setShowVideoPreview(bool b)  { emit showVideoPreviewChanged(showVideoPreview = b); }
+    void setAllowRunInBackground(bool b) { emit allowRunInBackgroundChanged(allowRunInBackground = b); }
 
 signals:
     void langChanged(QString);
@@ -188,6 +191,7 @@ signals:
     void showFullscreenIndicatorChanged(bool);
     void osdShowLocalTimeChanged(bool);
     void showVideoPreviewChanged(bool);
+    void allowRunInBackgroundChanged(bool);
 };
 
 #endif // MAINWINDOW_H

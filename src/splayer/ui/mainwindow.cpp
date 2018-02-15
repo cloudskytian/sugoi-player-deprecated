@@ -423,7 +423,7 @@ MainWindow::MainWindow(QWidget *parent):
                                 title = mpv->getFileInfo().metadata["author"];
                             }
                         }
-                        baka->sysTrayIcon->showMessage(title, mpv->getFileInfo().media_title, QIcon(":/images/splayer.svg"), 2000);
+                        baka->sysTrayIcon->showMessage(title, mpv->getFileInfo().media_title, QIcon(":/images/splayer.svg"), 4000);
                     }
                 }
             });
@@ -972,11 +972,6 @@ MainWindow::~MainWindow()
     }
     baka->SaveSettings();
 
-    // Note: child objects _should_ not need to be deleted because
-    // all children should get deleted when mainwindow is deleted
-    // see: http://qt-project.org/doc/qt-4.8/objecttrees.html
-
-    // but apparently they don't (https://github.com/u8sand/Baka-MPlayer/issues/47)
 #if defined(Q_OS_WIN)
     delete prev_toolbutton;
     delete playpause_toolbutton;
@@ -1317,14 +1312,27 @@ void MainWindow::changeEvent(QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    bool canClose = true;
     if (IsPlayingMusic(mpv->getFileFullPath()))
     {
-        if (QMessageBox::question(this, tr("Exit"), tr("Do you want SPlayer to run in background?")) == QMessageBox::Yes)
+        if (allowRunInBackground)
         {
-            hide();
-            event->ignore();
-            return;
+            canClose = false;
         }
+        else if (QMessageBox::question(this, tr("Exit"), tr("Do you want SPlayer to run in background?")) == QMessageBox::Yes)
+        {
+            canClose = false;
+        }
+    }
+    if (!canClose)
+    {
+        hide();
+        if (baka->sysTrayIcon->isVisible())
+        {
+            baka->sysTrayIcon->showMessage(QString::fromLatin1("SPlayer"), tr("SPlayer is running in background now, click the trayicon to bring SPlayer to foreground."), QIcon(":/images/splayer.svg"), 4000);
+        }
+        event->ignore();
+        return;
     }
     event->accept();
 }

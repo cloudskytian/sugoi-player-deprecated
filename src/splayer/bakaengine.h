@@ -133,7 +133,7 @@ private:
          {&BakaEngine::BakaNew, // function pointer to command functionality
           {
            // params     description
-           QString(), tr("creates a new instance of baka-mplayer"),
+           QString(), tr("creates a new instance of SPlayer"),
            QString()
           }
          }
@@ -412,7 +412,7 @@ private:
          {&BakaEngine::BakaQuit,
           {
            QString(),
-           tr("quit baka-mplayer"),
+           tr("quit SPlayer"),
            QString()
           }
          }

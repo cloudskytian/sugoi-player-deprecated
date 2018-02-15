@@ -193,7 +193,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>SPlayer</source>
-        <translation>SPlayer</translation>
+        <translation type="vanished">SPlayer</translation>
     </message>
     <message>
         <source>Architecture</source>
@@ -520,7 +520,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>creates a new instance of baka-mplayer</source>
-        <translation>打开一个新的baka-mplayer实例</translation>
+        <translation type="vanished">打开一个新的baka-mplayer实例</translation>
     </message>
     <message>
         <source>shows the open location dialog</source>
@@ -672,6 +672,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>quit baka-mplayer</source>
+        <translation type="vanished">退出 SPlayer</translation>
+    </message>
+    <message>
+        <source>creates a new instance of SPlayer</source>
+        <translation>打开一个新的 SPlayer 实例</translation>
+    </message>
+    <message>
+        <source>quit SPlayer</source>
         <translation>退出 SPlayer</translation>
     </message>
 </context>
@@ -1279,6 +1287,10 @@ Note: Value must be from %0 - %1</source>
         <source>&amp;Show all controls</source>
         <translation>显示所有控件(&amp;S)</translation>
     </message>
+    <message>
+        <source>SPlayer is running in background now, click the trayicon to bring SPlayer to foreground.</source>
+        <translation>SPlayer 正在后台运行，点击通知栏图标以显示主窗口。</translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>
@@ -1730,11 +1742,11 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Show progress when fullscreen</source>
-        <translation>全屏时显示进度指示器</translation>
+        <translation type="vanished">全屏时显示进度指示器</translation>
     </message>
     <message>
         <source>OSD show local time</source>
-        <translation>OSD显示本地时间</translation>
+        <translation>OSD 显示本地时间</translation>
     </message>
     <message>
         <source>Associate all video files</source>
@@ -1746,7 +1758,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Pause when window minimized</source>
-        <translation>窗口最小化时暂停播放视频</translation>
+        <translation type="vanished">窗口最小化时暂停播放视频</translation>
     </message>
     <message>
         <source>Video preview is SLOW. Enable this will increase CPU and memory usage, and the player may also get a little stutters.</source>
@@ -1763,6 +1775,26 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>Only preview key frames</source>
         <translation>只预览关键帧</translation>
+    </message>
+    <message>
+        <source>Allow run in background when playing music</source>
+        <translation>播放音乐时允许在后台运行</translation>
+    </message>
+    <message>
+        <source>SPlayer will show a thin progress bar if the seek bar is hidden if you enable this.</source>
+        <translation>如果你开启此选项，SPlayer 会在进度条隐藏时显示一个额外的细窄的进度条。</translation>
+    </message>
+    <message>
+        <source>Show progress indicator when fullscreen</source>
+        <translation>全屏时显示进度指示器</translation>
+    </message>
+    <message>
+        <source>Pause playing video when window minimized</source>
+        <translation>窗口最小化时视频暂停播放</translation>
+    </message>
+    <message>
+        <source>If you disable this, there will always be a message box asking you wether to run in background or not when you close SPlayer while it is playing music.</source>
+        <translation>如果你不开启此选项，当你在播放器播放音乐时关闭播放器，播放器总会弹出一个提示框询问是否后台运行。</translation>
     </message>
 </context>
 <context>

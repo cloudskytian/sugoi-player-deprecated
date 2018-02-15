@@ -29,6 +29,7 @@ void BakaEngine::LoadSettings()
     {
         window->setFileAssocType(FileAssoc::reg_type::NONE);
     }
+    window->setAllowRunInBackground(settings.value(QString::fromLatin1("allowRunInBackground"), false).toBool());
     window->setShowVideoPreview(settings.value(QString::fromLatin1("showVideoPreview"), false).toBool());
     window->setPauseWhenMinimized(settings.value(QString::fromLatin1("pauseWhenMinimized"), true).toBool());
     window->setShowFullscreenIndicator(settings.value(QString::fromLatin1("showFullscreenIndicator"), true).toBool());
@@ -88,7 +89,7 @@ void BakaEngine::LoadSettings()
     }
     settings.endArray();
 
-    window->setMaxRecent(settings.value(QString::fromLatin1("maxRecent"), 50).toInt());
+    window->setMaxRecent(settings.value(QString::fromLatin1("maxRecent"), 100).toInt());
     window->setResume(settings.value(QString::fromLatin1("resume"), true).toBool());
     window->setHideAllControls(settings.value(QString::fromLatin1("hideAllControls"), false).toBool());
     window->setLang(settings.value(QString::fromLatin1("lang"), QString::fromLatin1("auto")).toString());
@@ -164,6 +165,7 @@ void BakaEngine::SaveSettings()
     {
         regType = QString::fromLatin1("none");
     }
+    settings.setValue(QString::fromLatin1("allowRunInBackground"), window->getAllowRunInBackground());
     settings.setValue(QString::fromLatin1("showVideoPreview"), window->getShowVideoPreview());
     settings.setValue(QString::fromLatin1("pauseWhenMinimized"), window->getPauseWhenMinimized());
     settings.setValue(QString::fromLatin1("showFullscreenIndicator"), window->getShowFullscreenIndicator());

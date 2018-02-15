@@ -51,6 +51,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     ui->templateLineEdit->setText(baka->mpv->getScreenshotTemplate());
     ui->msgLvlComboBox->setCurrentIndex(ui->msgLvlComboBox->findData(baka->mpv->getMsgLevel()));
     ui->groupBox_9->setChecked(baka->window->getShowVideoPreview());
+    ui->backgroundNotAskCheckBox->setChecked(baka->window->getAllowRunInBackground());
 
     // add shortcuts
     saved = baka->input;
@@ -194,6 +195,7 @@ PreferencesDialog::~PreferencesDialog()
 {
     if (result() == QDialog::Accepted)
     {
+        baka->window->setAllowRunInBackground(ui->backgroundNotAskCheckBox->isChecked());
         baka->window->setPauseWhenMinimized(ui->pauseWhenMinimizedCheckBox->isChecked());
         baka->window->setShowFullscreenIndicator(ui->showFullscreenIndicatorCheckBox->isChecked());
         baka->window->setOSDShowLocalTime(ui->osdShowLocalTimeCheckBox->isChecked());

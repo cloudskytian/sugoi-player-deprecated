@@ -179,14 +179,30 @@ QTabBar::tab:!selected {
         </layout>
        </item>
        <item>
-        <widget class="QTextBrowser" name="compilerText">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="aboutText">
          <property name="openExternalLinks">
           <bool>true</bool>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QTextBrowser" name="aboutText">
+        <widget class="QTextBrowser" name="compilerText">
          <property name="openExternalLinks">
           <bool>true</bool>
          </property>
