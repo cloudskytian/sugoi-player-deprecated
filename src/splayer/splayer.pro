@@ -27,12 +27,10 @@ contains(QT_ARCH, x86_64) {
 LIBS += -lUser32 -lShell32 -lKernel32 \
     -L$${LIBDIR} -llibmpv -lWinSparkle
 
-!exists($${ROOTDIR}/version.pri) {
-    VERSION = 1.1.0.0
-} else {
+exists($${ROOTDIR}/ci_version.h) {
     DEFINES += CI
-    include($${ROOTDIR}/version.pri)
 }
+include($${ROOTDIR}/version.pri)
 
 QMAKE_TARGET_COMPANY = wangwenx190
 QMAKE_TARGET_DESCRIPTION = SPlayer

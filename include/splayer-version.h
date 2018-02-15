@@ -11,7 +11,7 @@
 #endif
 
 #ifdef CI
-#include "../version.h"
+#include "../ci_version.h"
 #else
 #define SPLAYER_VERSION_MAJOR 1
 #define SPLAYER_VERSION_MINOR 1

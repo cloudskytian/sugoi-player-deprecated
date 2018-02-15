@@ -34,13 +34,13 @@ void AboutDialog::about(QString lang, QWidget *parent)
 QString AboutDialog::compilerText_HTML()
 {
 #ifndef CI
-    static QString text = QString::fromLatin1("<h2>%1</h2>\n<h3>%2: %3</h3>\n<h3>%4: %5</h3>\n<h3>%6: %7</h3>")
+    static QString text = QString::fromLatin1("<h2>%1</h2>\n<p>%2: %3</p>\n<p>%4: %5</p>\n<p>%6: %7</p>")
                      .arg(tr("SPlayer"))
                      .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
                      .arg(tr("Architecture")).arg(QString::fromStdWString(SPLAYER_ARCH_STR))
                      .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
 #else
-    static QString text = QString::fromLatin1("<h2>%1</h2>\n<p><b>%2</b>: %3\n<b>%4</b>: %5\n<b>%6</b>: %7\n<b>%8</b>: %9\n<b>%10</b>: %11\n<b>%12</b>: %13\n<b>%14</b>: %15\n<b>%16</b>: %17</p>")
+    static QString text = QString::fromLatin1("<h2>%1</h2>\n<p><b>%2</b>: %3</p>\n<b>%4</b>: %5</p>\n<b>%6</b>: %7</p>\n<b>%8</b>: %9</p>\n<b>%10</b>: %11</p>\n<b>%12</b>: %13</p>\n<b>%14</b>: %15</p>\n<b>%16</b>: %17</p>")
                      .arg(tr("SPlayer"))
                      .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
                      .arg(tr("Commit ID")).arg(QString::fromStdWString(SPLAYER_COMMIT_ID_STR))

@@ -58,9 +58,9 @@ build_script:
   - qmake "splayer.pro" -spec win32-msvc "CONFIG+=release"
   - jom qmake_all
   - jom && jom install
-  - 7z a -tzip SPlayer_V%APPVEYOR_BUILD_VERSION%_x64_Portable.zip .\bin64\Release\*
+  - 7z a -tzip SPlayer_x64_Portable.zip .\bin64\Release\*
   - SET "PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%"
-  - ISCC /Dx64 /DAPPVEYOR /O"%APPVEYOR_BUILD_FOLDER%" /F"SPlayer_V%APPVEYOR_BUILD_VERSION%_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\splayer.iss"
+  - ISCC /Dx64 /DAPPVEYOR /O"%APPVEYOR_BUILD_FOLDER%" /F"SPlayer_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\splayer.iss"
   - jom distclean
   - IF EXIST bin64 RD /S /Q bin64
 
@@ -71,10 +71,8 @@ on_failure:
 test: off
 
 artifacts:
-  - path: SPlayer_V$(appveyor_build_version)_x64_Portable.zip
-    name: SPlayer_x64_Portable.zip
-  - path: SPlayer_V$(appveyor_build_version)_x64_Setup.exe
-    name: SPlayer_x64_Setup.exe
+  - path: SPlayer_x64_Portable.zip
+  - path: SPlayer_x64_Setup.exe
 
 deploy:
   release: SPlayer V$(appveyor_build_version)

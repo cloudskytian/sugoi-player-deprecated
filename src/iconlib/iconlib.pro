@@ -5,7 +5,7 @@ CONFIG += dll
 RC_FILE += iconlib.rc
 HEADERS += iconlib.h
 SOURCES += iconlib.cpp
-exists($$PWD/../../version.h) {
+exists($$PWD/../../ci_version.h) {
     DEFINES += CI
 }
 contains(QT_ARCH, x86_64) {
