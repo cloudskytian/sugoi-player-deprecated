@@ -4,6 +4,7 @@
 #include <QString>
 #include <QFileInfo>
 #include <QMimeDatabase>
+#include <QThread>
 
 #include <locale.h>
 
@@ -37,10 +38,10 @@ int main(int argc, char *argv[])
     QtSingleApplication::setOrganizationDomain(QString::fromStdWString(SPLAYER_COMPANY_URL_STR));
 
     QtSingleApplication instance(QString::fromStdWString(SPLAYER_APP_MUTEX_STR), argc, argv);
-    QtSingleApplication *ins = &instance;
 
     bool singleInstance = true;
     bool runInBackground = false;
+    bool exitNow = false;
 
     QStringList cmdline = instance.arguments();
     QString filePath = QString();
@@ -138,39 +139,54 @@ int main(int argc, char *argv[])
     // the LC_NUMERIC category to be set to "C", so change it back.
     setlocale(LC_NUMERIC, "C");
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->hide();
+    MainWindow *mainWindow = nullptr;
     if (!runInBackground)
     {
+        if (mainWindow == nullptr)
+        {
+            mainWindow = new MainWindow();
+        }
         mainWindow->Load(filePath, false);
         mainWindow->show();
     }
-    else
-    {
-        //mainWindow->hide();
-        mainWindow->Load(QString(), true);
-    }
+//    else
+//    {
+//        //mainWindow->hide();
+//        mainWindow->Load(QString(), true);
+//    }
 
-    instance.setActivationWindow(mainWindow, false);
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
-                     [=](const QString &message)
+                     [=, &mainWindow, &instance, &exitNow](const QString &message)
                      {
                          if (message == QString::fromLatin1("exit")
                                  || message == QString::fromLatin1("quit")
                                  || message == QString::fromLatin1("close"))
                          {
-                             mainWindow->close();
-                             //delete mainWindow;
-                             //mainWindow = nullptr;
-                             return 0;
+                             if (mainWindow != nullptr)
+                             {
+                                 mainWindow->close();
+                             }
+                             exitNow = true;
                          }
                          else
                          {
+                             if (mainWindow == nullptr)
+                             {
+                                 mainWindow = new MainWindow();
+                                 mainWindow->Load(QString(), false);
+                             }
                              if (mainWindow->isHidden())
                              {
                                  mainWindow->show();
                              }
-                             ins->activateWindow();
+                             if (instance.activationWindow() != static_cast<QWidget *>(mainWindow))
+                             {
+                                 instance.setActivationWindow(mainWindow, true);
+                             }
+                             if (!mainWindow->isActiveWindow())
+                             {
+                                 instance.activateWindow();
+                             }
                              mainWindow->setPauseWhenMinimized(false);
                              mainWindow->openFileFromCmd(message);
                              mainWindow->setPauseWhenMinimized(true);
@@ -187,10 +203,22 @@ int main(int argc, char *argv[])
     win_sparkle_init();
     win_sparkle_check_update_without_ui();
 
+    while (mainWindow == nullptr)
+    {
+        if (exitNow)
+        {
+            return 0;
+        }
+        QThread::msleep(500);
+    }
+
     int ret = instance.exec();
 
-    delete mainWindow;
-    mainWindow = nullptr;
+    if (mainWindow != nullptr)
+    {
+        delete mainWindow;
+        mainWindow = nullptr;
+    }
 
     win_sparkle_cleanup();
 
