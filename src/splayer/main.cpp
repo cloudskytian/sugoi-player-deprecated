@@ -4,7 +4,6 @@
 #include <QString>
 #include <QFileInfo>
 #include <QMimeDatabase>
-#include <QIcon>
 
 #include <locale.h>
 
@@ -38,8 +37,10 @@ int main(int argc, char *argv[])
     QtSingleApplication::setOrganizationDomain(QString::fromStdWString(SPLAYER_COMPANY_URL_STR));
 
     QtSingleApplication instance(QString::fromStdWString(SPLAYER_APP_MUTEX_STR), argc, argv);
+    QtSingleApplication *ins = &instance;
 
     bool singleInstance = true;
+    bool runInBackground = false;
 
     QStringList cmdline = instance.arguments();
     QString filePath = QString();
@@ -97,6 +98,18 @@ int main(int argc, char *argv[])
             {
                 singleInstance = false;
             }
+            else if (cmdline.at(i) == QString::fromLatin1("--exit")
+                     || cmdline.at(i) == QString::fromLatin1("--quit")
+                     || cmdline.at(i) == QString::fromLatin1("--close"))
+            {
+                instance.sendMessage(QString::fromLatin1("exit"));
+                return 0;
+            }
+            else if (cmdline.at(i) == QString::fromLatin1("--runinbackground"))
+            {
+                runInBackground = true;
+                break;
+            }
             else
             {
                 QFileInfo fi(cmdline.at(i));
@@ -125,20 +138,43 @@ int main(int argc, char *argv[])
     // the LC_NUMERIC category to be set to "C", so change it back.
     setlocale(LC_NUMERIC, "C");
 
-    MainWindow window;
-    window.setWindowIcon(QIcon(":/images/splayer.svg"));
-    window.show();
-    window.Load(filePath);
+    MainWindow *mainWindow = new MainWindow();
+    mainWindow->hide();
+    if (!runInBackground)
+    {
+        mainWindow->Load(filePath, false);
+        mainWindow->show();
+    }
+    else
+    {
+        //mainWindow->hide();
+        mainWindow->Load(QString(), true);
+    }
 
-    MainWindow *mainWindow = &window;
-
-    instance.setActivationWindow(&window, true);
+    instance.setActivationWindow(mainWindow, false);
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
-                     [=](const QString &newFilePath)
+                     [=](const QString &message)
                      {
-                         mainWindow->setPauseWhenMinimized(false);
-                         mainWindow->openFileFromCmd(newFilePath);
-                         mainWindow->setPauseWhenMinimized(true);
+                         if (message == QString::fromLatin1("exit")
+                                 || message == QString::fromLatin1("quit")
+                                 || message == QString::fromLatin1("close"))
+                         {
+                             mainWindow->close();
+                             //delete mainWindow;
+                             //mainWindow = nullptr;
+                             return 0;
+                         }
+                         else
+                         {
+                             if (mainWindow->isHidden())
+                             {
+                                 mainWindow->show();
+                             }
+                             ins->activateWindow();
+                             mainWindow->setPauseWhenMinimized(false);
+                             mainWindow->openFileFromCmd(message);
+                             mainWindow->setPauseWhenMinimized(true);
+                         }
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
@@ -147,12 +183,13 @@ int main(int argc, char *argv[])
     win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/SPlayer/master/src/splayer/appcast.xml");
     win_sparkle_set_app_details(SPLAYER_COMPANY_NAME_STR, SPLAYER_APP_NAME_STR, SPLAYER_VERSION_STR);
     win_sparkle_set_automatic_check_for_updates(1);
-    win_sparkle_set_lang(window.getLang().toUtf8().constData());
+    win_sparkle_set_lang(mainWindow->getLang().toUtf8().constData());
     win_sparkle_init();
     win_sparkle_check_update_without_ui();
 
     int ret = instance.exec();
 
+    delete mainWindow;
     mainWindow = nullptr;
 
     win_sparkle_cleanup();

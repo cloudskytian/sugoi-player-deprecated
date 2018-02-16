@@ -984,7 +984,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::Load(const QString &file)
+void MainWindow::Load(const QString &file, bool backgroundMode)
 {
     // load the settings here--the constructor has already been called
     // this solves some issues with setting things before the constructor has ended
@@ -1042,17 +1042,6 @@ void MainWindow::Load(const QString &file)
 #endif
     baka->LoadSettings();
     mpv->Initialize();
-    mpv->LoadFile(file);
-
-    FileAssoc fileAssoc;
-    setFileAssocState(fileAssoc.getMediaFilesRegisterState());
-    if (getAlwaysCheckFileAssoc())
-    {
-        if (getFileAssocType() != FileAssoc::reg_type::NONE && getFileAssocState() != FileAssoc::reg_state::ALL_REGISTERED)
-        {
-            SetFileAssoc(getFileAssocType(), true);
-        }
-    }
 
     if (osdShowLocalTime)
     {
@@ -1064,6 +1053,25 @@ void MainWindow::Load(const QString &file)
             }
             osdLocalTimeUpdater->start(1000);
         }
+    }
+
+    if (!backgroundMode)
+    {
+        mpv->LoadFile(file);
+
+        FileAssoc fileAssoc;
+        setFileAssocState(fileAssoc.getMediaFilesRegisterState());
+        if (getAlwaysCheckFileAssoc())
+        {
+            if (getFileAssocType() != FileAssoc::reg_type::NONE && getFileAssocState() != FileAssoc::reg_state::ALL_REGISTERED)
+            {
+                SetFileAssoc(getFileAssocType(), true);
+            }
+        }
+    }
+    else
+    {
+        this->hide();
     }
 }
 

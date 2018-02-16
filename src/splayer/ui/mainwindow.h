@@ -68,7 +68,7 @@ public:
     QImage albumArt;
 
 public slots:
-    void Load(const QString &f = QString());
+    void Load(const QString &f = QString(), bool backgroundMode = false);
     void MapShortcuts();
     void SetFileAssoc(FileAssoc::reg_type type = FileAssoc::reg_type::ALL, bool showUI = false);
     void BringWindowToFront();
