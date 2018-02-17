@@ -15,6 +15,9 @@ namespace Util {
 QStringList supportedMimeTypes();
 QStringList supportedSuffixes();
 bool executeProgramWithAdministratorPrivilege(const QString &exePath, const QString &exeParam);
+bool setAutoStart(const QString &path, const QString &param);
+bool isAutoStart();
+bool disableAutoStart();
 
 QStringList externalFilesToLoad(const QFile &originalMediaFile, const QString &fileType);
 QStringList externalFilesToLoad(const QFileInfo &originalMediaFile, const QString &fileType);

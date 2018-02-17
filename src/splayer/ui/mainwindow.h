@@ -63,6 +63,8 @@ public:
     bool getPauseWhenMinimized() { return pauseWhenMinimized; }
     bool getShowVideoPreview()   { return showVideoPreview; }
     bool getAllowRunInBackground() { return allowRunInBackground; }
+    bool getQuickStartMode()     { return quickStartMode; }
+    bool getTrayIconVisible()    { return trayIconVisible; }
 
     Ui::MainWindow  *ui;
     QImage albumArt;
@@ -85,6 +87,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
     void changeEvent(QEvent *event);
     void closeEvent(QCloseEvent *event);
+    void showEvent(QShowEvent *event);
     void SetIndexLabels(bool enable);
     void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
     void TogglePlaylist();                          // toggles playlist visibility
@@ -117,6 +120,8 @@ private:
     bool osdShowLocalTime = true;
     bool showVideoPreview = true;
     bool allowRunInBackground = true;
+    bool quickStartMode = true;
+    bool trayIconVisible = true;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar;
@@ -170,6 +175,8 @@ public slots:
     void setOSDShowLocalTime(bool b)  { emit osdShowLocalTimeChanged(osdShowLocalTime = b); }
     void setShowVideoPreview(bool b)  { emit showVideoPreviewChanged(showVideoPreview = b); }
     void setAllowRunInBackground(bool b) { emit allowRunInBackgroundChanged(allowRunInBackground = b); }
+    void setQuickStartMode(bool b)    { emit quickStartModeChanged(quickStartMode = b); }
+    void setTrayIconVisible(bool b)   { emit trayIconVisibleChanged(trayIconVisible = b); }
 
 signals:
     void langChanged(QString);
@@ -192,6 +199,8 @@ signals:
     void osdShowLocalTimeChanged(bool);
     void showVideoPreviewChanged(bool);
     void allowRunInBackgroundChanged(bool);
+    void quickStartModeChanged(bool);
+    void trayIconVisibleChanged(bool);
 };
 
 #endif // MAINWINDOW_H

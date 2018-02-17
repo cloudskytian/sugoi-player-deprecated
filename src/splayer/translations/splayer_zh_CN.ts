@@ -1800,6 +1800,14 @@ Note: Value must be from %0 - %1</source>
         <source>If you disable this, there will always be a message box asking you wether to run in background or not when you close SPlayer while it is playing music.</source>
         <translation>如果你不开启此选项，当你在播放器播放音乐时关闭播放器，播放器总会弹出一个提示框询问是否后台运行。</translation>
     </message>
+    <message>
+        <source>SPlayer will always stay in background and auto starts when the system starts if you enable this.</source>
+        <translation>如果你开启此选项，播放器将会常驻后台，并且将开机自启，请考虑周全后再做出选择。</translation>
+    </message>
+    <message>
+        <source>Quick start mode</source>
+        <translation>快速启动模式</translation>
+    </message>
 </context>
 <context>
     <name>PropertiesDialog</name>

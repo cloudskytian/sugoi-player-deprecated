@@ -397,6 +397,13 @@ void MpvHandler::Stop()
     Pause();
 }
 
+void MpvHandler::TrulyStop()
+{
+    Stop();
+    const char *args[] = {"stop", NULL};
+    AsyncCommand(args);
+}
+
 void MpvHandler::PlayPause(QString fileIfStopped)
 {
     if(playState < 0) // not playing, play plays the selected playlist file

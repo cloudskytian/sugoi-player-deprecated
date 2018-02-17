@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>517</width>
-    <height>439</height>
+    <height>462</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -514,6 +514,19 @@ QTabBar::tab:!selected {
               </property>
               <property name="text">
                <string>Allow run in background when playing music</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="quickStartCheckBox">
+              <property name="toolTip">
+               <string>SPlayer will always stay in background and auto starts when the system starts if you enable this.</string>
+              </property>
+              <property name="text">
+               <string>Quick start mode</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>

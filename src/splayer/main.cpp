@@ -48,7 +48,25 @@ int main(int argc, char *argv[])
     {
         for (int i = 1; i <= (cmdline.count() - 1); ++i)
         {
-            if (cmdline.at(i) == QString::fromLatin1("--regall"))
+            if (cmdline.at(i) == QString::fromLatin1("--autostart"))
+            {
+                const QString exePath = QApplication::applicationFilePath();
+                const QString exeParam = QString::fromLatin1("--runinbackground");
+                if (!Util::setAutoStart(exePath, exeParam))
+                {
+                    return -1;
+                }
+                return 0;
+            }
+            else if (cmdline.at(i) == QString::fromLatin1("--noautostart"))
+            {
+                if (!Util::disableAutoStart())
+                {
+                    return -1;
+                }
+                return 0;
+            }
+            else if (cmdline.at(i) == QString::fromLatin1("--regall"))
             {
                 FileAssoc fileAssoc;
                 if (!fileAssoc.registerMediaFiles(FileAssoc::reg_type::ALL))

@@ -12,6 +12,7 @@
 #include <QObject>
 #include <QDateTime>
 #include <QApplication>
+#include <QSettings>
 
 #include <Windows.h>
 
@@ -451,6 +452,45 @@ void messagesOutputToFile(QtMsgType type, const QMessageLogContext &context, con
     file.close();
 
     mutex.unlock();
+}
+
+bool setAutoStart(const QString &path, const QString &param)
+{
+    if (path.isEmpty())
+    {
+        return false;
+    }
+    const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+    QSettings settings(key, QSettings::NativeFormat);
+    if (settings.status() != QSettings::NoError)
+    {
+        return false;
+    }
+    QString value = QLatin1Char('"') + path + QString::fromLatin1("\" ") + param;
+    settings.setValue(QApplication::applicationDisplayName(), QDir::toNativeSeparators(value.trimmed()));
+    return true;
+}
+
+bool isAutoStart()
+{
+    const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+    QSettings settings(key, QSettings::NativeFormat);
+    if (settings.contains(QApplication::applicationDisplayName()))
+    {
+        return true;
+    }
+    return false;
+}
+
+bool disableAutoStart()
+{
+    const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+    QSettings settings(key, QSettings::NativeFormat);
+    if (settings.contains(QApplication::applicationDisplayName()))
+    {
+        settings.remove(QApplication::applicationDisplayName());
+    }
+    return true;
 }
 
 }

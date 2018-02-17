@@ -934,6 +934,38 @@ MainWindow::MainWindow(QWidget *parent):
                 ui->inputLineEdit->setText("");
             });
 
+    connect(this, &MainWindow::trayIconVisibleChanged,
+            [=](bool visible)
+            {
+                if (baka->sysTrayIcon != nullptr)
+                {
+                    baka->sysTrayIcon->setVisible(visible);
+                }
+            });
+
+    connect(this, &MainWindow::quickStartModeChanged,
+            [=](bool quickStart)
+            {
+                if (quickStart)
+                {
+                    if (!Util::isAutoStart())
+                    {
+                        const QString exePath = QCoreApplication::applicationFilePath();
+                        const QString exeParam = QString::fromLatin1("--autostart");
+                        Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
+                    }
+                }
+                else
+                {
+                    if (Util::isAutoStart())
+                    {
+                        const QString exePath = QCoreApplication::applicationFilePath();
+                        const QString exeParam = QString::fromLatin1("--noautostart");
+                        Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
+                    }
+                }
+            });
+
     // add multimedia shortcuts
     ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
     ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
@@ -957,6 +989,7 @@ MainWindow::MainWindow(QWidget *parent):
             {
                 contextMenu->popup(mapToGlobal(pos));
             });
+    baka->sysTrayIcon->setContextMenu(contextMenu);
 }
 
 MainWindow::~MainWindow()
@@ -1342,7 +1375,32 @@ void MainWindow::closeEvent(QCloseEvent *event)
         event->ignore();
         return;
     }
+    if (quickStartMode)
+    {
+        mpv->TrulyStop();
+        this->hide();
+        baka->sysTrayIcon->hide();
+        event->ignore();
+        return;
+    }
     event->accept();
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+    if (baka->sysTrayIcon != nullptr)
+    {
+        if (trayIconVisible && !baka->sysTrayIcon->isVisible())
+        {
+            baka->sysTrayIcon->show();
+        }
+        else if (!trayIconVisible && baka->sysTrayIcon->isVisible())
+        {
+            baka->sysTrayIcon->hide();
+        }
+    }
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)

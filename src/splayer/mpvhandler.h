@@ -63,6 +63,7 @@ public slots:
     void Play();
     void Pause();
     void Stop();
+    void TrulyStop();
     void PlayPause(QString fileIfStopped);
     void Restart();
     void Rewind();

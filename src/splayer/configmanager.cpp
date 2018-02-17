@@ -29,6 +29,7 @@ void BakaEngine::LoadSettings()
     {
         window->setFileAssocType(FileAssoc::reg_type::NONE);
     }
+    window->setQuickStartMode(settings.value(QString::fromLatin1("quickStartMode"), true).toBool());
     window->setAllowRunInBackground(settings.value(QString::fromLatin1("allowRunInBackground"), false).toBool());
     window->setShowVideoPreview(settings.value(QString::fromLatin1("showVideoPreview"), false).toBool());
     window->setPauseWhenMinimized(settings.value(QString::fromLatin1("pauseWhenMinimized"), true).toBool());
@@ -36,9 +37,8 @@ void BakaEngine::LoadSettings()
     window->setOSDShowLocalTime(settings.value(QString::fromLatin1("osdShowLocalTime"), true).toBool());
     window->setOnTop(settings.value(QString::fromLatin1("onTop"), QString::fromLatin1("never")).toString());
     window->setAutoFit(settings.value(QString::fromLatin1("autoFit"), 100).toInt());
-    sysTrayIcon->setVisible(settings.value(QString::fromLatin1("trayIcon"), true).toBool());
+    window->setTrayIconVisible(settings.value(QString::fromLatin1("trayIcon"), true).toBool());
     window->setHidePopup(settings.value(QString::fromLatin1("hidePopup"), false).toBool());
-    sysTrayIcon->setContextMenu(window->contextMenu);
     window->setRemaining(settings.value(QString::fromLatin1("remaining"), true).toBool());
     window->ui->splitter->setNormalPosition(settings.value(QString::fromLatin1("splitter"), window->ui->splitter->max()*1.0/8).toInt());
     window->setDebug(settings.value(QString::fromLatin1("debug"), false).toBool());
@@ -165,6 +165,7 @@ void BakaEngine::SaveSettings()
     {
         regType = QString::fromLatin1("none");
     }
+    settings.setValue(QString::fromLatin1("quickStartMode"), window->getQuickStartMode());
     settings.setValue(QString::fromLatin1("allowRunInBackground"), window->getAllowRunInBackground());
     settings.setValue(QString::fromLatin1("showVideoPreview"), window->getShowVideoPreview());
     settings.setValue(QString::fromLatin1("pauseWhenMinimized"), window->getPauseWhenMinimized());
@@ -173,7 +174,7 @@ void BakaEngine::SaveSettings()
     settings.setValue(QString::fromLatin1("fileAssoc"), regType);
     settings.setValue(QString::fromLatin1("onTop"), window->onTop);
     settings.setValue(QString::fromLatin1("autoFit"), window->autoFit);
-    settings.setValue(QString::fromLatin1("trayIcon"), sysTrayIcon->isVisible());
+    settings.setValue(QString::fromLatin1("trayIcon"), window->getTrayIconVisible());
     settings.setValue(QString::fromLatin1("hidePopup"), window->hidePopup);
     settings.setValue(QString::fromLatin1("remaining"), window->remaining);
     int pos = (window->ui->splitter->position() == 0 ||
