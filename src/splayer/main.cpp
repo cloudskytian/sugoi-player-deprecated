@@ -4,7 +4,6 @@
 #include <QString>
 #include <QFileInfo>
 #include <QMimeDatabase>
-#include <QThread>
 
 #include <locale.h>
 
@@ -41,7 +40,6 @@ int main(int argc, char *argv[])
 
     bool singleInstance = true;
     bool runInBackground = false;
-    bool exitNow = false;
 
     QStringList cmdline = instance.arguments();
     QString filePath = QString();
@@ -139,57 +137,49 @@ int main(int argc, char *argv[])
     // the LC_NUMERIC category to be set to "C", so change it back.
     setlocale(LC_NUMERIC, "C");
 
-    MainWindow *mainWindow = nullptr;
+    MainWindow mainWindow;
     if (!runInBackground)
     {
-        if (mainWindow == nullptr)
-        {
-            mainWindow = new MainWindow();
-        }
-        mainWindow->Load(filePath, false);
-        mainWindow->show();
+        mainWindow.Load(filePath, false);
+        mainWindow.show();
     }
-//    else
-//    {
-//        //mainWindow->hide();
-//        mainWindow->Load(QString(), true);
-//    }
+    else
+    {
+        mainWindow.setWindowOpacity(0.0);
+        mainWindow.Load(QString(), true);
+        mainWindow.hide();
+    }
 
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
-                     [=, &mainWindow, &instance, &exitNow](const QString &message)
+                     [=, &mainWindow, &instance](const QString &message)
                      {
                          if (message == QString::fromLatin1("exit")
                                  || message == QString::fromLatin1("quit")
                                  || message == QString::fromLatin1("close"))
                          {
-                             if (mainWindow != nullptr)
-                             {
-                                 mainWindow->close();
-                             }
-                             exitNow = true;
+                             mainWindow.close();
                          }
                          else
                          {
-                             if (mainWindow == nullptr)
+                             if (mainWindow.isHidden())
                              {
-                                 mainWindow = new MainWindow();
-                                 mainWindow->Load(QString(), false);
+                                 mainWindow.show();
                              }
-                             if (mainWindow->isHidden())
+                             if (mainWindow.windowOpacity() < 1.0)
                              {
-                                 mainWindow->show();
+                                 mainWindow.setWindowOpacity(1.0);
                              }
-                             if (instance.activationWindow() != static_cast<QWidget *>(mainWindow))
+                             if (instance.activationWindow() != &mainWindow)
                              {
-                                 instance.setActivationWindow(mainWindow, true);
+                                 instance.setActivationWindow(&mainWindow, true);
                              }
-                             if (!mainWindow->isActiveWindow())
+                             if (!mainWindow.isActiveWindow())
                              {
                                  instance.activateWindow();
                              }
-                             mainWindow->setPauseWhenMinimized(false);
-                             mainWindow->openFileFromCmd(message);
-                             mainWindow->setPauseWhenMinimized(true);
+                             mainWindow.setPauseWhenMinimized(false);
+                             mainWindow.openFileFromCmd(message);
+                             mainWindow.setPauseWhenMinimized(true);
                          }
                      });
 
@@ -199,26 +189,11 @@ int main(int argc, char *argv[])
     win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/SPlayer/master/src/splayer/appcast.xml");
     win_sparkle_set_app_details(SPLAYER_COMPANY_NAME_STR, SPLAYER_APP_NAME_STR, SPLAYER_VERSION_STR);
     win_sparkle_set_automatic_check_for_updates(1);
-    win_sparkle_set_lang(mainWindow->getLang().toUtf8().constData());
+    win_sparkle_set_lang(mainWindow.getLang().toUtf8().constData());
     win_sparkle_init();
     win_sparkle_check_update_without_ui();
 
-    while (mainWindow == nullptr)
-    {
-        if (exitNow)
-        {
-            return 0;
-        }
-        QThread::msleep(500);
-    }
-
     int ret = instance.exec();
-
-    if (mainWindow != nullptr)
-    {
-        delete mainWindow;
-        mainWindow = nullptr;
-    }
 
     win_sparkle_cleanup();
 
