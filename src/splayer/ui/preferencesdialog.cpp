@@ -52,7 +52,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     ui->msgLvlComboBox->setCurrentIndex(ui->msgLvlComboBox->findData(baka->mpv->getMsgLevel()));
     ui->groupBox_9->setChecked(baka->window->getShowVideoPreview());
     ui->backgroundNotAskCheckBox->setChecked(baka->window->getAllowRunInBackground());
-    ui->quickStartModeCheckBox->setChecked(baka->window->getQuickStartMode());
+    ui->quickStartCheckBox->setChecked(baka->window->getQuickStartMode());
 
     // add shortcuts
     saved = baka->input;
@@ -196,7 +196,7 @@ PreferencesDialog::~PreferencesDialog()
 {
     if (result() == QDialog::Accepted)
     {
-        baka->window->setQuickStartMode(ui->quickStartModeCheckBox->isChecked());
+        baka->window->setQuickStartMode(ui->quickStartCheckBox->isChecked());
         baka->window->setAllowRunInBackground(ui->backgroundNotAskCheckBox->isChecked());
         baka->window->setPauseWhenMinimized(ui->pauseWhenMinimizedCheckBox->isChecked());
         baka->window->setShowFullscreenIndicator(ui->showFullscreenIndicatorCheckBox->isChecked());
