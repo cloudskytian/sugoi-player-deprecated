@@ -247,6 +247,7 @@ PreferencesDialog::~PreferencesDialog()
     {
         baka->input = saved;
     }
+    baka->SaveSettings();
     delete sortLock;
     delete ui;
 }

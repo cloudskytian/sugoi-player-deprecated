@@ -60,7 +60,7 @@ build_script:
   - jom && jom install
   - 7z a -tzip SPlayer_V%APPVEYOR_BUILD_VERSION%_x64_Portable.zip .\bin64\Release\*
   - SET "PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%"
-  - ISCC /Dx64 /DAPPVEYOR /O"%APPVEYOR_BUILD_FOLDER%" /F"SPlayer_V%APPVEYOR_BUILD_VERSION%_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\splayer.iss"
+  - ISCC /Dx64 /DCI /O"%APPVEYOR_BUILD_FOLDER%" /F"SPlayer_V%APPVEYOR_BUILD_VERSION%_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\splayer.iss"
   - jom distclean
   - IF EXIST bin64 RD /S /Q bin64
 
