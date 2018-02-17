@@ -34,12 +34,13 @@ void AboutDialog::about(QString lang, QWidget *parent)
 QString AboutDialog::compilerText_HTML()
 {
 #ifndef CI
-    static QString text = QString::fromLatin1("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6</p>")
+    static QString text = QString::fromLatin1("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6<br /><b>%7</b>: %8</p>")
                      .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
                      .arg(tr("Architecture")).arg(QString::fromStdWString(SPLAYER_ARCH_STR))
+                     .arg(tr("Qt version")).arg(QString::fromLatin1(QT_VERSION_STR))
                      .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
 #else
-    static QString text = QString::fromLatin1("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6<br /><b>%7</b>: %8<br /><b>%9</b>: %10<br /><b>%11</b>: %12<br /><b>%13</b>: %14<br /><b>%15</b>: %16</p>")
+    static QString text = QString::fromLatin1("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6<br /><b>%7</b>: %8<br /><b>%9</b>: %10<br /><b>%11</b>: %12<br /><b>%13</b>: %14<br /><b>%15</b>: %16<br /><b>%17</b>: %18</p>")
                      .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
                      .arg(tr("Commit ID")).arg(QString::fromStdWString(SPLAYER_COMMIT_ID_STR))
                      .arg(tr("Commit author")).arg(QString::fromStdWString(SPLAYER_COMMIT_AUTHOR_STR))
@@ -47,6 +48,7 @@ QString AboutDialog::compilerText_HTML()
                      .arg(tr("Commit time")).arg(QString::fromStdWString(SPLAYER_COMMIT_TIMESTAMP_STR))
                      .arg(tr("Commit message")).arg(QString::fromStdWString(SPLAYER_COMMIT_MESSAGE_STR))
                      .arg(tr("Architecture")).arg(QString::fromStdWString(SPLAYER_ARCH_STR))
+                     .arg(tr("Qt version")).arg(QString::fromLatin1(QT_VERSION_STR))
                      .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
 #endif
     return text;

@@ -223,6 +223,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
         <source>Commit message</source>
         <translation>提交信息</translation>
     </message>
+    <message>
+        <source>Qt version</source>
+        <translation>Qt 版本</translation>
+    </message>
 </context>
 <context>
     <name>BakaEngine</name>

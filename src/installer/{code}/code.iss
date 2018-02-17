@@ -66,6 +66,14 @@ function KillTimer(hWnd, nIDEvent: longword): longword; external 'KillTimer@user
 function SetClassLong(h : hwnd; nIndex : integer; dwNewLong : longint) : DWORD; external 'SetClassLongW@user32.dll stdcall';
 function GetClassLong(h : hwnd; nIndex : integer) : DWORD; external 'GetClassLongW@user32.dll stdcall';
 
+procedure kill_splayer_task;
+var
+  ErrorCode : integer;
+begin
+  ShellExec('open', 'taskkill.exe', '/F /IM {#MyAppExeName} /T', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+  ShellExec('open', 'tskill.exe', ' {#MyAppName}', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+end;
+
 //停止轮播计时器
 procedure stop_slide_timer;
 begin
@@ -1023,6 +1031,10 @@ end;
 //安装步骤改变时会调用这个函数
 procedure CurStepChanged(CurStep : TSetupStep);
 begin
+  if (CurStep = ssInstall) then
+  begin
+    kill_splayer_task;
+  end;
   if (CurStep = ssPostInstall) then
   begin
 #ifdef RegisteAssociations
@@ -1051,4 +1063,12 @@ begin
   if (PageID = wpReady) then Result := True;
   if (PageID = wpPreparing) then Result := True;
   if (PageID = wpInfoAfter) then Result := True;
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if (CurUninstallStep = usAppMutexCheck) then
+  begin
+    kill_splayer_task;
+  end;
 end;

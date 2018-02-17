@@ -98,7 +98,7 @@ DisableReadyPage                = yes
 TimeStampsInUTC                 = yes
 #IF VER >= EncodeVer(5,5,9)
 SetupMutex                      = {{#MyAppID}Setup,Global\{{#MyAppID}Setup
-AppMutex                        = {{#MyAppMutex}
+;AppMutex                        = {{#MyAppMutex}
 #endif
 LanguageDetectionMethod         = uilanguage
 ShowLanguageDialog              = no
@@ -278,24 +278,31 @@ Name: "{app}\Uninstaller"; Attribs: hidden system
 
 [Icons]
 #ifdef x64
-Name: "{commondesktop}\{#MyAppName} (64-bit)"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
+Name: "{commondesktop}\{#MyAppName} (64-bit)";   Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
 Name: "{commonstartmenu}\{#MyAppName} (64-bit)"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
 #else
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
-Name: "{commonstartmenu}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
+Name: "{commondesktop}\{#MyAppName}";            Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
+Name: "{commonstartmenu}\{#MyAppName}";          Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
 #endif
 
 [Run]
 #ifdef x64
-Filename: "{app}\vcredist_x64.exe"; Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist waituntilterminated
+Filename: "{app}\vcredist_x64.exe";     Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist waituntilterminated
+Filename: "{app}\SPlayerService64.exe"; Parameters: "-i";                         Flags: 64bit skipifdoesntexist waituntilterminated
 #else
-Filename: "{app}\vcredist_x86.exe"; Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist waituntilterminated
+Filename: "{app}\vcredist_x86.exe";     Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist waituntilterminated
+Filename: "{app}\SPlayerService.exe";   Parameters: "-i";                         Flags: 32bit skipifdoesntexist waituntilterminated
 #endif
 
 #ifdef RegisteAssociations
 [UninstallRun]
 ;卸载时运行反注册程序
-Filename: "{app}\{#MyAppExeName}"; Parameters: "--unregall"; WorkingDir: "{app}"; Flags: waituntilterminated skipifdoesntexist
+Filename: "{app}\{#MyAppExeName}";      Parameters: "--unregall";                 Flags: waituntilterminated skipifdoesntexist
+#endif
+#ifdef x64
+Filename: "{app}\SPlayerService64.exe"; Parameters: "-u";                         Flags: 64bit skipifdoesntexist waituntilterminated
+#else
+Filename: "{app}\SPlayerService.exe";   Parameters: "-u";                         Flags: 32bit skipifdoesntexist waituntilterminated
 #endif
 
 [InstallDelete]
