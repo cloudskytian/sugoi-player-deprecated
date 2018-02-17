@@ -56,7 +56,7 @@ public:
     {
         setServiceDescription(QString::fromLatin1("SPlayer support service."));
         setServiceFlags(QtServiceBase::CanBeSuspended);
-        //setStartupType(QtServiceController::AutoStartup);
+        setStartupType(QtServiceController::AutoStartup);
     }
 
 protected:
@@ -64,37 +64,41 @@ protected:
     {
         QCoreApplication *app = application();
         QString exeName = QString::fromLatin1("SPlayer64.exe");
-#ifdef _WIN64
-#ifdef _DEBUG
-        exeName = QString::fromLatin1("SPlayer64d.exe");
-#else
-        exeName = QString::fromLatin1("SPlayer64.exe");
-#endif
-#else
-#ifdef _DEBUG
-        exeName = QString::fromLatin1("SPlayerd.exe");
-#else
-        exeName = QString::fromLatin1("SPlayer.exe");
-#endif
-#endif
-        QString exePath = QDir::toNativeSeparators(app->applicationDirPath() + QDir::separator() + exeName);
-        QFileInfo fi(exePath);
-        if (!fi.exists())
+        QDir curDir(app->applicationDirPath());
+        if (QFileInfo(curDir, QString::fromLatin1("SPlayer64.exe")).exists())
+        {
+            exeName = QString::fromLatin1("SPlayer64.exe");
+        }
+        else if (QFileInfo(curDir, QString::fromLatin1("SPlayer64d.exe")).exists())
+        {
+            exeName = QString::fromLatin1("SPlayer64d.exe");
+        }
+        else if (QFileInfo(curDir, QString::fromLatin1("SPlayer.exe")).exists())
+        {
+            exeName = QString::fromLatin1("SPlayer.exe");
+        }
+        else if (QFileInfo(curDir, QString::fromLatin1("SPlayerd.exe")).exists())
+        {
+            exeName = QString::fromLatin1("SPlayerd.exe");
+        }
+        else
         {
             logMessage(QString::fromLatin1("SPlayer main executable file not found!"), QtServiceBase::Error);
             app->quit();
         }
+        QString exePath = QDir::toNativeSeparators(app->applicationDirPath() + QDir::separator() + exeName);
         for (;;)
         {
             QProcess process;
-            process.start(exePath, QStringList() << QString::fromLatin1("--runinbackground"));
+            process.startDetached(exePath, QStringList() << QString::fromLatin1("--runinbackground"));
             QThread::msleep(15000);
         }
     }
 
     void stop()
     {
-        QCoreApplication::quit();
+        QCoreApplication *app = application();
+        app->quit();
     }
 };
 

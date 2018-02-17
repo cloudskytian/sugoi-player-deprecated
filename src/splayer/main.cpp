@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     bool runInBackground = false;
 
     QStringList cmdline = instance.arguments();
-    QString filePath = QString();
+    QString command = QString();
 
     if (cmdline.count() > 1)
     {
@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
             else if (cmdline.at(i) == QString::fromLatin1("--runinbackground"))
             {
                 runInBackground = true;
+                command = QString::fromLatin1("runinbackground");
                 break;
             }
             else
@@ -117,7 +118,7 @@ int main(int argc, char *argv[])
                     QMimeDatabase mdb;
                     if (Util::supportedMimeTypes().contains(mdb.mimeTypeForFile(fi).name()))
                     {
-                        filePath = cmdline.at(i);
+                        command = cmdline.at(i);
                         break;
                     }
                 }
@@ -127,7 +128,7 @@ int main(int argc, char *argv[])
 
     if (singleInstance)
     {
-        if (instance.sendMessage(filePath))
+        if (instance.sendMessage(command))
         {
             return 0;
         }
@@ -140,7 +141,7 @@ int main(int argc, char *argv[])
     MainWindow mainWindow;
     if (!runInBackground)
     {
-        mainWindow.Load(filePath, false);
+        mainWindow.Load(command, false);
         mainWindow.show();
     }
     else
@@ -153,34 +154,44 @@ int main(int argc, char *argv[])
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
                      [=, &mainWindow, &instance](const QString &message)
                      {
+                         QString filePath(message);
                          if (message == QString::fromLatin1("exit")
                                  || message == QString::fromLatin1("quit")
                                  || message == QString::fromLatin1("close"))
                          {
                              mainWindow.close();
+                             return;
                          }
-                         else
+                         else if (message == QString::fromLatin1("runinbackground"))
                          {
-                             if (mainWindow.isHidden())
+                             if (runInBackground)
                              {
-                                 mainWindow.show();
+                                 return;
                              }
-                             if (mainWindow.windowOpacity() < 1.0)
+                             else
                              {
-                                 mainWindow.setWindowOpacity(1.0);
+                                 filePath = QString();
                              }
-                             if (instance.activationWindow() != &mainWindow)
-                             {
-                                 instance.setActivationWindow(&mainWindow, true);
-                             }
-                             if (!mainWindow.isActiveWindow())
-                             {
-                                 instance.activateWindow();
-                             }
-                             mainWindow.setPauseWhenMinimized(false);
-                             mainWindow.openFileFromCmd(message);
-                             mainWindow.setPauseWhenMinimized(true);
                          }
+                         if (mainWindow.isHidden())
+                         {
+                             mainWindow.show();
+                         }
+                         if (mainWindow.windowOpacity() < 1.0)
+                         {
+                             mainWindow.setWindowOpacity(1.0);
+                         }
+                         if (instance.activationWindow() != &mainWindow)
+                         {
+                             instance.setActivationWindow(&mainWindow, true);
+                         }
+                         if (!mainWindow.isActiveWindow())
+                         {
+                             instance.activateWindow();
+                         }
+                         mainWindow.setPauseWhenMinimized(false);
+                         mainWindow.openFileFromCmd(filePath);
+                         mainWindow.setPauseWhenMinimized(true);
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
