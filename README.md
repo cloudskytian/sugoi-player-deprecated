@@ -1,6 +1,13 @@
 ![logo](/src/splayer/resources/splayer.svg)
 
-## SPlayer [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/wangwenx190/SPlayer?branch=master&svg=true)](https://ci.appveyor.com/project/wangwenx190/splayer)
+## SPlayer
+
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/wangwenx190/SPlayer?branch=master&svg=true)](https://ci.appveyor.com/project/wangwenx190/splayer)
+[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/15146.svg)](https://scan.coverity.com/projects/splayer)
+[![Github All Releases](https://img.shields.io/github/downloads/wangwenx190/SPlayer/total.svg)](https://github.com/wangwenx190/SPlayer/releases/latest)
+[![GitHub release](https://img.shields.io/github/release/wangwenx190/SPlayer.svg)](https://github.com/wangwenx190/SPlayer/releases/latest)
+[![Github commits (since latest release)](https://img.shields.io/github/commits-since/wangwenx190/SPlayer/latest.svg)]()
+[![GitHub Release Date](https://img.shields.io/github/release-date/wangwenx190/SPlayer.svg)](https://github.com/wangwenx190/SPlayer/releases/latest)
 
 ---
 
