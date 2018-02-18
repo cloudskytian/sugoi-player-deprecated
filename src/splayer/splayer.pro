@@ -53,6 +53,7 @@ QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\translations\\*.qm\" \"$${DESTDIR}
 
 CONFIG(release, debug|release) {
     QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\doc\\ReadMe.txt.deploy\" \"$${DESTDIR}\\ReadMe.txt\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\doc\\Changelog.txt.deploy\" \"$${DESTDIR}\\Changelog.txt\"$$escape_expand(\\n\\t))
     QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\doc\\License.txt.deploy\" \"$${DESTDIR}\\License.txt\"$$escape_expand(\\n\\t))
     QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\doc\\Contributors.txt.deploy\" \"$${DESTDIR}\\Contributors.txt\"$$escape_expand(\\n\\t))
     QMAKE_POST_LINK += $$quote(if exist \"$${DESTDIR}\\licenses\" rd /s /q \"$${DESTDIR}\\licenses\"$$escape_expand(\\n\\t))
