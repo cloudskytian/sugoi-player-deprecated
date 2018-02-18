@@ -54,7 +54,6 @@ public:
     bool getResume()           { return resume; }
     bool getHideAllControls()  { return hideAllControls; }
     bool isFullScreenMode()    { return hideAllControls || isFullScreen(); }
-    //QMenu *getContextMenu()    { return contextMenu; }
     FileAssoc::reg_type getFileAssocType() { return regType; }
     FileAssoc::reg_state getFileAssocState() { return regState; }
     bool getAlwaysCheckFileAssoc() { return alwaysCheckFileAssoc; }
@@ -110,7 +109,6 @@ private:
     BakaEngine      *baka;
     MpvHandler      *mpv;
     LogoWidget      *logo;
-    //QMenu           *contextMenu;
     SProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
     bool showFullscreenIndicator = true;
     FileAssoc::reg_type  regType;
@@ -132,7 +130,7 @@ private:
     QWinTaskbarProgress     *taskbarProgress;
 #endif
     bool            pathChanged,
-                    menuVisible,
+                    menuVisible     = true,
                     firstItem       = false,
                     init            = false,
                     playlistState   = false;
