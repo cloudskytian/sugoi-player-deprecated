@@ -946,6 +946,10 @@ MainWindow::MainWindow(QWidget *parent):
     connect(this, &MainWindow::quickStartModeChanged,
             [=](bool quickStart)
             {
+                if (this->isHidden())
+                {
+                    return;
+                }
                 if (quickStart)
                 {
                     if (!Util::isAutoStart())

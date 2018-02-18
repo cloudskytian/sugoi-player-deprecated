@@ -313,7 +313,7 @@ bool executeProgramWithAdministratorPrivilege(const QString &exePath, const QStr
 
     SHELLEXECUTEINFO execInfo{sizeof(SHELLEXECUTEINFO)};
     execInfo.lpVerb = TEXT("runas");
-    execInfo.lpFile = reinterpret_cast<const wchar_t *>(exePath.utf16());
+    execInfo.lpFile = reinterpret_cast<const wchar_t *>(QDir::toNativeSeparators(exePath).utf16());
     execInfo.nShow = SW_HIDE;
     execInfo.lpParameters = reinterpret_cast<const wchar_t *>(exeParam.utf16());
 
