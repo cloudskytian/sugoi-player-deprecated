@@ -289,25 +289,21 @@ Name: "{commonstartmenu}\{#MyAppName}";          Filename: "{app}\{#MyAppExeName
 #ifdef x64
 Filename: "{app}\vcredist_x64.exe";     Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist waituntilterminated runhidden
 Filename: "{app}\vc_redist.x64.exe";    Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist waituntilterminated runhidden
-;Filename: "{app}\SPlayerService64.exe"; Parameters: "-i";                         Flags: 64bit skipifdoesntexist waituntilterminated runhidden
-;Filename: "{app}\SPlayerService64.exe"; Parameters: "-s";                         Flags: 64bit skipifdoesntexist waituntilterminated runhidden
+Filename: "{app}\{#MyAppExeName}";      Parameters: "--autostart";                Flags: 64bit skipifdoesntexist waituntilterminated runhidden
 #else
 Filename: "{app}\vcredist_x86.exe";     Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist waituntilterminated runhidden
 Filename: "{app}\vc_redist.x86.exe";    Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist waituntilterminated runhidden
-;Filename: "{app}\SPlayerService.exe";   Parameters: "-i";                         Flags: 32bit skipifdoesntexist waituntilterminated runhidden
-;Filename: "{app}\SPlayerService.exe";   Parameters: "-s";                         Flags: 32bit skipifdoesntexist waituntilterminated runhidden
+Filename: "{app}\{#MyAppExeName}";      Parameters: "--autostart";                Flags: 32bit skipifdoesntexist waituntilterminated runhidden
 #endif
 
 [UninstallRun]
 ;卸载时运行反注册程序
 #ifdef x64
-;Filename: "{app}\SPlayerService64.exe"; Parameters: "-t";                         Flags: 64bit skipifdoesntexist waituntilterminated runhidden
-;Filename: "{app}\SPlayerService64.exe"; Parameters: "-u";                         Flags: 64bit skipifdoesntexist waituntilterminated runhidden
 Filename: "{app}\{#MyAppExeName}";      Parameters: "--unregall";                 Flags: 64bit skipifdoesntexist waituntilterminated runhidden
+Filename: "{app}\{#MyAppExeName}";      Parameters: "--noautostart";              Flags: 64bit skipifdoesntexist waituntilterminated runhidden
 #else
-;Filename: "{app}\SPlayerService.exe";   Parameters: "-t";                         Flags: 32bit skipifdoesntexist waituntilterminated runhidden
-;Filename: "{app}\SPlayerService.exe";   Parameters: "-u";                         Flags: 32bit skipifdoesntexist waituntilterminated runhidden
 Filename: "{app}\{#MyAppExeName}";      Parameters: "--unregall";                 Flags: 32bit skipifdoesntexist waituntilterminated runhidden
+Filename: "{app}\{#MyAppExeName}";      Parameters: "--noautostart";              Flags: 32bit skipifdoesntexist waituntilterminated runhidden
 #endif
 
 [InstallDelete]
