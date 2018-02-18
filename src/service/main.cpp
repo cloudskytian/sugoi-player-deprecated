@@ -1,117 +1,213 @@
-﻿/****************************************************************************
-**
-** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
-** Contact: http://www.qt-project.org/legal
-**
-** This file is part of the Qt Solutions component.
-**
-** $QT_BEGIN_LICENSE:BSD$
-** You may use this file under the terms of the BSD license as follows:
-**
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Digia Plc and its Subsidiary(-ies) nor the names
-**     of its contributors may be used to endorse or promote products derived
-**     from this software without specific prior written permission.
-**
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
+﻿#include <Windows.h>
+#include <Shlwapi.h>
+#include <WtsApi32.h>
+#include <UserEnv.h>
+#include <iostream>
+#include <atlstr.h>
+#include <atlbase.h>
+#include <tchar.h>
 
-#include <QStringList>
-#include <QDir>
-#include <QSettings>
-#include <QCoreApplication>
-#include <QProcess>
-#include <QThread>
-#include <QFileInfo>
+static TCHAR lpServiceName[] = TEXT("SPlayer Protect Service");
+static SERVICE_STATUS_HANDLE hServiceStatus = NULL;
+static SERVICE_STATUS	ServiceStatus = {0};
+static TCHAR szCurDir[MAX_PATH+1] = {0};
+static bool bRun = false;
+static HANDLE hProcess = NULL;
 
-#include "qtservice.h"
-
-class SPlayerService : public QtService<QCoreApplication>
-{
-public:
-    SPlayerService(int argc, char **argv)
-    : QtService<QCoreApplication>(argc, argv, QString::fromLatin1("SPlayer Service"))
-    {
-        setServiceDescription(QString::fromLatin1("SPlayer support service."));
-        setServiceFlags(QtServiceBase::CanBeSuspended);
-        setStartupType(QtServiceController::AutoStartup);
-    }
-
-protected:
-    void start()
-    {
-        QCoreApplication *app = application();
-        QString exeName = QString::fromLatin1("SPlayer64.exe");
-        QDir curDir(app->applicationDirPath());
-        if (QFileInfo(curDir, QString::fromLatin1("SPlayer64.exe")).exists())
-        {
-            exeName = QString::fromLatin1("SPlayer64.exe");
-        }
-        else if (QFileInfo(curDir, QString::fromLatin1("SPlayer64d.exe")).exists())
-        {
-            exeName = QString::fromLatin1("SPlayer64d.exe");
-        }
-        else if (QFileInfo(curDir, QString::fromLatin1("SPlayer.exe")).exists())
-        {
-            exeName = QString::fromLatin1("SPlayer.exe");
-        }
-        else if (QFileInfo(curDir, QString::fromLatin1("SPlayerd.exe")).exists())
-        {
-            exeName = QString::fromLatin1("SPlayerd.exe");
-        }
-        else
-        {
-            logMessage(QString::fromLatin1("SPlayer main executable file not found!"), QtServiceBase::Error);
-            app->quit();
-        }
-        QString exePath = QDir::toNativeSeparators(app->applicationDirPath() + QDir::separator() + exeName);
-        for (;;)
-        {
-            QProcess process;
-            process.startDetached(exePath, QStringList() << QString::fromLatin1("--runinbackground"));
-            QThread::msleep(15000);
-        }
-    }
-
-    void stop()
-    {
-        QCoreApplication *app = application();
-        app->quit();
-    }
-};
-
+bool InstallService();
+VOID WINAPI ServiceMain(DWORD dwArgc,LPTSTR *lpszArgv);
+VOID WINAPI HandlerFunc(DWORD dwControl);
+HANDLE RunAsLoggedUser(CString lpPath, CString lpCmdLine);
+void WorkFunc();
 
 int main(int argc, char **argv)
 {
-#if !defined(Q_OS_WIN)
-    // QtService stores service settings in SystemScope, which normally require root privileges.
-    // To allow testing this example as non-root, we change the directory of the SystemScope settings file.
-    QSettings::setPath(QSettings::NativeFormat, QSettings::SystemScope, QDir::tempPath());
-    qWarning("(Example uses dummy settings file: %s/QtSoftware.conf)", QDir::tempPath().toLatin1().constData());
-#endif
+    GetModuleFileName(NULL,szCurDir,MAX_PATH);
+    TCHAR *pFind = _tcsrchr(szCurDir, '\\');
+    if (pFind)
+    {
+        *pFind = '\0';
+    }
 
-    SPlayerService service(argc, argv);
-    return service.exec();
+    SERVICE_TABLE_ENTRY ServiceTable[2];
+    ServiceTable[0].lpServiceName = lpServiceName;
+    ServiceTable[0].lpServiceProc = (LPSERVICE_MAIN_FUNCTION)ServiceMain;
+
+    ServiceTable[1].lpServiceName = NULL;
+    ServiceTable[1].lpServiceProc = NULL;
+
+    if (!StartServiceCtrlDispatcher(ServiceTable))
+    {
+        std::cout<<"Program not run as service. Do you want to install and run this service? y/n:";
+        if (getchar() == 'y')
+        {
+            if (!InstallService())
+            {
+                std::cout<<"Failed to install sercice."<<std::endl;
+                return 1;
+            }
+        }
+
+    }
+    return 0;
+}
+
+bool InstallService()
+{
+    SC_HANDLE hSCManager = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
+    if (!hSCManager)
+    {
+        return false;
+    }
+
+    SC_HANDLE hService = OpenService(hSCManager,lpServiceName,SERVICE_QUERY_CONFIG);
+    if (hService)
+    {
+        CloseServiceHandle(hSCManager);
+        CloseServiceHandle(hService);
+        return false;
+    }
+
+    TCHAR szPath[MAX_PATH+1];
+    GetModuleFileName(NULL,szPath,MAX_PATH);
+    hService = CreateService(hSCManager,
+        lpServiceName,
+        lpServiceName,
+        SERVICE_ALL_ACCESS,
+        SERVICE_WIN32_OWN_PROCESS | SERVICE_INTERACTIVE_PROCESS,
+        SERVICE_AUTO_START,
+        SERVICE_ERROR_NORMAL,
+        szPath,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL);
+    if (!hService)
+    {
+        CloseServiceHandle(hSCManager);
+        return false;
+    }
+
+    if (!StartService(hService,0,NULL))
+    {
+        CloseServiceHandle(hService);
+        CloseServiceHandle(hSCManager);
+        return false;
+    }
+
+    CloseServiceHandle(hService);
+    CloseServiceHandle(hSCManager);
+
+    return true;
+}
+
+VOID WINAPI ServiceMain( DWORD dwArgc,LPTSTR *lpszArgv )
+{
+    ServiceStatus.dwServiceType = SERVICE_WIN32;
+    ServiceStatus.dwCurrentState = SERVICE_RUNNING;
+    ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_SHUTDOWN | SERVICE_ACCEPT_STOP;
+    hServiceStatus = RegisterServiceCtrlHandler(lpServiceName,HandlerFunc);
+    if (!hServiceStatus)
+    {
+        return;
+    }
+    if (!SetServiceStatus(hServiceStatus,&ServiceStatus))
+    {
+        return;
+    }
+
+    bRun = true;
+    WorkFunc();
+}
+
+VOID WINAPI HandlerFunc( DWORD dwControl )
+{
+    if (dwControl == SERVICE_CONTROL_STOP || dwControl == SERVICE_CONTROL_SHUTDOWN)
+    {
+        ServiceStatus.dwCurrentState = SERVICE_STOPPED;
+        bRun = false;
+        if (hProcess)
+        {
+            TerminateProcess(hProcess,0);
+        }
+    }
+
+    SetServiceStatus(hServiceStatus,&ServiceStatus);
+}
+
+HANDLE RunAsLoggedUser(CString lpPath,CString lpCmdLine)
+{
+    if (!PathFileExists(lpPath))
+    {
+        return NULL;
+    }
+
+    DWORD dwSid = WTSGetActiveConsoleSessionId();
+
+    HANDLE hExistingToken = NULL;
+    if (!WTSQueryUserToken(dwSid,&hExistingToken))
+    {
+        return NULL;
+    }
+
+    HANDLE hNewToken = NULL;
+    if (!DuplicateTokenEx(hExistingToken,MAXIMUM_ALLOWED,NULL,SecurityIdentification,TokenPrimary,&hNewToken))
+    {
+        CloseHandle(hExistingToken);
+        return NULL;
+    }
+    CloseHandle(hExistingToken);
+
+    LPVOID pEnv = NULL;
+    DWORD dwCreationFlags = NORMAL_PRIORITY_CLASS | CREATE_NEW_CONSOLE;
+    if (CreateEnvironmentBlock(&pEnv,hNewToken,FALSE))
+    {
+        dwCreationFlags |= CREATE_UNICODE_ENVIRONMENT;
+    }
+
+    STARTUPINFO si = {0};
+    PROCESS_INFORMATION pi = {0};
+    si.cb = sizeof(si);
+    si.lpDesktop = (LPWSTR)"WinSta0\\Default";
+
+    if (!CreateProcessAsUser(hNewToken,lpPath.AllocSysString(),lpCmdLine.AllocSysString(),NULL,NULL,FALSE,dwCreationFlags,pEnv,szCurDir,&si,&pi))
+    {
+        if (pEnv)
+        {
+            DestroyEnvironmentBlock(pEnv);
+        }
+        return NULL;
+    }
+
+    if (pi.hThread && pi.hThread != INVALID_HANDLE_VALUE)
+    {
+        CloseHandle(pi.hThread);
+    }
+
+    if (pEnv)
+    {
+        DestroyEnvironmentBlock(pEnv);
+    }
+
+    return pi.hProcess;
+}
+
+void WorkFunc()
+{
+    CString curDir = szCurDir;
+    CString szProgPath = curDir + "\\SPlayer64.exe";
+    CString szCmdLine = TEXT("--runinbackground");
+    while (bRun)
+    {
+        hProcess = RunAsLoggedUser(szProgPath,szCmdLine);
+        if (!hProcess)
+        {
+            //
+        }
+        WaitForSingleObject(hProcess,INFINITE);
+        CloseHandle(hProcess);
+        hProcess = NULL;
+        Sleep(2000);
+    }
 }
