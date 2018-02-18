@@ -54,7 +54,7 @@ public:
     bool getResume()           { return resume; }
     bool getHideAllControls()  { return hideAllControls; }
     bool isFullScreenMode()    { return hideAllControls || isFullScreen(); }
-    QMenu *getContextMenu()    { return contextMenu; }
+    //QMenu *getContextMenu()    { return contextMenu; }
     FileAssoc::reg_type getFileAssocType() { return regType; }
     FileAssoc::reg_state getFileAssocState() { return regState; }
     bool getAlwaysCheckFileAssoc() { return alwaysCheckFileAssoc; }
