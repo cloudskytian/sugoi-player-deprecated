@@ -227,6 +227,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
         <source>Qt version</source>
         <translation>Qt 版本</translation>
     </message>
+    <message>
+        <source>libmpv version</source>
+        <translation>libmpv 版本</translation>
+    </message>
+    <message>
+        <source>WinSparkle version</source>
+        <translation>WinSparkle 版本</translation>
+    </message>
 </context>
 <context>
     <name>BakaEngine</name>
@@ -1079,7 +1087,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Online &amp;Help</source>
-        <translation>在线帮助(&amp;H)</translation>
+        <translation type="vanished">在线帮助(&amp;H)</translation>
     </message>
     <message>
         <source>&amp;Check for Updates</source>
@@ -1217,7 +1225,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Update &amp;Streaming Support</source>
-        <translation>更新流媒体支持(&amp;S)</translation>
+        <translation type="vanished">更新流媒体支持(&amp;S)</translation>
     </message>
     <message>
         <source>Show Playback &amp;Info</source>
@@ -1294,6 +1302,14 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>SPlayer is running in background now, click the trayicon to bring SPlayer to foreground.</source>
         <translation>SPlayer 正在后台运行，点击通知栏图标以显示主窗口。</translation>
+    </message>
+    <message>
+        <source>&amp;Home page</source>
+        <translation>官网首页(&amp;H)</translation>
+    </message>
+    <message>
+        <source>&amp;Update Streaming Support</source>
+        <translation>更新流媒体支持(&amp;U)</translation>
     </message>
 </context>
 <context>

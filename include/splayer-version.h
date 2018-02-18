@@ -40,12 +40,12 @@
 #define SPLAYER_COMMENTS_STR         _T("Multimedia player for Windows 7+ based on libmpv and Qt.")
 #define SPLAYER_COPYRIGHT_STR        _T("GPLv3")
 
+#define LIBMPV_VERSION_STR           _T("2.0.0 (2017-12-25-dev)")
+
 #if defined(_WIN64) || defined(x64)
-#define SPLAYER_ARCH_STR      _T("x64")
 #define SPLAYER_APP_ID_STR    SPLAYER_APP_ID_64_STR
 #define SPLAYER_APP_MUTEX_STR SPLAYER_APP_MUTEX_64_STR
 #else
-#define SPLAYER_ARCH_STR      _T("x86")
 #define SPLAYER_APP_ID_STR    SPLAYER_APP_ID_32_STR
 #define SPLAYER_APP_MUTEX_STR SPLAYER_APP_MUTEX_32_STR
 #endif
