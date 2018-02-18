@@ -77,10 +77,11 @@ QString AboutDialog::aboutText_HTML()
                           "simple, and enjoyable environment for watching tv shows. "
                           "Thanks to the great work of <b>Baka MPlayer</b>'s original developers. "
                           "Without their hard work, there won't be <b>SPlayer</b> anymore. "
-                          "I really appreciate <a href='https://github.com/u8sand'><b>u8sand</b></a> "
-                          "and his team.</p>\n"
-                          "<p>GitHub repository: <a href='https://github.com/wangwenx190/SPlayer'>"
-                          "https://github.com/wangwenx190/SPlayer</a></p>");
+                          "I really appreciate <b>godly-devotion</b> (Creator/UX Designer/Programmer), "
+                          "<a href='https://github.com/u8sand'><b>u8sand</b></a> (Lead Programmer/Website Host)"
+                          " and their team.</p>\n<p>Home Page: <a href='%1'>%2</a></p>")
+                          .arg(QString::fromStdWString(SPLAYER_COMPANY_URL_STR))
+                          .arg(QString::fromStdWString(SPLAYER_COMPANY_URL_STR));
     return text;
 }
 

@@ -53,7 +53,7 @@
 
 SPlayer is a free and open source multimedia player for Windows 7+ based on **libmpv** and **Qt**.
 
-People should know that SPlayer is a fork of [**Baka MPlayer**](https://github.com/u8sand/Baka-MPlayer). Baka MPlayer is a free and open source, cross-platform, libmpv based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows. Thanks to the great work of Baka MPlayer's original developers. Without their hard work, there won't be SPlayer anymore. I really appreciate [**u8sand**](https://github.com/u8sand) and his team.
+People should know that SPlayer is a fork of [**Baka MPlayer**](https://github.com/u8sand/Baka-MPlayer). Baka MPlayer is a free and open source, cross-platform, libmpv based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows. Thanks to the great work of Baka MPlayer's original developers. Without their hard work, there won't be SPlayer anymore. I really appreciate **godly-devotion** (Creator/UX Designer/Programmer), [**u8sand**](https://github.com/u8sand) (Lead Programmer/Website Host) and their team.
 
 
 ## Snapshots
@@ -65,19 +65,21 @@ People should know that SPlayer is a fork of [**Baka MPlayer**](https://github.c
 
 ## Features
 
+- Smart playlist
+
+- Dim Desktop
+
+- Hardware accelerated playback (vdpau, vaapi, vda)
+
+- Youtube playback support ([and others](http://rg3.github.io/youtube-dl/supportedsites.html))
+
+- Multilingual support (we are looking for translators!)
+
 - Beautiful and modern interface
 
 - High DPI support
 
-- Internationalization support
-
-- Play online media streams
-
-- Download online media streams from websites such as YouTube
-
-- Support play almost all kinds of video and audio files
-
-- High performance
+- Support playing almost all kinds of video and audio files
 
 - Much more to be found :)
 

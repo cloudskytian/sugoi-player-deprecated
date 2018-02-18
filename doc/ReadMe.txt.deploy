@@ -17,13 +17,14 @@ u8sand and his team.
 Features
 ------------
 
+* Smart playlist
+* Dim Desktop
+* Hardware accelerated playback (vdpau, vaapi, vda)
+* Youtube playback support (and others: http://rg3.github.io/youtube-dl/supportedsites.html)
+* Multilingual support
 * Beautiful and modern interface
 * High DPI support
-* Internationalization support
-* Play online media streams
-* Download online media streams from websites such as YouTube
-* Support play almost all kinds of video and audio files
-* High performance
+* Support playing almost all kinds of video and audio files
 * Much more to be found :)
 
 

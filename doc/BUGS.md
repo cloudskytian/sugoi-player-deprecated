@@ -2,17 +2,13 @@
 
 - The first time you opened a media file from the file explorer, SPlayer cannot change it's window size correctly.
 
-- The properties window does not work so well.
-
 - Some translation mistakes.
 
 - The menubar sometimes cannot get focused.
 
 - Sometimes SPlayer will crash, randomly.
 
-- The popup context menu does not popup in it's correct geometry.
-
-- The file association function does not work well, maybe some logical mistakes.
+- Dim dialog not work.
 
 
 **NOTE**

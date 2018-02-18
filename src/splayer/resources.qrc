@@ -47,4 +47,8 @@
     <file alias="gpl-3.0.zh_CN.html">licenses/gpl-3.0.zh_CN.html</file>
     <file alias="gpl-3.0.zh_TW.html">licenses/gpl-3.0.zh_TW.html</file>
   </qresource>
+  <qresource prefix="/updatelog">
+    <file alias="updatelog.en.html">updatelog/updatelog.en.html</file>
+    <file alias="updatelog.zh_CN.html">updatelog/updatelog.zh_CN.html</file>
+  </qresource>
 </RCC>
