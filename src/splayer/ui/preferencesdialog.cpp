@@ -36,7 +36,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
     else if(ontop == "always")
         ui->alwaysRadioButton->setChecked(true);
     ui->resumeCheckBox->setChecked(baka->window->getResume());
-    ui->groupBox_2->setChecked(baka->sysTrayIcon->isVisible());
+    ui->groupBox_2->setChecked(baka->window->getTrayIconVisible());
     ui->hidePopupCheckBox->setChecked(baka->window->getHidePopup());
     ui->langComboBox->setCurrentIndex(ui->langComboBox->findData(baka->window->getLang()));
     int autofit = baka->window->getAutoFit();
@@ -209,7 +209,7 @@ PreferencesDialog::~PreferencesDialog()
             baka->window->setOnTop("playing");
         else if(ui->alwaysRadioButton->isChecked())
             baka->window->setOnTop("always");
-        baka->sysTrayIcon->setVisible(ui->groupBox_2->isChecked());
+        baka->window->setTrayIconVisible(ui->groupBox_2->isChecked());
         baka->window->setHidePopup(ui->hidePopupCheckBox->isChecked());
         baka->window->setLang(ui->langComboBox->currentData().toString());
         baka->window->setShowVideoPreview(ui->groupBox_9->isChecked());
