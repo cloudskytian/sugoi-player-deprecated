@@ -37,6 +37,7 @@
 #define SPLAYER_SUPPORT_PHONE_STR    _T("10010001000")
 #define SPLAYER_README_URL_STR       _T("https://github.com/wangwenx190/SPlayer/blob/master/README.md")
 #define SPLAYER_LICENSE_URL_STR      _T("https://github.com/wangwenx190/SPlayer/blob/master/LICENSE.md")
+#define SPLAYER_BUG_REPORT_URL_STR   _T("https://github.com/wangwenx190/SPlayer/issues")
 #define SPLAYER_COMMENTS_STR         _T("Multimedia player for Windows 7+ based on libmpv and Qt.")
 #define SPLAYER_COPYRIGHT_STR        _T("GPLv3")
 

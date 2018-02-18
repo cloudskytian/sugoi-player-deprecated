@@ -112,9 +112,10 @@ MainWindow::MainWindow(QWidget *parent):
         {"output", ui->actionShow_D_ebug_Output},
         {"preferences", ui->action_Preferences},
         {"online_help", ui->actionOnline_Help},
+        {"bug_report", ui->action_Report_bugs},
+        {"sys_info", ui->action_System_Information},
         {"update", ui->action_Check_for_Updates},
         {"update youtube-dl", ui->actionUpdate_Streaming_Support},
-        {"about qt", ui->actionAbout_Qt},
         {"about", ui->actionAbout_Baka_MPlayer}
     };
 

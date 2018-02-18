@@ -1,6 +1,7 @@
 QT += core gui widgets svg winextras network
 TEMPLATE = app
 CONFIG += qt c++11
+CONFIG -= app_bundle
 
 ROOTDIR = $$PWD/../..
 
@@ -111,7 +112,8 @@ HEADERS += \
     widgets/sprogressindicatorbar.h \
     qtlocalpeer.h \
     qtsingleapplication.h \
-    qtlockedfile.h
+    qtlockedfile.h \
+    ui/sysinfodialog.h
 
 SOURCES += \
     main.cpp \
@@ -145,7 +147,8 @@ SOURCES += \
     qtlocalpeer.cpp \
     qtsingleapplication.cpp \
     qtlockedfile_win.cpp \
-    qtlockedfile.cpp
+    qtlockedfile.cpp \
+    ui/sysinfodialog.cpp
 
 FORMS += \
     ui/aboutdialog.ui \
@@ -155,4 +158,5 @@ FORMS += \
     ui/mainwindow.ui \
     ui/preferencesdialog.ui \
     ui/screenshotdialog.ui \
-    ui/keydialog.ui
+    ui/keydialog.ui \
+    ui/sysinfodialog.ui

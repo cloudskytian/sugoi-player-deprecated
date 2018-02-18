@@ -390,6 +390,24 @@ private:
           }
          }
         },
+        {"bug_report",
+         {&BakaEngine::BakaBugReport,
+          {
+           QString(),
+           tr("report bugs to the developers"),
+           QString()
+          }
+         }
+        },
+        {"sys_info",
+         {&BakaEngine::BakaSysInfo,
+          {
+           QString(),
+           tr("show system information"),
+           QString()
+          }
+         }
+        },
         {"about",
          {&BakaEngine::BakaAbout,
           {
@@ -454,6 +472,8 @@ private:
     void BakaAbout(QStringList&);
     void BakaMsgLevel(QStringList&);
     void BakaQuit(QStringList&);
+    void BakaBugReport(QStringList&);
+    void BakaSysInfo(QStringList&);
 public:
     void Open();
     void OpenLocation();

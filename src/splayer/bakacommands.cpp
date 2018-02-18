@@ -16,6 +16,7 @@
 #include "ui/jumpdialog.h"
 #include "ui/preferencesdialog.h"
 #include "ui/screenshotdialog.h"
+#include "ui/sysinfodialog.h"
 #include "widgets/dimdialog.h"
 #include "mpvhandler.h"
 #include "overlayhandler.h"
@@ -351,6 +352,14 @@ void BakaEngine::BakaOnlineHelp(QStringList &args)
 {
     if(args.empty())
         QDesktopServices::openUrl(QUrl(QString::fromStdWString(SPLAYER_SUPPORT_URL_STR)));
+    else
+        InvalidParameter(args.join(' '));
+}
+
+void BakaEngine::BakaBugReport(QStringList &args)
+{
+    if(args.empty())
+        QDesktopServices::openUrl(QUrl(QString::fromStdWString(SPLAYER_BUG_REPORT_URL_STR)));
     else
         InvalidParameter(args.join(' '));
 }
@@ -701,6 +710,16 @@ void BakaEngine::About(QString what)
         InvalidParameter(what);
 }
 
+void BakaEngine::BakaSysInfo(QStringList &args)
+{
+    if(args.empty())
+    {
+        SysInfoDialog sysInfoDialog;
+        sysInfoDialog.exec();
+    }
+    else
+        InvalidParameter(args.join(' '));
+}
 
 void BakaEngine::BakaQuit(QStringList &args)
 {

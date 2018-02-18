@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QSysInfo>
+#include <QCoreApplication>
 
 AboutDialog::AboutDialog(QString lang, QWidget *parent) :
     QDialog(parent),
@@ -18,8 +19,8 @@ AboutDialog::AboutDialog(QString lang, QWidget *parent) :
     ui->creditsText->setText(creditsText_HTML());
     ui->licenseText->setText(licenseText_HTML(lang));
 
-    connect(ui->closeButton, SIGNAL(clicked()),
-            this, SLOT(close()));
+    connect(ui->closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(ui->aboutQtButton, SIGNAL(clicked()), qApp, SLOT(aboutQt()));
 }
 
 AboutDialog::~AboutDialog()

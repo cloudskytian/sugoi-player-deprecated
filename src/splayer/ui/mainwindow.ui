@@ -1026,7 +1026,7 @@ QSlider::handle:horizontal {
      <x>0</x>
      <y>0</y>
      <width>636</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -1230,10 +1230,13 @@ QSlider::handle:horizontal {
      <string>&amp;Help</string>
     </property>
     <addaction name="actionOnline_Help"/>
+    <addaction name="action_Report_bugs"/>
+    <addaction name="separator"/>
+    <addaction name="action_System_Information"/>
+    <addaction name="separator"/>
     <addaction name="action_Check_for_Updates"/>
     <addaction name="actionUpdate_Streaming_Support"/>
     <addaction name="separator"/>
-    <addaction name="actionAbout_Qt"/>
     <addaction name="actionAbout_Baka_MPlayer"/>
    </widget>
    <addaction name="menu_File"/>
@@ -1444,7 +1447,7 @@ QSlider::handle:horizontal {
   </action>
   <action name="actionOnline_Help">
    <property name="text">
-    <string>&amp;Home page</string>
+    <string>&amp;Home Page</string>
    </property>
   </action>
   <action name="action_Check_for_Updates">
@@ -1459,7 +1462,7 @@ QSlider::handle:horizontal {
   </action>
   <action name="actionAbout_Baka_MPlayer">
    <property name="text">
-    <string>About &amp;SPlayer</string>
+    <string>&amp;About SPlayer</string>
    </property>
    <property name="iconText">
     <string>About SPlayer</string>
@@ -1694,6 +1697,16 @@ QSlider::handle:horizontal {
   <action name="actionHide_All_Controls">
    <property name="text">
     <string>&amp;Hide All Controls</string>
+   </property>
+  </action>
+  <action name="action_Report_bugs">
+   <property name="text">
+    <string>&amp;Report Bugs</string>
+   </property>
+  </action>
+  <action name="action_System_Information">
+   <property name="text">
+    <string>&amp;System Information</string>
    </property>
   </action>
  </widget>

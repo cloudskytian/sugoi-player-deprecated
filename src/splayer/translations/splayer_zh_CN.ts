@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>License</source>
-        <translation>许可证</translation>
+        <translation>许可协议</translation>
     </message>
     <message>
         <source>                GNU GENERAL PUBLIC LICENSE
@@ -234,6 +234,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     <message>
         <source>WinSparkle version</source>
         <translation>WinSparkle 版本</translation>
+    </message>
+    <message>
+        <source>Update Log</source>
+        <translation>更新日志</translation>
+    </message>
+    <message>
+        <source>About &amp;Qt</source>
+        <translation>关于 &amp;Qt</translation>
     </message>
 </context>
 <context>
@@ -693,6 +701,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     <message>
         <source>quit SPlayer</source>
         <translation>退出 SPlayer</translation>
+    </message>
+    <message>
+        <source>report bugs to the developers</source>
+        <translation>向开发者们报告问题</translation>
+    </message>
+    <message>
+        <source>show system information</source>
+        <translation>显示系统信息</translation>
     </message>
 </context>
 <context>
@@ -1261,7 +1277,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>About &amp;SPlayer</source>
-        <translation>关于 &amp;SPlayer</translation>
+        <translation type="vanished">关于 &amp;SPlayer</translation>
     </message>
     <message>
         <source>About SPlayer</source>
@@ -1305,11 +1321,27 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>&amp;Home page</source>
-        <translation>官网首页(&amp;H)</translation>
+        <translation type="vanished">官网首页(&amp;H)</translation>
     </message>
     <message>
         <source>&amp;Update Streaming Support</source>
         <translation>更新流媒体支持(&amp;U)</translation>
+    </message>
+    <message>
+        <source>&amp;Home Page</source>
+        <translation>官方网站(&amp;H)</translation>
+    </message>
+    <message>
+        <source>&amp;About SPlayer</source>
+        <translation>关于 SPlayer(&amp;A)</translation>
+    </message>
+    <message>
+        <source>&amp;Report Bugs</source>
+        <translation>报告问题(&amp;R)</translation>
+    </message>
+    <message>
+        <source>&amp;System Information</source>
+        <translation>系统信息(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -2008,6 +2040,65 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>Choose screenshot directory</source>
         <translation>选择截图目录</translation>
+    </message>
+</context>
+<context>
+    <name>SysInfoDialog</name>
+    <message>
+        <source>System Information</source>
+        <translation>系统信息</translation>
+    </message>
+    <message>
+        <source>Use the following to provide more detailed information about your system to bug reports:</source>
+        <translation>使用以下关于系统的详细信息来报告问题：</translation>
+    </message>
+    <message>
+        <source>&amp;Copy to Clipboard</source>
+        <translation>复制到剪贴板(&amp;C)</translation>
+    </message>
+    <message>
+        <source>&amp;OK</source>
+        <translation>确定(&amp;O)</translation>
+    </message>
+    <message>
+        <source>Build ABI</source>
+        <translation>构建 ABI</translation>
+    </message>
+    <message>
+        <source>Build CPU Architecture</source>
+        <translation>构建时 CPU 架构</translation>
+    </message>
+    <message>
+        <source>Current CPU Architecture</source>
+        <translation>当前 CPU 架构</translation>
+    </message>
+    <message>
+        <source>Kernel Type</source>
+        <translation>内核类型</translation>
+    </message>
+    <message>
+        <source>Kernel Version</source>
+        <translation>内核版本</translation>
+    </message>
+    <message>
+        <source>Machine Host Name</source>
+        <translation>主机名称</translation>
+    </message>
+    <message>
+        <source>Pretty Product Name</source>
+        <translation>产品名称</translation>
+    </message>
+    <message>
+        <source>Product Type</source>
+        <translation>产品类型</translation>
+    </message>
+    <message>
+        <source>Product Version</source>
+        <translation>产品版本</translation>
+    </message>
+    <message>
+        <source>Windows Version</source>
+        <translation>Windows 版本</translation>
     </message>
 </context>
 <context>

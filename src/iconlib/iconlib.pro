@@ -1,6 +1,7 @@
 TEMPLATE = lib
 TARGET = iconlib
 CONFIG -= qt
+CONFIG -= app_bundle
 CONFIG += dll
 RC_FILE += iconlib.rc
 HEADERS += iconlib.h
