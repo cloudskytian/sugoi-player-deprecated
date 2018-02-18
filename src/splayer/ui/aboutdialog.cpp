@@ -16,6 +16,7 @@ AboutDialog::AboutDialog(QString lang, QWidget *parent) :
 
     ui->compilerText->setText(compilerText_HTML());
     ui->aboutText->setText(aboutText_HTML());
+    ui->updateLogText->setText(updateLogText_HTML(lang));
     ui->creditsText->setText(creditsText_HTML());
     ui->licenseText->setText(licenseText_HTML(lang));
 
@@ -88,6 +89,35 @@ QString AboutDialog::aboutText_HTML()
 QString AboutDialog::aboutText_PlainText()
 {
     return aboutText_HTML().remove(QRegExp(QStringLiteral("<[^>]*>")));
+}
+
+QString AboutDialog::updateLogText_HTML(QString lang)
+{
+    static QString text;
+    QString l(lang);
+    if (lang == QString::fromLatin1("auto") || lang == QString::fromLatin1("en_US")
+            || lang == QString::fromLatin1("en_UK") || lang == QString::fromLatin1("C"))
+    {
+        l = QString::fromLatin1("en");
+    }
+    QString filePath = QString::fromLatin1(":/updatelog/updatelog.") + l + QString::fromLatin1(".html");
+    QFile licenseFile(filePath);
+    if (licenseFile.exists())
+    {
+        if (licenseFile.open(QFile::ReadOnly | QFile::Text))
+        {
+            QTextStream ts(&licenseFile);
+            text = ts.readAll();
+            licenseFile.close();
+            return text;
+        }
+    }
+    return updateLogText_HTML(QString::fromLatin1("en"));
+}
+
+QString AboutDialog::updateLogText_PlainText()
+{
+    return updateLogText_HTML().remove(QRegExp(QStringLiteral("<[^>]*>")));
 }
 
 QString AboutDialog::creditsText_HTML()

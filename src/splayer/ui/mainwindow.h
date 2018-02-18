@@ -110,7 +110,7 @@ private:
     BakaEngine      *baka;
     MpvHandler      *mpv;
     LogoWidget      *logo;
-    QMenu           *contextMenu;
+    //QMenu           *contextMenu;
     SProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
     bool showFullscreenIndicator = true;
     FileAssoc::reg_type  regType;

@@ -977,24 +977,25 @@ MainWindow::MainWindow(QWidget *parent):
     ui->actionPlay_Next_File->setShortcuts({ui->actionPlay_Next_File->shortcut(), QKeySequence(Qt::Key_MediaNext)});
     ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
 
-    contextMenu = new QMenu(this);
-    contextMenu->addMenu(ui->menu_File);
-    contextMenu->addMenu(ui->menu_View);
-    contextMenu->addMenu(ui->menu_Playback);
-    contextMenu->addMenu(ui->menu_Navigate);
-    contextMenu->addMenu(ui->menu_Settings);
-    contextMenu->addMenu(ui->menu_Help);
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
-    logo->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->mpvFrame->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(logo, SIGNAL(customContextMenuRequested(const QPoint &)), this, SIGNAL(customContextMenuRequested(const QPoint &)));
-    connect(ui->mpvFrame, SIGNAL(customContextMenuRequested(const QPoint &)), this, SIGNAL(customContextMenuRequested(const QPoint &)));
-    connect(this, &MainWindow::customContextMenuRequested,
-            [=](const QPoint &pos)
-            {
-                contextMenu->popup(mapToGlobal(pos));
-            });
-    baka->sysTrayIcon->setContextMenu(contextMenu);
+//    contextMenu = new QMenu(this);
+//    contextMenu->addMenu(ui->menu_File);
+//    contextMenu->addMenu(ui->menu_View);
+//    contextMenu->addMenu(ui->menu_Playback);
+//    contextMenu->addMenu(ui->menu_Navigate);
+//    contextMenu->addMenu(ui->menu_Settings);
+//    contextMenu->addMenu(ui->menu_Help);
+//    this->setContextMenuPolicy(Qt::CustomContextMenu);
+//    logo->setContextMenuPolicy(Qt::CustomContextMenu);
+//    ui->mpvFrame->setContextMenuPolicy(Qt::CustomContextMenu);
+//    connect(logo, SIGNAL(customContextMenuRequested(const QPoint &)), this, SIGNAL(customContextMenuRequested(const QPoint &)));
+//    connect(ui->mpvFrame, SIGNAL(customContextMenuRequested(const QPoint &)), this, SIGNAL(customContextMenuRequested(const QPoint &)));
+//    connect(this, &MainWindow::customContextMenuRequested,
+//            [=](const QPoint &pos)
+//            {
+//                contextMenu->popup(mapToGlobal(pos));
+//            });
+//    baka->sysTrayIcon->setContextMenu(contextMenu);
+    setContextMenuPolicy(Qt::ActionsContextMenu);
 }
 
 MainWindow::~MainWindow()
