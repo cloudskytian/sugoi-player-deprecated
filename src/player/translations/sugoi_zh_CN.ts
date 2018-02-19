@@ -372,35 +372,35 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     <name>BakaEngine</name>
     <message>
         <source>Open File</source>
-        <translation>打开文件</translation>
+        <translation type="vanished">打开文件</translation>
     </message>
     <message>
         <source>Media Files</source>
-        <translation>媒体文件</translation>
+        <translation type="vanished">媒体文件</translation>
     </message>
     <message>
         <source>Video Files</source>
-        <translation>视频文件</translation>
+        <translation type="vanished">视频文件</translation>
     </message>
     <message>
         <source>Audio Files</source>
-        <translation>音频文件</translation>
+        <translation type="vanished">音频文件</translation>
     </message>
     <message>
         <source>Fit Window: %0</source>
-        <translation>适应窗口: %0</translation>
+        <translation type="vanished">适应窗口: %0</translation>
     </message>
     <message>
         <source>Open Subtitle File</source>
-        <translation>打开字幕文件</translation>
+        <translation type="vanished">打开字幕文件</translation>
     </message>
     <message>
         <source>Subtitle Files</source>
-        <translation>字幕文件</translation>
+        <translation type="vanished">字幕文件</translation>
     </message>
     <message>
         <source>Open Audio File</source>
-        <translation>打开音频文件</translation>
+        <translation type="vanished">打开音频文件</translation>
     </message>
     <message>
         <source>http://bakamplayer.u8sand.net/help.php</source>
@@ -408,259 +408,259 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Dim Lights</source>
-        <translation>昏暗灯光</translation>
+        <translation type="vanished">昏暗灯光</translation>
     </message>
     <message>
         <source>In order to dim the lights, the desktop compositor has to be enabled. This can be done through Window Manager Desktop.</source>
-        <translation>为了开启黯淡桌面功能,桌面混成需要开启，可以通过窗口管理进行设置。</translation>
+        <translation type="vanished">为了开启黯淡桌面功能,桌面混成需要开启，可以通过窗口管理进行设置。</translation>
     </message>
     <message>
         <source>Increase sub size</source>
-        <translation>增大字幕大小</translation>
+        <translation type="vanished">增大字幕大小</translation>
     </message>
     <message>
         <source>Decrease sub size</source>
-        <translation>减小字幕大小</translation>
+        <translation type="vanished">减小字幕大小</translation>
     </message>
     <message>
         <source>Restart playback</source>
-        <translation>重新播放</translation>
+        <translation type="vanished">重新播放</translation>
     </message>
     <message>
         <source>Reset speed</source>
-        <translation>重置播放速度</translation>
+        <translation type="vanished">重置播放速度</translation>
     </message>
     <message>
         <source>Take screenshot without subtitles</source>
-        <translation>无字幕截图</translation>
+        <translation type="vanished">无字幕截图</translation>
     </message>
     <message>
         <source>Take screenshot with subtitles</source>
-        <translation>有字幕截图</translation>
+        <translation type="vanished">有字幕截图</translation>
     </message>
     <message>
         <source>Toggle subtitle visibility</source>
-        <translation>切换字幕可见度</translation>
+        <translation type="vanished">切换字幕可见度</translation>
     </message>
     <message>
         <source>Go to previous chapter</source>
-        <translation>跳转到前一章节</translation>
+        <translation type="vanished">跳转到前一章节</translation>
     </message>
     <message>
         <source>Go to next chapter</source>
-        <translation>跳转到下一章节</translation>
+        <translation type="vanished">跳转到下一章节</translation>
     </message>
     <message>
         <source>Frame step backwards</source>
-        <translation>向后逐帧</translation>
+        <translation type="vanished">向后逐帧</translation>
     </message>
     <message>
         <source>Frame step</source>
-        <translation>逐帧</translation>
+        <translation type="vanished">逐帧</translation>
     </message>
     <message>
         <source>Toggle mute audio</source>
-        <translation>静音</translation>
+        <translation type="vanished">静音</translation>
     </message>
     <message>
         <source>Decrease volume</source>
-        <translation>降低音量</translation>
+        <translation type="vanished">降低音量</translation>
     </message>
     <message>
         <source>Increase volume</source>
-        <translation>提高音量</translation>
+        <translation type="vanished">提高音量</translation>
     </message>
     <message>
         <source>Toggle fullscreen</source>
-        <translation>切换全屏</translation>
+        <translation type="vanished">切换全屏</translation>
     </message>
     <message>
         <source>Toggle hide all controls mode</source>
-        <translation>切换隐藏所有控制项模式</translation>
+        <translation type="vanished">切换隐藏所有控制项模式</translation>
     </message>
     <message>
         <source>Dim lights</source>
-        <translation>昏暗灯光</translation>
+        <translation type="vanished">昏暗灯光</translation>
     </message>
     <message>
         <source>Show the file in its folder</source>
-        <translation>在文件夹中显示</translation>
+        <translation type="vanished">在文件夹中显示</translation>
     </message>
     <message>
         <source>View media information</source>
-        <translation>查看媒体信息</translation>
+        <translation type="vanished">查看媒体信息</translation>
     </message>
     <message>
         <source>Show jump to time dialog</source>
-        <translation>显示跳转时间对话框</translation>
+        <translation type="vanished">显示跳转时间对话框</translation>
     </message>
     <message>
         <source>Show open file dialog</source>
-        <translation>显示打开文件对话框</translation>
+        <translation type="vanished">显示打开文件对话框</translation>
     </message>
     <message>
         <source>Show location dialog</source>
-        <translation>显示位置对话框</translation>
+        <translation type="vanished">显示位置对话框</translation>
     </message>
     <message>
         <source>Toggle playlist visibility</source>
-        <translation>切换播放列表可见</translation>
+        <translation type="vanished">切换播放列表可见</translation>
     </message>
     <message>
         <source>Fit the window to the video</source>
-        <translation>根据视频适应窗口大小</translation>
+        <translation type="vanished">根据视频适应窗口大小</translation>
     </message>
     <message>
         <source>Boss key</source>
-        <translation>老板键</translation>
+        <translation type="vanished">老板键</translation>
     </message>
     <message>
         <source>Play previous file</source>
-        <translation>播放前一个文件</translation>
+        <translation type="vanished">播放前一个文件</translation>
     </message>
     <message>
         <source>Open a new window</source>
-        <translation>打开新的窗口</translation>
+        <translation type="vanished">打开新的窗口</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation>退出</translation>
+        <translation type="vanished">退出</translation>
     </message>
     <message>
         <source>Play next file</source>
-        <translation>播放下一文件</translation>
+        <translation type="vanished">播放下一文件</translation>
     </message>
     <message>
         <source>Stop playback</source>
-        <translation>停止播放</translation>
+        <translation type="vanished">停止播放</translation>
     </message>
     <message>
         <source>Open clipboard location</source>
-        <translation>打开剪贴板路径</translation>
+        <translation type="vanished">打开剪贴板路径</translation>
     </message>
     <message>
         <source>Open the last played file</source>
-        <translation>打开最近播放的文件</translation>
+        <translation type="vanished">打开最近播放的文件</translation>
     </message>
     <message>
         <source>Access command-line</source>
-        <translation>打开命令行</translation>
+        <translation type="vanished">打开命令行</translation>
     </message>
     <message>
         <source>Launch online help</source>
-        <translation>在线帮助</translation>
+        <translation type="vanished">在线帮助</translation>
     </message>
     <message>
         <source>Play/Pause</source>
-        <translation>播放/暂停</translation>
+        <translation type="vanished">播放/暂停</translation>
     </message>
     <message>
         <source>Select previous file on playlist</source>
-        <translation>选择播放列表的前一个文件</translation>
+        <translation type="vanished">选择播放列表的前一个文件</translation>
     </message>
     <message>
         <source>Select next file on playlist</source>
-        <translation>选择播放列表的下一个文件</translation>
+        <translation type="vanished">选择播放列表的下一个文件</translation>
     </message>
     <message>
         <source>Seek forwards by %0 sec</source>
-        <translation>快进 %0 秒</translation>
+        <translation type="vanished">快进 %0 秒</translation>
     </message>
     <message>
         <source>Seek backwards by %0 sec</source>
-        <translation>快退 %0 秒</translation>
+        <translation type="vanished">快退 %0 秒</translation>
     </message>
     <message>
         <source>Increase playback speed by %0</source>
-        <translation>提高 %0 播放速度</translation>
+        <translation type="vanished">提高 %0 播放速度</translation>
     </message>
     <message>
         <source>Decrease playback speed by %0</source>
-        <translation>降低 %0 播放速度</translation>
+        <translation type="vanished">降低 %0 播放速度</translation>
     </message>
     <message>
         <source>Fit window to %0%</source>
-        <translation>适应窗口到 %0%</translation>
+        <translation type="vanished">适应窗口到 %0%</translation>
     </message>
     <message>
         <source>Play selected file on playlist</source>
-        <translation>播放在播放列表选中的文件</translation>
+        <translation type="vanished">播放在播放列表选中的文件</translation>
     </message>
     <message>
         <source>Remove selected file from playlist</source>
-        <translation>把选中文件移出播放列表</translation>
+        <translation type="vanished">把选中文件移出播放列表</translation>
     </message>
     <message>
         <source>Saved to &quot;%0&quot;, with subs</source>
-        <translation>保存到 &quot;%0&quot;, 附带字幕</translation>
+        <translation type="vanished">保存到 &quot;%0&quot;, 附带字幕</translation>
     </message>
     <message>
         <source>Saved to &quot;%0&quot;, without subs</source>
-        <translation>保存到 &quot;%0&quot;, 不附带字幕</translation>
+        <translation type="vanished">保存到 &quot;%0&quot;, 不附带字幕</translation>
     </message>
     <message>
         <source>DimDialog not supported on this platform</source>
-        <translation>此平台不支持昏暗灯光</translation>
+        <translation type="vanished">此平台不支持昏暗灯光</translation>
     </message>
     <message>
         <source>All Files</source>
-        <translation>所有文件</translation>
+        <translation type="vanished">所有文件</translation>
     </message>
     <message>
         <source>To Current Size</source>
-        <translation>到目前大小</translation>
+        <translation type="vanished">到目前大小</translation>
     </message>
     <message>
         <source>Speed: %0x</source>
-        <translation>速度: %0x</translation>
+        <translation type="vanished">速度: %0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
-        <translation>按下 ESC 或 双击 以离开全屏</translation>
+        <translation type="vanished">按下 ESC 或 双击 以离开全屏</translation>
     </message>
     <message>
         <source>Press %0 to show all controls again</source>
-        <translation>按下 %0 以显示所有控制项</translation>
+        <translation type="vanished">按下 %0 以显示所有控制项</translation>
     </message>
     <message>
         <source>usage: baka &lt;command&gt; [...]</source>
-        <translation>用法: baka &lt;command&gt; [...]</translation>
+        <translation type="vanished">用法: baka &lt;command&gt; [...]</translation>
     </message>
     <message>
         <source>commands:</source>
-        <translation>命令:</translation>
+        <translation type="vanished">命令:</translation>
     </message>
     <message>
         <source>usage: %0 %1</source>
-        <translation>用法: %0 %1</translation>
+        <translation type="vanished">用法: %0 %1</translation>
     </message>
     <message>
         <source>description:</source>
-        <translation>描述：</translation>
+        <translation type="vanished">描述：</translation>
     </message>
     <message>
         <source>advanced:</source>
-        <translation>高级:</translation>
+        <translation type="vanished">高级:</translation>
     </message>
     <message>
         <source>invalid command &apos;%0&apos;</source>
-        <translation>无效命令 &apos;%0&apos;</translation>
+        <translation type="vanished">无效命令 &apos;%0&apos;</translation>
     </message>
     <message>
         <source>invalid parameter &apos;%0&apos;</source>
-        <translation>无效参数:&apos;%0&apos;</translation>
+        <translation type="vanished">无效参数:&apos;%0&apos;</translation>
     </message>
     <message>
         <source>&apos;%0&apos; requires parameters</source>
-        <translation>&apos;%0&apos; 需要参数</translation>
+        <translation type="vanished">&apos;%0&apos; 需要参数</translation>
     </message>
     <message>
         <source>executes mpv command</source>
-        <translation>执行mpv命令</translation>
+        <translation type="vanished">执行mpv命令</translation>
     </message>
     <message>
         <source>executes system shell command</source>
-        <translation>执行系统shell命令</translation>
+        <translation type="vanished">执行系统shell命令</translation>
     </message>
     <message>
         <source>creates a new instance of baka-mplayer</source>
@@ -668,151 +668,151 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>shows the open location dialog</source>
-        <translation>显示打开路径对话框</translation>
+        <translation type="vanished">显示打开路径对话框</translation>
     </message>
     <message>
         <source>opens the clipboard</source>
-        <translation>打开剪贴板</translation>
+        <translation type="vanished">打开剪贴板</translation>
     </message>
     <message>
         <source>shows the current file in folder</source>
-        <translation>在文件夹中显示当前文件</translation>
+        <translation type="vanished">在文件夹中显示当前文件</translation>
     </message>
     <message>
         <source>add subtitles dialog</source>
-        <translation>添加字幕对话框</translation>
+        <translation type="vanished">添加字幕对话框</translation>
     </message>
     <message>
         <source>add audio track dialog</source>
-        <translation>添加音轨对话框</translation>
+        <translation type="vanished">添加音轨对话框</translation>
     </message>
     <message>
         <source>[subs]</source>
-        <translation>[字幕]</translation>
+        <translation type="vanished">[字幕]</translation>
     </message>
     <message>
         <source>take a screenshot (with subtitles if specified)</source>
-        <translation>截图(带字幕)</translation>
+        <translation type="vanished">截图(带字幕)</translation>
     </message>
     <message>
         <source>toggles media info display</source>
-        <translation>显示媒体信息</translation>
+        <translation type="vanished">显示媒体信息</translation>
     </message>
     <message>
         <source>stops the current playback</source>
-        <translation>停止目前播放</translation>
+        <translation type="vanished">停止目前播放</translation>
     </message>
     <message>
         <source>playlist options</source>
-        <translation>播放列表选项</translation>
+        <translation type="vanished">播放列表选项</translation>
     </message>
     <message>
         <source>opens jump dialog</source>
-        <translation>打开跳转对话框</translation>
+        <translation type="vanished">打开跳转对话框</translation>
     </message>
     <message>
         <source>toggles dim desktop</source>
-        <translation>暗淡桌面</translation>
+        <translation type="vanished">暗淡桌面</translation>
     </message>
     <message>
         <source>toggles output textbox</source>
-        <translation>切换输出文本框</translation>
+        <translation type="vanished">切换输出文本框</translation>
     </message>
     <message>
         <source>opens preferences dialog</source>
-        <translation>打开首选项对话框</translation>
+        <translation type="vanished">打开首选项对话框</translation>
     </message>
     <message>
         <source>launches online help</source>
-        <translation>在线帮助</translation>
+        <translation type="vanished">在线帮助</translation>
     </message>
     <message>
         <source>opens the update dialog or updates youtube-dl</source>
-        <translation>打开更新对话框或更新youtube-dl</translation>
+        <translation type="vanished">打开更新对话框或更新youtube-dl</translation>
     </message>
     <message>
         <source>[file]</source>
-        <translation>[文件]</translation>
+        <translation type="vanished">[文件]</translation>
     </message>
     <message>
         <source>opens the open file dialog or the file specified</source>
-        <translation>显示打开文件对话框或被指定文件</translation>
+        <translation type="vanished">显示打开文件对话框或被指定文件</translation>
     </message>
     <message>
         <source>toggle play/pause state</source>
-        <translation>切换 播放/暂停</translation>
+        <translation type="vanished">切换 播放/暂停</translation>
     </message>
     <message>
         <source>[percent]</source>
-        <translation>[百分比]</translation>
+        <translation type="vanished">[百分比]</translation>
     </message>
     <message>
         <source>fit the window</source>
-        <translation>适应窗口</translation>
+        <translation type="vanished">适应窗口</translation>
     </message>
     <message>
         <source>toggle deinterlace</source>
-        <translation>切换反交错</translation>
+        <translation type="vanished">切换反交错</translation>
     </message>
     <message>
         <source>toggle motion interpolation</source>
-        <translation>切换运动插值</translation>
+        <translation type="vanished">切换运动插值</translation>
     </message>
     <message>
         <source>mutes the audio</source>
-        <translation>静音</translation>
+        <translation type="vanished">静音</translation>
     </message>
     <message>
         <source>[level]</source>
-        <translation>[级别]</translation>
+        <translation type="vanished">[级别]</translation>
     </message>
     <message>
         <source>adjusts the volume</source>
-        <translation>调整音量</translation>
+        <translation type="vanished">调整音量</translation>
     </message>
     <message>
         <source>[ratio]</source>
-        <translation>[比例]</translation>
+        <translation type="vanished">[比例]</translation>
     </message>
     <message>
         <source>adjusts the speed</source>
-        <translation>调整速度</translation>
+        <translation type="vanished">调整速度</translation>
     </message>
     <message>
         <source>toggles fullscreen state</source>
-        <translation>切换全屏</translation>
+        <translation type="vanished">切换全屏</translation>
     </message>
     <message>
         <source>toggles hide all controls state</source>
-        <translation>切换隐藏所有控制项</translation>
+        <translation type="vanished">切换隐藏所有控制项</translation>
     </message>
     <message>
         <source>pause and hide the window</source>
-        <translation>暂停并隐藏窗口</translation>
+        <translation type="vanished">暂停并隐藏窗口</translation>
     </message>
     <message>
         <source>clears the output textbox</source>
-        <translation>清空输出文本框</translation>
+        <translation type="vanished">清空输出文本框</translation>
     </message>
     <message>
         <source>[command]</source>
-        <translation>[命令]</translation>
+        <translation type="vanished">[命令]</translation>
     </message>
     <message>
         <source>internal help menu</source>
-        <translation>内置帮助菜单</translation>
+        <translation type="vanished">内置帮助菜单</translation>
     </message>
     <message>
         <source>[qt]</source>
-        <translation>[Qt]</translation>
+        <translation type="vanished">[Qt]</translation>
     </message>
     <message>
         <source>open about dialog</source>
-        <translation>打开关于对话框</translation>
+        <translation type="vanished">打开关于对话框</translation>
     </message>
     <message>
         <source>set mpv msg-level</source>
-        <translation>设置 mpv 日志等级</translation>
+        <translation type="vanished">设置 mpv 日志等级</translation>
     </message>
     <message>
         <source>quit baka-mplayer</source>
@@ -828,19 +828,19 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>report bugs to the developers</source>
-        <translation>向开发者们报告问题</translation>
+        <translation type="vanished">向开发者们报告问题</translation>
     </message>
     <message>
         <source>show system information</source>
-        <translation>显示系统信息</translation>
+        <translation type="vanished">显示系统信息</translation>
     </message>
     <message>
         <source>creates a new instance of Sugoi Player</source>
-        <translation>打开一个新的 Sugoi Player 实例</translation>
+        <translation type="vanished">打开一个新的 Sugoi Player 实例</translation>
     </message>
     <message>
         <source>quit Sugoi Player</source>
-        <translation>退出 Sugoi Player</translation>
+        <translation type="vanished">退出 Sugoi Player</translation>
     </message>
 </context>
 <context>
@@ -1445,7 +1445,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>&amp;Show all controls</source>
-        <translation>显示所有控件(&amp;S)</translation>
+        <translation type="vanished">显示所有控件(&amp;S)</translation>
     </message>
     <message>
         <source>SPlayer is running in background now, click the trayicon to bring SPlayer to foreground.</source>
@@ -2024,6 +2024,18 @@ Note: Value must be from %0 - %1</source>
         <source>Sugoi Player will always stay in background and auto starts when the system starts if you enable this.</source>
         <translation>如果你开启此选项，播放器将会常驻后台，并且将开机自启，请考虑周全后再做出选择。</translation>
     </message>
+    <message>
+        <source>Update</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <source>Auto update Sugoi Player</source>
+        <translation>自动更新 Sugoi Player</translation>
+    </message>
+    <message>
+        <source>Auto update streaming support</source>
+        <translation>自动更新流媒体支持</translation>
+    </message>
 </context>
 <context>
     <name>PropertiesDialog</name>
@@ -2208,6 +2220,461 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>Choose screenshot directory</source>
         <translation>选择截图目录</translation>
+    </message>
+</context>
+<context>
+    <name>SugoiEngine</name>
+    <message>
+        <source>Open Subtitle File</source>
+        <translation>打开字幕文件</translation>
+    </message>
+    <message>
+        <source>Subtitle Files</source>
+        <translation>字幕文件</translation>
+    </message>
+    <message>
+        <source>Open Audio File</source>
+        <translation>打开音频文件</translation>
+    </message>
+    <message>
+        <source>Audio Files</source>
+        <translation>音频文件</translation>
+    </message>
+    <message>
+        <source>Saved to &quot;%0&quot;, with subs</source>
+        <translation>保存到 &quot;%0&quot;, 附带字幕</translation>
+    </message>
+    <message>
+        <source>Saved to &quot;%0&quot;, without subs</source>
+        <translation>保存到 &quot;%0&quot;, 不附带字幕</translation>
+    </message>
+    <message>
+        <source>DimDialog not supported on this platform</source>
+        <translation>此平台不支持昏暗灯光</translation>
+    </message>
+    <message>
+        <source>Dim Lights</source>
+        <translation>昏暗灯光</translation>
+    </message>
+    <message>
+        <source>In order to dim the lights, the desktop compositor has to be enabled. This can be done through Window Manager Desktop.</source>
+        <translation>为了开启黯淡桌面功能,桌面混成需要开启，可以通过窗口管理进行设置。</translation>
+    </message>
+    <message>
+        <source>Open File</source>
+        <translation>打开文件</translation>
+    </message>
+    <message>
+        <source>Media Files</source>
+        <translation>媒体文件</translation>
+    </message>
+    <message>
+        <source>Video Files</source>
+        <translation>视频文件</translation>
+    </message>
+    <message>
+        <source>All Files</source>
+        <translation>所有文件</translation>
+    </message>
+    <message>
+        <source>Fit Window: %0</source>
+        <translation>适应窗口: %0</translation>
+    </message>
+    <message>
+        <source>To Current Size</source>
+        <translation>到目前大小</translation>
+    </message>
+    <message>
+        <source>Speed: %0x</source>
+        <translation>速度: %0x</translation>
+    </message>
+    <message>
+        <source>Press ESC or double-click to leave full screen</source>
+        <translation>按下 ESC 或 双击 以离开全屏</translation>
+    </message>
+    <message>
+        <source>Press %0 to show all controls again</source>
+        <translation>按下 %0 以显示所有控制项</translation>
+    </message>
+    <message>
+        <source>usage: Sugoi &lt;command&gt; [...]</source>
+        <translation>用法： Sugoi &lt;命令&gt; [...]</translation>
+    </message>
+    <message>
+        <source>commands:</source>
+        <translation>命令：</translation>
+    </message>
+    <message>
+        <source>usage: %0 %1</source>
+        <translation>用法： %0 %1</translation>
+    </message>
+    <message>
+        <source>description:</source>
+        <translation>描述：</translation>
+    </message>
+    <message>
+        <source>advanced:</source>
+        <translation>高级：</translation>
+    </message>
+    <message>
+        <source>invalid command &apos;%0&apos;</source>
+        <translation>无效命令 &apos;%0&apos;</translation>
+    </message>
+    <message>
+        <source>invalid parameter &apos;%0&apos;</source>
+        <translation>无效参数：&apos;%0&apos;</translation>
+    </message>
+    <message>
+        <source>&apos;%0&apos; requires parameters</source>
+        <translation>&apos;%0&apos; 需要参数</translation>
+    </message>
+    <message>
+        <source>Increase sub size</source>
+        <translation>增大字幕大小</translation>
+    </message>
+    <message>
+        <source>Decrease sub size</source>
+        <translation>减小字幕大小</translation>
+    </message>
+    <message>
+        <source>Toggle subtitle visibility</source>
+        <translation>切换字幕可见度</translation>
+    </message>
+    <message>
+        <source>Restart playback</source>
+        <translation>重新播放</translation>
+    </message>
+    <message>
+        <source>Go to next chapter</source>
+        <translation>跳转到下一章节</translation>
+    </message>
+    <message>
+        <source>Go to previous chapter</source>
+        <translation>跳转到前一章节</translation>
+    </message>
+    <message>
+        <source>Seek forwards by %0 sec</source>
+        <translation>快进 %0 秒</translation>
+    </message>
+    <message>
+        <source>Seek backwards by %0 sec</source>
+        <translation>快退 %0 秒</translation>
+    </message>
+    <message>
+        <source>Frame step backwards</source>
+        <translation>向后逐帧</translation>
+    </message>
+    <message>
+        <source>Frame step</source>
+        <translation>逐帧</translation>
+    </message>
+    <message>
+        <source>Toggle mute audio</source>
+        <translation>静音</translation>
+    </message>
+    <message>
+        <source>Take screenshot with subtitles</source>
+        <translation>带字幕截图</translation>
+    </message>
+    <message>
+        <source>Take screenshot without subtitles</source>
+        <translation>无字幕截图</translation>
+    </message>
+    <message>
+        <source>Decrease volume</source>
+        <translation>降低音量</translation>
+    </message>
+    <message>
+        <source>Increase volume</source>
+        <translation>提高音量</translation>
+    </message>
+    <message>
+        <source>Increase playback speed by %0</source>
+        <translation>提高 %0 播放速度</translation>
+    </message>
+    <message>
+        <source>Decrease playback speed by %0</source>
+        <translation>降低 %0 播放速度</translation>
+    </message>
+    <message>
+        <source>Reset speed</source>
+        <translation>重置播放速度</translation>
+    </message>
+    <message>
+        <source>Toggle fullscreen</source>
+        <translation>切换全屏</translation>
+    </message>
+    <message>
+        <source>Toggle hide all controls mode</source>
+        <translation>切换隐藏所有控制项模式</translation>
+    </message>
+    <message>
+        <source>Dim lights</source>
+        <translation>昏暗灯光</translation>
+    </message>
+    <message>
+        <source>Show the file in its folder</source>
+        <translation>在文件夹中显示</translation>
+    </message>
+    <message>
+        <source>View media information</source>
+        <translation>查看媒体信息</translation>
+    </message>
+    <message>
+        <source>Show jump to time dialog</source>
+        <translation>显示跳转时间对话框</translation>
+    </message>
+    <message>
+        <source>Open a new window</source>
+        <translation>打开新的窗口</translation>
+    </message>
+    <message>
+        <source>Show open file dialog</source>
+        <translation>显示打开文件对话框</translation>
+    </message>
+    <message>
+        <source>Quit</source>
+        <translation>退出</translation>
+    </message>
+    <message>
+        <source>Play next file</source>
+        <translation>播放下一文件</translation>
+    </message>
+    <message>
+        <source>Play previous file</source>
+        <translation>播放前一个文件</translation>
+    </message>
+    <message>
+        <source>Stop playback</source>
+        <translation>停止播放</translation>
+    </message>
+    <message>
+        <source>Show location dialog</source>
+        <translation>显示位置对话框</translation>
+    </message>
+    <message>
+        <source>Open clipboard location</source>
+        <translation>打开剪贴板路径</translation>
+    </message>
+    <message>
+        <source>Toggle playlist visibility</source>
+        <translation>切换播放列表可见性</translation>
+    </message>
+    <message>
+        <source>Open the last played file</source>
+        <translation>打开最近播放的文件</translation>
+    </message>
+    <message>
+        <source>Access command-line</source>
+        <translation>打开命令行</translation>
+    </message>
+    <message>
+        <source>Launch online help</source>
+        <translation>打开在线帮助</translation>
+    </message>
+    <message>
+        <source>Play/Pause</source>
+        <translation>播放/暂停</translation>
+    </message>
+    <message>
+        <source>Fit the window to the video</source>
+        <translation>根据视频适应窗口大小</translation>
+    </message>
+    <message>
+        <source>Fit window to %0%</source>
+        <translation>适应窗口到 %0%</translation>
+    </message>
+    <message>
+        <source>Boss key</source>
+        <translation>老板键</translation>
+    </message>
+    <message>
+        <source>Select next file on playlist</source>
+        <translation>选择播放列表的下一个文件</translation>
+    </message>
+    <message>
+        <source>Select previous file on playlist</source>
+        <translation>选择播放列表的前一个文件</translation>
+    </message>
+    <message>
+        <source>Play selected file on playlist</source>
+        <translation>播放在播放列表选中的文件</translation>
+    </message>
+    <message>
+        <source>Remove selected file from playlist</source>
+        <translation>把选中文件移出播放列表</translation>
+    </message>
+    <message>
+        <source>executes mpv command</source>
+        <translation>执行mpv命令</translation>
+    </message>
+    <message>
+        <source>executes system shell command</source>
+        <translation>执行系统shell命令</translation>
+    </message>
+    <message>
+        <source>creates a new instance of Sugoi Player</source>
+        <translation>打开一个新的 Sugoi Player 实例</translation>
+    </message>
+    <message>
+        <source>shows the open location dialog</source>
+        <translation>显示打开路径对话框</translation>
+    </message>
+    <message>
+        <source>opens the clipboard</source>
+        <translation>打开剪贴板</translation>
+    </message>
+    <message>
+        <source>shows the current file in folder</source>
+        <translation>在文件夹中显示当前文件</translation>
+    </message>
+    <message>
+        <source>add subtitles dialog</source>
+        <translation>添加字幕对话框</translation>
+    </message>
+    <message>
+        <source>add audio track dialog</source>
+        <translation>添加音轨对话框</translation>
+    </message>
+    <message>
+        <source>[subs]</source>
+        <translation>[字幕]</translation>
+    </message>
+    <message>
+        <source>take a screenshot (with subtitles if specified)</source>
+        <translation>截图(带字幕)</translation>
+    </message>
+    <message>
+        <source>toggles media info display</source>
+        <translation>显示媒体信息</translation>
+    </message>
+    <message>
+        <source>stops the current playback</source>
+        <translation>停止当前播放</translation>
+    </message>
+    <message>
+        <source>playlist options</source>
+        <translation>播放列表选项</translation>
+    </message>
+    <message>
+        <source>opens jump dialog</source>
+        <translation>打开跳转对话框</translation>
+    </message>
+    <message>
+        <source>toggles dim desktop</source>
+        <translation>暗淡桌面</translation>
+    </message>
+    <message>
+        <source>toggles output textbox</source>
+        <translation>切换输出文本框</translation>
+    </message>
+    <message>
+        <source>opens preferences dialog</source>
+        <translation>打开首选项对话框</translation>
+    </message>
+    <message>
+        <source>launches online help</source>
+        <translation>打开在线帮助</translation>
+    </message>
+    <message>
+        <source>opens the update dialog or updates youtube-dl</source>
+        <translation>打开更新对话框或更新流媒体支持</translation>
+    </message>
+    <message>
+        <source>[file]</source>
+        <translation>[文件]</translation>
+    </message>
+    <message>
+        <source>opens the open file dialog or the file specified</source>
+        <translation>显示打开文件对话框或被指定文件</translation>
+    </message>
+    <message>
+        <source>toggle play/pause state</source>
+        <translation>切换 播放/暂停</translation>
+    </message>
+    <message>
+        <source>[percent]</source>
+        <translation>[百分比]</translation>
+    </message>
+    <message>
+        <source>fit the window</source>
+        <translation>适应窗口</translation>
+    </message>
+    <message>
+        <source>toggle deinterlace</source>
+        <translation>切换反交错</translation>
+    </message>
+    <message>
+        <source>toggle motion interpolation</source>
+        <translation>切换运动插值</translation>
+    </message>
+    <message>
+        <source>mutes the audio</source>
+        <translation>静音</translation>
+    </message>
+    <message>
+        <source>[level]</source>
+        <translation>[级别]</translation>
+    </message>
+    <message>
+        <source>adjusts the volume</source>
+        <translation>调整音量</translation>
+    </message>
+    <message>
+        <source>[ratio]</source>
+        <translation>[比例]</translation>
+    </message>
+    <message>
+        <source>adjusts the speed</source>
+        <translation>调整速度</translation>
+    </message>
+    <message>
+        <source>toggles fullscreen state</source>
+        <translation>切换全屏</translation>
+    </message>
+    <message>
+        <source>toggles hide all controls state</source>
+        <translation>切换隐藏所有控制项</translation>
+    </message>
+    <message>
+        <source>pause and hide the window</source>
+        <translation>暂停并隐藏窗口</translation>
+    </message>
+    <message>
+        <source>clears the output textbox</source>
+        <translation>清空输出文本框</translation>
+    </message>
+    <message>
+        <source>[command]</source>
+        <translation>[命令]</translation>
+    </message>
+    <message>
+        <source>internal help menu</source>
+        <translation>内置帮助菜单</translation>
+    </message>
+    <message>
+        <source>report bugs to the developers</source>
+        <translation>向开发者们报告问题</translation>
+    </message>
+    <message>
+        <source>show system information</source>
+        <translation>显示系统信息</translation>
+    </message>
+    <message>
+        <source>[qt]</source>
+        <translation>[Qt]</translation>
+    </message>
+    <message>
+        <source>open about dialog</source>
+        <translation>打开关于对话框</translation>
+    </message>
+    <message>
+        <source>set mpv msg-level</source>
+        <translation>设置 mpv 日志等级</translation>
+    </message>
+    <message>
+        <source>quit Sugoi Player</source>
+        <translation>退出 Sugoi Player</translation>
     </message>
 </context>
 <context>
