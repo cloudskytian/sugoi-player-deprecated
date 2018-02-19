@@ -64,6 +64,8 @@ public:
     bool getAllowRunInBackground() { return allowRunInBackground; }
     bool getQuickStartMode()     { return quickStartMode; }
     bool getTrayIconVisible()    { return trayIconVisible; }
+    bool getAutoUpdatePlayer()   { return autoUpdatePlayer; }
+    bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
 
     Ui::MainWindow  *ui;
     QImage albumArt;
@@ -120,6 +122,8 @@ private:
     bool allowRunInBackground = true;
     bool quickStartMode = true;
     bool trayIconVisible = true;
+    bool autoUpdatePlayer = true;
+    bool autoUpdateStreamingSupport = true;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar;
@@ -175,6 +179,8 @@ public slots:
     void setAllowRunInBackground(bool b) { emit allowRunInBackgroundChanged(allowRunInBackground = b); }
     void setQuickStartMode(bool b)    { emit quickStartModeChanged(quickStartMode = b); }
     void setTrayIconVisible(bool b)   { emit trayIconVisibleChanged(trayIconVisible = b); }
+    void setAutoUpdatePlayer(bool b)  { emit autoUpdatePlayerChanged(autoUpdatePlayer = b); }
+    void setAutoUpdateStreamingSupport(bool b) { emit autoUpdateStreamingSupportChanged(autoUpdateStreamingSupport = b); }
 
 signals:
     void langChanged(QString);
@@ -199,6 +205,8 @@ signals:
     void allowRunInBackgroundChanged(bool);
     void quickStartModeChanged(bool);
     void trayIconVisibleChanged(bool);
+    void autoUpdatePlayerChanged(bool);
+    void autoUpdateStreamingSupportChanged(bool);
 };
 
 #endif // MAINWINDOW_H

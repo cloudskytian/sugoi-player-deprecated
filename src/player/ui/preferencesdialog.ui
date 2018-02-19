@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
+    <width>554</width>
     <height>462</height>
    </rect>
   </property>
@@ -343,6 +343,29 @@ QTabBar::tab:!selected {
               </property>
               <property name="checked">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_10">
+           <property name="title">
+            <string>Update</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_13">
+            <item>
+             <widget class="QCheckBox" name="autoUpdatePlayerCheckBox">
+              <property name="text">
+               <string>Auto update Sugoi Player</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="autoUpdateStreamingSupportCheckBox">
+              <property name="text">
+               <string>Auto update streaming support</string>
               </property>
              </widget>
             </item>

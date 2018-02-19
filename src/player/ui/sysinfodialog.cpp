@@ -47,5 +47,6 @@ QString SysInfoDialog::sysInfoText_HTML()
 
 QString SysInfoDialog::sysInfoText_PlainText()
 {
-    return sysInfoText_HTML().remove(QRegExp(QStringLiteral("<[^>]*>")));
+    static QString str = sysInfoText_HTML().replace(QString::fromLatin1("<br />"), QString::fromLatin1("\r\n"));
+    return str.remove(QRegExp(QStringLiteral("<[^>]*>")));
 }

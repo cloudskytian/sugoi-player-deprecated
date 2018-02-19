@@ -216,11 +216,11 @@ int main(int argc, char *argv[])
                      , reinterpret_cast<const wchar_t *>(QString::fromStdWString(SUGOI_APP_MUTEX_STR).utf16()));
 
     win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/src/player/appcast.xml");
-    win_sparkle_set_app_details(SUGOI_COMPANY_NAME_STR, SUGOI_APP_NAME_STR, SUGOI_VERSION_STR);
-    win_sparkle_set_automatic_check_for_updates(1);
+    //win_sparkle_set_app_details(SUGOI_COMPANY_NAME_STR, SUGOI_APP_NAME_STR, SUGOI_VERSION_STR);
+    //win_sparkle_set_automatic_check_for_updates(1);
     win_sparkle_set_lang(mainWindow.getLang().toUtf8().constData());
     win_sparkle_init();
-    win_sparkle_check_update_without_ui();
+    //win_sparkle_check_update_without_ui();
 
     int ret = instance.exec();
 
