@@ -1,5 +1,5 @@
 #include "iconlib.h"
-#include "../../include/splayer-version.h"
+#include "../../include/sugoi-player-version.h"
 #include "winres.h"
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
