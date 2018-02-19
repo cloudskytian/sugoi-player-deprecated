@@ -2036,6 +2036,22 @@ Note: Value must be from %0 - %1</source>
         <source>Auto update streaming support</source>
         <translation>自动更新流媒体支持</translation>
     </message>
+    <message>
+        <source>Skins</source>
+        <translation>皮肤</translation>
+    </message>
+    <message>
+        <source>Style sheet file:</source>
+        <translation>样式表文件：</translation>
+    </message>
+    <message>
+        <source>&amp;Edit</source>
+        <translation>编辑(&amp;E)</translation>
+    </message>
+    <message>
+        <source>Show in file explorer</source>
+        <translation>在文件浏览器中显示</translation>
+    </message>
 </context>
 <context>
     <name>PropertiesDialog</name>

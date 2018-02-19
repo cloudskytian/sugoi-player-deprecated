@@ -175,8 +175,8 @@ QPushButton#openButton {
 	border: 0px;
 	border-radius: 0px;
 	color: none;
-	min-width: 10px;
-	min-height: 10px;
+	min-width: 8px;
+	min-height: 8px;
 }
 
 QPushButton#playlistButton {
@@ -184,8 +184,8 @@ QPushButton#playlistButton {
 	border: 0px;
 	border-radius: 0px;
 	color: none;
-	min-width: 10px;
-	min-height: 10px;
+	min-width: 8px;
+	min-height: 8px;
 }
 
 QPushButton#rewindButton {
@@ -193,8 +193,8 @@ QPushButton#rewindButton {
 	border: 0px;
 	border-radius: 0px;
 	color: none;
-	min-width: 10px;
-	min-height: 10px;
+	min-width: 8px;
+	min-height: 8px;
 }
 
 QPushButton#previousButton {
@@ -202,8 +202,8 @@ QPushButton#previousButton {
 	border: 0px;
 	border-radius: 0px;
 	color: none;
-	min-width: 12px;
-	min-height: 10px;
+	min-width: 8px;
+	min-height: 8px;
 }
 
 QPushButton#playButton {
@@ -211,8 +211,8 @@ QPushButton#playButton {
 	border: 0px;
 	border-radius: 0px;
 	color: none;
-	min-width: 28px;
-	min-height: 28px;
+	min-width: 25px;
+	min-height: 26px;
 }
 
 QPushButton#nextButton {
@@ -220,8 +220,8 @@ QPushButton#nextButton {
 	border: 0px;
 	border-radius: 0px;
 	color: none;
-	min-width: 12px;
-	min-height: 10px;
+	min-width: 8px;
+	min-height: 8px;
 }
 
 QPushButton#muteButton {
@@ -229,8 +229,8 @@ QPushButton#muteButton {
 	border: 0px;
 	border-radius: 0px;
 	color: none;
-	min-width: 10px;
-	min-height: 10px;
+	min-width: 8px;
+	min-height: 8px;
 }
 
 QPushButton#currentFileButton {

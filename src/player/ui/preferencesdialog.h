@@ -23,6 +23,7 @@ public:
     static void showPreferences(SugoiEngine *sugoi, QWidget *parent = 0);
 
 protected:
+    void PopulateSkinFiles();
     void PopulateLangs();
     void PopulateMsgLvls();
     void PopulateShortcuts();

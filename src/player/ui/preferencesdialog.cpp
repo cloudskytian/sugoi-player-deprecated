@@ -11,7 +11,11 @@
 #include <QMessageBox>
 #include <QLibraryInfo>
 #include <QLocale>
-#include <QVariant>
+#include <QApplication>
+#include <QFileInfo>
+#include <QFileInfoList>
+#include <QDesktopServices>
+#include <QUrl>
 
 PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     QDialog(parent),
@@ -27,6 +31,8 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     PopulateLangs();
 
     PopulateMsgLvls();
+
+    PopulateSkinFiles();
 
     QString ontop = sugoi->window->getOnTop();
     if(ontop == "never")
@@ -55,6 +61,7 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     ui->quickStartCheckBox->setChecked(sugoi->window->getQuickStartMode());
     ui->autoUpdatePlayerCheckBox->setChecked(sugoi->window->getAutoUpdatePlayer());
     ui->autoUpdateStreamingSupportCheckBox->setChecked(sugoi->window->getAutoUpdateStreamingSupport());
+    ui->styleSheetFilesComboBox->setCurrentIndex(ui->styleSheetFilesComboBox->findText(sugoi->window->getSkinFile()));
 
     // add shortcuts
     saved = sugoi->input;
@@ -87,6 +94,19 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
 
     ui->showFullscreenIndicatorCheckBox->setChecked(sugoi->window->getShowFullscreenIndicator());
     ui->osdShowLocalTimeCheckBox->setChecked(sugoi->window->getOSDShowLocalTime());
+
+    connect(ui->editStyleSheetFileButton, &QPushButton::clicked,
+            [=]
+            {
+                QDesktopServices::openUrl(QUrl::fromLocalFile(ui->styleSheetFilesComboBox->currentData().toString()));
+            });
+
+    connect(ui->openStyleSheetFolderButton, &QPushButton::clicked,
+            [=]
+            {
+                QString folderPath = QFileInfo(ui->styleSheetFilesComboBox->currentData().toString()).absolutePath();
+                QDesktopServices::openUrl(QUrl::fromLocalFile(folderPath));
+            });
 
     connect(ui->updateAssocButton, &QPushButton::clicked,
             [=]
@@ -198,6 +218,7 @@ PreferencesDialog::~PreferencesDialog()
 {
     if (result() == QDialog::Accepted)
     {
+        sugoi->window->setSkinFile(ui->styleSheetFilesComboBox->currentText());
         sugoi->window->setAutoUpdatePlayer(ui->autoUpdatePlayerCheckBox->isChecked());
         sugoi->window->setAutoUpdateStreamingSupport(ui->autoUpdateStreamingSupportCheckBox->isChecked());
         sugoi->window->setQuickStartMode(ui->quickStartCheckBox->isChecked());
@@ -260,6 +281,25 @@ void PreferencesDialog::showPreferences(SugoiEngine *sugoi, QWidget *parent)
 {
     PreferencesDialog dialog(sugoi, parent);
     dialog.exec();
+}
+
+void PreferencesDialog::PopulateSkinFiles()
+{
+    QString dirPath = QApplication::applicationDirPath() + QDir::separator() + QString::fromLatin1("stylesheets");
+    QDir dir(dirPath);
+    dir.setFilter(QDir::Files | QDir::NoSymLinks);
+    dir.setSorting(QDir::Name);
+    QFileInfoList fileList = dir.entryInfoList();
+    int fileCount = fileList.count();
+    if (fileCount < 1)
+    {
+        return;
+    }
+    for (int i = 0; i < fileCount; ++i)
+    {
+        QFileInfo fi = fileList.at(i);
+        ui->styleSheetFilesComboBox->addItem(fi.completeBaseName(), QDir::toNativeSeparators(fi.absoluteFilePath()));
+    }
 }
 
 void PreferencesDialog::PopulateLangs()
