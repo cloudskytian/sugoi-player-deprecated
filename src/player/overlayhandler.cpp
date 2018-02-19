@@ -89,7 +89,7 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     QStringList lines = text.split('\n');
     // the 1.3 was pretty much determined through trial and error; this formula isn't perfect
     // apparently, QFontMetrics doesn't work that well
-    const float fm_correction = 1.3;
+    const double fm_correction = 1.3;
     int w = 0,
         h = fm.height()*lines.length();
     for(auto line : lines)

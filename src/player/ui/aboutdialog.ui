@@ -14,110 +14,13 @@
    <string>About Sugoi Player</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-	background: #1A1A1A;
-	color: whitesmoke;
-}
-
-/* QPushButton */
-
-QPushButton {
-	background: #454A4D;
-	border: 1px solid #000;
-	border-radius: 2px;
-	color: whitesmoke;
-	min-width: 76px;
-	min-height: 17px;
-	padding: 4px 6px;
-}
-QPushButton:focus {
-	border: 1px solid #008098;
-	outline: none;
-}
-QPushButton:pressed {
-	background: #2E3133;
-}
-QPushButton:disabled {
-	background: transparent;
-	border: 1px solid #454A4D;
-	color: #6F6F6F;
-}
-
-/* QScrollBar */
-
-QScrollBar:vertical {
-	padding-left: 1px;
-	width: 6px;
-}
-QScrollBar::handle:vertical {
-	background: #008098;
-	border-radius: 2px;
-	min-height: 10px;
-}
-QScrollBar::add-line:vertical,
-QScrollBar::sub-line:vertical {
-	border: none;
-}
-QScrollBar::add-page:vertical,
-QScrollBar::sub-page:vertical  {
-	background: #383838;
-	margin: 0 2px;
-}
-QScrollBar::up-arrow:vertical,
-QScrollBar::down-arrow:vertical {
-	background: transparent;
-}
-
-QScrollBar:horizontal {
-	height: 6px;
-	padding-top: 1px;
-}
-QScrollBar::handle:horizontal {
-	background: #008098;
-	border-radius: 2px;
-	min-width: 10px;
-}
-QScrollBar::add-line:horizontal,
-QScrollBar::sub-line:horizontal {
-	border: none;
-}
-QScrollBar::add-page:horizontal,
-QScrollBar::sub-page:horizontal {
-	background: #383838;
-	margin: 2px 0;
-}
-QScrollBar::left-arrow:horizontal,
-QScrollBar::right-arrow:horizontal {
-	background: transparent;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="styleSheet">
-      <string notr="true">QTabWidget::pane { /* The tab widget frame */
-	border-top: 1px solid #454A4D;
-	padding: 5px 0px;
-}
-
-QTabWidget::tab-bar { alignment: center; }
-
-/* Style the tab using the tab sub-control. Note that
-    it reads QTabBar _not_ QTabWidget */
-QTabBar::tab {
-	border-style: none;
-	padding-bottom: 5px;
-	min-width: 100px;
-}
-QTabBar::tab:selected {
-	border-bottom: 1px solid #008098;
-	font-weight: bold;
-}
-QTabBar::tab:!selected {
-	font-weight: normal;
-	margin-bottom: 1px;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="currentIndex">
       <number>0</number>

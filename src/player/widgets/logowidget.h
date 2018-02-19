@@ -8,7 +8,7 @@ class LogoWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit LogoWidget(QWidget *parent = nullptr, const QString &imageFilePath = QString::fromLatin1(":/images/logo.png"));
+    explicit LogoWidget(QWidget *parent = nullptr, const QString &imageFilePath = QString::fromLatin1("./images/logo.png"));
 
 signals:
 

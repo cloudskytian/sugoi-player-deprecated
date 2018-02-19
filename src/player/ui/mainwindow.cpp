@@ -26,6 +26,7 @@
 #include "inputdialog.h"
 #include "screenshotdialog.h"
 #include "winsparkle.h"
+#include "skinmanager.h"
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
@@ -138,6 +139,16 @@ MainWindow::MainWindow(QWidget *parent):
             });
 
     // setup signals & slots
+
+    connect(this, &MainWindow::skinFileChanged,
+            [=](const QString &skin)
+            {
+                if (skin.isEmpty())
+                {
+                    return;
+                }
+                SkinManager::instance()->setSkin(skin);
+            });
 
     connect(this, &MainWindow::autoUpdatePlayerChanged,
             [=](bool isAuto)

@@ -29,6 +29,7 @@ void SugoiEngine::LoadSettings()
     {
         window->setFileAssocType(FileAssoc::reg_type::NONE);
     }
+    window->setSkinFile(settings.value(QString::fromLatin1("skin"), QString::fromLatin1("Default")).toString());
     window->setAutoUpdatePlayer(settings.value(QString::fromLatin1("autoUpdatePlayer"), true).toBool());
     window->setAutoUpdateStreamingSupport(settings.value(QString::fromLatin1("autoUpdateStreamingSupport"), true).toBool());
     window->setQuickStartMode(settings.value(QString::fromLatin1("quickStartMode"), true).toBool());
@@ -167,6 +168,7 @@ void SugoiEngine::SaveSettings()
     {
         regType = QString::fromLatin1("none");
     }
+    settings.setValue(QString::fromLatin1("skin"), window->getSkinFile());
     settings.setValue(QString::fromLatin1("autoUpdatePlayer"), window->getAutoUpdatePlayer());
     settings.setValue(QString::fromLatin1("autoUpdateStreamingSupport"), window->getAutoUpdateStreamingSupport());
     settings.setValue(QString::fromLatin1("quickStartMode"), window->getQuickStartMode());

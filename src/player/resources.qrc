@@ -24,10 +24,7 @@
     <file alias="edit.svg">resources/edit.svg</file>
     <file alias="enabled_hide_files.svg">resources/enabled_hide_files.svg</file>
     <file alias="exists.svg">resources/exists.svg</file>
-    <file alias="player.ico">resources/player.ico</file>
     <file alias="player.svg">resources/player.svg</file>
-    <file alias="logo.png">resources/logo.png</file>
-    <file alias="player.png">resources/player.png</file>
     <file alias="not_exists.svg">resources/not_exists.svg</file>
     <file alias="refresh_view.svg">resources/refresh_view.svg</file>
     <file alias="paste.svg">resources/paste.svg</file>

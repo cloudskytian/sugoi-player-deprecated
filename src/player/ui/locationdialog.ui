@@ -14,46 +14,7 @@
    <string>Open Location</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget {
-	font: 12px &quot;Noto Sans&quot;, &quot;FreeSans&quot;;
-	background: #1A1A1A;
-	color: whitesmoke;
-}
-
-/* QLineEdit */
-
-QLineEdit {
-	background: #000;
-	border: 1px solid #454A4D;
-	padding: 2px;
-}
-QLineEdit:focus {
-	border: 1px solid #008098;
-}
-
-/* QPushButton */
-
-QPushButton {
-	background: #454A4D;
-	border: 1px solid #000;
-	border-radius: 2px;
-	color: whitesmoke;
-	min-width: 76px;
-	min-height: 17px;
-	padding: 4px 6px;
-}
-QPushButton:focus {
-	border: 1px solid #008098;
-	outline: none;
-}
-QPushButton:pressed {
-	background: #2E3133;
-}
-QPushButton:disabled {
-	background: transparent;
-	border: 1px solid #454A4D;
-	color: #6F6F6F;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -84,18 +45,7 @@ QPushButton:disabled {
       <string>Paste copied link</string>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton {
-	background: none;
-	border: 1px solid #454A4D;
-    min-width: 20px;
-}
-QPushButton:focus {
-	border: 1px solid #008098;
-	outline: none;
-}
-QPushButton:pressed {
-	background: #2E3133;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="icon">
       <iconset resource="../resources.qrc">

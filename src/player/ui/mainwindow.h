@@ -66,6 +66,7 @@ public:
     bool getTrayIconVisible()    { return trayIconVisible; }
     bool getAutoUpdatePlayer()   { return autoUpdatePlayer; }
     bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
+    QString getSkinFile()        { return skinFile; }
 
     Ui::MainWindow  *ui;
     QImage albumArt;
@@ -124,6 +125,7 @@ private:
     bool trayIconVisible = true;
     bool autoUpdatePlayer = true;
     bool autoUpdateStreamingSupport = true;
+    QString skinFile;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar;
@@ -181,6 +183,7 @@ public slots:
     void setTrayIconVisible(bool b)   { emit trayIconVisibleChanged(trayIconVisible = b); }
     void setAutoUpdatePlayer(bool b)  { emit autoUpdatePlayerChanged(autoUpdatePlayer = b); }
     void setAutoUpdateStreamingSupport(bool b) { emit autoUpdateStreamingSupportChanged(autoUpdateStreamingSupport = b); }
+    void setSkinFile(const QString &s)  { emit skinFileChanged(skinFile = s); }
 
 signals:
     void langChanged(QString);
@@ -207,6 +210,7 @@ signals:
     void trayIconVisibleChanged(bool);
     void autoUpdatePlayerChanged(bool);
     void autoUpdateStreamingSupportChanged(bool);
+    void skinFileChanged(const QString &);
 };
 
 #endif // MAINWINDOW_H
