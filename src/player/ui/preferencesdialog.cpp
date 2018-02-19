@@ -1,7 +1,7 @@
 ﻿#include "preferencesdialog.h"
 #include "ui_preferencesdialog.h"
 
-#include "bakaengine.h"
+#include "sugoiengine.h"
 #include "ui/mainwindow.h"
 #include "mpvhandler.h"
 #include "ui/keydialog.h"
@@ -13,10 +13,10 @@
 #include <QLocale>
 #include <QVariant>
 
-PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
+PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PreferencesDialog),
-    baka(baka),
+    sugoi(sugoi),
     screenshotDir("")
 {
     ui->setupUi(this);
@@ -28,47 +28,47 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
 
     PopulateMsgLvls();
 
-    QString ontop = baka->window->getOnTop();
+    QString ontop = sugoi->window->getOnTop();
     if(ontop == "never")
         ui->neverRadioButton->setChecked(true);
     else if(ontop == "playing")
         ui->playingRadioButton->setChecked(true);
     else if(ontop == "always")
         ui->alwaysRadioButton->setChecked(true);
-    ui->resumeCheckBox->setChecked(baka->window->getResume());
-    ui->groupBox_2->setChecked(baka->window->getTrayIconVisible());
-    ui->hidePopupCheckBox->setChecked(baka->window->getHidePopup());
-    ui->langComboBox->setCurrentIndex(ui->langComboBox->findData(baka->window->getLang()));
-    int autofit = baka->window->getAutoFit();
+    ui->resumeCheckBox->setChecked(sugoi->window->getResume());
+    ui->groupBox_2->setChecked(sugoi->window->getTrayIconVisible());
+    ui->hidePopupCheckBox->setChecked(sugoi->window->getHidePopup());
+    ui->langComboBox->setCurrentIndex(ui->langComboBox->findData(sugoi->window->getLang()));
+    int autofit = sugoi->window->getAutoFit();
     ui->autoFitCheckBox->setChecked((bool)autofit);
     ui->comboBox->setCurrentText(QString::number(autofit)+"%");
-    int maxRecent= baka->window->getMaxRecent();
+    int maxRecent= sugoi->window->getMaxRecent();
     ui->recentCheckBox->setChecked(maxRecent > 0);
     ui->recentSpinBox->setValue(maxRecent);
-    ui->resumeCheckBox->setChecked(baka->window->getResume());
-    ui->formatComboBox->setCurrentText(baka->mpv->getScreenshotFormat());
-    screenshotDir = QDir::toNativeSeparators(baka->mpv->getScreenshotDir());
-    ui->templateLineEdit->setText(baka->mpv->getScreenshotTemplate());
-    ui->msgLvlComboBox->setCurrentIndex(ui->msgLvlComboBox->findData(baka->mpv->getMsgLevel()));
-    ui->groupBox_9->setChecked(baka->window->getShowVideoPreview());
-    ui->backgroundNotAskCheckBox->setChecked(baka->window->getAllowRunInBackground());
-    ui->quickStartCheckBox->setChecked(baka->window->getQuickStartMode());
+    ui->resumeCheckBox->setChecked(sugoi->window->getResume());
+    ui->formatComboBox->setCurrentText(sugoi->mpv->getScreenshotFormat());
+    screenshotDir = QDir::toNativeSeparators(sugoi->mpv->getScreenshotDir());
+    ui->templateLineEdit->setText(sugoi->mpv->getScreenshotTemplate());
+    ui->msgLvlComboBox->setCurrentIndex(ui->msgLvlComboBox->findData(sugoi->mpv->getMsgLevel()));
+    ui->groupBox_9->setChecked(sugoi->window->getShowVideoPreview());
+    ui->backgroundNotAskCheckBox->setChecked(sugoi->window->getAllowRunInBackground());
+    ui->quickStartCheckBox->setChecked(sugoi->window->getQuickStartMode());
 
     // add shortcuts
-    saved = baka->input;
+    saved = sugoi->input;
     PopulateShortcuts();
 
-    if (baka->window->getFileAssocType() == FileAssoc::reg_type::ALL)
+    if (sugoi->window->getFileAssocType() == FileAssoc::reg_type::ALL)
     {
         ui->assocVideoCheckBox->setChecked(true);
         ui->assocAudioCheckBox->setChecked(true);
     }
-    else if (baka->window->getFileAssocType() == FileAssoc::reg_type::VIDEO_ONLY)
+    else if (sugoi->window->getFileAssocType() == FileAssoc::reg_type::VIDEO_ONLY)
     {
         ui->assocVideoCheckBox->setChecked(true);
         ui->assocAudioCheckBox->setChecked(false);
     }
-    else if (baka->window->getFileAssocType() == FileAssoc::reg_type::AUDIO_ONLY)
+    else if (sugoi->window->getFileAssocType() == FileAssoc::reg_type::AUDIO_ONLY)
     {
         ui->assocVideoCheckBox->setChecked(false);
         ui->assocAudioCheckBox->setChecked(true);
@@ -79,12 +79,12 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
         ui->assocAudioCheckBox->setChecked(false);
     }
 
-    ui->alwaysAssocCheckBox->setChecked(baka->window->getAlwaysCheckFileAssoc());
+    ui->alwaysAssocCheckBox->setChecked(sugoi->window->getAlwaysCheckFileAssoc());
 
-    ui->pauseWhenMinimizedCheckBox->setChecked(baka->window->getPauseWhenMinimized());
+    ui->pauseWhenMinimizedCheckBox->setChecked(sugoi->window->getPauseWhenMinimized());
 
-    ui->showFullscreenIndicatorCheckBox->setChecked(baka->window->getShowFullscreenIndicator());
-    ui->osdShowLocalTimeCheckBox->setChecked(baka->window->getOSDShowLocalTime());
+    ui->showFullscreenIndicatorCheckBox->setChecked(sugoi->window->getShowFullscreenIndicator());
+    ui->osdShowLocalTimeCheckBox->setChecked(sugoi->window->getOSDShowLocalTime());
 
     connect(ui->updateAssocButton, &QPushButton::clicked,
             [=]
@@ -106,7 +106,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
                 {
                     regType = FileAssoc::reg_type::NONE;
                 }
-                baka->window->SetFileAssoc(regType, false);
+                sugoi->window->SetFileAssoc(regType, false);
             });
 
     connect(ui->autoFitCheckBox, &QCheckBox::clicked,
@@ -147,7 +147,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
             {
                 if(QMessageBox::question(this, tr("Reset All Key Bindings?"), tr("Are you sure you want to reset all shortcut keys to its original bindings?")) == QMessageBox::Yes)
                 {
-                    baka->input = baka->default_input;
+                    sugoi->input = sugoi->default_input;
                     while(numberOfShortcuts > 0)
                         RemoveRow(numberOfShortcuts-1);
                     PopulateShortcuts();
@@ -161,7 +161,7 @@ PreferencesDialog::PreferencesDialog(BakaEngine *baka, QWidget *parent) :
                 if(row == -1)
                     return;
 
-                baka->input[ui->infoWidget->item(row, 0)->text()] = {QString(), QString()};
+                sugoi->input[ui->infoWidget->item(row, 0)->text()] = {QString(), QString()};
                 RemoveRow(row);
             });
 
@@ -196,34 +196,34 @@ PreferencesDialog::~PreferencesDialog()
 {
     if (result() == QDialog::Accepted)
     {
-        baka->window->setQuickStartMode(ui->quickStartCheckBox->isChecked());
-        baka->window->setAllowRunInBackground(ui->backgroundNotAskCheckBox->isChecked());
-        baka->window->setPauseWhenMinimized(ui->pauseWhenMinimizedCheckBox->isChecked());
-        baka->window->setShowFullscreenIndicator(ui->showFullscreenIndicatorCheckBox->isChecked());
-        baka->window->setOSDShowLocalTime(ui->osdShowLocalTimeCheckBox->isChecked());
-        baka->window->setAlwaysCheckFileAssoc(ui->alwaysAssocCheckBox->isChecked());
-        baka->window->setResume(ui->resumeCheckBox->isChecked());
+        sugoi->window->setQuickStartMode(ui->quickStartCheckBox->isChecked());
+        sugoi->window->setAllowRunInBackground(ui->backgroundNotAskCheckBox->isChecked());
+        sugoi->window->setPauseWhenMinimized(ui->pauseWhenMinimizedCheckBox->isChecked());
+        sugoi->window->setShowFullscreenIndicator(ui->showFullscreenIndicatorCheckBox->isChecked());
+        sugoi->window->setOSDShowLocalTime(ui->osdShowLocalTimeCheckBox->isChecked());
+        sugoi->window->setAlwaysCheckFileAssoc(ui->alwaysAssocCheckBox->isChecked());
+        sugoi->window->setResume(ui->resumeCheckBox->isChecked());
         if(ui->neverRadioButton->isChecked())
-            baka->window->setOnTop("never");
+            sugoi->window->setOnTop("never");
         else if(ui->playingRadioButton->isChecked())
-            baka->window->setOnTop("playing");
+            sugoi->window->setOnTop("playing");
         else if(ui->alwaysRadioButton->isChecked())
-            baka->window->setOnTop("always");
-        baka->window->setTrayIconVisible(ui->groupBox_2->isChecked());
-        baka->window->setHidePopup(ui->hidePopupCheckBox->isChecked());
-        baka->window->setLang(ui->langComboBox->currentData().toString());
-        baka->window->setShowVideoPreview(ui->groupBox_9->isChecked());
+            sugoi->window->setOnTop("always");
+        sugoi->window->setTrayIconVisible(ui->groupBox_2->isChecked());
+        sugoi->window->setHidePopup(ui->hidePopupCheckBox->isChecked());
+        sugoi->window->setLang(ui->langComboBox->currentData().toString());
+        sugoi->window->setShowVideoPreview(ui->groupBox_9->isChecked());
         if(ui->autoFitCheckBox->isChecked())
-            baka->window->setAutoFit(ui->comboBox->currentText().left(ui->comboBox->currentText().length()-1).toInt());
+            sugoi->window->setAutoFit(ui->comboBox->currentText().left(ui->comboBox->currentText().length()-1).toInt());
         else
-            baka->window->setAutoFit(0);
-        baka->window->setMaxRecent(ui->recentCheckBox->isChecked() ? ui->recentSpinBox->value() : 0);
-        baka->window->setResume(ui->resumeCheckBox->isChecked());
-        baka->mpv->ScreenshotFormat(ui->formatComboBox->currentText());
-        baka->mpv->ScreenshotDirectory(screenshotDir);
-        baka->mpv->ScreenshotTemplate(ui->templateLineEdit->text());
-        baka->mpv->MsgLevel(ui->msgLvlComboBox->currentData().toString());
-        baka->window->MapShortcuts();
+            sugoi->window->setAutoFit(0);
+        sugoi->window->setMaxRecent(ui->recentCheckBox->isChecked() ? ui->recentSpinBox->value() : 0);
+        sugoi->window->setResume(ui->resumeCheckBox->isChecked());
+        sugoi->mpv->ScreenshotFormat(ui->formatComboBox->currentText());
+        sugoi->mpv->ScreenshotDirectory(screenshotDir);
+        sugoi->mpv->ScreenshotTemplate(ui->templateLineEdit->text());
+        sugoi->mpv->MsgLevel(ui->msgLvlComboBox->currentData().toString());
+        sugoi->window->MapShortcuts();
         FileAssoc::reg_state regState;
         if (ui->assocVideoCheckBox->isChecked() && ui->assocAudioCheckBox->isChecked())
         {
@@ -245,16 +245,16 @@ PreferencesDialog::~PreferencesDialog()
     }
     else
     {
-        baka->input = saved;
+        sugoi->input = saved;
     }
-    baka->SaveSettings();
+    sugoi->SaveSettings();
     delete sortLock;
     delete ui;
 }
 
-void PreferencesDialog::showPreferences(BakaEngine *baka, QWidget *parent)
+void PreferencesDialog::showPreferences(SugoiEngine *sugoi, QWidget *parent)
 {
-    PreferencesDialog dialog(baka, parent);
+    PreferencesDialog dialog(sugoi, parent);
     dialog.exec();
 }
 
@@ -297,7 +297,7 @@ void PreferencesDialog::PopulateShortcuts()
 {
     sortLock->lock();
     numberOfShortcuts = 0;
-    for(auto iter = baka->input.begin(); iter != baka->input.end(); ++iter)
+    for(auto iter = sugoi->input.begin(); iter != sugoi->input.end(); ++iter)
     {
         QPair<QString, QString> p = iter.value();
         if(p.first == QString() || p.second == QString())
@@ -362,7 +362,7 @@ void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QStrin
                        tr("%0 is already being used. Would you like to change its function?").arg(
                            result.first)) == QMessageBox::Yes)
                 {
-                    baka->input[ui->infoWidget->item(i, 0)->text()] = {QString(), QString()};
+                    sugoi->input[ui->infoWidget->item(i, 0)->text()] = {QString(), QString()};
                     RemoveRow(i);
                     status = 0;
                 }
@@ -381,10 +381,10 @@ void PreferencesDialog::SelectKey(bool add, QPair<QString, QPair<QString, QStrin
             else // change
             {
                 if(result.first != init.first)
-                    baka->input[init.first] = {QString(), QString()};
+                    sugoi->input[init.first] = {QString(), QString()};
                 ModifyRow(ui->infoWidget->currentRow(), result.first, result.second.first, result.second.second);
             }
-            baka->input[result.first] = result.second;
+            sugoi->input[result.first] = result.second;
             status = 2;
         }
         else

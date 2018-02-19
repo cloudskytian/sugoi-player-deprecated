@@ -12,11 +12,11 @@
 #define MPV_REPLY_COMMAND 1
 #define MPV_REPLY_PROPERTY 2
 
-class BakaEngine;
+class SugoiEngine;
 
 class MpvHandler : public QObject
 {
-friend class BakaEngine;
+friend class SugoiEngine;
     Q_OBJECT
 public:
     explicit MpvHandler(int64_t wid, QObject *parent = 0);
@@ -177,7 +177,7 @@ signals:
     void messageSignal(QString m);
 
 private:
-    BakaEngine *baka;
+    SugoiEngine *sugoi;
     mpv_handle *mpv = nullptr;
 
     // variables

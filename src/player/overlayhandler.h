@@ -1,4 +1,4 @@
-#ifndef OVERLAYHANDLER_H
+﻿#ifndef OVERLAYHANDLER_H
 #define OVERLAYHANDLER_H
 
 #include <QObject>
@@ -11,7 +11,7 @@
 #include <QLabel>
 #include <QMutex>
 
-class BakaEngine;
+class SugoiEngine;
 class Overlay;
 
 class OverlayHandler : public QObject
@@ -30,7 +30,7 @@ protected slots:
     void remove(int id);
 
 private:
-    BakaEngine *baka;
+    SugoiEngine *sugoi;
 
     QHash<int, Overlay*> overlays;
     QMutex overlay_mutex;

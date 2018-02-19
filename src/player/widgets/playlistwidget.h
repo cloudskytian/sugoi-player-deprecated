@@ -1,4 +1,4 @@
-#ifndef PLAYLISTWIDGET_H
+﻿#ifndef PLAYLISTWIDGET_H
 #define PLAYLISTWIDGET_H
 
 #include <QListWidget>
@@ -6,7 +6,7 @@
 #include <QDropEvent>
 #include <QAction>
 
-class BakaEngine;
+class SugoiEngine;
 
 class PlaylistWidget : public QListWidget
 {
@@ -14,7 +14,7 @@ class PlaylistWidget : public QListWidget
 public:
     explicit PlaylistWidget(QWidget *parent = 0);
 
-    void AttachEngine(BakaEngine *baka);
+    void AttachEngine(SugoiEngine *sugoi);
 
 public slots:
     void Populate();
@@ -41,7 +41,7 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private:
-    BakaEngine *baka;
+    SugoiEngine *sugoi;
 
     QStringList playlist;
     QString file, suffix;

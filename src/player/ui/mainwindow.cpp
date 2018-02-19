@@ -18,7 +18,7 @@
 #include <QUrl>
 #include <QCursor>
 
-#include "bakaengine.h"
+#include "sugoiengine.h"
 #include "mpvhandler.h"
 #include "overlayhandler.h"
 #include "util.h"
@@ -39,10 +39,10 @@ MainWindow::MainWindow(QWidget *parent):
     addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
 
     // initialize managers/handlers
-    baka = new BakaEngine(this);
-    mpv = baka->mpv;
+    sugoi = new SugoiEngine(this);
+    mpv = sugoi->mpv;
 
-    ui->playlistWidget->AttachEngine(baka);
+    ui->playlistWidget->AttachEngine(sugoi);
     ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
     ui->mpvFrame->setMouseTracking(true);
     autohide = new QTimer(this);
@@ -62,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent):
         {"mpv set sub-scale 1", ui->action_Reset_Size},
         {"mpv add sub-scale +0.1", ui->action_Size},
         {"mpv add sub-scale -0.1", ui->actionS_ize},
-        {"mpv set video-aspect -1", ui->action_Auto_Detect}, // todo: make these baka-commands so we can output messages when they change
+        {"mpv set video-aspect -1", ui->action_Auto_Detect}, // todo: make these sugoi-commands so we can output messages when they change
         {"mpv set video-aspect 16:9", ui->actionForce_16_9},
         {"mpv set video-aspect 2.35:1", ui->actionForce_2_35_1},
         {"mpv set video-aspect 4:3", ui->actionForce_4_3},
@@ -116,7 +116,7 @@ MainWindow::MainWindow(QWidget *parent):
         {"sys_info", ui->action_System_Information},
         {"update", ui->action_Check_for_Updates},
         {"update youtube-dl", ui->actionUpdate_Streaming_Support},
-        {"about", ui->actionAbout_Baka_MPlayer}
+        {"about", ui->actionAbout_Sugoi_Player}
     };
 
     // map actions to commands
@@ -124,7 +124,7 @@ MainWindow::MainWindow(QWidget *parent):
     {
         const QString cmd = action.key();
         connect(*action, &QAction::triggered,
-                [=] { baka->Command(cmd); });
+                [=] { sugoi->Command(cmd); });
     }
 
     connect(this, &MainWindow::openFileFromCmd,
@@ -167,7 +167,7 @@ MainWindow::MainWindow(QWidget *parent):
                     {
                         if (fullscreenProgressIndicator == nullptr)
                         {
-                            fullscreenProgressIndicator = new SProgressIndicatorBar(this);
+                            fullscreenProgressIndicator = new ProgressIndicatorBar(this);
                             fullscreenProgressIndicator->setFixedSize(QSize(width(), (2.0 / 1080.0) * height()));
                             fullscreenProgressIndicator->move(QPoint(0, height() - fullscreenProgressIndicator->height()));
                             fullscreenProgressIndicator->setRange(0, 1000);
@@ -201,31 +201,31 @@ MainWindow::MainWindow(QWidget *parent):
                 if (lang != QString::fromLatin1("C") && lang != QString::fromLatin1("en") && lang != QString::fromLatin1("en_US") && lang != QString::fromLatin1("en_UK"))
                 {
                     // load the application translations
-                    if(baka->translator != nullptr)
+                    if(sugoi->translator != nullptr)
                     {
-                        qApp->removeTranslator(baka->translator);
-                        delete baka->translator;
-                        baka->translator = nullptr;
+                        qApp->removeTranslator(sugoi->translator);
+                        delete sugoi->translator;
+                        sugoi->translator = nullptr;
                     }
-                    baka->translator = new QTranslator(qApp);
+                    sugoi->translator = new QTranslator(qApp);
                     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-                    if (baka->translator->load(QString("sugoi_%0").arg(lang), langPath))
+                    if (sugoi->translator->load(QString("sugoi_%0").arg(lang), langPath))
                     {
-                        qApp->installTranslator(baka->translator);
+                        qApp->installTranslator(sugoi->translator);
                     }
                     else
                     {
-                        delete baka->translator;
-                        baka->translator = nullptr;
+                        delete sugoi->translator;
+                        sugoi->translator = nullptr;
                     }
                 }
                 else
                 {
-                    if(baka->translator != nullptr)
+                    if(sugoi->translator != nullptr)
                     {
-                        qApp->removeTranslator(baka->translator);
-                        delete baka->translator;
-                        baka->translator = nullptr;
+                        qApp->removeTranslator(sugoi->translator);
+                        delete sugoi->translator;
+                        sugoi->translator = nullptr;
                     }
                 }
 
@@ -282,7 +282,7 @@ MainWindow::MainWindow(QWidget *parent):
                 blockSignals(false);
             });
 
-    connect(baka->sysTrayIcon, &QSystemTrayIcon::activated,
+    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::activated,
             [=](QSystemTrayIcon::ActivationReason reason)
             {
                 if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick)
@@ -291,7 +291,7 @@ MainWindow::MainWindow(QWidget *parent):
                 }
             });
 
-    connect(baka->sysTrayIcon, &QSystemTrayIcon::messageClicked, this, &MainWindow::BringWindowToFront);
+    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::messageClicked, this, &MainWindow::BringWindowToFront);
 
     connect(autohide, &QTimer::timeout, // cursor autohide
             [=]
@@ -323,7 +323,7 @@ MainWindow::MainWindow(QWidget *parent):
             });
 
     // dimDialog
-    connect(baka->dimDialog, &DimDialog::visbilityChanged,
+    connect(sugoi->dimDialog, &DimDialog::visbilityChanged,
             [=](bool dim)
             {
                 ui->action_Dim_Lights->setChecked(dim);
@@ -402,11 +402,11 @@ MainWindow::MainWindow(QWidget *parent):
                     ui->seekBar->setTracking(fileInfo.length);
 
                     if(ui->actionMedia_Info->isChecked())
-                        baka->MediaInfo(true);
+                        sugoi->MediaInfo(true);
 
                     SetRemainingLabels(fileInfo.length);
 
-                    if(baka->sysTrayIcon->isVisible() && !hidePopup)
+                    if(sugoi->sysTrayIcon->isVisible() && !hidePopup)
                     {
                         QString title = QString();
                         if (mpv->getFileInfo().metadata.contains("artist"))
@@ -420,7 +420,7 @@ MainWindow::MainWindow(QWidget *parent):
                                 title = mpv->getFileInfo().metadata["author"];
                             }
                         }
-                        baka->sysTrayIcon->showMessage(title, mpv->getFileInfo().media_title, QIcon(":/images/player.svg"), 4000);
+                        sugoi->sysTrayIcon->showMessage(title, mpv->getFileInfo().media_title, QIcon(":/images/player.svg"), 4000);
                     }
                 }
             });
@@ -543,7 +543,7 @@ MainWindow::MainWindow(QWidget *parent):
 
                     if(pathChanged && autoFit)
                     {
-                        baka->FitWindow(autoFit, false);
+                        sugoi->FitWindow(autoFit, false);
                         pathChanged = false;
                     }
                 }
@@ -595,7 +595,7 @@ MainWindow::MainWindow(QWidget *parent):
                 switch(playState)
                 {
                 case Mpv::Loaded:
-                    baka->mpv->ShowText("Loading...", 0);
+                    sugoi->mpv->ShowText("Loading...", 0);
                     break;
 
                 case Mpv::Started:
@@ -613,7 +613,7 @@ MainWindow::MainWindow(QWidget *parent):
                     }
                     SetPlaybackControls(true);
                     mpv->Play();
-                    baka->overlay->showStatusText(QString(), 0);
+                    sugoi->overlay->showStatusText(QString(), 0);
                 case Mpv::Playing:
                     SetPlayButtonIcon(false);
                     if(onTop == "playing")
@@ -797,19 +797,19 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->openButton, &OpenButton::LeftClick,                     // Playback: Open button (left click)
             [=]
             {
-                baka->Open();
+                sugoi->Open();
             });
 
     connect(ui->openButton, &OpenButton::MiddleClick,                   // Playback: Open button (middle click)
             [=]
             {
-                baka->Jump();
+                sugoi->Jump();
             });
 
     connect(ui->openButton, &OpenButton::RightClick,                    // Playback: Open button (right click)
             [=]
             {
-                baka->OpenLocation();
+                sugoi->OpenLocation();
             });
 
     connect(ui->rewindButton, &QPushButton::clicked,                    // Playback: Rewind button
@@ -827,7 +827,7 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->playButton, &QPushButton::clicked,                      // Playback: Play/pause button
             [=]
             {
-                baka->PlayPause();
+                sugoi->PlayPause();
             });
 
     connect(ui->nextButton, &IndexButton::clicked,                      // Playback: Next button
@@ -877,7 +877,7 @@ MainWindow::MainWindow(QWidget *parent):
                 ui->playlistLayoutWidget->setVisible(ui->action_Show_Playlist->isChecked());
                 blockSignals(false);
                 if(ui->actionMedia_Info->isChecked())
-                    baka->overlay->showInfoText();
+                    sugoi->overlay->showInfoText();
 
                 logo->setGeometry(0, menuBar()->height() / 2, width() - i,
                     height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
@@ -927,16 +927,16 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->inputLineEdit, &CustomLineEdit::submitted,
             [=](QString s)
             {
-                baka->Command(s);
+                sugoi->Command(s);
                 ui->inputLineEdit->setText("");
             });
 
     connect(this, &MainWindow::trayIconVisibleChanged,
             [=](bool visible)
             {
-                if (baka->sysTrayIcon != nullptr)
+                if (sugoi->sysTrayIcon != nullptr)
                 {
-                    baka->sysTrayIcon->setVisible(visible);
+                    sugoi->sysTrayIcon->setVisible(visible);
                 }
             });
 
@@ -987,7 +987,7 @@ MainWindow::~MainWindow()
         else
             current->time = 0;
     }
-    baka->SaveSettings();
+    sugoi->SaveSettings();
 
 #if defined(Q_OS_WIN)
     delete prev_toolbutton;
@@ -997,7 +997,7 @@ MainWindow::~MainWindow()
     delete taskbarProgress;
     delete taskbarButton;
 #endif
-    delete baka;
+    delete sugoi;
     delete ui;
 }
 
@@ -1040,7 +1040,7 @@ void MainWindow::Load(const QString &file, bool backgroundMode)
     connect(playpause_toolbutton, &QWinThumbnailToolButton::clicked,
             [=]
             {
-                baka->PlayPause();
+                sugoi->PlayPause();
             });
 
     next_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
@@ -1057,7 +1057,7 @@ void MainWindow::Load(const QString &file, bool backgroundMode)
     thumbnail_toolbar->addButton(playpause_toolbutton);
     thumbnail_toolbar->addButton(next_toolbutton);
 #endif
-    baka->LoadSettings();
+    sugoi->LoadSettings();
     mpv->Initialize();
 
     if (osdShowLocalTime)
@@ -1096,7 +1096,7 @@ void MainWindow::MapShortcuts()
 {
     auto tmp = commandActionMap;
     // map shortcuts to actions
-    for(auto input_iter = baka->input.begin(); input_iter != baka->input.end(); ++input_iter)
+    for(auto input_iter = sugoi->input.begin(); input_iter != sugoi->input.end(); ++input_iter)
     {
         auto commandAction = tmp.find(input_iter->first);
         if(commandAction != tmp.end())
@@ -1198,7 +1198,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     {
         if(ui->remainingLabel->rect().contains(ui->remainingLabel->mapFrom(this, event->pos()))) // clicked timeLayoutWidget
         {
-            setRemaining(!remaining); // todo: use a bakacommand
+            setRemaining(!remaining); // todo: use a sugoicommand
         }
         else if (ui->mpvFrame->geometry().contains(event->pos())) // mouse is in the mpvFrame
         {
@@ -1264,7 +1264,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     // keyboard shortcuts
-    if(!baka->input.empty())
+    if(!sugoi->input.empty())
     {
         QString key = QKeySequence(event->modifiers()|event->key()).toString();
 
@@ -1281,9 +1281,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         }
 
         // find shortcut in input hash table
-        auto iter = baka->input.find(key);
-        if(iter != baka->input.end())
-            baka->Command(iter->first); // execute command
+        auto iter = sugoi->input.find(key);
+        if(iter != sugoi->input.end())
+            sugoi->Command(iter->first); // execute command
     }
     QMainWindow::keyPressEvent(event);
 }
@@ -1291,7 +1291,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     if(ui->actionMedia_Info->isChecked())
-        baka->overlay->showInfoText();
+        sugoi->overlay->showInfoText();
     if (!isPlaylistVisible())
     {
         logo->setGeometry(0, menuBar()->height() / 2, width(),
@@ -1327,7 +1327,7 @@ void MainWindow::changeEvent(QEvent *event)
             {
                 if (IsPlayingVideo(mpv->getFileFullPath()))
                 {
-                    baka->PlayPause();
+                    sugoi->PlayPause();
                 }
             }
         }
@@ -1352,9 +1352,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (!canClose)
     {
         hide();
-        if (baka->sysTrayIcon->isVisible())
+        if (sugoi->sysTrayIcon->isVisible())
         {
-            baka->sysTrayIcon->showMessage(QString::fromLatin1("Sugoi Player"), tr("Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground."), QIcon(":/images/player.svg"), 4000);
+            sugoi->sysTrayIcon->showMessage(QString::fromLatin1("Sugoi Player"), tr("Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground."), QIcon(":/images/player.svg"), 4000);
         }
         event->ignore();
         return;
@@ -1363,7 +1363,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         mpv->TrulyStop();
         this->hide();
-        baka->sysTrayIcon->hide();
+        sugoi->sysTrayIcon->hide();
         event->ignore();
         return;
     }
@@ -1374,15 +1374,15 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::showEvent(QShowEvent *event)
 {
     QMainWindow::showEvent(event);
-    if (baka->sysTrayIcon != nullptr)
+    if (sugoi->sysTrayIcon != nullptr)
     {
-        if (trayIconVisible && !baka->sysTrayIcon->isVisible())
+        if (trayIconVisible && !sugoi->sysTrayIcon->isVisible())
         {
-            baka->sysTrayIcon->show();
+            sugoi->sysTrayIcon->show();
         }
-        else if (!trayIconVisible && baka->sysTrayIcon->isVisible())
+        else if (!trayIconVisible && sugoi->sysTrayIcon->isVisible())
         {
-            baka->sysTrayIcon->hide();
+            sugoi->sysTrayIcon->hide();
         }
     }
 }
@@ -1450,7 +1450,7 @@ void MainWindow::SetPlaybackControls(bool enable)
     ui->menuS_peed->setEnabled(enable);
     ui->action_Jump_to_Time->setEnabled(enable);
     ui->actionMedia_Info->setEnabled(enable);
-    ui->actionShow_in_Folder->setEnabled(enable && baka->mpv->getPath() != QString());
+    ui->actionShow_in_Folder->setEnabled(enable && sugoi->mpv->getPath() != QString());
     ui->action_Full_Screen->setEnabled(enable);
     if(!enable)
     {
@@ -1491,7 +1491,7 @@ void MainWindow::HideAllControls(bool w, bool s)
         }
         if (showFullscreenIndicator)
         {
-            fullscreenProgressIndicator = new SProgressIndicatorBar(this);
+            fullscreenProgressIndicator = new ProgressIndicatorBar(this);
             fullscreenProgressIndicator->setFixedSize(QSize(width(), (2.0 / 1080.0) * height()));
             fullscreenProgressIndicator->move(QPoint(0, height() - fullscreenProgressIndicator->height()));
             fullscreenProgressIndicator->setRange(0, 1000);
@@ -1530,8 +1530,8 @@ void MainWindow::FullScreen(bool fs)
 {
     if(fs)
     {
-        if(baka->dimDialog && baka->dimDialog->isVisible())
-            baka->Dim(false);
+        if(sugoi->dimDialog && sugoi->dimDialog->isVisible())
+            sugoi->Dim(false);
         setWindowState(windowState() | Qt::WindowFullScreen);
         if(!hideAllControls)
             HideAllControls(true, false);

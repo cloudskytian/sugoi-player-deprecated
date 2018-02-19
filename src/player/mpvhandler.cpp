@@ -7,7 +7,7 @@
 #include <QFileInfoList>
 #include <QDateTime>
 
-#include "bakaengine.h"
+#include "sugoiengine.h"
 #include "overlayhandler.h"
 #include "util.h"
 
@@ -19,7 +19,7 @@ static void wakeup(void *ctx)
 
 MpvHandler::MpvHandler(int64_t wid, QObject *parent):
     QObject(parent),
-    baka(static_cast<BakaEngine*>(parent))
+    sugoi(static_cast<SugoiEngine*>(parent))
 {
     // create mpv
     mpv = mpv_create();
@@ -687,7 +687,7 @@ void MpvHandler::MsgLevel(QString level)
 
 void MpvHandler::ShowText(QString text, int duration)
 {
-    baka->overlay->showStatusText(text, duration);
+    sugoi->overlay->showStatusText(text, duration);
     /*
     const QByteArray tmp1 = text.toUtf8(),
                      tmp2 = QString::number(duration).toUtf8(),

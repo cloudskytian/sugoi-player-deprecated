@@ -1237,7 +1237,7 @@ QSlider::handle:horizontal {
     <addaction name="action_Check_for_Updates"/>
     <addaction name="actionUpdate_Streaming_Support"/>
     <addaction name="separator"/>
-    <addaction name="actionAbout_Baka_MPlayer"/>
+    <addaction name="actionAbout_Sugoi_Player"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -1460,7 +1460,7 @@ QSlider::handle:horizontal {
     <string>About &amp;Qt</string>
    </property>
   </action>
-  <action name="actionAbout_Baka_MPlayer">
+  <action name="actionAbout_Sugoi_Player">
    <property name="text">
     <string>&amp;About Sugoi Player</string>
    </property>

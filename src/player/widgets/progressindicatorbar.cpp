@@ -1,9 +1,9 @@
-﻿#include "sprogressindicatorbar.h"
+﻿#include "progressindicatorbar.h"
 
 #include <QPainter>
 #include <QMouseEvent>
 
-SProgressIndicatorBar::SProgressIndicatorBar(QWidget *parent) : QWidget(parent)
+ProgressIndicatorBar::ProgressIndicatorBar(QWidget *parent) : QWidget(parent)
   , m_currentProgress(0)
   , min(0)
   , max(1000)
@@ -11,29 +11,29 @@ SProgressIndicatorBar::SProgressIndicatorBar(QWidget *parent) : QWidget(parent)
     setWindowFlags(Qt::FramelessWindowHint/* | Qt::WindowStaysOnTopHint*/);
 }
 
-void SProgressIndicatorBar::setMinimum(int value)
+void ProgressIndicatorBar::setMinimum(int value)
 {
     min = value;
     emit rangeChanged(min, max);
 }
 
-int SProgressIndicatorBar::minimum() const
+int ProgressIndicatorBar::minimum() const
 {
     return min;
 }
 
-void SProgressIndicatorBar::setMaximum(int value)
+void ProgressIndicatorBar::setMaximum(int value)
 {
     max = value;
     emit rangeChanged(min, max);
 }
 
-int SProgressIndicatorBar::maximum() const
+int ProgressIndicatorBar::maximum() const
 {
     return max;
 }
 
-void SProgressIndicatorBar::setRange(int min_value, int max_value)
+void ProgressIndicatorBar::setRange(int min_value, int max_value)
 {
     if (min_value >= max_value)
     {
@@ -44,7 +44,7 @@ void SProgressIndicatorBar::setRange(int min_value, int max_value)
     emit rangeChanged(min, max);
 }
 
-void SProgressIndicatorBar::setValue(int value)
+void ProgressIndicatorBar::setValue(int value)
 {
     if (value <= min)
     {
@@ -62,12 +62,12 @@ void SProgressIndicatorBar::setValue(int value)
     emit sliderMoved(value);
 }
 
-int SProgressIndicatorBar::value() const
+int ProgressIndicatorBar::value() const
 {
     return m_currentProgress;
 }
 
-void SProgressIndicatorBar::paintEvent(QPaintEvent *event)
+void ProgressIndicatorBar::paintEvent(QPaintEvent *event)
 {
     QPainter objPainter(this);
     objPainter.setRenderHint(QPainter::Antialiasing);
@@ -88,7 +88,7 @@ void SProgressIndicatorBar::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
-void SProgressIndicatorBar::mousePressEvent(QMouseEvent *event)
+void ProgressIndicatorBar::mousePressEvent(QMouseEvent *event)
 {
     int range = max - min;
     if (range <= 1)

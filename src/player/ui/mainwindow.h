@@ -25,18 +25,18 @@
 #include "recent.h"
 #include "widgets/logowidget.h"
 #include "fileassoc.h"
-#include "widgets/sprogressindicatorbar.h"
+#include "widgets/progressindicatorbar.h"
 
 namespace Ui {
 class MainWindow;
 }
 
-class BakaEngine;
+class SugoiEngine;
 class MpvHandler;
 
 class MainWindow : public QMainWindow
 {
-friend class BakaEngine;
+friend class SugoiEngine;
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -108,10 +108,10 @@ private slots:
     bool IsPlayingVideo(const QString &filePath);
 
 private:
-    BakaEngine      *baka;
+    SugoiEngine      *sugoi;
     MpvHandler      *mpv;
     LogoWidget      *logo;
-    SProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
+    ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
     bool showFullscreenIndicator = true;
     FileAssoc::reg_type  regType;
     FileAssoc::reg_state regState;

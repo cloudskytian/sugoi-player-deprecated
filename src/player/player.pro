@@ -83,7 +83,7 @@ RESOURCES += resources.qrc
 TRANSLATIONS += translations/sugoi_zh_CN.ts
 
 HEADERS += \
-    bakaengine.h \
+    sugoiengine.h \
     mpvhandler.h \
     mpvtypes.h \
     overlayhandler.h \
@@ -109,7 +109,7 @@ HEADERS += \
     ui/keydialog.h \
     recent.h \
     fileassoc.h \
-    widgets/sprogressindicatorbar.h \
+    widgets/progressindicatorbar.h \
     qtlocalpeer.h \
     qtsingleapplication.h \
     qtlockedfile.h \
@@ -117,8 +117,8 @@ HEADERS += \
 
 SOURCES += \
     main.cpp \
-    bakaengine.cpp \
-    bakacommands.cpp \
+    sugoiengine.cpp \
+    sugoicommands.cpp \
     mpvhandler.cpp \
     overlayhandler.cpp \
     util.cpp \
@@ -143,7 +143,7 @@ SOURCES += \
     overlay.cpp \
     configmanager.cpp \
     fileassoc.cpp \
-    widgets/sprogressindicatorbar.cpp \
+    widgets/progressindicatorbar.cpp \
     qtlocalpeer.cpp \
     qtsingleapplication.cpp \
     qtlockedfile_win.cpp \

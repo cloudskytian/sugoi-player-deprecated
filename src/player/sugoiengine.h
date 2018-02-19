@@ -1,5 +1,5 @@
-﻿#ifndef BAKAENGINE_H
-#define BAKAENGINE_H
+﻿#ifndef SugoiENGINE_H
+#define SugoiENGINE_H
 
 #include <QObject>
 #include <QString>
@@ -13,12 +13,12 @@ class MpvHandler;
 class OverlayHandler;
 class DimDialog;
 
-class BakaEngine : public QObject
+class SugoiEngine : public QObject
 {
     Q_OBJECT
 public:
-    explicit BakaEngine(QObject *parent = 0);
-    ~BakaEngine();
+    explicit SugoiEngine(QObject *parent = 0);
+    ~SugoiEngine();
 
     MainWindow     *window;
     MpvHandler     *mpv;
@@ -94,8 +94,8 @@ public slots:
 
 protected slots:
     // Utility functions
-    void Print(QString what, QString who = "baka");
-    void PrintLn(QString what, QString who = "baka");
+    void Print(QString what, QString who = "Sugoi");
+    void PrintLn(QString what, QString who = "Sugoi");
     void InvalidCommand(QString);
     void InvalidParameter(QString);
     void RequiresParameters(QString);
@@ -104,16 +104,16 @@ signals:
 
 
 private:
-    // This is a baka-command hashtable initialized below
+    // This is a Sugoi-command hashtable initialized below
     //  by using a hash-table -> function pointer we acheive O(1) function lookups
-    // Format: void BakaCommand(QStringList args)
-    // See bakacommands.cpp for function definitions
+    // Format: void SugoiCommand(QStringList args)
+    // See Sugoicommands.cpp for function definitions
 
     // todo: write advanced information about commands
-    typedef void(BakaEngine::*BakaCommandFPtr)(QStringList&);
-    const QHash<QString, QPair<BakaCommandFPtr, QStringList>> BakaCommandMap = {
+    typedef void(SugoiEngine::*SugoiCommandFPtr)(QStringList&);
+    const QHash<QString, QPair<SugoiCommandFPtr, QStringList>> SugoiCommandMap = {
         {"mpv", // command
-         {&BakaEngine::BakaMpv,
+         {&SugoiEngine::SugoiMpv,
           {
            // params     description
            QString(), tr("executes mpv command"),
@@ -122,7 +122,7 @@ private:
          }
         },
         {"sh",
-         {&BakaEngine::BakaSh,
+         {&SugoiEngine::SugoiSh,
           {
            QString(), tr("executes system shell command"),
            QString()
@@ -130,7 +130,7 @@ private:
          }
         },
         {"new",
-         {&BakaEngine::BakaNew, // function pointer to command functionality
+         {&SugoiEngine::SugoiNew, // function pointer to command functionality
           {
            // params     description
            QString(), tr("creates a new instance of Sugoi Player"),
@@ -139,7 +139,7 @@ private:
          }
         },
         {"open_location",
-         {&BakaEngine::BakaOpenLocation,
+         {&SugoiEngine::SugoiOpenLocation,
           {
            QString(),
            tr("shows the open location dialog"),
@@ -148,7 +148,7 @@ private:
          }
         },
         {"open_clipboard",
-         {&BakaEngine::BakaOpenClipboard,
+         {&SugoiEngine::SugoiOpenClipboard,
           {
            QString(),
            tr("opens the clipboard"),
@@ -157,7 +157,7 @@ private:
          }
         },
         {"show_in_folder",
-         {&BakaEngine::BakaShowInFolder,
+         {&SugoiEngine::SugoiShowInFolder,
           {
            QString(),
            tr("shows the current file in folder"),
@@ -166,7 +166,7 @@ private:
          }
         },
         {"add_subtitles",
-         {&BakaEngine::BakaAddSubtitles,
+         {&SugoiEngine::SugoiAddSubtitles,
           {
            QString(),
            tr("add subtitles dialog"),
@@ -175,7 +175,7 @@ private:
          }
         },
         {"add_audio",
-         {&BakaEngine::BakaAddAudio,
+         {&SugoiEngine::SugoiAddAudio,
           {
            QString(),
            tr("add audio track dialog"),
@@ -184,7 +184,7 @@ private:
          }
         },
         {"screenshot",
-         {&BakaEngine::BakaScreenshot,
+         {&SugoiEngine::SugoiScreenshot,
           {
            tr("[subs]"),
            tr("take a screenshot (with subtitles if specified)"),
@@ -193,7 +193,7 @@ private:
          }
         },
         {"media_info",
-         {&BakaEngine::BakaMediaInfo,
+         {&SugoiEngine::SugoiMediaInfo,
           {
            QString(),
            tr("toggles media info display"),
@@ -202,7 +202,7 @@ private:
          }
         },
         {"stop",
-         {&BakaEngine::BakaStop,
+         {&SugoiEngine::SugoiStop,
           {
            QString(),
            tr("stops the current playback"),
@@ -211,7 +211,7 @@ private:
          }
         },
         {"playlist",
-         {&BakaEngine::BakaPlaylist,
+         {&SugoiEngine::SugoiPlaylist,
           {
            "[...]",
            tr("playlist options"),
@@ -220,7 +220,7 @@ private:
          }
         },
         {"jump",
-         {&BakaEngine::BakaJump,
+         {&SugoiEngine::SugoiJump,
           {
            QString(),
            tr("opens jump dialog"),
@@ -229,7 +229,7 @@ private:
          }
         },
         {"dim",
-         {&BakaEngine::BakaDim,
+         {&SugoiEngine::SugoiDim,
           {
            QString(),
            tr("toggles dim desktop"),
@@ -238,7 +238,7 @@ private:
          }
         },
         {"output",
-         {&BakaEngine::BakaOutput,
+         {&SugoiEngine::SugoiOutput,
           {
            QString(),
            tr("toggles output textbox"),
@@ -247,7 +247,7 @@ private:
          }
         },
         {"preferences",
-         {&BakaEngine::BakaPreferences,
+         {&SugoiEngine::SugoiPreferences,
           {
            QString(),
            tr("opens preferences dialog"),
@@ -256,7 +256,7 @@ private:
          }
         },
         {"online_help",
-         {&BakaEngine::BakaOnlineHelp,
+         {&SugoiEngine::SugoiOnlineHelp,
           {
            QString(),
            tr("launches online help"),
@@ -265,7 +265,7 @@ private:
          }
         },
         {"update",
-         {&BakaEngine::BakaUpdate,
+         {&SugoiEngine::SugoiUpdate,
           {
            QString(),
            tr("opens the update dialog or updates youtube-dl"),
@@ -274,7 +274,7 @@ private:
          }
         },
         {"open",
-         {&BakaEngine::BakaOpen,
+         {&SugoiEngine::SugoiOpen,
           {
            tr("[file]"),
            tr("opens the open file dialog or the file specified"),
@@ -283,7 +283,7 @@ private:
          }
         },
         {"play_pause",
-         {&BakaEngine::BakaPlayPause,
+         {&SugoiEngine::SugoiPlayPause,
           {
            QString(),
            tr("toggle play/pause state"),
@@ -292,7 +292,7 @@ private:
          }
         },
         {"fitwindow",
-         {&BakaEngine::BakaFitWindow,
+         {&SugoiEngine::SugoiFitWindow,
           {
            tr("[percent]"),
            tr("fit the window"),
@@ -301,7 +301,7 @@ private:
          }
         },
         {"deinterlace",
-         {&BakaEngine::BakaDeinterlace,
+         {&SugoiEngine::SugoiDeinterlace,
           {
            QString(),
            tr("toggle deinterlace"),
@@ -310,7 +310,7 @@ private:
          }
         },
         {"interpolate",
-         {&BakaEngine::BakaInterpolate,
+         {&SugoiEngine::SugoiInterpolate,
           {
            QString(),
            tr("toggle motion interpolation"),
@@ -319,7 +319,7 @@ private:
          }
         },
         {"mute",
-         {&BakaEngine::BakaMute,
+         {&SugoiEngine::SugoiMute,
           {
            QString(),
            tr("mutes the audio"),
@@ -328,7 +328,7 @@ private:
          }
         },
         {"volume",
-         {&BakaEngine::BakaVolume,
+         {&SugoiEngine::SugoiVolume,
           {
            tr("[level]"),
            tr("adjusts the volume"),
@@ -337,7 +337,7 @@ private:
          }
         },
         {"speed",
-         {&BakaEngine::BakaSpeed,
+         {&SugoiEngine::SugoiSpeed,
           {
            tr("[ratio]"),
            tr("adjusts the speed"),
@@ -346,7 +346,7 @@ private:
          }
         },
         {"fullscreen",
-         {&BakaEngine::BakaFullScreen,
+         {&SugoiEngine::SugoiFullScreen,
           {
            QString(),
            tr("toggles fullscreen state"),
@@ -355,7 +355,7 @@ private:
          }
         },
         {"hide_all_controls",
-         {&BakaEngine::BakaHideAllControls,
+         {&SugoiEngine::SugoiHideAllControls,
           {
            QString(),
            tr("toggles hide all controls state"),
@@ -364,7 +364,7 @@ private:
          }
         },
         {"boss",
-         {&BakaEngine::BakaBoss,
+         {&SugoiEngine::SugoiBoss,
           {
            QString(),
            tr("pause and hide the window"),
@@ -373,7 +373,7 @@ private:
          }
         },
         {"clear",
-         {&BakaEngine::BakaClear,
+         {&SugoiEngine::SugoiClear,
           {
            QString(),
            tr("clears the output textbox"),
@@ -382,7 +382,7 @@ private:
          }
         },
         {"help",
-         {&BakaEngine::BakaHelp,
+         {&SugoiEngine::SugoiHelp,
           {
            tr("[command]"),
            tr("internal help menu"),
@@ -391,7 +391,7 @@ private:
          }
         },
         {"bug_report",
-         {&BakaEngine::BakaBugReport,
+         {&SugoiEngine::SugoiBugReport,
           {
            QString(),
            tr("report bugs to the developers"),
@@ -400,7 +400,7 @@ private:
          }
         },
         {"sys_info",
-         {&BakaEngine::BakaSysInfo,
+         {&SugoiEngine::SugoiSysInfo,
           {
            QString(),
            tr("show system information"),
@@ -409,7 +409,7 @@ private:
          }
         },
         {"about",
-         {&BakaEngine::BakaAbout,
+         {&SugoiEngine::SugoiAbout,
           {
            tr("[qt]"),
            tr("open about dialog"),
@@ -418,7 +418,7 @@ private:
          }
         },
         {"msg_level",
-         {&BakaEngine::BakaMsgLevel,
+         {&SugoiEngine::SugoiMsgLevel,
           {
            tr("[level]"),
            tr("set mpv msg-level"),
@@ -427,7 +427,7 @@ private:
          }
         },
         {"quit",
-         {&BakaEngine::BakaQuit,
+         {&SugoiEngine::SugoiQuit,
           {
            QString(),
            tr("quit Sugoi Player"),
@@ -436,44 +436,44 @@ private:
          }
         }
     };
-    // Baka Command Functions
-    void BakaMpv(QStringList&);
-    void BakaSh(QStringList&);
-    void BakaNew(QStringList&);
-    void BakaOpenLocation(QStringList&);
-    void BakaOpenClipboard(QStringList&);
-    void BakaShowInFolder(QStringList&);
-    void BakaAddSubtitles(QStringList&);
-    void BakaAddAudio(QStringList&);
-    void BakaScreenshot(QStringList&);
-    void BakaMediaInfo(QStringList&);
-    void BakaStop(QStringList&);
-    void BakaPlaylist(QStringList&);
-    void BakaJump(QStringList&);
-    void BakaDim(QStringList&);
-    void BakaOutput(QStringList&);
-    void BakaPreferences(QStringList&);
-    void BakaOnlineHelp(QStringList&);
-    void BakaUpdate(QStringList&);
-    void BakaOpen(QStringList&);
-    void BakaPlayPause(QStringList&);
-    void BakaFitWindow(QStringList&);
-    void BakaAspect(QStringList&);
-    void BakaDeinterlace(QStringList&);
-    void BakaInterpolate(QStringList&);
-    void BakaMute(QStringList&);
-    void BakaVolume(QStringList&);
-    void BakaSpeed(QStringList&);
-    void BakaFullScreen(QStringList&);
-    void BakaHideAllControls(QStringList&);
-    void BakaBoss(QStringList&);
-    void BakaClear(QStringList&);
-    void BakaHelp(QStringList&);
-    void BakaAbout(QStringList&);
-    void BakaMsgLevel(QStringList&);
-    void BakaQuit(QStringList&);
-    void BakaBugReport(QStringList&);
-    void BakaSysInfo(QStringList&);
+    // Sugoi Command Functions
+    void SugoiMpv(QStringList&);
+    void SugoiSh(QStringList&);
+    void SugoiNew(QStringList&);
+    void SugoiOpenLocation(QStringList&);
+    void SugoiOpenClipboard(QStringList&);
+    void SugoiShowInFolder(QStringList&);
+    void SugoiAddSubtitles(QStringList&);
+    void SugoiAddAudio(QStringList&);
+    void SugoiScreenshot(QStringList&);
+    void SugoiMediaInfo(QStringList&);
+    void SugoiStop(QStringList&);
+    void SugoiPlaylist(QStringList&);
+    void SugoiJump(QStringList&);
+    void SugoiDim(QStringList&);
+    void SugoiOutput(QStringList&);
+    void SugoiPreferences(QStringList&);
+    void SugoiOnlineHelp(QStringList&);
+    void SugoiUpdate(QStringList&);
+    void SugoiOpen(QStringList&);
+    void SugoiPlayPause(QStringList&);
+    void SugoiFitWindow(QStringList&);
+    void SugoiAspect(QStringList&);
+    void SugoiDeinterlace(QStringList&);
+    void SugoiInterpolate(QStringList&);
+    void SugoiMute(QStringList&);
+    void SugoiVolume(QStringList&);
+    void SugoiSpeed(QStringList&);
+    void SugoiFullScreen(QStringList&);
+    void SugoiHideAllControls(QStringList&);
+    void SugoiBoss(QStringList&);
+    void SugoiClear(QStringList&);
+    void SugoiHelp(QStringList&);
+    void SugoiAbout(QStringList&);
+    void SugoiMsgLevel(QStringList&);
+    void SugoiQuit(QStringList&);
+    void SugoiBugReport(QStringList&);
+    void SugoiSysInfo(QStringList&);
 public:
     void Open();
     void OpenLocation();
@@ -487,4 +487,4 @@ public:
     void Quit();
 };
 
-#endif // BAKAENGINE_H
+#endif // SugoiENGINE_H

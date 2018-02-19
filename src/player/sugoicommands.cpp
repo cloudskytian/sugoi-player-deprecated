@@ -1,4 +1,4 @@
-﻿#include "bakaengine.h"
+﻿#include "sugoiengine.h"
 
 #include <QApplication>
 #include <QFileDialog>
@@ -24,7 +24,7 @@
 #include "winsparkle.h"
 #include "sugoi-player-version.h"
 
-void BakaEngine::BakaMpv(QStringList &args)
+void SugoiEngine::SugoiMpv(QStringList &args)
 {
     if(!args.empty())
         mpv->Command(args);
@@ -32,7 +32,7 @@ void BakaEngine::BakaMpv(QStringList &args)
         RequiresParameters("mpv");
 }
 
-void BakaEngine::BakaSh(QStringList &args)
+void SugoiEngine::SugoiSh(QStringList &args)
 {
     if(!args.empty())
     {
@@ -55,7 +55,7 @@ void BakaEngine::BakaSh(QStringList &args)
         RequiresParameters("mpv");
 }
 
-void BakaEngine::BakaNew(QStringList &args)
+void SugoiEngine::SugoiNew(QStringList &args)
 {
     if(args.empty())
         QProcess::startDetached(QApplication::applicationFilePath(), QStringList() << QString::fromLatin1("--newinstance"));
@@ -63,7 +63,7 @@ void BakaEngine::BakaNew(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaOpenLocation(QStringList &args)
+void SugoiEngine::SugoiOpenLocation(QStringList &args)
 {
     if(args.empty())
         OpenLocation();
@@ -71,13 +71,13 @@ void BakaEngine::BakaOpenLocation(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::OpenLocation()
+void SugoiEngine::OpenLocation()
 {
     mpv->LoadFile(LocationDialog::getUrl(mpv->getPath()+mpv->getFile(), window));
 }
 
 
-void BakaEngine::BakaOpenClipboard(QStringList &args)
+void SugoiEngine::SugoiOpenClipboard(QStringList &args)
 {
     if(args.empty())
         mpv->LoadFile(QApplication::clipboard()->text());
@@ -85,7 +85,7 @@ void BakaEngine::BakaOpenClipboard(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaShowInFolder(QStringList &args)
+void SugoiEngine::SugoiShowInFolder(QStringList &args)
 {
     if(args.empty())
         Util::ShowInFolder(mpv->getPath(), mpv->getFile());
@@ -93,7 +93,7 @@ void BakaEngine::BakaShowInFolder(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaAddSubtitles(QStringList &args)
+void SugoiEngine::SugoiAddSubtitles(QStringList &args)
 {
     QString trackFile;
     if(args.empty())
@@ -108,7 +108,7 @@ void BakaEngine::BakaAddSubtitles(QStringList &args)
     mpv->AddSubtitleTrack(trackFile);
 }
 
-void BakaEngine::BakaAddAudio(QStringList &args)
+void SugoiEngine::SugoiAddAudio(QStringList &args)
 {
     QString trackFile;
     if(args.empty())
@@ -123,7 +123,7 @@ void BakaEngine::BakaAddAudio(QStringList &args)
     mpv->AddAudioTrack(trackFile);
 }
 
-void BakaEngine::BakaScreenshot(QStringList &args)
+void SugoiEngine::SugoiScreenshot(QStringList &args)
 {
     if(args.empty())
         Screenshot(false);
@@ -138,7 +138,7 @@ void BakaEngine::BakaScreenshot(QStringList &args)
     }
 }
 
-void BakaEngine::Screenshot(bool subs)
+void SugoiEngine::Screenshot(bool subs)
 {
     if(window->screenshotDialog)
     {
@@ -165,7 +165,7 @@ void BakaEngine::Screenshot(bool subs)
 }
 
 
-void BakaEngine::BakaMediaInfo(QStringList &args)
+void SugoiEngine::SugoiMediaInfo(QStringList &args)
 {
     if(args.empty())
         MediaInfo(window->ui->actionMedia_Info->isChecked());
@@ -173,13 +173,13 @@ void BakaEngine::BakaMediaInfo(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::MediaInfo(bool show)
+void SugoiEngine::MediaInfo(bool show)
 {
     overlay->showInfoText(show);
 }
 
 
-void BakaEngine::BakaStop(QStringList &args)
+void SugoiEngine::SugoiStop(QStringList &args)
 {
     if(args.empty())
         mpv->Stop();
@@ -187,7 +187,7 @@ void BakaEngine::BakaStop(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaPlaylist(QStringList &args)
+void SugoiEngine::SugoiPlaylist(QStringList &args)
 {
     if(!args.empty())
     {
@@ -287,10 +287,10 @@ void BakaEngine::BakaPlaylist(QStringList &args)
             InvalidParameter(arg);
     }
     else
-        RequiresParameters("baka playlist");
+        RequiresParameters("Sugoi playlist");
 }
 
-void BakaEngine::BakaJump(QStringList &args)
+void SugoiEngine::SugoiJump(QStringList &args)
 {
     if(args.empty())
         Jump();
@@ -298,7 +298,7 @@ void BakaEngine::BakaJump(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::Jump()
+void SugoiEngine::Jump()
 {
     int time = JumpDialog::getTime(mpv->getFileInfo().length, window);
     if(time >= 0)
@@ -306,7 +306,7 @@ void BakaEngine::Jump()
 }
 
 
-void BakaEngine::BakaDim(QStringList &args)
+void SugoiEngine::SugoiDim(QStringList &args)
 {
     if(dimDialog == nullptr)
     {
@@ -319,7 +319,7 @@ void BakaEngine::BakaDim(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::Dim(bool dim)
+void SugoiEngine::Dim(bool dim)
 {
     if(dimDialog == nullptr)
     {
@@ -332,7 +332,7 @@ void BakaEngine::Dim(bool dim)
         dimDialog->close();
 }
 
-void BakaEngine::BakaOutput(QStringList &args)
+void SugoiEngine::SugoiOutput(QStringList &args)
 {
     if(args.empty())
         window->setDebug(!window->getDebug());
@@ -340,7 +340,7 @@ void BakaEngine::BakaOutput(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaPreferences(QStringList &args)
+void SugoiEngine::SugoiPreferences(QStringList &args)
 {
     if(args.empty())
         PreferencesDialog::showPreferences(this, window);
@@ -348,7 +348,7 @@ void BakaEngine::BakaPreferences(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaOnlineHelp(QStringList &args)
+void SugoiEngine::SugoiOnlineHelp(QStringList &args)
 {
     if(args.empty())
         QDesktopServices::openUrl(QUrl(QString::fromStdWString(SUGOI_SUPPORT_URL_STR)));
@@ -356,7 +356,7 @@ void BakaEngine::BakaOnlineHelp(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaBugReport(QStringList &args)
+void SugoiEngine::SugoiBugReport(QStringList &args)
 {
     if(args.empty())
         QDesktopServices::openUrl(QUrl(QString::fromStdWString(SUGOI_BUG_REPORT_URL_STR)));
@@ -364,7 +364,7 @@ void BakaEngine::BakaBugReport(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaUpdate(QStringList &args)
+void SugoiEngine::SugoiUpdate(QStringList &args)
 {
     if(args.empty())
         win_sparkle_check_update_with_ui();
@@ -381,7 +381,7 @@ void BakaEngine::BakaUpdate(QStringList &args)
     }
 }
 
-void BakaEngine::BakaOpen(QStringList &args)
+void SugoiEngine::SugoiOpen(QStringList &args)
 {
     if(args.empty())
         Open();
@@ -389,7 +389,7 @@ void BakaEngine::BakaOpen(QStringList &args)
         mpv->LoadFile(args.join(' '));
 }
 
-void BakaEngine::Open()
+void SugoiEngine::Open()
 {
     mpv->LoadFile(QFileDialog::getOpenFileName(window,
                    tr("Open File"),/*mpv->getPath()*/window->getLastDir(),
@@ -401,7 +401,7 @@ void BakaEngine::Open()
 }
 
 
-void BakaEngine::BakaPlayPause(QStringList &args)
+void SugoiEngine::SugoiPlayPause(QStringList &args)
 {
     if(args.empty())
         PlayPause();
@@ -409,12 +409,12 @@ void BakaEngine::BakaPlayPause(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::PlayPause()
+void SugoiEngine::PlayPause()
 {
     mpv->PlayPause(window->ui->playlistWidget->CurrentItem());
 }
 
-void BakaEngine::BakaFitWindow(QStringList &args)
+void SugoiEngine::SugoiFitWindow(QStringList &args)
 {
     if(args.empty())
         FitWindow();
@@ -429,7 +429,7 @@ void BakaEngine::BakaFitWindow(QStringList &args)
     }
 }
 
-void BakaEngine::FitWindow(int percent, bool msg)
+void SugoiEngine::FitWindow(int percent, bool msg)
 {
     if(window->isFullScreen() || window->isMaximized() || !window->ui->menuFit_Window->isEnabled())
         return;
@@ -517,7 +517,7 @@ void BakaEngine::FitWindow(int percent, bool msg)
         mpv->ShowText(tr("Fit Window: %0").arg(percent == 0 ? tr("To Current Size") : (QString::number(percent)+"%")));
 }
 
-void BakaEngine::BakaDeinterlace(QStringList &args)
+void SugoiEngine::SugoiDeinterlace(QStringList &args)
 {
     if(args.empty())
         mpv->Deinterlace(window->ui->action_Deinterlace->isChecked());
@@ -525,7 +525,7 @@ void BakaEngine::BakaDeinterlace(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaInterpolate(QStringList &args)
+void SugoiEngine::SugoiInterpolate(QStringList &args)
 {
     if(args.empty())
         mpv->Interpolate(window->ui->action_Motion_Interpolation->isChecked());
@@ -533,7 +533,7 @@ void BakaEngine::BakaInterpolate(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaMute(QStringList &args)
+void SugoiEngine::SugoiMute(QStringList &args)
 {
     if(args.empty())
         mpv->Mute(!mpv->getMute());
@@ -541,7 +541,7 @@ void BakaEngine::BakaMute(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaVolume(QStringList &args)
+void SugoiEngine::SugoiVolume(QStringList &args)
 {
     if(!args.empty())
     {
@@ -561,7 +561,7 @@ void BakaEngine::BakaVolume(QStringList &args)
         RequiresParameters("volume");
 }
 
-void BakaEngine::BakaSpeed(QStringList &args)
+void SugoiEngine::SugoiSpeed(QStringList &args)
 {
     if(!args.empty())
     {
@@ -582,7 +582,7 @@ void BakaEngine::BakaSpeed(QStringList &args)
         RequiresParameters("speed");
 }
 
-void BakaEngine::BakaFullScreen(QStringList &args)
+void SugoiEngine::SugoiFullScreen(QStringList &args)
 {
     if(args.empty())
     {
@@ -594,7 +594,7 @@ void BakaEngine::BakaFullScreen(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaHideAllControls(QStringList &args)
+void SugoiEngine::SugoiHideAllControls(QStringList &args)
 {
     if(args.empty())
     {
@@ -618,7 +618,7 @@ void BakaEngine::BakaHideAllControls(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaBoss(QStringList &args)
+void SugoiEngine::SugoiBoss(QStringList &args)
 {
     if(args.empty())
     {
@@ -629,7 +629,7 @@ void BakaEngine::BakaBoss(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaClear(QStringList &args)
+void SugoiEngine::SugoiClear(QStringList &args)
 {
     if(args.empty())
         window->ui->outputTextEdit->setPlainText(QString());
@@ -637,14 +637,14 @@ void BakaEngine::BakaClear(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaHelp(QStringList &args)
+void SugoiEngine::SugoiHelp(QStringList &args)
 {
     if(args.empty())
     {
-        Print(tr("usage: baka <command> [...]"));
+        Print(tr("usage: Sugoi <command> [...]"));
         Print(tr("commands:"));
         int len, max_len = 22;
-        for(auto command = BakaCommandMap.begin(); command != BakaCommandMap.end(); ++command)
+        for(auto command = SugoiCommandMap.begin(); command != SugoiCommandMap.end(); ++command)
         {
             QString str = QString("  %0 %1").arg(command.key(), command->second[0]);
             len = str.length();
@@ -660,8 +660,8 @@ void BakaEngine::BakaHelp(QStringList &args)
         args.pop_front();
         if(args.empty())
         {
-            auto command = BakaCommandMap.find(arg);
-            if(command != BakaCommandMap.end()) //found
+            auto command = SugoiCommandMap.find(arg);
+            if(command != SugoiCommandMap.end()) //found
             {
                 Print(tr("usage: %0 %1").arg(arg, command->second[0]));
                 Print(tr("description:"));
@@ -680,12 +680,12 @@ void BakaEngine::BakaHelp(QStringList &args)
     }
 }
 
-void BakaEngine::BakaAbout(QStringList &args)
+void SugoiEngine::SugoiAbout(QStringList &args)
 {
     About(args.join(' '));
 }
 
-void BakaEngine::BakaMsgLevel(QStringList &args)
+void SugoiEngine::SugoiMsgLevel(QStringList &args)
 {
     if(!args.empty())
     {
@@ -700,7 +700,7 @@ void BakaEngine::BakaMsgLevel(QStringList &args)
         RequiresParameters("msg_level");
 }
 
-void BakaEngine::About(QString what)
+void SugoiEngine::About(QString what)
 {
     if(what == QString())
         AboutDialog::about(window->getLang(), window);
@@ -710,7 +710,7 @@ void BakaEngine::About(QString what)
         InvalidParameter(what);
 }
 
-void BakaEngine::BakaSysInfo(QStringList &args)
+void SugoiEngine::SugoiSysInfo(QStringList &args)
 {
     if(args.empty())
     {
@@ -721,7 +721,7 @@ void BakaEngine::BakaSysInfo(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::BakaQuit(QStringList &args)
+void SugoiEngine::SugoiQuit(QStringList &args)
 {
     if(args.empty())
         Quit();
@@ -729,7 +729,7 @@ void BakaEngine::BakaQuit(QStringList &args)
         InvalidParameter(args.join(' '));
 }
 
-void BakaEngine::Quit()
+void SugoiEngine::Quit()
 {
     qApp->quit();
 }

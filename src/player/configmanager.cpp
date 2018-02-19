@@ -1,4 +1,4 @@
-﻿#include "bakaengine.h"
+﻿#include "sugoiengine.h"
 #include "util.h"
 #include "ui/mainwindow.h"
 #include "mpvhandler.h"
@@ -8,7 +8,7 @@
 #include <QDir>
 #include <QSettings>
 
-void BakaEngine::LoadSettings()
+void SugoiEngine::LoadSettings()
 {
     QSettings settings(Util::SettingsLocation(), QSettings::IniFormat);
     window->setAlwaysCheckFileAssoc(settings.value(QString::fromLatin1("alwaysCheckFileAssoc"), true).toBool());
@@ -29,6 +29,8 @@ void BakaEngine::LoadSettings()
     {
         window->setFileAssocType(FileAssoc::reg_type::NONE);
     }
+    window->setAutoUpdatePlayer(settings.value(QString::fromLatin1("autoUpdatePlayer"), true).toBool());
+    window->setAutoUpdateStreamingSupport(settings.value(QString::fromLatin1("autoUpdateStreamingSupport"), true).toBool());
     window->setQuickStartMode(settings.value(QString::fromLatin1("quickStartMode"), true).toBool());
     window->setAllowRunInBackground(settings.value(QString::fromLatin1("allowRunInBackground"), false).toBool());
     window->setShowVideoPreview(settings.value(QString::fromLatin1("showVideoPreview"), false).toBool());
@@ -148,7 +150,7 @@ void BakaEngine::LoadSettings()
     settings.endGroup();
 }
 
-void BakaEngine::SaveSettings()
+void SugoiEngine::SaveSettings()
 {
     QSettings settings(Util::SettingsLocation(), QSettings::IniFormat);
     settings.setValue(QString::fromLatin1("alwaysCheckFileAssoc"), window->getAlwaysCheckFileAssoc());
@@ -165,6 +167,8 @@ void BakaEngine::SaveSettings()
     {
         regType = QString::fromLatin1("none");
     }
+    settings.setValue(QString::fromLatin1("autoUpdatePlayer"), window->getAutoUpdatePlayer());
+    settings.setValue(QString::fromLatin1("autoUpdateStreamingSupport"), window->getAutoUpdateStreamingSupport());
     settings.setValue(QString::fromLatin1("quickStartMode"), window->getQuickStartMode());
     settings.setValue(QString::fromLatin1("allowRunInBackground"), window->getAllowRunInBackground());
     settings.setValue(QString::fromLatin1("showVideoPreview"), window->getShowVideoPreview());

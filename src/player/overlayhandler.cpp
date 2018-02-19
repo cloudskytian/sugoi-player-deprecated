@@ -1,6 +1,6 @@
-#include "overlayhandler.h"
+﻿#include "overlayhandler.h"
 
-#include "bakaengine.h"
+#include "sugoiengine.h"
 #include "mpvhandler.h"
 #include "ui/mainwindow.h"
 #include "ui_mainwindow.h"
@@ -22,7 +22,7 @@
 
 OverlayHandler::OverlayHandler(QObject *parent):
     QObject(parent),
-    baka(static_cast<BakaEngine*>(parent)),
+    sugoi(static_cast<SugoiEngine*>(parent)),
     refresh_timer(nullptr),
     min_overlay(1),
     max_overlay(60),
@@ -59,7 +59,7 @@ void OverlayHandler::showInfoText(bool show)
                     [=] { showInfoText(); });
         }
         refresh_timer->start(OVERLAY_REFRESH_RATE);
-        showText(baka->mpv->getMediaInfo(),
+        showText(sugoi->mpv->getMediaInfo(),
                  QFont(Util::MonospaceFont(),
                        14, QFont::Bold), QColor(0xFFFF00),
                  QPoint(20, 20), 0, OVERLAY_INFO);
@@ -94,8 +94,8 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
         h = fm.height()*lines.length();
     for(auto line : lines)
         w = std::max(fm.width(line), w);
-    float xF = float(baka->window->ui->mpvFrame->width()-2*pos.x()) / (fm_correction*w);
-    float yF = float(baka->window->ui->mpvFrame->height()-2*pos.y()) / h;
+    float xF = float(sugoi->window->ui->mpvFrame->width()-2*pos.x()) / (fm_correction*w);
+    float yF = float(sugoi->window->ui->mpvFrame->height()-2*pos.y()) / h;
     font.setPointSizeF(std::min(font.pointSizeF()*std::min(xF, yF), font.pointSizeF()));
 
     fm = QFontMetrics(font);
@@ -122,14 +122,14 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     painter.drawPath(path);
 
     // add as mpv overlay
-    baka->mpv->AddOverlay(
+    sugoi->mpv->AddOverlay(
         id == -1 ? overlay_id : id,
         pos.x(), pos.y(),
         "&"+QString::number(quintptr(canvas->bits())),
         0, canvas->width(), canvas->height());
 
     // add over mpv as label
-    QLabel *label = new QLabel(baka->window->ui->mpvFrame);
+    QLabel *label = new QLabel(sugoi->window->ui->mpvFrame);
     label->setStyleSheet("background-color:rgb(0,0,0,0);background-image:url();");
     label->setGeometry(pos.x(),
                        pos.y(),
@@ -158,7 +158,7 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
 void OverlayHandler::remove(int id)
 {
     overlay_mutex.lock();
-    baka->mpv->RemoveOverlay(id);
+    sugoi->mpv->RemoveOverlay(id);
     if(overlays.find(id) != overlays.end())
     {
         delete overlays[id];

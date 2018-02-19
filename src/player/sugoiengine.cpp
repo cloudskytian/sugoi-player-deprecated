@@ -1,4 +1,4 @@
-﻿#include "bakaengine.h"
+﻿#include "sugoiengine.h"
 
 #include <QMessageBox>
 #include <QDir>
@@ -10,7 +10,7 @@
 #include "widgets/dimdialog.h"
 #include "util.h"
 
-BakaEngine::BakaEngine(QObject *parent):
+SugoiEngine::SugoiEngine(QObject *parent):
     QObject(parent),
     window(static_cast<MainWindow*>(parent)),
     mpv(new MpvHandler(window->ui->mpvFrame->winId(), this)),
@@ -33,7 +33,7 @@ BakaEngine::BakaEngine(QObject *parent):
             });
 }
 
-BakaEngine::~BakaEngine()
+SugoiEngine::~SugoiEngine()
 {
     if(translator != nullptr)
         delete translator;
@@ -44,20 +44,20 @@ BakaEngine::~BakaEngine()
     delete mpv;
 }
 
-void BakaEngine::Command(QString command)
+void SugoiEngine::Command(QString command)
 {
     if(command == QString())
         return;
     QStringList args = command.split(" ");
     if(!args.empty())
     {
-        if(args.front() == "baka") // implicitly understood
+        if(args.front() == "Sugoi") // implicitly understood
             args.pop_front();
 
         if(!args.empty())
         {
-            auto iter = BakaCommandMap.find(args.front());
-            if(iter != BakaCommandMap.end())
+            auto iter = SugoiCommandMap.find(args.front());
+            if(iter != SugoiCommandMap.end())
             {
                 args.pop_front();
                 (this->*(iter->first))(args); // execute command
@@ -66,13 +66,13 @@ void BakaEngine::Command(QString command)
                 InvalidCommand(args.join(' '));
         }
         else
-            RequiresParameters("baka");
+            RequiresParameters("Sugoi");
     }
     else
         InvalidCommand(args.join(' '));
 }
 
-void BakaEngine::Print(QString what, QString who)
+void SugoiEngine::Print(QString what, QString who)
 {
     QString out = QString("[%0]: %1").arg(who, what);
     (qStdout() << out).flush();
@@ -80,22 +80,22 @@ void BakaEngine::Print(QString what, QString who)
     window->ui->outputTextEdit->insertPlainText(out);
 }
 
-void BakaEngine::PrintLn(QString what, QString who)
+void SugoiEngine::PrintLn(QString what, QString who)
 {
     Print(what+"\n", who);
 }
 
-void BakaEngine::InvalidCommand(QString command)
+void SugoiEngine::InvalidCommand(QString command)
 {
     PrintLn(tr("invalid command '%0'").arg(command));
 }
 
-void BakaEngine::InvalidParameter(QString parameter)
+void SugoiEngine::InvalidParameter(QString parameter)
 {
     PrintLn(tr("invalid parameter '%0'").arg(parameter));
 }
 
-void BakaEngine::RequiresParameters(QString what)
+void SugoiEngine::RequiresParameters(QString what)
 {
     PrintLn(tr("'%0' requires parameters").arg(what));
 }

@@ -1,14 +1,14 @@
-﻿#ifndef SPROGRESSINDICATORBAR_H
-#define SPROGRESSINDICATORBAR_H
+﻿#ifndef ProgressIndicatorBar_H
+#define ProgressIndicatorBar_H
 
 #include <QWidget>
 
-class SProgressIndicatorBar : public QWidget
+class ProgressIndicatorBar : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit SProgressIndicatorBar(QWidget *parent = nullptr);
+    explicit ProgressIndicatorBar(QWidget *parent = nullptr);
 
 signals:
     void sliderMoved(int value);
@@ -31,4 +31,4 @@ private:
     int m_currentProgress, min, max;
 };
 
-#endif // SPROGRESSINDICATORBAR_H
+#endif // ProgressIndicatorBar_H

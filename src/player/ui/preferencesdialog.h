@@ -11,16 +11,16 @@ namespace Ui {
 class PreferencesDialog;
 }
 
-class BakaEngine;
+class SugoiEngine;
 
 class PreferencesDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit PreferencesDialog(BakaEngine *baka, QWidget *parent = 0);
+    explicit PreferencesDialog(SugoiEngine *sugoi, QWidget *parent = 0);
     ~PreferencesDialog();
 
-    static void showPreferences(BakaEngine *baka, QWidget *parent = 0);
+    static void showPreferences(SugoiEngine *sugoi, QWidget *parent = 0);
 
 protected:
     void PopulateLangs();
@@ -33,7 +33,7 @@ protected:
 
 private:
     Ui::PreferencesDialog *ui;
-    BakaEngine *baka;
+    SugoiEngine *sugoi;
     QHash<QString, QPair<QString, QString>> saved;
 
     QString screenshotDir;

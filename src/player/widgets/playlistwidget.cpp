@@ -1,6 +1,6 @@
-#include "playlistwidget.h"
+﻿#include "playlistwidget.h"
 
-#include "bakaengine.h"
+#include "sugoiengine.h"
 #include "mpvhandler.h"
 
 #include <QListWidgetItem>
@@ -19,10 +19,10 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
     setAttribute(Qt::WA_NoMousePropagation);
 }
 
-void PlaylistWidget::AttachEngine(BakaEngine *baka)
+void PlaylistWidget::AttachEngine(SugoiEngine *sugoi)
 {
-    this->baka = baka;
-    connect(baka->mpv, &MpvHandler::playlistChanged,
+    this->sugoi = sugoi;
+    connect(sugoi->mpv, &MpvHandler::playlistChanged,
             [=](const QStringList &list)
             {
                 playlist = list;
@@ -35,7 +35,7 @@ void PlaylistWidget::AttachEngine(BakaEngine *baka)
                 }
             });
 
-    connect(baka->mpv, &MpvHandler::fileChanged,
+    connect(sugoi->mpv, &MpvHandler::fileChanged,
             [=](QString f)
             {
                 if(newPlaylist)
@@ -97,7 +97,7 @@ void PlaylistWidget::Populate()
 void PlaylistWidget::RefreshPlaylist()
 {
     refresh = true;
-    baka->mpv->LoadPlaylist(baka->mpv->getPath()+file);
+    sugoi->mpv->LoadPlaylist(sugoi->mpv->getPath()+file);
 }
 
 QString PlaylistWidget::CurrentItem()
@@ -152,7 +152,7 @@ void PlaylistWidget::PlayIndex(int index, bool relative)
     QListWidgetItem *current = item(newIndex);
     if(current != nullptr)
     {
-        if(baka->mpv->PlayFile(current->text()))
+        if(sugoi->mpv->PlayFile(current->text()))
             scrollToItem(current);
         else
         {
@@ -295,7 +295,7 @@ void PlaylistWidget::DeleteFromDisk(QListWidgetItem *item)
             subf.remove();
     }
     // check and remove all external subtitle files in the video
-    for(auto track : baka->mpv->getFileInfo().tracks)
+    for(auto track : sugoi->mpv->getFileInfo().tracks)
     {
         if(track.external)
         {
@@ -310,7 +310,7 @@ void PlaylistWidget::DeleteFromDisk(QListWidgetItem *item)
         }
     }
     // remove the actual file
-    QFile f(baka->mpv->getPath()+item->text());
+    QFile f(sugoi->mpv->getPath()+item->text());
     f.remove();
     delete item;
     emit currentRowChanged(currentRow());
