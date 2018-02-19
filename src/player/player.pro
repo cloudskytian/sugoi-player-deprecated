@@ -8,19 +8,19 @@ ROOTDIR = $$PWD/../..
 contains(QT_ARCH, x86_64) {
     LIBDIR = $${ROOTDIR}/lib64
     CONFIG(debug, debug|release) {
-        TARGET = SPlayer64d
+        TARGET = Sugoi64d
         DESTDIR = $${ROOTDIR}/bin64/Debug
     } else {
-        TARGET = SPlayer64
+        TARGET = Sugoi64
         DESTDIR = $${ROOTDIR}/bin64/Release
     }
 } else {
     LIBDIR = $${ROOTDIR}/lib
     CONFIG(debug, debug|release) {
-        TARGET = SPlayerd
+        TARGET = Sugoid
         DESTDIR = $${ROOTDIR}/bin/Debug
     } else {
-        TARGET = SPlayer
+        TARGET = Sugoi
         DESTDIR = $${ROOTDIR}/bin/Release
     }
 }
@@ -34,10 +34,10 @@ exists($${ROOTDIR}/ci_version.h) {
 include($${ROOTDIR}/version.pri)
 
 QMAKE_TARGET_COMPANY = wangwenx190
-QMAKE_TARGET_DESCRIPTION = SPlayer
+QMAKE_TARGET_DESCRIPTION = Sugoi
 QMAKE_TARGET_COPYRIGHT = GPLv3
-QMAKE_TARGET_PRODUCT = SPlayer
-RC_ICONS = resources/splayer.ico
+QMAKE_TARGET_PRODUCT = Sugoi
+RC_ICONS = resources/player.ico
 
 QMAKE_POST_LINK += $$quote(windeployqt \"$${DESTDIR}\\$${TARGET}.exe\"$$escape_expand(\\n\\t))
 QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\3rdparty\\youtube-dl.exe\" \"$${DESTDIR}\\youtube-dl.exe\"$$escape_expand(\\n\\t))
@@ -80,7 +80,7 @@ DEPENDPATH += $${ROOTDIR}/include
 
 RESOURCES += resources.qrc
 
-TRANSLATIONS += translations/splayer_zh_CN.ts
+TRANSLATIONS += translations/sugoi_zh_CN.ts
 
 HEADERS += \
     bakaengine.h \

@@ -8,6 +8,6 @@ CALL build.user.bat
 CALL "%_QT_DIR%\bin\qtenv2.bat"
 CALL "%_VC_BUILD_DIR%\vcvars64.bat"
 CD /D "%~dp0src\splayer"
-lupdate splayer.pro
-lrelease splayer.pro
+lupdate player.pro
+lrelease player.pro
 PAUSE

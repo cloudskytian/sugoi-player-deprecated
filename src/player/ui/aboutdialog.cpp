@@ -100,7 +100,7 @@ QString AboutDialog::updateLogText_HTML(QString lang)
     {
         l = QString::fromLatin1("en");
     }
-    QString filePath = QString::fromLatin1(":/updatelog/updatelog.") + l + QString::fromLatin1(".html");
+    QString filePath = QString::fromLatin1(":/updatelogs/updatelog.") + l + QString::fromLatin1(".html");
     QFile licenseFile(filePath);
     if (licenseFile.exists())
     {

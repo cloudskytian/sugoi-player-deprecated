@@ -6,7 +6,7 @@
   #error Please use **UNICODE** edition of Inno Setup !!!
 #endif
 
-#include "..\..\include\splayer-version.h"
+#include "..\..\include\sugoi-player-version.h"
 
 ;指定是否为64位安装程序
 ;#define x64
@@ -33,29 +33,29 @@
 ;若想开启禁止安装旧版本的功能，此处版本号请注意一定要是
 ;点分十进制的正整数，除数字和英文半角句点以外不允许出现任何其他字符，
 ;否则程序无法判断版本的高低。
-#define MyAppVersion      str(SPLAYER_VERSION_MAJOR) + "." + str(SPLAYER_VERSION_MINOR) + "." + str(SPLAYER_VERSION_PATCH) + "." + str(SPLAYER_VERSION_BUILD)
-#define MyAppPublisher    str(SPLAYER_COMPANY_NAME_STR)
-#define MyAppPublisherURL str(SPLAYER_COMPANY_URL_STR)
-#define MyAppSupportURL   str(SPLAYER_SUPPORT_URL_STR)
-#define MyAppUpdatesURL   str(SPLAYER_UPDATE_URL_STR)
-#define MyAppComments     str(SPLAYER_COMMENTS_STR)
-#define MyAppContact      str(SPLAYER_CONTACT_STR)
-#define MyAppSupportPhone str(SPLAYER_SUPPORT_PHONE_STR)
-#define MyAppReadmeURL    str(SPLAYER_README_URL_STR)
-#define MyAppLicenseURL   str(SPLAYER_LICENSE_URL_STR)
-#define MyAppCopyright    str(SPLAYER_COPYRIGHT_STR)
-#define MyAppName         str(SPLAYER_APP_NAME_STR)
+#define MyAppVersion      str(SUGOI_VERSION_MAJOR) + "." + str(SUGOI_VERSION_MINOR) + "." + str(SUGOI_VERSION_PATCH) + "." + str(SUGOI_VERSION_BUILD)
+#define MyAppPublisher    str(SUGOI_COMPANY_NAME_STR)
+#define MyAppPublisherURL str(SUGOI_COMPANY_URL_STR)
+#define MyAppSupportURL   str(SUGOI_SUPPORT_URL_STR)
+#define MyAppUpdatesURL   str(SUGOI_UPDATE_URL_STR)
+#define MyAppComments     str(SUGOI_COMMENTS_STR)
+#define MyAppContact      str(SUGOI_CONTACT_STR)
+#define MyAppSupportPhone str(SUGOI_SUPPORT_PHONE_STR)
+#define MyAppReadmeURL    str(SUGOI_README_URL_STR)
+#define MyAppLicenseURL   str(SUGOI_LICENSE_URL_STR)
+#define MyAppCopyright    str(SUGOI_COPYRIGHT_STR)
+#define MyAppName         str(SUGOI_APP_NAME_STR)
 #ifdef x64
   #define MyAppBinDir     "..\..\bin64\Release"
-  #define MyAppID         str(SPLAYER_APP_ID_64_STR)
-  #define MyAppExeName    "SPlayer64.exe"
-  #define MyAppMutex      str(SPLAYER_APP_MUTEX_64_STR)
+  #define MyAppID         str(SUGOI_APP_ID_64_STR)
+  #define MyAppExeName    "Sugoi64.exe"
+  #define MyAppMutex      str(SUGOI_APP_MUTEX_64_STR)
   #define MyAppSetupExe   MyAppName + "_" + MyAppVersion + "_x64"
 #else
   #define MyAppBinDir     "..\..\bin\Release"
-  #define MyAppID         str(SPLAYER_APP_ID_32_STR)
-  #define MyAppExeName    "SPlayer.exe"
-  #define MyAppMutex      str(SPLAYER_APP_MUTEX_32_STR)
+  #define MyAppID         str(SUGOI_APP_ID_32_STR)
+  #define MyAppExeName    "Sugoi.exe"
+  #define MyAppMutex      str(SUGOI_APP_MUTEX_32_STR)
   #define MyAppSetupExe   MyAppName + "_" + MyAppVersion + "_x86"
 #endif
 #ifdef PortableBuild
@@ -87,7 +87,7 @@ VersionInfoProductVersion       = {#MyAppVersion}
 VersionInfoProductTextVersion   = {#MyAppVersion}
 VersionInfoTextVersion          = {#MyAppVersion}
 VersionInfoVersion              = {#MyAppVersion}
-SetupIconFile                   = "..\splayer\resources\splayer.ico"
+SetupIconFile                   = "..\player\resources\player.ico"
 Compression                     = lzma2/ultra64
 InternalCompressLevel           = ultra64
 SolidCompression                = yes

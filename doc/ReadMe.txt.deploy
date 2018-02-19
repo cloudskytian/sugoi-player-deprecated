@@ -1,16 +1,16 @@
-﻿SPlayer
-==========
+﻿Sugoi Player
+=============
 
-SPlayer is a free and open source multimedia player
+Sugoi Player is a free and open source multimedia player
 for Windows 7+ based on libmpv and Qt.
 
-People should know that SPlayer is a fork of Baka MPlayer.
+People should know that Sugoi Player is a fork of Baka MPlayer.
 Baka MPlayer is a free and open source, cross-platform,
 libmpv based multimedia player. Its simple design reflects
 the idea for an uncluttered, simple, and enjoyable
 environment for watching tv shows. Thanks to the great work
 of Baka MPlayer's original developers. Without their hard
-work, there won't be SPlayer anymore. I really appreciate
+work, there won't be Sugoi Player anymore. I really appreciate
 u8sand and his team.
 
 
@@ -38,7 +38,7 @@ A somewhat capable CPU. Hardware decoding might help if
 the CPU is too slow to decode video in realtime, but
 must be explicitly enabled with the --hwdec option.
 
-A not too crappy GPU. SPlayer is not intended to be
+A not too crappy GPU. Sugoi Player is not intended to be
 used with bad GPUs. There are many caveats with drivers
 or system compositors causing tearing, stutter, etc.
 On Windows, you might want to make sure the graphics
@@ -51,7 +51,7 @@ Bug reports & Feature requests
 --------------------------------
 
 Please use the issues tracker provided by GitHub
-(https://github.com/wangwenx190/SPlayer/issues) to
+(https://github.com/wangwenx190/Sugoi-Player/issues) to
 send us bug reports or feature requests. Follow the
 template's instructions or the issue will likely be
 ignored or closed as invalid.

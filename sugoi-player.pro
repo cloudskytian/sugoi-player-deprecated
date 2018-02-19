@@ -2,4 +2,4 @@ TEMPLATE = subdirs
 CONFIG += ordered
 SUBDIRS += \
     src/iconlib \
-    src/splayer
+    src/player

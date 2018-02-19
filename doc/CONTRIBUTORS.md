@@ -327,13 +327,13 @@ suhr
 Alfredo Ramos
 
 
-## SPlayer
+## Sugoi Player
 
 ### Contributors
 
 wangwenx190
 
-### SPlayer icon
+### Player icon
 
 ninja emotion-icons [roundicons](https://roundicons.com/) <Creative Commons Attribution-Share Alike 3.0 Unported License>
 

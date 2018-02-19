@@ -66,7 +66,7 @@ function KillTimer(hWnd, nIDEvent: longword): longword; external 'KillTimer@user
 function SetClassLong(h : hwnd; nIndex : integer; dwNewLong : longint) : DWORD; external 'SetClassLongW@user32.dll stdcall';
 function GetClassLong(h : hwnd; nIndex : integer) : DWORD; external 'GetClassLongW@user32.dll stdcall';
 
-procedure kill_splayer_task;
+procedure kill_running_task;
 var
   ErrorCode : integer;
 begin
@@ -1033,7 +1033,7 @@ procedure CurStepChanged(CurStep : TSetupStep);
 begin
   if (CurStep = ssInstall) then
   begin
-    kill_splayer_task;
+    kill_running_task;
   end;
   if (CurStep = ssPostInstall) then
   begin
@@ -1069,6 +1069,6 @@ procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if (CurUninstallStep = usAppMutexCheck) then
   begin
-    kill_splayer_task;
+    kill_running_task;
   end;
 end;

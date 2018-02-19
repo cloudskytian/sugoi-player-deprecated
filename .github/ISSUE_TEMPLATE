@@ -1,4 +1,4 @@
-### SPlayer version, Qt version and platform
+### Player version, Qt version and platform
 
 or commit ID if not using release version
 
@@ -14,6 +14,6 @@ or commit ID if not using release version
 
 ### Log file
 
-For Windows 7 and newer: "%APPDATA%\..\Local\wangwenx190\SPlayer\debug[64].log"
+For Windows 7 and newer: "%APPDATA%\..\Local\wangwenx190\Sugoi Player\debug[64].log"
 
 ### Sample files (optional)

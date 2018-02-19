@@ -24,10 +24,10 @@
     <file alias="edit.svg">resources/edit.svg</file>
     <file alias="enabled_hide_files.svg">resources/enabled_hide_files.svg</file>
     <file alias="exists.svg">resources/exists.svg</file>
-    <file alias="splayer.ico">resources/splayer.ico</file>
-    <file alias="splayer.svg">resources/splayer.svg</file>
+    <file alias="player.ico">resources/player.ico</file>
+    <file alias="player.svg">resources/player.svg</file>
     <file alias="logo.png">resources/logo.png</file>
-    <file alias="splayer.png">resources/splayer.png</file>
+    <file alias="player.png">resources/player.png</file>
     <file alias="not_exists.svg">resources/not_exists.svg</file>
     <file alias="refresh_view.svg">resources/refresh_view.svg</file>
     <file alias="paste.svg">resources/paste.svg</file>
@@ -47,8 +47,8 @@
     <file alias="gpl-3.0.zh_CN.html">licenses/gpl-3.0.zh_CN.html</file>
     <file alias="gpl-3.0.zh_TW.html">licenses/gpl-3.0.zh_TW.html</file>
   </qresource>
-  <qresource prefix="/updatelog">
-    <file alias="updatelog.en.html">updatelog/updatelog.en.html</file>
-    <file alias="updatelog.zh_CN.html">updatelog/updatelog.zh_CN.html</file>
+  <qresource prefix="/updatelogs">
+    <file alias="updatelog.en.html">updatelogs/updatelog.en.html</file>
+    <file alias="updatelog.zh_CN.html">updatelogs/updatelog.zh_CN.html</file>
   </qresource>
 </RCC>
