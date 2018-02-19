@@ -34,9 +34,9 @@ exists($${ROOTDIR}/ci_version.h) {
 include($${ROOTDIR}/version.pri)
 
 QMAKE_TARGET_COMPANY = wangwenx190
-QMAKE_TARGET_DESCRIPTION = Sugoi
+QMAKE_TARGET_DESCRIPTION = Sugoi Player
 QMAKE_TARGET_COPYRIGHT = GPLv3
-QMAKE_TARGET_PRODUCT = Sugoi
+QMAKE_TARGET_PRODUCT = Sugoi Player
 RC_ICONS = resources/player.ico
 
 QMAKE_POST_LINK += $$quote(windeployqt \"$${DESTDIR}\\$${TARGET}.exe\"$$escape_expand(\\n\\t))
