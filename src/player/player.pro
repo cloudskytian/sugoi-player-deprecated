@@ -39,6 +39,9 @@ QMAKE_TARGET_COPYRIGHT = GPLv3
 QMAKE_TARGET_PRODUCT = Sugoi Player
 RC_ICONS = resources/player.ico
 
+QMAKE_PRE_LINK += $$quote(taskkill /F /IM \"$${TARGET}.exe\" /T$$escape_expand(\\n\\t))
+QMAKE_POST_LINK += $$quote(taskkill /F /IM \"youtube-dl.exe\" /T$$escape_expand(\\n\\t))
+
 QMAKE_POST_LINK += $$quote(windeployqt \"$${DESTDIR}\\$${TARGET}.exe\"$$escape_expand(\\n\\t))
 QMAKE_POST_LINK += $$quote(copy /y \"$${ROOTDIR}\\3rdparty\\youtube-dl.exe\" \"$${DESTDIR}\\youtube-dl.exe\"$$escape_expand(\\n\\t))
 
