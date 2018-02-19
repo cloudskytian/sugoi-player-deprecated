@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About SPlayer</string>
+   <string>About Sugoi Player</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
@@ -162,7 +162,7 @@ QTabBar::tab:!selected {
             </size>
            </property>
            <property name="pixmap">
-            <pixmap resource="../resources.qrc">:/images/splayer.svg</pixmap>
+            <pixmap resource="../resources.qrc">:/images/player.svg</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>

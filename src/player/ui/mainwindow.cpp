@@ -209,10 +209,7 @@ MainWindow::MainWindow(QWidget *parent):
                     }
                     baka->translator = new QTranslator(qApp);
                     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-#ifdef STATIC_SPLAYER
-                    langPath = QString::fromLatin1(":/languages/");
-#endif
-                    if (baka->translator->load(QString("splayer_%0").arg(lang), langPath))
+                    if (baka->translator->load(QString("sugoi_%0").arg(lang), langPath))
                     {
                         qApp->installTranslator(baka->translator);
                     }
@@ -366,9 +363,9 @@ MainWindow::MainWindow(QWidget *parent):
                 if(mpv->getPlayState() > 0)
                 {
                     if(fileInfo.media_title == "")
-                        setWindowTitle("SPlayer");
+                        setWindowTitle("Sugoi Player");
                     else if(fileInfo.media_title == "-")
-                        setWindowTitle("SPlayer: stdin"); // todo: disable playlist?
+                        setWindowTitle("Sugoi Player: stdin"); // todo: disable playlist?
                     else
                         setWindowTitle(fileInfo.media_title);
 
@@ -424,7 +421,7 @@ MainWindow::MainWindow(QWidget *parent):
                                 title = mpv->getFileInfo().metadata["author"];
                             }
                         }
-                        baka->sysTrayIcon->showMessage(title, mpv->getFileInfo().media_title, QIcon(":/images/splayer.svg"), 4000);
+                        baka->sysTrayIcon->showMessage(title, mpv->getFileInfo().media_title, QIcon(":/images/player.svg"), 4000);
                     }
                 }
             });
@@ -649,7 +646,7 @@ MainWindow::MainWindow(QWidget *parent):
                             }
                             else // stop
                             {
-                                setWindowTitle("SPlayer");
+                                setWindowTitle("Sugoi Player");
                                 SetPlaybackControls(false);
                                 ui->seekBar->setTracking(0);
                                 ui->actionStop_after_Current->setChecked(false);
@@ -1133,8 +1130,8 @@ void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
     bool needChange = true;
     if (showUI)
     {
-        if (QMessageBox::question(this, tr("Associate media files"), tr("You have configured SPlayer to check "
-             "file associations every time SPlayer starts up. And now SPlayer found that it is not associated "
+        if (QMessageBox::question(this, tr("Associate media files"), tr("You have configured Sugoi Player to check "
+             "file associations every time Sugoi Player starts up. And now Sugoi Player found that it is not associated "
              "with some/all media files. Do you want to associate them now?")) == QMessageBox::No)
         {
             needChange = false;
@@ -1348,7 +1345,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         {
             canClose = false;
         }
-        else if (QMessageBox::question(this, tr("Exit"), tr("Do you want SPlayer to run in background?")) == QMessageBox::Yes)
+        else if (QMessageBox::question(this, tr("Exit"), tr("Do you want Sugoi Player to run in background?")) == QMessageBox::Yes)
         {
             canClose = false;
         }
@@ -1358,7 +1355,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         hide();
         if (baka->sysTrayIcon->isVisible())
         {
-            baka->sysTrayIcon->showMessage(QString::fromLatin1("SPlayer"), tr("SPlayer is running in background now, click the trayicon to bring SPlayer to foreground."), QIcon(":/images/splayer.svg"), 4000);
+            baka->sysTrayIcon->showMessage(QString::fromLatin1("Sugoi Player"), tr("Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground."), QIcon(":/images/player.svg"), 4000);
         }
         event->ignore();
         return;

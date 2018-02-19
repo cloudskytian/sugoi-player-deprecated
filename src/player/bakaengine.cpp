@@ -15,7 +15,7 @@ BakaEngine::BakaEngine(QObject *parent):
     window(static_cast<MainWindow*>(parent)),
     mpv(new MpvHandler(window->ui->mpvFrame->winId(), this)),
     overlay(new OverlayHandler(this)),
-    sysTrayIcon(new QSystemTrayIcon(QIcon(":/images/splayer.svg"), this)),
+    sysTrayIcon(new QSystemTrayIcon(QIcon(":/images/player.svg"), this)),
     translator(nullptr)
 {
     if(Util::DimLightsSupported())

@@ -133,7 +133,7 @@ private:
          {&BakaEngine::BakaNew, // function pointer to command functionality
           {
            // params     description
-           QString(), tr("creates a new instance of SPlayer"),
+           QString(), tr("creates a new instance of Sugoi Player"),
            QString()
           }
          }
@@ -430,7 +430,7 @@ private:
          {&BakaEngine::BakaQuit,
           {
            QString(),
-           tr("quit SPlayer"),
+           tr("quit Sugoi Player"),
            QString()
           }
          }

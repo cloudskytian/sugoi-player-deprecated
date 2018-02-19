@@ -11,7 +11,7 @@
 #include <Windows.h>
 #endif
 
-#include "splayer-version.h"
+#include "sugoi-player-version.h"
 #include "qtsingleapplication.h"
 #include "util.h"
 #include "winsparkle.h"
@@ -30,13 +30,13 @@ int main(int argc, char *argv[])
     QtSingleApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QtSingleApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    QtSingleApplication::setApplicationName(QString::fromStdWString(SPLAYER_APP_NAME_STR));
-    QtSingleApplication::setApplicationDisplayName(QString::fromStdWString(SPLAYER_APP_DISPLAY_NAME_STR));
-    QtSingleApplication::setApplicationVersion(QString::fromStdWString(SPLAYER_VERSION_STR));
-    QtSingleApplication::setOrganizationName(QString::fromStdWString(SPLAYER_COMPANY_NAME_STR));
-    QtSingleApplication::setOrganizationDomain(QString::fromStdWString(SPLAYER_COMPANY_URL_STR));
+    QtSingleApplication::setApplicationName(QString::fromStdWString(SUGOI_APP_NAME_STR));
+    QtSingleApplication::setApplicationDisplayName(QString::fromStdWString(SUGOI_APP_DISPLAY_NAME_STR));
+    QtSingleApplication::setApplicationVersion(QString::fromStdWString(SUGOI_VERSION_STR));
+    QtSingleApplication::setOrganizationName(QString::fromStdWString(SUGOI_COMPANY_NAME_STR));
+    QtSingleApplication::setOrganizationDomain(QString::fromStdWString(SUGOI_COMPANY_URL_STR));
 
-    QtSingleApplication instance(QString::fromStdWString(SPLAYER_APP_MUTEX_STR), argc, argv);
+    QtSingleApplication instance(QString::fromStdWString(SUGOI_APP_MUTEX_STR), argc, argv);
 
     bool singleInstance = true;
     bool runInBackground = false;
@@ -213,10 +213,10 @@ int main(int argc, char *argv[])
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
-                     , reinterpret_cast<const wchar_t *>(QString::fromStdWString(SPLAYER_APP_MUTEX_STR).utf16()));
+                     , reinterpret_cast<const wchar_t *>(QString::fromStdWString(SUGOI_APP_MUTEX_STR).utf16()));
 
-    win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/SPlayer/master/src/splayer/appcast.xml");
-    win_sparkle_set_app_details(SPLAYER_COMPANY_NAME_STR, SPLAYER_APP_NAME_STR, SPLAYER_VERSION_STR);
+    win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/src/player/appcast.xml");
+    win_sparkle_set_app_details(SUGOI_COMPANY_NAME_STR, SUGOI_APP_NAME_STR, SUGOI_VERSION_STR);
     win_sparkle_set_automatic_check_for_updates(1);
     win_sparkle_set_lang(mainWindow.getLang().toUtf8().constData());
     win_sparkle_init();

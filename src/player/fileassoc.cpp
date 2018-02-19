@@ -16,8 +16,8 @@ FileAssoc::FileAssoc(QObject *parent) : QObject(parent)
 
 FileAssoc::reg_state FileAssoc::getMediaFilesRegisterState()
 {
-    const QString videoKey = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\io.SPlayer.avi");
-    const QString audioKey = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\io.SPlayer.mp3");
+    const QString videoKey = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\io.SugoiPlayer.avi");
+    const QString audioKey = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\io.SugoiPlayer.mp3");
     QSettings videoSettings(videoKey, QSettings::NativeFormat);
     QSettings audioSettings(audioKey, QSettings::NativeFormat);
     if (videoSettings.contains(QString::fromLatin1("FriendlyTypeName"))
@@ -66,22 +66,22 @@ void FileAssoc::unregisterMediaFiles(reg_type type)
     // Delete "Default Programs" entry
     const QString key5 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\RegisteredApplications");
     QSettings settings5(key5, QSettings::NativeFormat);
-    settings5.remove(QString::fromLatin1("SPlayer"));
+    settings5.remove(QString::fromLatin1("SugoiPlayer"));
 
-    const QString key6 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Clients\\Media\\SPlayer\\Capabilities");
+    const QString key6 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Clients\\Media\\SugoiPlayer\\Capabilities");
     deleteRegistryKey(key6);
 
-    // Delete all OpenWithProgIds referencing ProgIds that start with io.SPlayer.
+    // Delete all OpenWithProgIds referencing ProgIds that start with io.SugoiPlayer.
     // TODO
 
-    // Delete all ProgIds starting with io.SPlayer.
+    // Delete all ProgIds starting with io.SugoiPlayer.
     const QString key8 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes");
     QSettings settings8(key8, QSettings::NativeFormat);
     QStringList key8s = settings8.allKeys();
     for (int i = 0; i <= (key8s.count() - 1); ++i)
     {
         QString currentKeyName = key8s.at(i);
-        if (currentKeyName.startsWith(QString::fromLatin1("io.SPlayer")))
+        if (currentKeyName.startsWith(QString::fromLatin1("io.SugoiPlayer")))
         {
             settings8.remove(currentKeyName);
         }
@@ -109,7 +109,7 @@ bool FileAssoc::add_verbs(const QString &key)
 
     const QString filePath = QCoreApplication::applicationFilePath();
 
-    settings.setValue(QString::fromLatin1("FriendlyAppName"), QString::fromLatin1("SPlayer"));
+    settings.setValue(QString::fromLatin1("FriendlyAppName"), QString::fromLatin1("SugoiPlayer"));
     settings.beginGroup(QString::fromLatin1("shell"));
     // Set the default verb to "play"
     settings.setValue(QString::fromLatin1("."), QString::fromLatin1("play"));
@@ -186,7 +186,7 @@ bool FileAssoc::update_extension(const QString &extension, const QString &prog_i
     settings2.setValue(extension, QString());
 
     // Add type to the Default Programs control panel
-    const QString key3 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Clients\\Media\\SPlayer\\Capabilities\\FileAssociations");
+    const QString key3 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Clients\\Media\\SugoiPlayer\\Capabilities\\FileAssociations");
     QSettings settings3(key3, QSettings::NativeFormat);
     if (settings3.status() != QSettings::NoError)
     {
@@ -219,7 +219,7 @@ bool FileAssoc::add_type(const QString &mime_type, const QString &perceived_type
         }
     }
     // Add ProgId
-    const QString prog_id = QString::fromLatin1("io.SPlayer") + extension;
+    const QString prog_id = QString::fromLatin1("io.SugoiPlayer") + extension;
     QString iconPath = QLatin1Char('"') + QCoreApplication::applicationFilePath() + QString::fromLatin1("\",0");
     const QString iconLibPath = QCoreApplication::applicationDirPath() + QLatin1Char('/') + QString::fromLatin1("iconlib.dll");
     QLibrary iconLib;
@@ -264,7 +264,7 @@ bool FileAssoc::registerMediaFiles(FileAssoc::reg_type type)
     const QString filePath = QCoreApplication::applicationFilePath();
     const QString fileName = QFileInfo(filePath).fileName();
 
-    // Register splayer.exe under the "App Paths" key, so it can be found by
+    // Register Sugoi.exe under the "App Paths" key, so it can be found by
     // ShellExecute, the run command, the start menu, etc.
     const QString key1 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\") + fileName;
     QSettings settings1(key1, QSettings::NativeFormat);
@@ -276,15 +276,15 @@ bool FileAssoc::registerMediaFiles(FileAssoc::reg_type type)
     settings1.setValue(QString::fromLatin1("."), QDir::toNativeSeparators(filePath));
     settings1.setValue(QString::fromLatin1("UseUrl"), 1);
 
-    // Register splayer.exe under the "Applications" key to add some default verbs for
-    // when SPlayer is used from the "Open with" menu
+    // Register Sugoi.exe under the "Applications" key to add some default verbs for
+    // when SugoiPlayer is used from the "Open with" menu
     const QString key2 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\Applications\\") + fileName;
     if (!add_verbs(key2))
     {
         return false;
     }
 
-    // Add SPlayer to the "Open with" list for all video and audio file types
+    // Add SugoiPlayer to the "Open with" list for all video and audio file types
     if (regType != FileAssoc::reg_type::AUDIO_ONLY)
     {
         const QString key3 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\SystemFileAssociations\\video\\OpenWithList\\") + fileName;
@@ -309,17 +309,17 @@ bool FileAssoc::registerMediaFiles(FileAssoc::reg_type type)
         settings4.setValue(QString::fromLatin1("FileName"), fileName);
     }
 
-    // Add a capabilities key for SPlayer, which is registered later on for use in the
+    // Add a capabilities key for SugoiPlayer, which is registered later on for use in the
     // "Default Programs" control panel
-    const QString key5 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Clients\\Media\\SPlayer\\Capabilities");
+    const QString key5 = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Clients\\Media\\SugoiPlayer\\Capabilities");
     QSettings settings5(key5, QSettings::NativeFormat);
     if (settings5.status() != QSettings::NoError)
     {
         return false;
     }
 
-    settings5.setValue(QString::fromLatin1("ApplicationName"), QString::fromLatin1("SPlayer"));
-    settings5.setValue(QString::fromLatin1("ApplicationDescription"), QString::fromLatin1("SPlayer, a multimedia player for Windows 7+ based on libmpv and Qt."));
+    settings5.setValue(QString::fromLatin1("ApplicationName"), QString::fromLatin1("SugoiPlayer"));
+    settings5.setValue(QString::fromLatin1("ApplicationDescription"), QString::fromLatin1("SugoiPlayer, a multimedia player for Windows 7+ based on libmpv and Qt."));
 
     // Add file types
     // DVD/Blu-ray audio formats
@@ -485,7 +485,7 @@ bool FileAssoc::registerMediaFiles(FileAssoc::reg_type type)
         return false;
     }
 
-    settings6.setValue(QString::fromLatin1("SPlayer"), QString::fromLatin1("SOFTWARE\\Clients\\Media\\SPlayer\\Capabilities"));
+    settings6.setValue(QString::fromLatin1("SugoiPlayer"), QString::fromLatin1("SOFTWARE\\Clients\\Media\\SugoiPlayer\\Capabilities"));
 
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 

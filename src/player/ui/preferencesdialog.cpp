@@ -262,9 +262,6 @@ void PreferencesDialog::PopulateLangs()
 {
     // open the language directory
     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-#ifdef STATIC_SPLAYER
-    langPath = QString::fromLatin1(":/languages/");
-#endif
     QDir root(langPath);
     // get files in the directory with .qm extension
     QFileInfoList flist;
@@ -273,7 +270,7 @@ void PreferencesDialog::PopulateLangs()
     ui->langComboBox->addItem(tr("auto"), QVariant(QString::fromLatin1("auto")));
     for(auto &i : flist)
     {
-        QString lang = i.fileName().mid(i.fileName().indexOf("_") + 1); // splayer_....
+        QString lang = i.fileName().mid(i.fileName().indexOf("_") + 1); // sugoi_....
         lang.chop(3); // -  .qm
         lang = lang.replace('-', '_');
         QLocale locale(lang);

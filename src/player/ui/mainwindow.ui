@@ -17,11 +17,11 @@
    <bool>true</bool>
   </property>
   <property name="windowTitle">
-   <string>SPlayer</string>
+   <string>Sugoi Player</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">
-    <normaloff>:/images/splayer.svg</normaloff>:/images/splayer.svg</iconset>
+    <normaloff>:/images/player.svg</normaloff>:/images/player.svg</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget {
@@ -1462,13 +1462,13 @@ QSlider::handle:horizontal {
   </action>
   <action name="actionAbout_Baka_MPlayer">
    <property name="text">
-    <string>&amp;About SPlayer</string>
+    <string>&amp;About Sugoi Player</string>
    </property>
    <property name="iconText">
-    <string>About SPlayer</string>
+    <string>About Sugoi Player</string>
    </property>
    <property name="toolTip">
-    <string>About SPlayer</string>
+    <string>About Sugoi Player</string>
    </property>
   </action>
   <action name="action_To_Current_Size">

@@ -22,7 +22,7 @@
 #include "overlayhandler.h"
 #include "util.h"
 #include "winsparkle.h"
-#include "splayer-version.h"
+#include "sugoi-player-version.h"
 
 void BakaEngine::BakaMpv(QStringList &args)
 {
@@ -351,7 +351,7 @@ void BakaEngine::BakaPreferences(QStringList &args)
 void BakaEngine::BakaOnlineHelp(QStringList &args)
 {
     if(args.empty())
-        QDesktopServices::openUrl(QUrl(QString::fromStdWString(SPLAYER_SUPPORT_URL_STR)));
+        QDesktopServices::openUrl(QUrl(QString::fromStdWString(SUGOI_SUPPORT_URL_STR)));
     else
         InvalidParameter(args.join(' '));
 }
@@ -359,7 +359,7 @@ void BakaEngine::BakaOnlineHelp(QStringList &args)
 void BakaEngine::BakaBugReport(QStringList &args)
 {
     if(args.empty())
-        QDesktopServices::openUrl(QUrl(QString::fromStdWString(SPLAYER_BUG_REPORT_URL_STR)));
+        QDesktopServices::openUrl(QUrl(QString::fromStdWString(SUGOI_BUG_REPORT_URL_STR)));
     else
         InvalidParameter(args.join(' '));
 }

@@ -1,6 +1,6 @@
 ﻿#include "aboutdialog.h"
 #include "ui_aboutdialog.h"
-#include "splayer-version.h"
+#include "sugoi-player-version.h"
 #include "winsparkle-version.h"
 
 #include <QFile>
@@ -39,7 +39,7 @@ QString AboutDialog::compilerText_HTML()
 {
 #ifndef CI
     static QString text = QString::fromLatin1("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6<br /><b>%7</b>: %8<br /><b>%9</b>: %10<br /><b>%11</b>: %12</p>")
-                     .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
+                     .arg(tr("Version")).arg(QString::fromStdWString(SUGOI_VERSION_STR))
                      .arg(tr("Architecture")).arg(QSysInfo::buildCpuArchitecture())
                      .arg(tr("libmpv version")).arg(QString::fromStdWString(LIBMPV_VERSION_STR))
                      .arg(tr("Qt version")).arg(QString::fromLatin1(QT_VERSION_STR))
@@ -47,12 +47,12 @@ QString AboutDialog::compilerText_HTML()
                      .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
 #else
     static QString text = QString::fromLatin1("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6<br /><b>%7</b>: %8<br /><b>%9</b>: %10<br /><b>%11</b>: %12<br /><b>%13</b>: %14<br /><b>%15</b>: %16<br /><b>%17</b>: %18<br /><b>%19</b>: %20<br /><b>%21</b>: %22</p>")
-                     .arg(tr("Version")).arg(QString::fromStdWString(SPLAYER_VERSION_STR))
-                     .arg(tr("Commit ID")).arg(QString::fromStdWString(SPLAYER_COMMIT_ID_STR))
-                     .arg(tr("Commit author")).arg(QString::fromStdWString(SPLAYER_COMMIT_AUTHOR_STR))
-                     .arg(tr("Commit author e-mail")).arg(QString::fromStdWString(SPLAYER_COMMIT_AUTHOR_EMAIL_STR))
-                     .arg(tr("Commit time")).arg(QString::fromStdWString(SPLAYER_COMMIT_TIMESTAMP_STR))
-                     .arg(tr("Commit message")).arg(QString::fromStdWString(SPLAYER_COMMIT_MESSAGE_STR))
+                     .arg(tr("Version")).arg(QString::fromStdWString(SUGOI_VERSION_STR))
+                     .arg(tr("Commit ID")).arg(QString::fromStdWString(SUGOI_COMMIT_ID_STR))
+                     .arg(tr("Commit author")).arg(QString::fromStdWString(SUGOI_COMMIT_AUTHOR_STR))
+                     .arg(tr("Commit author e-mail")).arg(QString::fromStdWString(SUGOI_COMMIT_AUTHOR_EMAIL_STR))
+                     .arg(tr("Commit time")).arg(QString::fromStdWString(SUGOI_COMMIT_TIMESTAMP_STR))
+                     .arg(tr("Commit message")).arg(QString::fromStdWString(SUGOI_COMMIT_MESSAGE_STR))
                      .arg(tr("Architecture")).arg(QSysInfo::buildCpuArchitecture())
                      .arg(tr("libmpv version")).arg(QString::fromStdWString(LIBMPV_VERSION_STR))
                      .arg(tr("Qt version")).arg(QString::fromLatin1(QT_VERSION_STR))
@@ -69,20 +69,20 @@ QString AboutDialog::compilerText_PlainText()
 
 QString AboutDialog::aboutText_HTML()
 {
-    static QString text = tr("<p><b>SPlayer</b> is a multimedia player based on "
+    static QString text = tr("<p><b>Sugoi Player</b> is a multimedia player based on "
                           "<b>libmpv</b> and <b>Qt</b> for Microsoft Windows 7+.</p>\n"
-                          "<p>People should know that <b>SPlayer</b> is a fork of "
+                          "<p>People should know that <b>Sugoi Player</b> is a fork of "
                           "<a href='https://github.com/u8sand/Baka-MPlayer'><b>Baka MPlayer</b></a>. "
                           "<b>Baka MPlayer</b> is a free and open source, cross-platform, <b>libmpv</b> "
                           "based multimedia player. Its simple design reflects the idea for an uncluttered, "
                           "simple, and enjoyable environment for watching tv shows. "
                           "Thanks to the great work of <b>Baka MPlayer</b>'s original developers. "
-                          "Without their hard work, there won't be <b>SPlayer</b> anymore. "
+                          "Without their hard work, there won't be <b>Sugoi Player</b> anymore. "
                           "I really appreciate <b>godly-devotion</b> (Creator/UX Designer/Programmer), "
                           "<a href='https://github.com/u8sand'><b>u8sand</b></a> (Lead Programmer/Website Host)"
                           " and their team.</p>\n<p>Home Page: <a href='%1'>%2</a></p>")
-                          .arg(QString::fromStdWString(SPLAYER_COMPANY_URL_STR))
-                          .arg(QString::fromStdWString(SPLAYER_COMPANY_URL_STR));
+                          .arg(QString::fromStdWString(SUGOI_COMPANY_URL_STR))
+                          .arg(QString::fromStdWString(SUGOI_COMPANY_URL_STR));
     return text;
 }
 
@@ -150,8 +150,8 @@ QString AboutDialog::creditsText_HTML()
                              "<h4>German</h4>\n<p>yiip87</p>\n<h4>Italian</h4>\n<p>Aloysius</p>\n"
                              "<h4>Korean</h4>\n<p>godly-devotion</p>\n<h4>Portuguese</h4>\n<p>u8sand</p>\n"
                              "<h4>Russian</h4>\n<p>suhr</p>\n<h4>Spanish</h4>\n<p>Alfredo Ramos</p>\n"
-                             "<h2>SPlayer</h2>\n<h3>Contributors</h3>\n<p>wangwenx190</p>\n"
-                             "<h3>SPlayer icon</h3>\n<p>ninja emotion-icons <a href='https://roundicons.com/'>"
+                             "<h2>Sugoi Player</h2>\n<h3>Contributors</h3>\n<p>wangwenx190</p>\n"
+                             "<h3>Sugoi Player icon</h3>\n<p>ninja emotion-icons <a href='https://roundicons.com/'>"
                              "roundicons</a></p>\n<h3>Translations</h3>\n<h4>Simplified Chinese</h4>\n"
                              "<p>amazingfate, Antares95, wangwenx190</p>");
     return text;

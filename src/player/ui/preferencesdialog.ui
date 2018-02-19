@@ -483,7 +483,7 @@ QTabBar::tab:!selected {
             <item>
              <widget class="QCheckBox" name="showFullscreenIndicatorCheckBox">
               <property name="toolTip">
-               <string>SPlayer will show a thin progress bar if the seek bar is hidden if you enable this.</string>
+               <string>Sugoi Player will show a thin progress bar if the seek bar is hidden if you enable this.</string>
               </property>
               <property name="text">
                <string>Show progress indicator when fullscreen</string>
@@ -510,7 +510,7 @@ QTabBar::tab:!selected {
             <item>
              <widget class="QCheckBox" name="backgroundNotAskCheckBox">
               <property name="toolTip">
-               <string>If you disable this, there will always be a message box asking you wether to run in background or not when you close SPlayer while it is playing music.</string>
+               <string>If you disable this, there will always be a message box asking you wether to run in background or not when you close Sugoi Player while it is playing music.</string>
               </property>
               <property name="text">
                <string>Allow run in background when playing music</string>
@@ -520,7 +520,7 @@ QTabBar::tab:!selected {
             <item>
              <widget class="QCheckBox" name="quickStartCheckBox">
               <property name="toolTip">
-               <string>SPlayer will always stay in background and auto starts when the system starts if you enable this.</string>
+               <string>Sugoi Player will always stay in background and auto starts when the system starts if you enable this.</string>
               </property>
               <property name="text">
                <string>Quick start mode</string>
