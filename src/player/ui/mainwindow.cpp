@@ -153,6 +153,9 @@ MainWindow::MainWindow(QWidget *parent):
     connect(this, &MainWindow::autoUpdatePlayerChanged,
             [=](bool isAuto)
             {
+#ifdef _DEBUG
+                return;
+#endif
                 if (isAuto)
                 {
                     win_sparkle_set_automatic_check_for_updates(1);
@@ -1410,6 +1413,9 @@ void MainWindow::showEvent(QShowEvent *event)
             sugoi->sysTrayIcon->hide();
         }
     }
+#ifdef _DEBUG
+    return;
+#endif
     if (autoUpdatePlayer)
     {
         win_sparkle_check_update_without_ui();
