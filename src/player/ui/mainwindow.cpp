@@ -139,6 +139,19 @@ MainWindow::MainWindow(QWidget *parent):
 
     // setup signals & slots
 
+    connect(this, &MainWindow::autoUpdatePlayerChanged,
+            [=](bool isAuto)
+            {
+                if (isAuto)
+                {
+                    win_sparkle_set_automatic_check_for_updates(1);
+                }
+                else
+                {
+                    win_sparkle_set_automatic_check_for_updates(0);
+                }
+            });
+
     connect(this, &MainWindow::osdShowLocalTimeChanged,
             [=](bool enable)
             {
@@ -1388,12 +1401,7 @@ void MainWindow::showEvent(QShowEvent *event)
     }
     if (autoUpdatePlayer)
     {
-        win_sparkle_set_automatic_check_for_updates(1);
         win_sparkle_check_update_without_ui();
-    }
-    else
-    {
-        win_sparkle_set_automatic_check_for_updates(0);
     }
     if (autoUpdateStreamingSupport)
     {

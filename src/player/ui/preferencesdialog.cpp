@@ -53,6 +53,8 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     ui->groupBox_9->setChecked(sugoi->window->getShowVideoPreview());
     ui->backgroundNotAskCheckBox->setChecked(sugoi->window->getAllowRunInBackground());
     ui->quickStartCheckBox->setChecked(sugoi->window->getQuickStartMode());
+    ui->autoUpdatePlayerCheckBox->setChecked(sugoi->window->getAutoUpdatePlayer());
+    ui->autoUpdateStreamingSupportCheckBox->setChecked(sugoi->window->getAutoUpdateStreamingSupport());
 
     // add shortcuts
     saved = sugoi->input;
@@ -196,6 +198,8 @@ PreferencesDialog::~PreferencesDialog()
 {
     if (result() == QDialog::Accepted)
     {
+        sugoi->window->setAutoUpdatePlayer(ui->autoUpdatePlayerCheckBox->isChecked());
+        sugoi->window->setAutoUpdateStreamingSupport(ui->autoUpdateStreamingSupportCheckBox->isChecked());
         sugoi->window->setQuickStartMode(ui->quickStartCheckBox->isChecked());
         sugoi->window->setAllowRunInBackground(ui->backgroundNotAskCheckBox->isChecked());
         sugoi->window->setPauseWhenMinimized(ui->pauseWhenMinimizedCheckBox->isChecked());
