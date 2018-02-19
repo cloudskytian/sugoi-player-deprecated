@@ -67,7 +67,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>About SPlayer</source>
-        <translation>关于 SPlayer</translation>
+        <translation type="vanished">关于 SPlayer</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; font-weight:600; color:#ffffff;&quot;&gt;SPlayer&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; color:#ffffff;&quot;&gt; is a free and open source multimedia player for Windows 7+ based on &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; font-weight:600; color:#ffffff;&quot;&gt;libmpv&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; color:#ffffff;&quot;&gt; and &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; font-weight:600; color:#ffffff;&quot;&gt;Qt&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; color:#ffffff;&quot;&gt;.&lt;/span&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; color:#ffffff;&quot;&gt;People should know that SPlayer is a fork of &lt;/span&gt;&lt;a href=&quot;https://github.com/u8sand/Baka-MPlayer&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; text-decoration: underline; color:#ffffff;&quot;&gt;Baka MPlayer&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; color:#ffffff;&quot;&gt;. &lt;/span&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; font-weight:600; color:#ffffff;&quot;&gt;Baka MPlayer&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; color:#ffffff;&quot;&gt; is a free and open source, cross-platform, libmpv based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows. Thanks to the great work of Baka MPlayer&apos;s original developers. Without their hard work, there won&apos;t be SPlayer anymore. I really appreciate &lt;/span&gt;&lt;a href=&quot;https://github.com/u8sand&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; text-decoration: underline; color:#ffffff;&quot;&gt;u8sand&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-family:&apos;Courier New&apos;; font-size:12pt; color:#ffffff;&quot;&gt; and his team.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt;&lt;br/&gt;Distribute under &lt;/span&gt;&lt;a href=&quot;https://github.com/wangwenx190/SPlayer/blob/develop/LICENSE.md&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600; text-decoration: underline; color:#ffffff;&quot;&gt;GPLv3&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:12pt; color:#ffffff;&quot;&gt; license.&lt;br/&gt;&lt;br/&gt;GitHub: &lt;/span&gt;&lt;a href=&quot;https://github.com/wangwenx190/SPlayer&quot;&gt;&lt;span style=&quot; font-size:12pt; text-decoration: underline; color:#ffffff;&quot;&gt;https://github.com/wangwenx190/SPlayer&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -135,7 +135,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
 &lt;h3&gt;Translations&lt;/h3&gt;
 &lt;h4&gt;Simplified Chinese&lt;/h4&gt;
 &lt;p&gt;amazingfate, Antares95, wangwenx190&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;mpv - 基于 MPlayer/mplayer2 的视频播放器&lt;/h2&gt;
+        <translation type="vanished">&lt;h2&gt;mpv - 基于 MPlayer/mplayer2 的视频播放器&lt;/h2&gt;
 &lt;h3&gt;贡献人员&lt;/h3&gt;
 &lt;p&gt;pigoz, haasn, kevmitch, rossy, wiiaboo, divVerent, giselher, lachs0r, Kovensky, Akemi, Argon-, ChrisK2, ghedo, mathstuf, olifre, xylosper, ubitux, atomnuker, qmega, tmm1, bjin, philipl, pavelxdd, shdown, avih, thebombzen, rr-, dubhater, rrooij, torque, jeeb, sfan5, igv, grigorig, frau, jon-y, TimothyGu, maniak1349, richardpl, Nyx0uf, czarkoff, Coacher, qyot27, Cloudef, linkmauve, DanOscarsson, CounterPillow, henry0312, marcan, fhvwy, jaimeMF, SirCmpwn, xantoz, rcombs, Nikoli, percontation, AoD314, otommod, ahodesuka, LongChair, CyberShadow, michaelforney, sCreami, medhefgo, MadFishTheOne, rozhuk-im, shinchiro, TheAMM, Gusar321, elenril, wrl, mixi, Themaister, lu-zero, pa4, markun, maletor, quilloss, PombeirP, mikaoP, ricardomv, wsldankers, ion1, chneukirchen, ncopa, agiz, viveksjain, hroncok, andre-d, Bilalh, jozzse, elevengu, MoSal, foo86, ryanmjacobs, vitorgalvao, Shudouken, zekica, c-14, eworm-de&lt;/p&gt;
 &lt;h2&gt;Baka MPlayer&lt;/h2&gt;
@@ -255,9 +255,117 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
         <source>&lt;p&gt;&lt;b&gt;SPlayer&lt;/b&gt; is a multimedia player based on &lt;b&gt;libmpv&lt;/b&gt; and &lt;b&gt;Qt&lt;/b&gt; for Microsoft Windows 7+.&lt;/p&gt;
 &lt;p&gt;People should know that &lt;b&gt;SPlayer&lt;/b&gt; is a fork of &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt;. &lt;b&gt;Baka MPlayer&lt;/b&gt; is a free and open source, cross-platform, &lt;b&gt;libmpv&lt;/b&gt; based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows. Thanks to the great work of &lt;b&gt;Baka MPlayer&lt;/b&gt;&apos;s original developers. Without their hard work, there won&apos;t be &lt;b&gt;SPlayer&lt;/b&gt; anymore. I really appreciate &lt;b&gt;godly-devotion&lt;/b&gt; (Creator/UX Designer/Programmer), &lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt; (Lead Programmer/Website Host) and their team.&lt;/p&gt;
 &lt;p&gt;Home Page: &lt;a href=&apos;%1&apos;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;SPlayer&lt;/b&gt; 是一款基于 &lt;b&gt;libmpv&lt;/b&gt; 和 &lt;b&gt;Qt&lt;/b&gt; 开发的多媒体播放器。它是专门针对 Microsoft Windows 7 及更新版本的操作系统设计的。&lt;/p&gt;
+        <translation type="vanished">&lt;p&gt;&lt;b&gt;SPlayer&lt;/b&gt; 是一款基于 &lt;b&gt;libmpv&lt;/b&gt; 和 &lt;b&gt;Qt&lt;/b&gt; 开发的多媒体播放器。它是专门针对 Microsoft Windows 7 及更新版本的操作系统设计的。&lt;/p&gt;
 &lt;p&gt;您应了解 &lt;b&gt;SPlayer&lt;/b&gt; 是基于 &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt; 二次开发而成的。&lt;b&gt;Baka MPlayer&lt;/b&gt; 是一个自由开源跨平台的基于 &lt;b&gt;libmpv&lt;/b&gt; 的多媒体播放器。简单的设计致力于为观看视频提供一个整洁，简单，愉快的环境。感谢 &lt;b&gt;Baka MPlayer&lt;/b&gt; 开发团队的杰出工作。没有他们的辛勤付出，就没有 &lt;b&gt;SPlayer&lt;/b&gt; 的诞生。我真的十分感激 &lt;b&gt;godly-devotion&lt;/b&gt;（播放器的创造者/界面设计/编码），&lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt;（绝大多数的编码工作/网站建设及维护） 和他们的团队的贡献。&lt;/p&gt;
 &lt;p&gt;官方网站：&lt;a href=&apos;%1&apos;&gt;%2&lt;/a&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>About Sugoi Player</source>
+        <translation>关于 Sugoi Player</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;b&gt;Sugoi Player&lt;/b&gt; is a multimedia player based on &lt;b&gt;libmpv&lt;/b&gt; and &lt;b&gt;Qt&lt;/b&gt; for Microsoft Windows 7+.&lt;/p&gt;
+&lt;p&gt;People should know that &lt;b&gt;Sugoi Player&lt;/b&gt; is a fork of &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt;. &lt;b&gt;Baka MPlayer&lt;/b&gt; is a free and open source, cross-platform, &lt;b&gt;libmpv&lt;/b&gt; based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows. Thanks to the great work of &lt;b&gt;Baka MPlayer&lt;/b&gt;&apos;s original developers. Without their hard work, there won&apos;t be &lt;b&gt;Sugoi Player&lt;/b&gt; anymore. I really appreciate &lt;b&gt;godly-devotion&lt;/b&gt; (Creator/UX Designer/Programmer), &lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt; (Lead Programmer/Website Host) and their team.&lt;/p&gt;
+&lt;p&gt;Home Page: &lt;a href=&apos;%1&apos;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
+        <translation>&lt;p&gt;&lt;b&gt;Sugoi Player&lt;/b&gt; 是一款基于 &lt;b&gt;libmpv&lt;/b&gt; 和 &lt;b&gt;Qt&lt;/b&gt; 开发的多媒体播放器。它是专门针对 Microsoft Windows 7 及更新版本的操作系统设计的。&lt;/p&gt;
+&lt;p&gt;您应了解 &lt;b&gt;Sugoi Player&lt;/b&gt; 是基于 &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt; 二次开发而成的。&lt;b&gt;Baka MPlayer&lt;/b&gt; 是一个自由开源跨平台的基于 &lt;b&gt;libmpv&lt;/b&gt; 的多媒体播放器。简单的设计致力于为观看视频提供一个整洁，简单，愉快的环境。感谢 &lt;b&gt;Baka MPlayer&lt;/b&gt; 开发团队的杰出工作。没有他们的辛勤付出，就没有 &lt;b&gt;Sugoi Player&lt;/b&gt; 的诞生。我真的十分感激 &lt;b&gt;godly-devotion&lt;/b&gt;（播放器的创造者/界面设计/编码），&lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt;（绝大多数的编码工作/网站建设及维护） 和他们的团队的贡献。&lt;/p&gt;
+&lt;p&gt;官方网站：&lt;a href=&apos;%1&apos;&gt;%2&lt;/a&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;mpv - video player based on MPlayer/mplayer2&lt;/h2&gt;
+&lt;h3&gt;Contributors&lt;/h3&gt;
+&lt;p&gt;pigoz, haasn, kevmitch, rossy, wiiaboo, divVerent, giselher, lachs0r, Kovensky, Akemi, Argon-, ChrisK2, ghedo, mathstuf, olifre, xylosper, ubitux, atomnuker, qmega, tmm1, bjin, philipl, pavelxdd, shdown, avih, thebombzen, rr-, dubhater, rrooij, torque, jeeb, sfan5, igv, grigorig, frau, jon-y, TimothyGu, maniak1349, richardpl, Nyx0uf, czarkoff, Coacher, qyot27, Cloudef, linkmauve, DanOscarsson, CounterPillow, henry0312, marcan, fhvwy, jaimeMF, SirCmpwn, xantoz, rcombs, Nikoli, percontation, AoD314, otommod, ahodesuka, LongChair, CyberShadow, michaelforney, sCreami, medhefgo, MadFishTheOne, rozhuk-im, shinchiro, TheAMM, Gusar321, elenril, wrl, mixi, Themaister, lu-zero, pa4, markun, maletor, quilloss, PombeirP, mikaoP, ricardomv, wsldankers, ion1, chneukirchen, ncopa, agiz, viveksjain, hroncok, andre-d, Bilalh, jozzse, elevengu, MoSal, foo86, ryanmjacobs, vitorgalvao, Shudouken, zekica, c-14, eworm-de&lt;/p&gt;
+&lt;h2&gt;Baka MPlayer&lt;/h2&gt;
+&lt;h3&gt;Contributors&lt;/h3&gt;
+&lt;p&gt;u8sand, godly-devotion, amazingfate, epitron, AlfredoRamos, jbeich, rrooij, samdx, ErikDavison, muzena, FrankHB, stryaponoff, starks, theChaosCoder, luigino, tehcereal, redranamber, wb9688, arabuli, jqs7, Reboare, yiip87, suhr&lt;/p&gt;
+&lt;h3&gt;Material Design icons&lt;/h3&gt;
+&lt;p&gt;Google&lt;/p&gt;
+&lt;h3&gt;Noto Sans fonts&lt;/h3&gt;
+&lt;p&gt;Google&lt;/p&gt;
+&lt;h3&gt;Retro Cassette image&lt;/h3&gt;
+&lt;p&gt;Lukas Troup&lt;/p&gt;
+&lt;h3&gt;Gesture icons&lt;/h3&gt;
+&lt;p&gt;Jeff Portaro&lt;/p&gt;
+&lt;h3&gt;Download icon&lt;/h3&gt;
+&lt;p&gt;Sasha Mescheryakov&lt;/p&gt;
+&lt;h3&gt;Translations&lt;/h3&gt;
+&lt;h4&gt;Chinese&lt;/h4&gt;
+&lt;p&gt;amazingfate, Antares95&lt;/p&gt;
+&lt;h4&gt;Croatian&lt;/h4&gt;
+&lt;p&gt;gogo&lt;/p&gt;
+&lt;h4&gt;Dutch&lt;/h4&gt;
+&lt;p&gt;robin007bond, wb9688&lt;/p&gt;
+&lt;h4&gt;French&lt;/h4&gt;
+&lt;p&gt;chapouvalpin&lt;/p&gt;
+&lt;h4&gt;Georgian&lt;/h4&gt;
+&lt;p&gt;arabuli&lt;/p&gt;
+&lt;h4&gt;German&lt;/h4&gt;
+&lt;p&gt;yiip87&lt;/p&gt;
+&lt;h4&gt;Italian&lt;/h4&gt;
+&lt;p&gt;Aloysius&lt;/p&gt;
+&lt;h4&gt;Korean&lt;/h4&gt;
+&lt;p&gt;godly-devotion&lt;/p&gt;
+&lt;h4&gt;Portuguese&lt;/h4&gt;
+&lt;p&gt;u8sand&lt;/p&gt;
+&lt;h4&gt;Russian&lt;/h4&gt;
+&lt;p&gt;suhr&lt;/p&gt;
+&lt;h4&gt;Spanish&lt;/h4&gt;
+&lt;p&gt;Alfredo Ramos&lt;/p&gt;
+&lt;h2&gt;Sugoi Player&lt;/h2&gt;
+&lt;h3&gt;Contributors&lt;/h3&gt;
+&lt;p&gt;wangwenx190&lt;/p&gt;
+&lt;h3&gt;Sugoi Player icon&lt;/h3&gt;
+&lt;p&gt;ninja emotion-icons &lt;a href=&apos;https://roundicons.com/&apos;&gt;roundicons&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Translations&lt;/h3&gt;
+&lt;h4&gt;Simplified Chinese&lt;/h4&gt;
+&lt;p&gt;amazingfate, Antares95, wangwenx190&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;mpv - 基于 MPlayer/mplayer2 的视频播放器&lt;/h2&gt;
+&lt;h3&gt;贡献人员&lt;/h3&gt;
+&lt;p&gt;pigoz, haasn, kevmitch, rossy, wiiaboo, divVerent, giselher, lachs0r, Kovensky, Akemi, Argon-, ChrisK2, ghedo, mathstuf, olifre, xylosper, ubitux, atomnuker, qmega, tmm1, bjin, philipl, pavelxdd, shdown, avih, thebombzen, rr-, dubhater, rrooij, torque, jeeb, sfan5, igv, grigorig, frau, jon-y, TimothyGu, maniak1349, richardpl, Nyx0uf, czarkoff, Coacher, qyot27, Cloudef, linkmauve, DanOscarsson, CounterPillow, henry0312, marcan, fhvwy, jaimeMF, SirCmpwn, xantoz, rcombs, Nikoli, percontation, AoD314, otommod, ahodesuka, LongChair, CyberShadow, michaelforney, sCreami, medhefgo, MadFishTheOne, rozhuk-im, shinchiro, TheAMM, Gusar321, elenril, wrl, mixi, Themaister, lu-zero, pa4, markun, maletor, quilloss, PombeirP, mikaoP, ricardomv, wsldankers, ion1, chneukirchen, ncopa, agiz, viveksjain, hroncok, andre-d, Bilalh, jozzse, elevengu, MoSal, foo86, ryanmjacobs, vitorgalvao, Shudouken, zekica, c-14, eworm-de&lt;/p&gt;
+&lt;h2&gt;Baka MPlayer&lt;/h2&gt;
+&lt;h3&gt;贡献人员&lt;/h3&gt;
+&lt;p&gt;u8sand, godly-devotion, amazingfate, epitron, AlfredoRamos, jbeich, rrooij, samdx, ErikDavison, muzena, FrankHB, stryaponoff, starks, theChaosCoder, luigino, tehcereal, redranamber, wb9688, arabuli, jqs7, Reboare, yiip87, suhr&lt;/p&gt;
+&lt;h3&gt;Material Design 图标&lt;/h3&gt;
+&lt;p&gt;Google&lt;/p&gt;
+&lt;h3&gt;Noto Sans 字体&lt;/h3&gt;
+&lt;p&gt;Google&lt;/p&gt;
+&lt;h3&gt;Retro Cassette 图片&lt;/h3&gt;
+&lt;p&gt;Lukas Troup&lt;/p&gt;
+&lt;h3&gt;手势图标&lt;/h3&gt;
+&lt;p&gt;Jeff Portaro&lt;/p&gt;
+&lt;h3&gt;Download icon&lt;/h3&gt;
+&lt;p&gt;Sasha Mescheryakov&lt;/p&gt;
+&lt;h3&gt;翻译&lt;/h3&gt;
+&lt;h4&gt;汉语&lt;/h4&gt;
+&lt;p&gt;amazingfate, Antares95&lt;/p&gt;
+&lt;h4&gt;克罗地亚语&lt;/h4&gt;
+&lt;p&gt;gogo&lt;/p&gt;
+&lt;h4&gt;荷兰语&lt;/h4&gt;
+&lt;p&gt;robin007bond, wb9688&lt;/p&gt;
+&lt;h4&gt;法语&lt;/h4&gt;
+&lt;p&gt;chapouvalpin&lt;/p&gt;
+&lt;h4&gt;格鲁吉亚语&lt;/h4&gt;
+&lt;p&gt;arabuli&lt;/p&gt;
+&lt;h4&gt;德语&lt;/h4&gt;
+&lt;p&gt;yiip87&lt;/p&gt;
+&lt;h4&gt;意大利语&lt;/h4&gt;
+&lt;p&gt;Aloysius&lt;/p&gt;
+&lt;h4&gt;韩语&lt;/h4&gt;
+&lt;p&gt;godly-devotion&lt;/p&gt;
+&lt;h4&gt;葡萄牙语&lt;/h4&gt;
+&lt;p&gt;u8sand&lt;/p&gt;
+&lt;h4&gt;俄语&lt;/h4&gt;
+&lt;p&gt;suhr&lt;/p&gt;
+&lt;h4&gt;西班牙语&lt;/h4&gt;
+&lt;p&gt;Alfredo Ramos&lt;/p&gt;
+&lt;h2&gt;Sugoi Player&lt;/h2&gt;
+&lt;h3&gt;贡献人员&lt;/h3&gt;
+&lt;p&gt;wangwenx190&lt;/p&gt;
+&lt;h3&gt;播放器图标&lt;/h3&gt;
+&lt;p&gt;ninja emotion-icons &lt;a href=&apos;https://roundicons.com/&apos;&gt;roundicons&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;翻译&lt;/h3&gt;
+&lt;h4&gt;简体中文&lt;/h4&gt;
+&lt;p&gt;amazingfate, Antares95, wangwenx190&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -712,11 +820,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>creates a new instance of SPlayer</source>
-        <translation>打开一个新的 SPlayer 实例</translation>
+        <translation type="vanished">打开一个新的 SPlayer 实例</translation>
     </message>
     <message>
         <source>quit SPlayer</source>
-        <translation>退出 SPlayer</translation>
+        <translation type="vanished">退出 SPlayer</translation>
     </message>
     <message>
         <source>report bugs to the developers</source>
@@ -725,6 +833,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     <message>
         <source>show system information</source>
         <translation>显示系统信息</translation>
+    </message>
+    <message>
+        <source>creates a new instance of Sugoi Player</source>
+        <translation>打开一个新的 Sugoi Player 实例</translation>
+    </message>
+    <message>
+        <source>quit Sugoi Player</source>
+        <translation>退出 Sugoi Player</translation>
     </message>
 </context>
 <context>
@@ -1281,7 +1397,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>SPlayer</source>
-        <translation>SPlayer</translation>
+        <translation type="vanished">SPlayer</translation>
     </message>
     <message>
         <source>Click to play a specific file by index</source>
@@ -1297,7 +1413,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>About SPlayer</source>
-        <translation>关于 SPlayer</translation>
+        <translation type="vanished">关于 SPlayer</translation>
     </message>
     <message>
         <source>%0 / %1</source>
@@ -1313,7 +1429,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>You have configured SPlayer to check file associations every time SPlayer starts up. And now SPlayer found that it is not associated with some/all media files. Do you want to associate them now?</source>
-        <translation>您已设置SPlayer在每次启动时都检查文件关联。SPlayer检测到有部分或全部媒体文件格式尚未关联，请问您想现在立刻关联吗？</translation>
+        <translation type="vanished">您已设置SPlayer在每次启动时都检查文件关联。SPlayer检测到有部分或全部媒体文件格式尚未关联，请问您想现在立刻关联吗？</translation>
     </message>
     <message>
         <source>Exit</source>
@@ -1321,7 +1437,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Do you want SPlayer to run in background?</source>
-        <translation>是否允许 SPlayer 在后台继续播放？</translation>
+        <translation type="vanished">是否允许 SPlayer 在后台继续播放？</translation>
     </message>
     <message>
         <source>Show all controls</source>
@@ -1333,7 +1449,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>SPlayer is running in background now, click the trayicon to bring SPlayer to foreground.</source>
-        <translation>SPlayer 正在后台运行，点击通知栏图标以显示主窗口。</translation>
+        <translation type="vanished">SPlayer 正在后台运行，点击通知栏图标以显示主窗口。</translation>
     </message>
     <message>
         <source>&amp;Home page</source>
@@ -1349,7 +1465,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>&amp;About SPlayer</source>
-        <translation>关于 SPlayer(&amp;A)</translation>
+        <translation type="vanished">关于 SPlayer(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Report Bugs</source>
@@ -1358,6 +1474,30 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>&amp;System Information</source>
         <translation>系统信息(&amp;S)</translation>
+    </message>
+    <message>
+        <source>Sugoi Player</source>
+        <translation>Sugoi Player</translation>
+    </message>
+    <message>
+        <source>&amp;About Sugoi Player</source>
+        <translation>关于 Sugoi Player(&amp;A)</translation>
+    </message>
+    <message>
+        <source>About Sugoi Player</source>
+        <translation>关于 Sugoi Player</translation>
+    </message>
+    <message>
+        <source>You have configured Sugoi Player to check file associations every time Sugoi Player starts up. And now Sugoi Player found that it is not associated with some/all media files. Do you want to associate them now?</source>
+        <translation>您已设置 Sugoi Player 在每次启动时都检查文件关联。Sugoi Player 检测到有部分或全部媒体文件格式尚未关联，请问您想现在立刻关联吗？</translation>
+    </message>
+    <message>
+        <source>Do you want Sugoi Player to run in background?</source>
+        <translation>是否允许 Sugoi Player 在后台继续播放？</translation>
+    </message>
+    <message>
+        <source>Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground.</source>
+        <translation>Sugoi Player 正在后台运行，点击通知栏图标以显示主窗口。</translation>
     </message>
 </context>
 <context>
@@ -1850,7 +1990,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>SPlayer will show a thin progress bar if the seek bar is hidden if you enable this.</source>
-        <translation>如果你开启此选项，SPlayer 会在进度条隐藏时显示一个额外的细窄的进度条。</translation>
+        <translation type="vanished">如果你开启此选项，SPlayer 会在进度条隐藏时显示一个额外的细窄的进度条。</translation>
     </message>
     <message>
         <source>Show progress indicator when fullscreen</source>
@@ -1862,15 +2002,27 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>If you disable this, there will always be a message box asking you wether to run in background or not when you close SPlayer while it is playing music.</source>
-        <translation>如果你不开启此选项，当你在播放器播放音乐时关闭播放器，播放器总会弹出一个提示框询问是否后台运行。</translation>
+        <translation type="vanished">如果你不开启此选项，当你在播放器播放音乐时关闭播放器，播放器总会弹出一个提示框询问是否后台运行。</translation>
     </message>
     <message>
         <source>SPlayer will always stay in background and auto starts when the system starts if you enable this.</source>
-        <translation>如果你开启此选项，播放器将会常驻后台，并且将开机自启，请考虑周全后再做出选择。</translation>
+        <translation type="vanished">如果你开启此选项，播放器将会常驻后台，并且将开机自启，请考虑周全后再做出选择。</translation>
     </message>
     <message>
         <source>Quick start mode</source>
         <translation>快速启动模式</translation>
+    </message>
+    <message>
+        <source>Sugoi Player will show a thin progress bar if the seek bar is hidden if you enable this.</source>
+        <translation>如果你开启此选项，Sugoi Player 会在进度条隐藏时显示一个额外的细窄的进度条。</translation>
+    </message>
+    <message>
+        <source>If you disable this, there will always be a message box asking you wether to run in background or not when you close Sugoi Player while it is playing music.</source>
+        <translation>如果你不开启此选项，当你在播放器播放音乐时关闭播放器，播放器总会弹出一个提示框询问是否后台运行。</translation>
+    </message>
+    <message>
+        <source>Sugoi Player will always stay in background and auto starts when the system starts if you enable this.</source>
+        <translation>如果你开启此选项，播放器将会常驻后台，并且将开机自启，请考虑周全后再做出选择。</translation>
     </message>
 </context>
 <context>

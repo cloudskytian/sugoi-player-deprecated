@@ -77,8 +77,8 @@ artifacts:
     name: Sugoi_x64_Setup.exe
 
 deploy:
-  release: Sugoi V$(appveyor_build_version)
-  description: 'New stable release.'
+  release: Sugoi Player V$(appveyor_build_version)
+  description: 'New release.'
   provider: GitHub
   auth_token:
     secure: mt/+eFXl/beOPLHdhWm9XmBeb9RCCDPUU19omxC4ra66Aj9EwwHPzi9CUvGJMn3i
