@@ -278,8 +278,7 @@ MainWindow::MainWindow(QWidget *parent):
             {
                 HideAllControls(b);
                 blockSignals(true);
-                //ui->actionHide_All_Controls->setChecked(b);
-                ui->actionHide_All_Controls->setText(tr("&Show all controls"));
+                ui->actionHide_All_Controls->setChecked(b);
                 blockSignals(false);
             });
 
