@@ -25,6 +25,7 @@
 #include "widgets/dimdialog.h"
 #include "inputdialog.h"
 #include "screenshotdialog.h"
+#include "winsparkle.h"
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
@@ -1384,6 +1385,19 @@ void MainWindow::showEvent(QShowEvent *event)
         {
             sugoi->sysTrayIcon->hide();
         }
+    }
+    if (autoUpdatePlayer)
+    {
+        win_sparkle_set_automatic_check_for_updates(1);
+        win_sparkle_check_update_without_ui();
+    }
+    else
+    {
+        win_sparkle_set_automatic_check_for_updates(0);
+    }
+    if (autoUpdateStreamingSupport)
+    {
+        ui->actionUpdate_Streaming_Support->triggered();
     }
 }
 
