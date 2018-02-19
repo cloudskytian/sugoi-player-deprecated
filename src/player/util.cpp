@@ -456,6 +456,9 @@ void messagesOutputToFile(QtMsgType type, const QMessageLogContext &context, con
 
 bool setAutoStart(const QString &path, const QString &param)
 {
+#ifdef _DEBUG
+    return true;
+#endif
     if (path.isEmpty())
     {
         return false;
@@ -473,6 +476,9 @@ bool setAutoStart(const QString &path, const QString &param)
 
 bool isAutoStart()
 {
+#ifdef _DEBUG
+    return true;
+#endif
     const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
     QSettings settings(key, QSettings::NativeFormat);
     if (settings.contains(QApplication::applicationDisplayName()))
@@ -484,6 +490,9 @@ bool isAutoStart()
 
 bool disableAutoStart()
 {
+#ifdef _DEBUG
+    return true;
+#endif
     const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
     QSettings settings(key, QSettings::NativeFormat);
     if (settings.contains(QApplication::applicationDisplayName()))

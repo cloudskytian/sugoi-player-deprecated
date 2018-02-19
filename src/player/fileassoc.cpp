@@ -16,6 +16,9 @@ FileAssoc::FileAssoc(QObject *parent) : QObject(parent)
 
 FileAssoc::reg_state FileAssoc::getMediaFilesRegisterState()
 {
+#ifdef _DEBUG
+    return FileAssoc::reg_state::ALL_REGISTERED;
+#endif
     const QString videoKey = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\io.SugoiPlayer.avi");
     const QString audioKey = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\io.SugoiPlayer.mp3");
     QSettings videoSettings(videoKey, QSettings::NativeFormat);
@@ -35,12 +38,18 @@ FileAssoc::reg_state FileAssoc::getMediaFilesRegisterState()
 
 void FileAssoc::deleteRegistryKey(const QString &key)
 {
+#ifdef _DEBUG
+    return;
+#endif
     QSettings settings(key, QSettings::NativeFormat);
     settings.clear();
 }
 
 void FileAssoc::unregisterMediaFiles(reg_type type)
 {
+#ifdef _DEBUG
+    return;
+#endif
     if (type == FileAssoc::reg_type::NONE)
     {
         return;
@@ -101,6 +110,9 @@ void FileAssoc::unregisterMediaFiles(reg_type type)
 
 bool FileAssoc::add_verbs(const QString &key)
 {
+#ifdef _DEBUG
+    return true;
+#endif
     QSettings settings(key, QSettings::NativeFormat);
     if (settings.status() != QSettings::NoError)
     {
@@ -139,6 +151,9 @@ bool FileAssoc::add_verbs(const QString &key)
 
 bool FileAssoc::add_progid(const QString &prog_id, const QString &friendly_name, const QString &icon_path)
 {
+#ifdef _DEBUG
+    return true;
+#endif
     // Add ProgId, edit flags are FTA_OpenIsSafe | FTA_AlwaysUseDirectInvoke
     const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\") + prog_id;
     QSettings settings(key, QSettings::NativeFormat);
@@ -159,6 +174,9 @@ bool FileAssoc::add_progid(const QString &prog_id, const QString &friendly_name,
 
 bool FileAssoc::update_extension(const QString &extension, const QString &prog_id, const QString &mime_type, const QString &perceived_type)
 {
+#ifdef _DEBUG
+    return true;
+#endif
     // Add information about the file extension
     const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\") + extension;
     QSettings settings(key, QSettings::NativeFormat);
@@ -200,6 +218,9 @@ bool FileAssoc::update_extension(const QString &extension, const QString &prog_i
 
 bool FileAssoc::add_type(const QString &mime_type, const QString &perceived_type, const QString &friendly_name, const QString &extension)
 {
+#ifdef _DEBUG
+    return true;
+#endif
     if (regType == FileAssoc::reg_type::NONE)
     {
         return false;
@@ -253,6 +274,9 @@ bool FileAssoc::add_type(const QString &mime_type, const QString &perceived_type
 
 bool FileAssoc::registerMediaFiles(FileAssoc::reg_type type)
 {
+#ifdef _DEBUG
+    return true;
+#endif
     regType = type;
 
     if (regType == FileAssoc::reg_type::NONE)
