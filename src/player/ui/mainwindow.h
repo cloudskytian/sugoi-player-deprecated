@@ -126,6 +126,7 @@ private:
     bool autoUpdatePlayer = true;
     bool autoUpdateStreamingSupport = true;
     QString skinFile;
+    bool firstShow = true;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar;

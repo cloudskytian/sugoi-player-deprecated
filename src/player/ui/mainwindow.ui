@@ -196,17 +196,7 @@
               <string>Select the Current File</string>
              </property>
              <property name="styleSheet">
-              <string notr="true">QPushButton {
-	padding: 2px;
-	margin: 1px;
-}
-QPushButton:flat {
-    border: none; /* no border for a flat push button */
-}
-QPushButton:flat:pressed {
-	background: #383838;
-	border-radius: 2px;
-}</string>
+              <string notr="true"/>
              </property>
              <property name="icon">
               <iconset resource="../resources.qrc">
@@ -280,17 +270,7 @@ QPushButton:flat:pressed {
               <string>Refresh Playlist</string>
              </property>
              <property name="styleSheet">
-              <string notr="true">QPushButton {
-	padding: 2px;
-	margin: 1px;
-}
-QPushButton:flat {
-    border: none; /* no border for a flat push button */
-}
-QPushButton:flat:pressed {
-	background: #383838;
-	border-radius: 2px;
-}</string>
+              <string notr="true"/>
              </property>
              <property name="icon">
               <iconset resource="../resources.qrc">
@@ -742,20 +722,7 @@ QPushButton:flat:pressed {
             <enum>Qt::NoFocus</enum>
            </property>
            <property name="styleSheet">
-            <string notr="true">QSlider::groove:horizontal {
-	background: #5A5A5A;
-	height: 1px;
-}
-QSlider::sub-page:horizontal {
-	background: #008098;
-}
-QSlider::handle:horizontal {
-	background: whitesmoke;
-	border: 2px solid #1A1A1A;
-	border-radius: 7px;
-	margin: -7px 0;
-	width: 12px;
-}</string>
+            <string notr="true"/>
            </property>
            <property name="maximum">
             <number>100</number>

@@ -2,6 +2,7 @@
 #define SKINMANAGER_H
 
 #include <QObject>
+#include <QApplication>
 
 class SkinManager : public QObject
 {
@@ -21,9 +22,9 @@ private:
     explicit SkinManager(QObject *parent = nullptr);
 
 private:
+    QApplication *app = nullptr;
     QString curSkinName;
     QString curSkinPath;
-    QString curSkinContent;
 };
 
 #endif // SKINMANAGER_H

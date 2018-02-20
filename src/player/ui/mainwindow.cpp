@@ -1414,16 +1414,21 @@ void MainWindow::showEvent(QShowEvent *event)
         }
     }
 #ifdef _DEBUG
+    firstShow = false;
     return;
 #endif
-    if (autoUpdatePlayer)
+    if (firstShow)
     {
-        win_sparkle_check_update_without_ui();
+        if (autoUpdatePlayer)
+        {
+            win_sparkle_check_update_without_ui();
+        }
+        if (autoUpdateStreamingSupport)
+        {
+            ui->actionUpdate_Streaming_Support->triggered();
+        }
     }
-    if (autoUpdateStreamingSupport)
-    {
-        ui->actionUpdate_Streaming_Support->triggered();
-    }
+    firstShow = false;
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)

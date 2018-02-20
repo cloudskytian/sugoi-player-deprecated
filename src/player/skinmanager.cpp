@@ -1,14 +1,14 @@
 ﻿#include "skinmanager.h"
 
-#include <QApplication>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
 #include <QDir>
+#include <QCoreApplication>
 
 SkinManager::SkinManager(QObject *parent) : QObject(parent)
 {
-
+    app = qApp;
 }
 
 SkinManager *SkinManager::instance()
@@ -29,7 +29,7 @@ QString SkinManager::currentSkinPath() const
 
 QString SkinManager::currentSkinContent() const
 {
-    return curSkinContent;
+    return app->styleSheet();
 }
 
 bool SkinManager::setSkin(const QString &skin)
@@ -64,14 +64,13 @@ bool SkinManager::setSkin(const QString &skin)
     if (skinFile.open(QFile::ReadOnly | QFile::Text))
     {
         QTextStream ts(&skinFile);
-        curSkinContent = ts.readAll();
+        QString str = ts.readAll();
         skinFile.close();
-        if (curSkinContent.isEmpty())
+        if (str.isEmpty())
         {
             return false;
         }
-        QApplication *app = qApp;
-        app->setStyleSheet(curSkinContent);
+        app->setStyleSheet(str);
         return true;
     }
     return false;

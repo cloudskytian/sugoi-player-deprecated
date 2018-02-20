@@ -361,9 +361,7 @@
        <item>
         <widget class="QLabel" name="label_6">
          <property name="styleSheet">
-          <string notr="true">QLabel {
-	color: #6F6F6F;
-}</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>Prefix a command with 'mpv' to make it run as an input command.</string>
@@ -376,22 +374,7 @@
        <item>
         <widget class="QTableWidget" name="infoWidget">
          <property name="styleSheet">
-          <string notr="true">/* QHeaderView set under main stylesheet (QDialog) */
-
-QTableWidget {
-	border: 1px solid #212121;
-	background: black;
-}
-
-QTableWidget::item {
-	alternate-background-color: #141414;
-}
-QTableWidget::item:alternate {
-    background: #141414;
-}
-QTableWidget::item:selected {
-	background: #008098;
-}</string>
+          <string notr="true"/>
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
@@ -454,9 +437,7 @@ QTableWidget::item:selected {
          <item>
           <widget class="QPushButton" name="addKeyButton">
            <property name="styleSheet">
-            <string notr="true">QPushButton {
-    min-width: 40px;
-}</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">
@@ -470,9 +451,7 @@ QTableWidget::item:selected {
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton {
-    min-width: 40px;
-}</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">
@@ -486,9 +465,7 @@ QTableWidget::item:selected {
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton {
-    min-width: 40px;
-}</string>
+            <string notr="true"/>
            </property>
            <property name="icon">
             <iconset resource="../resources.qrc">
@@ -512,18 +489,7 @@ QTableWidget::item:selected {
          <item>
           <widget class="QPushButton" name="resetKeyButton">
            <property name="styleSheet">
-            <string notr="true">/* resetKeyButton */
-
-QPushButton {
-	background: #A51051;
-	border: 1px solid #A51051;
-}
-QPushButton:focus {
-	border: 1px solid #008098;
-}
-QPushButton:pressed {
-	background: #650A32;
-}</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>Rese&amp;t All</string>

@@ -28,9 +28,7 @@
         </sizepolicy>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton {
-    min-width: 40px;
-}</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>...</string>
