@@ -54,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent):
     logo = new LogoWidget(this);
     logo->setGeometry(0, menuBar()->height() / 2, width(),
                 height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+    logo->show();
 
     ui->playlistButton->setEnabled(true);
 
@@ -1359,7 +1360,7 @@ void MainWindow::changeEvent(QEvent *event)
             {
                 if (IsPlayingVideo(mpv->getFileFullPath()))
                 {
-                    sugoi->PlayPause();
+                    mpv->Pause();
                 }
             }
         }
@@ -1394,11 +1395,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (quickStartMode)
     {
-        mpv->TrulyStop();
-        if (logo->isHidden())
-        {
-            logo->show();
-        }
+        //mpv->TrulyStop();
+        mpv->Stop();
+        logo->show();
         this->hide();
         sugoi->sysTrayIcon->hide();
         event->ignore();
