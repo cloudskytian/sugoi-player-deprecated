@@ -70,8 +70,8 @@ procedure kill_running_task;
 var
   ErrorCode : integer;
 begin
-  ShellExec('open', 'taskkill.exe', '/F /IM {#MyAppExeName} /T', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
-  ShellExec('open', 'tskill.exe', ' {#MyAppName}', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+  ShellExec('open', 'taskkill.exe', '/F /IM {#MyAppExeName}', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+  //ShellExec('open', 'tskill.exe', ' {#MyAppName}', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
 end;
 
 //停止轮播计时器
