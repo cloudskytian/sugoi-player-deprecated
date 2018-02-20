@@ -399,7 +399,7 @@ void MpvHandler::Stop()
 
 void MpvHandler::TrulyStop()
 {
-    Stop();
+    //Stop();
     const char *args[] = {"stop", NULL};
     AsyncCommand(args);
 }

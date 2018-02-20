@@ -249,6 +249,7 @@ PreferencesDialog::~PreferencesDialog()
         sugoi->mpv->ScreenshotTemplate(ui->templateLineEdit->text());
         sugoi->mpv->MsgLevel(ui->msgLvlComboBox->currentData().toString());
         sugoi->window->MapShortcuts();
+
         FileAssoc::reg_state regState;
         if (ui->assocVideoCheckBox->isChecked() && ui->assocAudioCheckBox->isChecked())
         {

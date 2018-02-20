@@ -216,17 +216,17 @@ MainWindow::MainWindow(QWidget *parent):
 
     // mainwindow
     connect(this, &MainWindow::langChanged,
-            [=](QString lang)
+            [=](QString l)
             {
-                lang = lang.replace('-', '_');
-                if (lang == QString::fromLatin1("auto") || lang == QString::fromLatin1("system") || lang == QString::fromLatin1("ui") || lang == QString::fromLatin1("locale"))
+                l = l.replace('-', '_');
+                if (l == QString::fromLatin1("auto") || l == QString::fromLatin1("system") || l == QString::fromLatin1("ui") || l == QString::fromLatin1("locale"))
                 {
                     QLocale locale;
-                    lang = locale.uiLanguages().first();
-                    lang = lang.replace('-', '_');
+                    l = locale.uiLanguages().first();
+                    l = l.replace('-', '_');
                 }
 
-                if (lang != QString::fromLatin1("C") && lang != QString::fromLatin1("en") && lang != QString::fromLatin1("en_US") && lang != QString::fromLatin1("en_UK"))
+                if (l != QString::fromLatin1("C") && l != QString::fromLatin1("en") && l != QString::fromLatin1("en_US") && l != QString::fromLatin1("en_UK"))
                 {
                     // load the application translations
                     if(sugoi->translator != nullptr)
@@ -237,9 +237,10 @@ MainWindow::MainWindow(QWidget *parent):
                     }
                     sugoi->translator = new QTranslator(qApp);
                     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-                    if (sugoi->translator->load(QString("sugoi_%0").arg(lang), langPath))
+                    if (sugoi->translator->load(QString("sugoi_%0").arg(l), langPath))
                     {
                         qApp->installTranslator(sugoi->translator);
+                        lang = l;
                     }
                     else
                     {
@@ -1391,6 +1392,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
     if (quickStartMode)
     {
         mpv->TrulyStop();
+        if (logo->isHidden())
+        {
+            logo->show();
+        }
         this->hide();
         sugoi->sysTrayIcon->hide();
         event->ignore();
