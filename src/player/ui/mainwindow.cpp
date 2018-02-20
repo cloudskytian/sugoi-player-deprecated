@@ -218,6 +218,7 @@ MainWindow::MainWindow(QWidget *parent):
     connect(this, &MainWindow::langChanged,
             [=](QString l)
             {
+                lang = QString::fromLatin1("auto");
                 l = l.replace('-', '_');
                 if (l == QString::fromLatin1("auto") || l == QString::fromLatin1("system") || l == QString::fromLatin1("ui") || l == QString::fromLatin1("locale"))
                 {
@@ -239,8 +240,10 @@ MainWindow::MainWindow(QWidget *parent):
                     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
                     if (sugoi->translator->load(QString("sugoi_%0").arg(l), langPath))
                     {
-                        qApp->installTranslator(sugoi->translator);
-                        lang = l;
+                        if (qApp->installTranslator(sugoi->translator))
+                        {
+                            lang = l;
+                        }
                     }
                     else
                     {
