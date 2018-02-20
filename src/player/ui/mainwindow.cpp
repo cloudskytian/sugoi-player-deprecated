@@ -1365,6 +1365,7 @@ void MainWindow::changeEvent(QEvent *event)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    sugoi->SaveSettings();
     bool canClose = true;
     if (IsPlayingMusic(mpv->getFileFullPath()))
     {
@@ -1423,10 +1424,10 @@ void MainWindow::showEvent(QShowEvent *event)
         {
             win_sparkle_check_update_without_ui();
         }
-        if (autoUpdateStreamingSupport)
-        {
-            ui->actionUpdate_Streaming_Support->triggered();
-        }
+//        if (autoUpdateStreamingSupport)
+//        {
+//            ui->actionUpdate_Streaming_Support->triggered();
+//        }
     }
     firstShow = false;
 }

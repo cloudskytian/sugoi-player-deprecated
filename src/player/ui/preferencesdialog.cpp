@@ -267,12 +267,13 @@ PreferencesDialog::~PreferencesDialog()
         {
             ui->updateAssocButton->clicked();
         }
+
+        sugoi->SaveSettings();
     }
     else
     {
         sugoi->input = saved;
     }
-    sugoi->SaveSettings();
     delete sortLock;
     delete ui;
 }
