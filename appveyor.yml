@@ -83,7 +83,7 @@ deploy:
   auth_token:
     secure: mt/+eFXl/beOPLHdhWm9XmBeb9RCCDPUU19omxC4ra66Aj9EwwHPzi9CUvGJMn3i
   artifact: Sugoi_x64_Portable.zip, Sugoi_x64_Setup.exe
-  draft: false
+  draft: true
   prerelease: false
   force_update: true
   on:
