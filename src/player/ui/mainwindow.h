@@ -106,7 +106,8 @@ private slots:
     void SetRemainingLabels(int time);
     bool IsPlayingMusic(const QString &filePath);
     bool IsPlayingVideo(const QString &filePath);
-    void connectSignalsAndSlots();
+    void connectMpvSignalsAndSlots();
+    void connectUiSignalsAndSlots();
     void Load(bool backgroundMode = false);
 
 private:

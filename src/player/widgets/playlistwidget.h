@@ -12,7 +12,7 @@ class PlaylistWidget : public QListWidget
 {
     Q_OBJECT
 public:
-    explicit PlaylistWidget(QWidget *parent = 0);
+    explicit PlaylistWidget(QWidget *parent = nullptr);
 
     void AttachEngine(SugoiEngine *sugoi);
 
@@ -41,7 +41,7 @@ protected:
     void dropEvent(QDropEvent *event);
 
 private:
-    SugoiEngine *sugoi;
+    SugoiEngine *sugoi = nullptr;
 
     QStringList playlist;
     QString file, suffix;
