@@ -28,29 +28,827 @@
 #include "winsparkle.h"
 #include "skinmanager.h"
 
-MainWindow::MainWindow(QWidget *parent):
+MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
     // update streaming support disabled on unix platforms
     ui->actionUpdate_Streaming_Support->setEnabled(false);
 #endif
+
     ShowPlaylist(false);
     addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
 
+    connectSignalsAndSlots();
+
+    setContextMenuPolicy(Qt::ActionsContextMenu);
+
+    Load(backgroundMode);
+}
+
+MainWindow::~MainWindow()
+{
+    win_sparkle_cleanup();
+
+    if(current != nullptr)
+    {
+        int t = mpv->getTime(),
+            l = mpv->getFileInfo().length;
+        if(t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
+            current->time = t;
+        else
+            current->time = 0;
+    }
+
+    sugoi->SaveSettings();
+
+#if defined(Q_OS_WIN)
+    delete prev_toolbutton;
+    delete playpause_toolbutton;
+    delete next_toolbutton;
+    delete thumbnail_toolbar;
+    delete taskbarProgress;
+    delete taskbarButton;
+#endif
+    delete sugoi;
+    delete ui;
+}
+
+void MainWindow::Load(bool backgroundMode)
+{
+    // load the settings here--the constructor has already been called
+    // this solves some issues with setting things before the constructor has ended
+    menuVisible = true/*ui->menubar->isVisible()*/; // does the OS use a menubar? (appmenu doesn't)
+#if defined(Q_OS_WIN)
+    QtWin::enableBlurBehindWindow(this);
+
+    QWinJumpList *jumplist = new QWinJumpList(this);
+    jumplist->recent()->setVisible(true);
+
+    taskbarButton = new QWinTaskbarButton(this);
+    taskbarButton->setWindow(this->windowHandle());
+
+    taskbarProgress = taskbarButton->progress();
+    taskbarProgress->setMinimum(0);
+    taskbarProgress->setMaximum(1000);
+
+    // add windows 7+ thubnail toolbar buttons
+    thumbnail_toolbar = new QWinThumbnailToolBar(this);
+    thumbnail_toolbar->setWindow(this->windowHandle());
+
+    prev_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    prev_toolbutton->setEnabled(false);
+    prev_toolbutton->setToolTip(tr("Previous"));
+    prev_toolbutton->setIcon(QIcon(":/images/tool-previous.ico"));
+    connect(prev_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                ui->playlistWidget->PlayIndex(-1, true);
+            });
+
+    playpause_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    playpause_toolbutton->setEnabled(false);
+    playpause_toolbutton->setToolTip(tr("Play"));
+    playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
+    connect(playpause_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                sugoi->PlayPause();
+            });
+
+    next_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    next_toolbutton->setEnabled(false);
+    next_toolbutton->setToolTip(tr("Next"));
+    next_toolbutton->setIcon(QIcon(":/images/tool-next.ico"));
+    connect(next_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                ui->playlistWidget->PlayIndex(1, true);
+            });
+
+    thumbnail_toolbar->addButton(prev_toolbutton);
+    thumbnail_toolbar->addButton(playpause_toolbutton);
+    thumbnail_toolbar->addButton(next_toolbutton);
+#endif
+    sugoi->LoadSettings();
+    mpv->Initialize();
+
+    if (osdShowLocalTime)
+    {
+        if (osdLocalTimeUpdater)
+        {
+            if (osdLocalTimeUpdater->isActive())
+            {
+                osdLocalTimeUpdater->stop();
+            }
+            osdLocalTimeUpdater->start(1000);
+        }
+    }
+
+    if (!backgroundMode)
+    {
+        FileAssoc fileAssoc;
+        setFileAssocState(fileAssoc.getMediaFilesRegisterState());
+        if (getAlwaysCheckFileAssoc())
+        {
+            if (getFileAssocType() != FileAssoc::reg_type::NONE && getFileAssocState() != FileAssoc::reg_state::ALL_REGISTERED)
+            {
+                SetFileAssoc(getFileAssocType(), true);
+            }
+        }
+    }
+    else
+    {
+        this->hide();
+    }
+}
+
+void MainWindow::MapShortcuts()
+{
+    auto tmp = commandActionMap;
+    // map shortcuts to actions
+    for(auto input_iter = sugoi->input.begin(); input_iter != sugoi->input.end(); ++input_iter)
+    {
+        auto commandAction = tmp.find(input_iter->first);
+        if(commandAction != tmp.end())
+        {
+            (*commandAction)->setShortcut(QKeySequence(input_iter.key()));
+            tmp.erase(commandAction);
+        }
+    }
+    // clear the rest
+    for(auto iter = tmp.begin(); iter != tmp.end(); ++iter)
+        (*iter)->setShortcut(QKeySequence());
+}
+
+void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
+{
+    const QString path = QCoreApplication::applicationFilePath();
+    QString param = QString::fromLatin1("--regall");
+    if (type == FileAssoc::reg_type::VIDEO_ONLY)
+    {
+        param = QString::fromLatin1("--regvideo");
+    }
+    else if (type == FileAssoc::reg_type::AUDIO_ONLY)
+    {
+        param = QString::fromLatin1("--regaudio");
+    }
+    else if (type == FileAssoc::reg_type::NONE)
+    {
+        param = QString::fromLatin1("--unregall");
+    }
+    bool needChange = true;
+    if (showUI)
+    {
+        if (QMessageBox::question(this, tr("Associate media files"), tr("You have configured Sugoi Player to check "
+             "file associations every time Sugoi Player starts up. And now Sugoi Player found that it is not associated "
+             "with some/all media files. Do you want to associate them now?")) == QMessageBox::No)
+        {
+            needChange = false;
+        }
+    }
+    if (needChange)
+    {
+        if (Util::executeProgramWithAdministratorPrivilege(path, param))
+        {
+            setFileAssocType(type);
+            FileAssoc fileAssoc;
+            setFileAssocState(fileAssoc.getMediaFilesRegisterState());
+        }
+    }
+}
+
+void MainWindow::BringWindowToFront()
+{
+    if (isHidden())
+    {
+        show();
+    }
+    showMinimized();
+    setWindowState(windowState() & ~Qt::WindowMinimized);
+    raise();
+    activateWindow();
+}
+
+static bool canHandleDrop(const QDragEnterEvent *event)
+{
+    const QList<QUrl> urls = event->mimeData()->urls();
+    if (urls.size() < 1)
+    {
+        return false;
+    }
+    QMimeDatabase mimeDatabase;
+    return Util::supportedMimeTypes().
+        contains(mimeDatabase.mimeTypeForUrl(urls.constFirst()).name());
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->setAccepted(canHandleDrop(event));
+    QMainWindow::dragEnterEvent(event);
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    event->accept();
+    QUrl filePath = event->mimeData()->urls().constFirst();
+    if (filePath.isLocalFile())
+    {
+        mpv->LoadFile(filePath.toLocalFile());
+    }
+    else
+    {
+        mpv->LoadFile(filePath.url());
+    }
+    QMainWindow::dropEvent(event);
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        if(ui->remainingLabel->rect().contains(ui->remainingLabel->mapFrom(this, event->pos()))) // clicked timeLayoutWidget
+        {
+            setRemaining(!remaining); // todo: use a sugoicommand
+        }
+        else if (ui->mpvFrame->geometry().contains(event->pos())) // mouse is in the mpvFrame
+        {
+            mpv->PlayPause(ui->playlistWidget->CurrentItem());
+        }
+    }
+    QMainWindow::mousePressEvent(event);
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *event)
+{
+    if(isFullScreenMode())
+    {
+        setCursor(QCursor(Qt::ArrowCursor)); // show the cursor
+        autohide->stop();
+
+        QRect playbackRect = geometry();
+        playbackRect.setTop(playbackRect.bottom() - 60);
+        bool showPlayback = playbackRect.contains(event->globalPos());
+        ui->playbackLayoutWidget->setVisible(showPlayback || ui->outputTextEdit->isVisible());
+        ui->seekBar->setVisible(showPlayback || ui->outputTextEdit->isVisible());
+
+        QRect playlistRect = geometry();
+        playlistRect.setLeft(playlistRect.right() - qCeil(playlistRect.width()/7.0));
+        bool showPlaylist = playlistRect.contains(event->globalPos());
+        ShowPlaylist(showPlaylist);
+
+        if (fullscreenProgressIndicator)
+        {
+            fullscreenProgressIndicator->setVisible(!ui->playbackLayoutWidget->isVisible());
+        }
+
+        if(!(showPlayback || showPlaylist) && autohide)
+            autohide->start(500);
+    }
+    QMainWindow::mouseMoveEvent(event);
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+    if(obj == ui->mpvFrame && isFullScreenMode() && event->type() == QEvent::MouseMove)
+    {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        mouseMoveEvent(mouseEvent);
+    }
+    else if(event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        keyPressEvent(keyEvent);
+    }
+    return false;
+}
+
+void MainWindow::wheelEvent(QWheelEvent *event)
+{
+    if(event->delta() > 0)
+        mpv->Volume(mpv->getVolume()+5, true);
+    else
+        mpv->Volume(mpv->getVolume()-5, true);
+    QMainWindow::wheelEvent(event);
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event)
+{
+    // keyboard shortcuts
+    if(!sugoi->input.empty())
+    {
+        QString key = QKeySequence(event->modifiers()|event->key()).toString();
+
+        // TODO: Add more protection/find a better way to protect edit boxes from executing commands
+        if(focusWidget() == ui->inputLineEdit &&
+           key == "Return")
+            return;
+
+        // Escape exits fullscreen
+        if(isFullScreen() &&
+           key == "Esc") {
+            FullScreen(false);
+            return;
+        }
+
+        // find shortcut in input hash table
+        auto iter = sugoi->input.find(key);
+        if(iter != sugoi->input.end())
+            sugoi->Command(iter->first); // execute command
+    }
+    QMainWindow::keyPressEvent(event);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    if(ui->actionMedia_Info->isChecked())
+        sugoi->overlay->showInfoText();
+    if (!isPlaylistVisible())
+    {
+        logo->setGeometry(0, menuBar()->height() / 2, width(),
+                    height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+    }
+    else
+    {
+        logo->setGeometry(0, menuBar()->height() / 2, width() - ui->splitter->position(),
+                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+    }
+    if (hideAllControls)
+    {
+        if (fullscreenProgressIndicator)
+        {
+            fullscreenProgressIndicator->setGeometry(0, height() - fullscreenProgressIndicator->height(),
+                                                     width(), fullscreenProgressIndicator->height());
+        }
+        ui->playbackLayoutWidget->setGeometry(0, height() - ui->playbackLayoutWidget->height(),
+                                              width(), ui->playbackLayoutWidget->height());
+        ui->seekBar->setGeometry(0, height() - ui->playbackLayoutWidget->height() - ui->seekBar->height(),
+                                 width(), ui->seekBar->height());
+    }
+    QMainWindow::resizeEvent(event);
+}
+
+void MainWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::WindowStateChange)
+    {
+        if (windowState() == Qt::WindowMinimized)
+        {
+            if (pauseWhenMinimized)
+            {
+                if (IsPlayingVideo(mpv->getFileFullPath()))
+                {
+                    mpv->Pause();
+                }
+            }
+        }
+    }
+    QMainWindow::changeEvent(event);
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    sugoi->SaveSettings();
+    bool canClose = true;
+    if (IsPlayingMusic(mpv->getFileFullPath()))
+    {
+        if (allowRunInBackground)
+        {
+            canClose = false;
+        }
+        else if (QMessageBox::question(this, tr("Exit"), tr("Do you want Sugoi Player to run in background?")) == QMessageBox::Yes)
+        {
+            canClose = false;
+        }
+    }
+    if (!canClose)
+    {
+        hide();
+        if (sugoi->sysTrayIcon->isVisible())
+        {
+            sugoi->sysTrayIcon->showMessage(QString::fromLatin1("Sugoi Player"), tr("Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground."), QIcon(":/images/player.svg"), 4000);
+        }
+        event->ignore();
+        return;
+    }
+    if (quickStartMode)
+    {
+        this->hide();
+        connectSignalsAndSlots();
+        mpv->Initialize();
+        sugoi->sysTrayIcon->hide();
+        event->ignore();
+        return;
+    }
+    event->accept();
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+    if (sugoi->sysTrayIcon != nullptr)
+    {
+        if (trayIconVisible && !sugoi->sysTrayIcon->isVisible())
+        {
+            sugoi->sysTrayIcon->show();
+        }
+        else if (!trayIconVisible && sugoi->sysTrayIcon->isVisible())
+        {
+            sugoi->sysTrayIcon->hide();
+        }
+    }
+#ifdef _DEBUG
+    firstShow = false;
+    return;
+#endif
+    if (firstShow)
+    {
+        win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/src/player/appcast.xml");
+        win_sparkle_set_lang(lang.toUtf8().constData());
+        win_sparkle_init();
+    }
+    if (autoUpdatePlayer)
+    {
+        win_sparkle_check_update_without_ui();
+    }
+//    if (autoUpdateStreamingSupport)
+//    {
+//        ui->actionUpdate_Streaming_Support->triggered();
+//    }
+    firstShow = false;
+}
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton && ui->mpvFrame->geometry().contains(event->pos())) // if mouse is in the mpvFrame
+    {
+        if(!isFullScreen() && ui->action_Full_Screen->isEnabled()) // don't allow people to go full screen if they shouldn't be able to
+            FullScreen(true);
+        else // they can leave fullscreen even if it's disabled (eg. video ends while in full screen)
+            FullScreen(false);
+        event->accept();
+    }
+    QMainWindow::mouseDoubleClickEvent(event);
+}
+
+void MainWindow::SetIndexLabels(bool enable)
+{
+    int i = ui->playlistWidget->currentRow(),
+        index = ui->playlistWidget->CurrentIndex();
+
+    // next file
+    if(enable && index+1 < ui->playlistWidget->count()) // not the last entry
+    {
+        SetNextButtonEnabled(true);
+        ui->nextButton->setIndex(index+2); // starting at 1 instead of at 0 like actual index
+
+    }
+    else
+        SetNextButtonEnabled(false);
+
+    // previous file
+    if(enable && index-1 >= 0) // not the first entry
+    {
+        SetPreviousButtonEnabled(true);
+        ui->previousButton->setIndex(-index); // we use a negative index value for the left button
+    }
+    else
+        SetPreviousButtonEnabled(false);
+
+    if(i == -1) // no selection
+    {
+        ui->indexLabel->setText(tr("No selection"));
+        ui->indexLabel->setEnabled(false);
+    }
+    else
+    {
+        ui->indexLabel->setEnabled(true);
+        ui->indexLabel->setText(tr("%0 / %1").arg(QString::number(i+1), QString::number(ui->playlistWidget->count())));
+    }
+}
+
+void MainWindow::SetPlaybackControls(bool enable)
+{
+    // playback controls
+    ui->seekBar->setEnabled(enable);
+    ui->rewindButton->setEnabled(enable);
+
+    SetIndexLabels(enable);
+
+    // menubar
+    ui->action_Stop->setEnabled(enable);
+    ui->action_Restart->setEnabled(enable);
+    ui->menuS_peed->setEnabled(enable);
+    ui->action_Jump_to_Time->setEnabled(enable);
+    ui->actionMedia_Info->setEnabled(enable);
+    ui->actionShow_in_Folder->setEnabled(enable && sugoi->mpv->getPath() != QString());
+    ui->action_Full_Screen->setEnabled(enable);
+    if(!enable)
+    {
+        ui->action_Hide_Album_Art->setEnabled(false);
+        ui->menuSubtitle_Track->setEnabled(false);
+        ui->menuFont_Si_ze->setEnabled(false);
+    }
+}
+
+void MainWindow::HideAllControls(bool w, bool s)
+{
+    if(s)
+    {
+        hideAllControls = w;
+        if(isFullScreen())
+            return;
+    }
+    if(w)
+    {
+        if(s || !hideAllControls)
+            playlistState = ui->playlistLayoutWidget->isVisible();
+        ui->menubar->setVisible(false);
+
+        ui->playbackLayoutWidget->hide();
+        ui->seekBar->hide();
+        ui->centralwidget->layout()->removeWidget(ui->playbackLayoutWidget);
+        ui->playbackLayoutWidget->setParent(this);
+        ui->playbackLayoutWidget->move(QPoint(0, geometry().height() - ui->playbackLayoutWidget->height()));
+        ui->centralwidget->layout()->removeWidget(ui->seekBar);
+        ui->seekBar->setParent(this);
+        ui->seekBar->move(QPoint(0, geometry().height() - ui->playbackLayoutWidget->height() - ui->seekBar->height()));
+
+        if (fullscreenProgressIndicator)
+        {
+            fullscreenProgressIndicator->close();
+            delete fullscreenProgressIndicator;
+            fullscreenProgressIndicator = nullptr;
+        }
+        if (showFullscreenIndicator)
+        {
+            fullscreenProgressIndicator = new ProgressIndicatorBar(this);
+            fullscreenProgressIndicator->setFixedSize(QSize(width(), (2.0 / 1080.0) * height()));
+            fullscreenProgressIndicator->move(QPoint(0, height() - fullscreenProgressIndicator->height()));
+            fullscreenProgressIndicator->setRange(0, 1000);
+            fullscreenProgressIndicator->show();
+        }
+
+        mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
+                                       QCursor::pos(),
+                                       Qt::NoButton,Qt::NoButton,Qt::NoModifier));
+    }
+    else
+    {
+        if (fullscreenProgressIndicator)
+        {
+            fullscreenProgressIndicator->close();
+            delete fullscreenProgressIndicator;
+            fullscreenProgressIndicator = nullptr;
+        }
+
+        ui->seekBar->setParent(centralWidget());
+        ui->centralwidget->layout()->addWidget(ui->seekBar);
+        ui->playbackLayoutWidget->setParent(centralWidget());
+        ui->centralwidget->layout()->addWidget(ui->playbackLayoutWidget);
+
+        if(menuVisible)
+            ui->menubar->setVisible(true);
+        ui->seekBar->setVisible(true);
+        ui->playbackLayoutWidget->setVisible(true);
+        setCursor(QCursor(Qt::ArrowCursor)); // show cursor
+        autohide->stop();
+        ShowPlaylist(playlistState);
+    }
+}
+
+void MainWindow::FullScreen(bool fs)
+{
+    if(fs)
+    {
+        if(sugoi->dimDialog && sugoi->dimDialog->isVisible())
+            sugoi->Dim(false);
+        setWindowState(windowState() | Qt::WindowFullScreen);
+        if(!hideAllControls)
+            HideAllControls(true, false);
+    }
+    else
+    {
+        setWindowState(windowState() & ~Qt::WindowFullScreen);
+        if(!hideAllControls)
+            HideAllControls(false, false);
+    }
+}
+
+bool MainWindow::isPlaylistVisible()
+{
+    // if the position is 0, playlist is hidden
+    return (ui->splitter->position() != 0);
+}
+
+void MainWindow::TogglePlaylist()
+{
+    ShowPlaylist(!isPlaylistVisible());
+}
+
+void MainWindow::ShowPlaylist(bool visible)
+{
+    if(ui->splitter->position() != 0 && visible) // ignore showing if it's already visible as it resets original position
+        return;
+
+    if(visible)
+    {
+        ui->splitter->setPosition(ui->splitter->normalPosition()); // bring splitter position to normal
+        logo->setGeometry(0, menuBar()->height() / 2, width() - ui->splitter->normalPosition(),
+                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+    }
+    else
+    {
+        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
+            ui->splitter->setNormalPosition(ui->splitter->position()); // save current splitter position as the normal position
+        ui->splitter->setPosition(0); // set splitter position to right-most
+        setFocus();
+//        logo->setGeometry(0, menuBar()->height() / 2, width(),
+//                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+    }
+}
+
+void MainWindow::HideAlbumArt(bool hide)
+{
+    if(hide)
+    {
+        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
+            ui->splitter->setNormalPosition(ui->splitter->position()); // save splitter position as the normal position
+        ui->splitter->setPosition(ui->splitter->max()); // bring the splitter position to the left-most
+    }
+    else
+        ui->splitter->setPosition(ui->splitter->normalPosition()); // bring the splitter to normal position
+}
+
+void MainWindow::UpdateRecentFiles()
+{
+    ui->menu_Recently_Opened->clear();
+    QAction *action;
+    int n = 1,
+        N = recent.length();
+    for(auto &f : recent)
+    {
+        action = ui->menu_Recently_Opened->addAction(QString("%0. %1").arg(Util::FormatNumberWithAmpersand(n, N), Util::ShortenPathToParent(f).replace("&","&&")));
+        if(n++ == 1)
+            action->setShortcut(QKeySequence("Ctrl+Z"));
+        connect(action, &QAction::triggered,
+                [=]
+                {
+                    mpv->LoadFile(f);
+                });
+    }
+}
+
+void MainWindow::SetNextButtonEnabled(bool enable)
+{
+    ui->nextButton->setEnabled(enable);
+    ui->actionPlay_Next_File->setEnabled(enable);
+#if defined(Q_OS_WIN)
+    next_toolbutton->setEnabled(enable);
+#endif
+}
+
+void MainWindow::SetPreviousButtonEnabled(bool enable)
+{
+    ui->previousButton->setEnabled(enable);
+    ui->actionPlay_Previous_File->setEnabled(enable);
+#if defined(Q_OS_WIN)
+    prev_toolbutton->setEnabled(enable);
+#endif
+}
+
+void MainWindow::SetPlayButtonIcon(bool play)
+{
+    if(play)
+    {
+        ui->playButton->setIcon(QIcon(":/images/default_play.svg"));
+        ui->action_Play->setText(tr("&Play"));
+#if defined(Q_OS_WIN)
+        playpause_toolbutton->setToolTip(tr("Play"));
+        playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
+        taskbarButton->setOverlayIcon(QIcon(":/images/tool-pause.ico"));
+        taskbarProgress->show();
+        taskbarProgress->pause();
+#endif
+    }
+    else // pause icon
+    {
+        ui->playButton->setIcon(QIcon(":/images/default_pause.svg"));
+        ui->action_Play->setText(tr("&Pause"));
+#if defined(Q_OS_WIN)
+        playpause_toolbutton->setToolTip(tr("Pause"));
+        playpause_toolbutton->setIcon(QIcon(":/images/tool-pause.ico"));
+        taskbarButton->setOverlayIcon(QIcon(":/images/tool-play.ico"));
+        taskbarProgress->show();
+        taskbarProgress->resume();
+#endif
+    }
+}
+
+void MainWindow::SetRemainingLabels(int time)
+{
+    // todo: move setVisible functions outside of this function which gets called every second and somewhere at the start of a video
+    const Mpv::FileInfo &fi = mpv->getFileInfo();
+    if(fi.length == 0)
+    {
+        ui->durationLabel->setText(Util::FormatTime(time, time));
+        ui->remainingLabel->setVisible(false);
+        ui->seperatorLabel->setVisible(false);
+    }
+    else
+    {
+        ui->remainingLabel->setVisible(true);
+        ui->seperatorLabel->setVisible(true);
+
+        ui->durationLabel->setText(Util::FormatTime(time, fi.length));
+        if(remaining)
+        {
+            int remainingTime = fi.length - time;
+            QString text = "-" + Util::FormatTime(remainingTime, fi.length);
+            if(mpv->getSpeed() != 1)
+            {
+                double speed = mpv->getSpeed();
+                text += QString("  (-%0)").arg(Util::FormatTime(int(remainingTime/speed), int(fi.length/speed)));
+            }
+            ui->remainingLabel->setText(text);
+        }
+        else
+        {
+            QString text = Util::FormatTime(fi.length, fi.length);
+            if(mpv->getSpeed() != 1)
+            {
+                double speed = mpv->getSpeed();
+                text += QString("  (%0)").arg(Util::FormatTime(int(fi.length/speed), int(fi.length/speed)));
+            }
+            ui->remainingLabel->setText(text);
+        }
+    }
+}
+
+bool MainWindow::IsPlayingMusic(const QString &filePath)
+{
+    if (mpv->getPlayState() > 0)
+    {
+        QFileInfo fi(filePath);
+        QString suffix = QString::fromLatin1("*.") + fi.suffix();
+        if (Mpv::audio_filetypes.contains(suffix))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool MainWindow::IsPlayingVideo(const QString &filePath)
+{
+    if (mpv->getPlayState() > 0)
+    {
+        QFileInfo fi(filePath);
+        QString suffix = QString::fromLatin1("*.") + fi.suffix();
+        if (Mpv::video_filetypes.contains(suffix))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void MainWindow::connectSignalsAndSlots()
+{
     // initialize managers/handlers
+    if (sugoi != nullptr)
+    {
+        delete sugoi;
+        sugoi = nullptr;
+        mpv = nullptr;
+    }
     sugoi = new SugoiEngine(this);
     mpv = sugoi->mpv;
 
     ui->playlistWidget->AttachEngine(sugoi);
     ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
     ui->mpvFrame->setMouseTracking(true);
+    if (autohide != nullptr)
+    {
+        delete autohide;
+        autohide = nullptr;
+    }
     autohide = new QTimer(this);
-
+    if (osdLocalTimeUpdater != nullptr)
+    {
+        delete osdLocalTimeUpdater;
+        osdLocalTimeUpdater = nullptr;
+    }
     osdLocalTimeUpdater = new QTimer(this);
-
+    if (logo != nullptr)
+    {
+        delete logo;
+        logo = nullptr;
+    }
     logo = new LogoWidget(this);
     logo->setGeometry(0, menuBar()->height() / 2, width(),
                 height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
@@ -315,14 +1113,7 @@ MainWindow::MainWindow(QWidget *parent):
                 blockSignals(false);
             });
 
-    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::activated,
-            [=](QSystemTrayIcon::ActivationReason reason)
-            {
-                if (reason == QSystemTrayIcon::Trigger || reason == QSystemTrayIcon::DoubleClick)
-                {
-                    BringWindowToFront();
-                }
-            });
+    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::BringWindowToFront);
 
     connect(sugoi->sysTrayIcon, &QSystemTrayIcon::messageClicked, this, &MainWindow::BringWindowToFront);
 
@@ -1005,771 +1796,4 @@ MainWindow::MainWindow(QWidget *parent):
     ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
     ui->actionPlay_Next_File->setShortcuts({ui->actionPlay_Next_File->shortcut(), QKeySequence(Qt::Key_MediaNext)});
     ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
-
-    setContextMenuPolicy(Qt::ActionsContextMenu);
-}
-
-MainWindow::~MainWindow()
-{
-    if(current != nullptr)
-    {
-        int t = mpv->getTime(),
-            l = mpv->getFileInfo().length;
-        if(t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
-            current->time = t;
-        else
-            current->time = 0;
-    }
-    sugoi->SaveSettings();
-
-#if defined(Q_OS_WIN)
-    delete prev_toolbutton;
-    delete playpause_toolbutton;
-    delete next_toolbutton;
-    delete thumbnail_toolbar;
-    delete taskbarProgress;
-    delete taskbarButton;
-#endif
-    delete sugoi;
-    delete ui;
-}
-
-void MainWindow::Load(const QString &file, bool backgroundMode)
-{
-    // load the settings here--the constructor has already been called
-    // this solves some issues with setting things before the constructor has ended
-    menuVisible = true/*ui->menubar->isVisible()*/; // does the OS use a menubar? (appmenu doesn't)
-#if defined(Q_OS_WIN)
-    QtWin::enableBlurBehindWindow(this);
-
-    QWinJumpList *jumplist = new QWinJumpList(this);
-    jumplist->recent()->setVisible(true);
-
-    taskbarButton = new QWinTaskbarButton(this);
-    taskbarButton->setWindow(this->windowHandle());
-
-    taskbarProgress = taskbarButton->progress();
-    taskbarProgress->setMinimum(0);
-    taskbarProgress->setMaximum(1000);
-
-    // add windows 7+ thubnail toolbar buttons
-    thumbnail_toolbar = new QWinThumbnailToolBar(this);
-    thumbnail_toolbar->setWindow(this->windowHandle());
-
-    prev_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    prev_toolbutton->setEnabled(false);
-    prev_toolbutton->setToolTip(tr("Previous"));
-    prev_toolbutton->setIcon(QIcon(":/images/tool-previous.ico"));
-    connect(prev_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                ui->playlistWidget->PlayIndex(-1, true);
-            });
-
-    playpause_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    playpause_toolbutton->setEnabled(false);
-    playpause_toolbutton->setToolTip(tr("Play"));
-    playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
-    connect(playpause_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                sugoi->PlayPause();
-            });
-
-    next_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    next_toolbutton->setEnabled(false);
-    next_toolbutton->setToolTip(tr("Next"));
-    next_toolbutton->setIcon(QIcon(":/images/tool-next.ico"));
-    connect(next_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                ui->playlistWidget->PlayIndex(1, true);
-            });
-
-    thumbnail_toolbar->addButton(prev_toolbutton);
-    thumbnail_toolbar->addButton(playpause_toolbutton);
-    thumbnail_toolbar->addButton(next_toolbutton);
-#endif
-    sugoi->LoadSettings();
-    mpv->Initialize();
-
-    if (osdShowLocalTime)
-    {
-        if (osdLocalTimeUpdater)
-        {
-            if (osdLocalTimeUpdater->isActive())
-            {
-                osdLocalTimeUpdater->stop();
-            }
-            osdLocalTimeUpdater->start(1000);
-        }
-    }
-
-    if (!backgroundMode)
-    {
-        mpv->LoadFile(file);
-
-        FileAssoc fileAssoc;
-        setFileAssocState(fileAssoc.getMediaFilesRegisterState());
-        if (getAlwaysCheckFileAssoc())
-        {
-            if (getFileAssocType() != FileAssoc::reg_type::NONE && getFileAssocState() != FileAssoc::reg_state::ALL_REGISTERED)
-            {
-                SetFileAssoc(getFileAssocType(), true);
-            }
-        }
-    }
-    else
-    {
-        this->hide();
-    }
-}
-
-void MainWindow::MapShortcuts()
-{
-    auto tmp = commandActionMap;
-    // map shortcuts to actions
-    for(auto input_iter = sugoi->input.begin(); input_iter != sugoi->input.end(); ++input_iter)
-    {
-        auto commandAction = tmp.find(input_iter->first);
-        if(commandAction != tmp.end())
-        {
-            (*commandAction)->setShortcut(QKeySequence(input_iter.key()));
-            tmp.erase(commandAction);
-        }
-    }
-    // clear the rest
-    for(auto iter = tmp.begin(); iter != tmp.end(); ++iter)
-        (*iter)->setShortcut(QKeySequence());
-}
-
-void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
-{
-    const QString path = QCoreApplication::applicationFilePath();
-    QString param = QString::fromLatin1("--regall");
-    if (type == FileAssoc::reg_type::VIDEO_ONLY)
-    {
-        param = QString::fromLatin1("--regvideo");
-    }
-    else if (type == FileAssoc::reg_type::AUDIO_ONLY)
-    {
-        param = QString::fromLatin1("--regaudio");
-    }
-    else if (type == FileAssoc::reg_type::NONE)
-    {
-        param = QString::fromLatin1("--unregall");
-    }
-    bool needChange = true;
-    if (showUI)
-    {
-        if (QMessageBox::question(this, tr("Associate media files"), tr("You have configured Sugoi Player to check "
-             "file associations every time Sugoi Player starts up. And now Sugoi Player found that it is not associated "
-             "with some/all media files. Do you want to associate them now?")) == QMessageBox::No)
-        {
-            needChange = false;
-        }
-    }
-    if (needChange)
-    {
-        if (Util::executeProgramWithAdministratorPrivilege(path, param))
-        {
-            setFileAssocType(type);
-            FileAssoc fileAssoc;
-            setFileAssocState(fileAssoc.getMediaFilesRegisterState());
-        }
-    }
-}
-
-void MainWindow::BringWindowToFront()
-{
-    if (isHidden())
-    {
-        show();
-    }
-    showMinimized();
-    setWindowState(windowState() & ~Qt::WindowMinimized);
-    raise();
-    activateWindow();
-}
-
-static bool canHandleDrop(const QDragEnterEvent *event)
-{
-    const QList<QUrl> urls = event->mimeData()->urls();
-    if (urls.size() < 1)
-    {
-        return false;
-    }
-    QMimeDatabase mimeDatabase;
-    return Util::supportedMimeTypes().
-        contains(mimeDatabase.mimeTypeForUrl(urls.constFirst()).name());
-}
-
-void MainWindow::dragEnterEvent(QDragEnterEvent *event)
-{
-    event->setAccepted(canHandleDrop(event));
-    QMainWindow::dragEnterEvent(event);
-}
-
-void MainWindow::dropEvent(QDropEvent *event)
-{
-    event->accept();
-    QUrl filePath = event->mimeData()->urls().constFirst();
-    if (filePath.isLocalFile())
-    {
-        mpv->LoadFile(filePath.toLocalFile());
-    }
-    else
-    {
-        mpv->LoadFile(filePath.url());
-    }
-    QMainWindow::dropEvent(event);
-}
-
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
-    if(event->button() == Qt::LeftButton)
-    {
-        if(ui->remainingLabel->rect().contains(ui->remainingLabel->mapFrom(this, event->pos()))) // clicked timeLayoutWidget
-        {
-            setRemaining(!remaining); // todo: use a sugoicommand
-        }
-        else if (ui->mpvFrame->geometry().contains(event->pos())) // mouse is in the mpvFrame
-        {
-            mpv->PlayPause(ui->playlistWidget->CurrentItem());
-        }
-    }
-    QMainWindow::mousePressEvent(event);
-}
-
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
-{
-    if(isFullScreenMode())
-    {
-        setCursor(QCursor(Qt::ArrowCursor)); // show the cursor
-        autohide->stop();
-
-        QRect playbackRect = geometry();
-        playbackRect.setTop(playbackRect.bottom() - 60);
-        bool showPlayback = playbackRect.contains(event->globalPos());
-        ui->playbackLayoutWidget->setVisible(showPlayback || ui->outputTextEdit->isVisible());
-        ui->seekBar->setVisible(showPlayback || ui->outputTextEdit->isVisible());
-
-        QRect playlistRect = geometry();
-        playlistRect.setLeft(playlistRect.right() - qCeil(playlistRect.width()/7.0));
-        bool showPlaylist = playlistRect.contains(event->globalPos());
-        ShowPlaylist(showPlaylist);
-
-        if (fullscreenProgressIndicator)
-        {
-            fullscreenProgressIndicator->setVisible(!ui->playbackLayoutWidget->isVisible());
-        }
-
-        if(!(showPlayback || showPlaylist) && autohide)
-            autohide->start(500);
-    }
-    QMainWindow::mouseMoveEvent(event);
-}
-
-bool MainWindow::eventFilter(QObject *obj, QEvent *event)
-{
-    if(obj == ui->mpvFrame && isFullScreenMode() && event->type() == QEvent::MouseMove)
-    {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        mouseMoveEvent(mouseEvent);
-    }
-    else if(event->type() == QEvent::KeyPress)
-    {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        keyPressEvent(keyEvent);
-    }
-    return false;
-}
-
-void MainWindow::wheelEvent(QWheelEvent *event)
-{
-    if(event->delta() > 0)
-        mpv->Volume(mpv->getVolume()+5, true);
-    else
-        mpv->Volume(mpv->getVolume()-5, true);
-    QMainWindow::wheelEvent(event);
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    // keyboard shortcuts
-    if(!sugoi->input.empty())
-    {
-        QString key = QKeySequence(event->modifiers()|event->key()).toString();
-
-        // TODO: Add more protection/find a better way to protect edit boxes from executing commands
-        if(focusWidget() == ui->inputLineEdit &&
-           key == "Return")
-            return;
-
-        // Escape exits fullscreen
-        if(isFullScreen() &&
-           key == "Esc") {
-            FullScreen(false);
-            return;
-        }
-
-        // find shortcut in input hash table
-        auto iter = sugoi->input.find(key);
-        if(iter != sugoi->input.end())
-            sugoi->Command(iter->first); // execute command
-    }
-    QMainWindow::keyPressEvent(event);
-}
-
-void MainWindow::resizeEvent(QResizeEvent *event)
-{
-    if(ui->actionMedia_Info->isChecked())
-        sugoi->overlay->showInfoText();
-    if (!isPlaylistVisible())
-    {
-        logo->setGeometry(0, menuBar()->height() / 2, width(),
-                    height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
-    }
-    else
-    {
-        logo->setGeometry(0, menuBar()->height() / 2, width() - ui->splitter->position(),
-                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
-    }
-    if (hideAllControls)
-    {
-        if (fullscreenProgressIndicator)
-        {
-            fullscreenProgressIndicator->setGeometry(0, height() - fullscreenProgressIndicator->height(),
-                                                     width(), fullscreenProgressIndicator->height());
-        }
-        ui->playbackLayoutWidget->setGeometry(0, height() - ui->playbackLayoutWidget->height(),
-                                              width(), ui->playbackLayoutWidget->height());
-        ui->seekBar->setGeometry(0, height() - ui->playbackLayoutWidget->height() - ui->seekBar->height(),
-                                 width(), ui->seekBar->height());
-    }
-    QMainWindow::resizeEvent(event);
-}
-
-void MainWindow::changeEvent(QEvent *event)
-{
-    if (event->type() == QEvent::WindowStateChange)
-    {
-        if (windowState() == Qt::WindowMinimized)
-        {
-            if (pauseWhenMinimized)
-            {
-                if (IsPlayingVideo(mpv->getFileFullPath()))
-                {
-                    mpv->Pause();
-                }
-            }
-        }
-    }
-    QMainWindow::changeEvent(event);
-}
-
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    sugoi->SaveSettings();
-    bool canClose = true;
-    if (IsPlayingMusic(mpv->getFileFullPath()))
-    {
-        if (allowRunInBackground)
-        {
-            canClose = false;
-        }
-        else if (QMessageBox::question(this, tr("Exit"), tr("Do you want Sugoi Player to run in background?")) == QMessageBox::Yes)
-        {
-            canClose = false;
-        }
-    }
-    if (!canClose)
-    {
-        hide();
-        if (sugoi->sysTrayIcon->isVisible())
-        {
-            sugoi->sysTrayIcon->showMessage(QString::fromLatin1("Sugoi Player"), tr("Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground."), QIcon(":/images/player.svg"), 4000);
-        }
-        event->ignore();
-        return;
-    }
-    if (quickStartMode)
-    {
-        //mpv->TrulyStop();
-        mpv->Stop();
-        logo->show();
-        this->hide();
-        sugoi->sysTrayIcon->hide();
-        event->ignore();
-        return;
-    }
-    event->accept();
-    QMainWindow::closeEvent(event);
-}
-
-void MainWindow::showEvent(QShowEvent *event)
-{
-    QMainWindow::showEvent(event);
-    if (sugoi->sysTrayIcon != nullptr)
-    {
-        if (trayIconVisible && !sugoi->sysTrayIcon->isVisible())
-        {
-            sugoi->sysTrayIcon->show();
-        }
-        else if (!trayIconVisible && sugoi->sysTrayIcon->isVisible())
-        {
-            sugoi->sysTrayIcon->hide();
-        }
-    }
-#ifdef _DEBUG
-    firstShow = false;
-    return;
-#endif
-    if (firstShow)
-    {
-        if (autoUpdatePlayer)
-        {
-            win_sparkle_check_update_without_ui();
-        }
-//        if (autoUpdateStreamingSupport)
-//        {
-//            ui->actionUpdate_Streaming_Support->triggered();
-//        }
-    }
-    firstShow = false;
-}
-
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    if(event->button() == Qt::LeftButton && ui->mpvFrame->geometry().contains(event->pos())) // if mouse is in the mpvFrame
-    {
-        if(!isFullScreen() && ui->action_Full_Screen->isEnabled()) // don't allow people to go full screen if they shouldn't be able to
-            FullScreen(true);
-        else // they can leave fullscreen even if it's disabled (eg. video ends while in full screen)
-            FullScreen(false);
-        event->accept();
-    }
-    QMainWindow::mouseDoubleClickEvent(event);
-}
-
-void MainWindow::SetIndexLabels(bool enable)
-{
-    int i = ui->playlistWidget->currentRow(),
-        index = ui->playlistWidget->CurrentIndex();
-
-    // next file
-    if(enable && index+1 < ui->playlistWidget->count()) // not the last entry
-    {
-        SetNextButtonEnabled(true);
-        ui->nextButton->setIndex(index+2); // starting at 1 instead of at 0 like actual index
-
-    }
-    else
-        SetNextButtonEnabled(false);
-
-    // previous file
-    if(enable && index-1 >= 0) // not the first entry
-    {
-        SetPreviousButtonEnabled(true);
-        ui->previousButton->setIndex(-index); // we use a negative index value for the left button
-    }
-    else
-        SetPreviousButtonEnabled(false);
-
-    if(i == -1) // no selection
-    {
-        ui->indexLabel->setText(tr("No selection"));
-        ui->indexLabel->setEnabled(false);
-    }
-    else
-    {
-        ui->indexLabel->setEnabled(true);
-        ui->indexLabel->setText(tr("%0 / %1").arg(QString::number(i+1), QString::number(ui->playlistWidget->count())));
-    }
-}
-
-void MainWindow::SetPlaybackControls(bool enable)
-{
-    // playback controls
-    ui->seekBar->setEnabled(enable);
-    ui->rewindButton->setEnabled(enable);
-
-    SetIndexLabels(enable);
-
-    // menubar
-    ui->action_Stop->setEnabled(enable);
-    ui->action_Restart->setEnabled(enable);
-    ui->menuS_peed->setEnabled(enable);
-    ui->action_Jump_to_Time->setEnabled(enable);
-    ui->actionMedia_Info->setEnabled(enable);
-    ui->actionShow_in_Folder->setEnabled(enable && sugoi->mpv->getPath() != QString());
-    ui->action_Full_Screen->setEnabled(enable);
-    if(!enable)
-    {
-        ui->action_Hide_Album_Art->setEnabled(false);
-        ui->menuSubtitle_Track->setEnabled(false);
-        ui->menuFont_Si_ze->setEnabled(false);
-    }
-}
-
-void MainWindow::HideAllControls(bool w, bool s)
-{
-    if(s)
-    {
-        hideAllControls = w;
-        if(isFullScreen())
-            return;
-    }
-    if(w)
-    {
-        if(s || !hideAllControls)
-            playlistState = ui->playlistLayoutWidget->isVisible();
-        ui->menubar->setVisible(false);
-
-        ui->playbackLayoutWidget->hide();
-        ui->seekBar->hide();
-        ui->centralwidget->layout()->removeWidget(ui->playbackLayoutWidget);
-        ui->playbackLayoutWidget->setParent(this);
-        ui->playbackLayoutWidget->move(QPoint(0, geometry().height() - ui->playbackLayoutWidget->height()));
-        ui->centralwidget->layout()->removeWidget(ui->seekBar);
-        ui->seekBar->setParent(this);
-        ui->seekBar->move(QPoint(0, geometry().height() - ui->playbackLayoutWidget->height() - ui->seekBar->height()));
-
-        if (fullscreenProgressIndicator)
-        {
-            fullscreenProgressIndicator->close();
-            delete fullscreenProgressIndicator;
-            fullscreenProgressIndicator = nullptr;
-        }
-        if (showFullscreenIndicator)
-        {
-            fullscreenProgressIndicator = new ProgressIndicatorBar(this);
-            fullscreenProgressIndicator->setFixedSize(QSize(width(), (2.0 / 1080.0) * height()));
-            fullscreenProgressIndicator->move(QPoint(0, height() - fullscreenProgressIndicator->height()));
-            fullscreenProgressIndicator->setRange(0, 1000);
-            fullscreenProgressIndicator->show();
-        }
-
-        mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
-                                       QCursor::pos(),
-                                       Qt::NoButton,Qt::NoButton,Qt::NoModifier));
-    }
-    else
-    {
-        if (fullscreenProgressIndicator)
-        {
-            fullscreenProgressIndicator->close();
-            delete fullscreenProgressIndicator;
-            fullscreenProgressIndicator = nullptr;
-        }
-
-        ui->seekBar->setParent(centralWidget());
-        ui->centralwidget->layout()->addWidget(ui->seekBar);
-        ui->playbackLayoutWidget->setParent(centralWidget());
-        ui->centralwidget->layout()->addWidget(ui->playbackLayoutWidget);
-
-        if(menuVisible)
-            ui->menubar->setVisible(true);
-        ui->seekBar->setVisible(true);
-        ui->playbackLayoutWidget->setVisible(true);
-        setCursor(QCursor(Qt::ArrowCursor)); // show cursor
-        autohide->stop();
-        ShowPlaylist(playlistState);
-    }
-}
-
-void MainWindow::FullScreen(bool fs)
-{
-    if(fs)
-    {
-        if(sugoi->dimDialog && sugoi->dimDialog->isVisible())
-            sugoi->Dim(false);
-        setWindowState(windowState() | Qt::WindowFullScreen);
-        if(!hideAllControls)
-            HideAllControls(true, false);
-    }
-    else
-    {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);
-        if(!hideAllControls)
-            HideAllControls(false, false);
-    }
-}
-
-bool MainWindow::isPlaylistVisible()
-{
-    // if the position is 0, playlist is hidden
-    return (ui->splitter->position() != 0);
-}
-
-void MainWindow::TogglePlaylist()
-{
-    ShowPlaylist(!isPlaylistVisible());
-}
-
-void MainWindow::ShowPlaylist(bool visible)
-{
-    if(ui->splitter->position() != 0 && visible) // ignore showing if it's already visible as it resets original position
-        return;
-
-    if(visible)
-    {
-        ui->splitter->setPosition(ui->splitter->normalPosition()); // bring splitter position to normal
-        logo->setGeometry(0, menuBar()->height() / 2, width() - ui->splitter->normalPosition(),
-                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
-    }
-    else
-    {
-        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
-            ui->splitter->setNormalPosition(ui->splitter->position()); // save current splitter position as the normal position
-        ui->splitter->setPosition(0); // set splitter position to right-most
-        setFocus();
-//        logo->setGeometry(0, menuBar()->height() / 2, width(),
-//                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
-    }
-}
-
-void MainWindow::HideAlbumArt(bool hide)
-{
-    if(hide)
-    {
-        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
-            ui->splitter->setNormalPosition(ui->splitter->position()); // save splitter position as the normal position
-        ui->splitter->setPosition(ui->splitter->max()); // bring the splitter position to the left-most
-    }
-    else
-        ui->splitter->setPosition(ui->splitter->normalPosition()); // bring the splitter to normal position
-}
-
-void MainWindow::UpdateRecentFiles()
-{
-    ui->menu_Recently_Opened->clear();
-    QAction *action;
-    int n = 1,
-        N = recent.length();
-    for(auto &f : recent)
-    {
-        action = ui->menu_Recently_Opened->addAction(QString("%0. %1").arg(Util::FormatNumberWithAmpersand(n, N), Util::ShortenPathToParent(f).replace("&","&&")));
-        if(n++ == 1)
-            action->setShortcut(QKeySequence("Ctrl+Z"));
-        connect(action, &QAction::triggered,
-                [=]
-                {
-                    mpv->LoadFile(f);
-                });
-    }
-}
-
-void MainWindow::SetNextButtonEnabled(bool enable)
-{
-    ui->nextButton->setEnabled(enable);
-    ui->actionPlay_Next_File->setEnabled(enable);
-#if defined(Q_OS_WIN)
-    next_toolbutton->setEnabled(enable);
-#endif
-}
-
-void MainWindow::SetPreviousButtonEnabled(bool enable)
-{
-    ui->previousButton->setEnabled(enable);
-    ui->actionPlay_Previous_File->setEnabled(enable);
-#if defined(Q_OS_WIN)
-    prev_toolbutton->setEnabled(enable);
-#endif
-}
-
-void MainWindow::SetPlayButtonIcon(bool play)
-{
-    if(play)
-    {
-        ui->playButton->setIcon(QIcon(":/images/default_play.svg"));
-        ui->action_Play->setText(tr("&Play"));
-#if defined(Q_OS_WIN)
-        playpause_toolbutton->setToolTip(tr("Play"));
-        playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
-        taskbarButton->setOverlayIcon(QIcon(":/images/tool-pause.ico"));
-        taskbarProgress->show();
-        taskbarProgress->pause();
-#endif
-    }
-    else // pause icon
-    {
-        ui->playButton->setIcon(QIcon(":/images/default_pause.svg"));
-        ui->action_Play->setText(tr("&Pause"));
-#if defined(Q_OS_WIN)
-        playpause_toolbutton->setToolTip(tr("Pause"));
-        playpause_toolbutton->setIcon(QIcon(":/images/tool-pause.ico"));
-        taskbarButton->setOverlayIcon(QIcon(":/images/tool-play.ico"));
-        taskbarProgress->show();
-        taskbarProgress->resume();
-#endif
-    }
-}
-
-void MainWindow::SetRemainingLabels(int time)
-{
-    // todo: move setVisible functions outside of this function which gets called every second and somewhere at the start of a video
-    const Mpv::FileInfo &fi = mpv->getFileInfo();
-    if(fi.length == 0)
-    {
-        ui->durationLabel->setText(Util::FormatTime(time, time));
-        ui->remainingLabel->setVisible(false);
-        ui->seperatorLabel->setVisible(false);
-    }
-    else
-    {
-        ui->remainingLabel->setVisible(true);
-        ui->seperatorLabel->setVisible(true);
-
-        ui->durationLabel->setText(Util::FormatTime(time, fi.length));
-        if(remaining)
-        {
-            int remainingTime = fi.length - time;
-            QString text = "-" + Util::FormatTime(remainingTime, fi.length);
-            if(mpv->getSpeed() != 1)
-            {
-                double speed = mpv->getSpeed();
-                text += QString("  (-%0)").arg(Util::FormatTime(int(remainingTime/speed), int(fi.length/speed)));
-            }
-            ui->remainingLabel->setText(text);
-        }
-        else
-        {
-            QString text = Util::FormatTime(fi.length, fi.length);
-            if(mpv->getSpeed() != 1)
-            {
-                double speed = mpv->getSpeed();
-                text += QString("  (%0)").arg(Util::FormatTime(int(fi.length/speed), int(fi.length/speed)));
-            }
-            ui->remainingLabel->setText(text);
-        }
-    }
-}
-
-bool MainWindow::IsPlayingMusic(const QString &filePath)
-{
-    if (mpv->getPlayState() > 0)
-    {
-        QFileInfo fi(filePath);
-        QString suffix = QString::fromLatin1("*.") + fi.suffix();
-        if (Mpv::audio_filetypes.contains(suffix))
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool MainWindow::IsPlayingVideo(const QString &filePath)
-{
-    if (mpv->getPlayState() > 0)
-    {
-        QFileInfo fi(filePath);
-        QString suffix = QString::fromLatin1("*.") + fi.suffix();
-        if (Mpv::video_filetypes.contains(suffix))
-        {
-            return true;
-        }
-    }
-    return false;
 }

@@ -39,7 +39,7 @@ class MainWindow : public QMainWindow
 friend class SugoiEngine;
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr, bool backgroundMode = false);
     ~MainWindow();
 
     QString getLang()          { return lang; }
@@ -68,11 +68,10 @@ public:
     bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
     QString getSkinFile()        { return skinFile; }
 
-    Ui::MainWindow  *ui;
+    Ui::MainWindow *ui = nullptr;
     QImage albumArt;
 
 public slots:
-    void Load(const QString &f = QString(), bool backgroundMode = false);
     void MapShortcuts();
     void SetFileAssoc(FileAssoc::reg_type type = FileAssoc::reg_type::ALL, bool showUI = false);
     void BringWindowToFront();
@@ -107,11 +106,13 @@ private slots:
     void SetRemainingLabels(int time);
     bool IsPlayingMusic(const QString &filePath);
     bool IsPlayingVideo(const QString &filePath);
+    void connectSignalsAndSlots();
+    void Load(bool backgroundMode = false);
 
 private:
-    SugoiEngine      *sugoi;
-    MpvHandler      *mpv;
-    LogoWidget      *logo;
+    SugoiEngine *sugoi = nullptr;
+    MpvHandler *mpv = nullptr;
+    LogoWidget *logo = nullptr;
     ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
     bool showFullscreenIndicator = true;
     FileAssoc::reg_type  regType;
@@ -129,12 +130,12 @@ private:
     bool firstShow = true;
 
 #if defined(Q_OS_WIN)
-    QWinThumbnailToolBar    *thumbnail_toolbar;
-    QWinThumbnailToolButton *prev_toolbutton,
-                            *playpause_toolbutton,
-                            *next_toolbutton;
-    QWinTaskbarButton       *taskbarButton;
-    QWinTaskbarProgress     *taskbarProgress;
+    QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
+    QWinThumbnailToolButton *prev_toolbutton = nullptr,
+                            *playpause_toolbutton = nullptr,
+                            *next_toolbutton = nullptr;
+    QWinTaskbarButton       *taskbarButton = nullptr;
+    QWinTaskbarProgress     *taskbarProgress = nullptr;
 #endif
     bool            pathChanged,
                     menuVisible     = true,

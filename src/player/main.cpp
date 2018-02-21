@@ -14,7 +14,6 @@
 #include "sugoi-player-version.h"
 #include "qtsingleapplication.h"
 #include "util.h"
-#include "winsparkle.h"
 #include "fileassoc.h"
 
 int main(int argc, char *argv[])
@@ -156,17 +155,18 @@ int main(int argc, char *argv[])
     // the LC_NUMERIC category to be set to "C", so change it back.
     setlocale(LC_NUMERIC, "C");
 
-    MainWindow mainWindow;
+    MainWindow *mainWindow = nullptr;
     if (!runInBackground)
     {
-        mainWindow.Load(command, false);
-        mainWindow.show();
+        mainWindow = new MainWindow();
+        mainWindow->show();
+        mainWindow->openFileFromCmd(command);
     }
     else
     {
-        mainWindow.setWindowOpacity(0.0);
-        mainWindow.Load(QString(), true);
-        mainWindow.hide();
+        mainWindow = new MainWindow(nullptr, true);
+        mainWindow->setWindowOpacity(0.0);
+        mainWindow->hide();
     }
 
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
                                  || message == QString::fromLatin1("quit")
                                  || message == QString::fromLatin1("close"))
                          {
-                             mainWindow.close();
+                             mainWindow->close();
                              return;
                          }
                          else if (message == QString::fromLatin1("runinbackground"))
@@ -191,37 +191,34 @@ int main(int argc, char *argv[])
                                  filePath = QString();
                              }
                          }
-                         if (mainWindow.isHidden())
+                         if (mainWindow->isHidden())
                          {
-                             mainWindow.show();
+                             mainWindow->show();
                          }
-                         if (mainWindow.windowOpacity() < 1.0)
+                         if (mainWindow->windowOpacity() < 1.0)
                          {
-                             mainWindow.setWindowOpacity(1.0);
+                             mainWindow->setWindowOpacity(1.0);
                          }
-                         if (instance.activationWindow() != &mainWindow)
+                         if (instance.activationWindow() != mainWindow)
                          {
-                             instance.setActivationWindow(&mainWindow, true);
+                             instance.setActivationWindow(mainWindow, true);
                          }
-                         if (!mainWindow.isActiveWindow())
+                         if (!mainWindow->isActiveWindow())
                          {
                              instance.activateWindow();
                          }
-                         mainWindow.setPauseWhenMinimized(false);
-                         mainWindow.openFileFromCmd(filePath);
-                         mainWindow.setPauseWhenMinimized(true);
+                         mainWindow->setPauseWhenMinimized(false);
+                         mainWindow->openFileFromCmd(filePath);
+                         mainWindow->setPauseWhenMinimized(true);
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
                      , reinterpret_cast<const wchar_t *>(QString::fromStdWString(SUGOI_APP_MUTEX_STR).utf16()));
 
-    win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/src/player/appcast.xml");
-    win_sparkle_set_lang(mainWindow.getLang().toUtf8().constData());
-    win_sparkle_init();
-
     int ret = instance.exec();
 
-    win_sparkle_cleanup();
+    delete mainWindow;
+    mainWindow = nullptr;
 
     CloseHandle(mutexHandle);
 

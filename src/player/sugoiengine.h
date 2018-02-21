@@ -17,17 +17,17 @@ class SugoiEngine : public QObject
 {
     Q_OBJECT
 public:
-    explicit SugoiEngine(QObject *parent = 0);
+    explicit SugoiEngine(QObject *parent = nullptr);
     ~SugoiEngine();
 
-    MainWindow     *window;
-    MpvHandler     *mpv;
-    OverlayHandler *overlay;
-    DimDialog      *dimDialog;
+    MainWindow     *window = nullptr;
+    MpvHandler     *mpv = nullptr;
+    OverlayHandler *overlay = nullptr;
+    DimDialog      *dimDialog = nullptr;
 
-    QSystemTrayIcon *sysTrayIcon;
+    QSystemTrayIcon *sysTrayIcon = nullptr;
 
-    QTranslator     *translator;
+    QTranslator     *translator = nullptr;
 
     // input hash-table provides O(1) input-command lookups
     QHash<QString, QPair<QString, QString>> input; // [shortcut] = QPair<command, comment>
