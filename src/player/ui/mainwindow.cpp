@@ -42,9 +42,124 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     ShowPlaylist(false);
     addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
 
+    // initialize managers/handlers
+    if (sugoi != nullptr)
+    {
+        delete sugoi;
+        sugoi = nullptr;
+        mpv = nullptr;
+    }
+    sugoi = new SugoiEngine(this);
+    mpv = sugoi->mpv;
+
+    ui->playlistWidget->AttachEngine(sugoi);
+    ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
+    ui->mpvFrame->setMouseTracking(true);
+    if (autohide != nullptr)
+    {
+        delete autohide;
+        autohide = nullptr;
+    }
+    autohide = new QTimer(this);
+    if (osdLocalTimeUpdater != nullptr)
+    {
+        delete osdLocalTimeUpdater;
+        osdLocalTimeUpdater = nullptr;
+    }
+    osdLocalTimeUpdater = new QTimer(this);
+    if (logo != nullptr)
+    {
+        delete logo;
+        logo = nullptr;
+    }
+    logo = new LogoWidget(this);
+    logo->setGeometry(0, menuBar()->height() / 2, width(),
+                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+    logo->show();
+
+    ui->playlistButton->setEnabled(true);
+
+    // command action mappings (action (right) performs command (left))
+    commandActionMap = {
+        {"mpv add chapter +1", ui->action_Next_Chapter},
+        {"mpv add chapter -1", ui->action_Previous_Chapter},
+        {"mpv set sub-scale 1", ui->action_Reset_Size},
+        {"mpv add sub-scale +0.1", ui->action_Size},
+        {"mpv add sub-scale -0.1", ui->actionS_ize},
+        {"mpv set video-aspect -1", ui->action_Auto_Detect}, // todo: make these sugoi-commands so we can output messages when they change
+        {"mpv set video-aspect 16:9", ui->actionForce_16_9},
+        {"mpv set video-aspect 2.35:1", ui->actionForce_2_35_1},
+        {"mpv set video-aspect 4:3", ui->actionForce_4_3},
+        {"mpv cycle sub-visibility", ui->actionShow_Subtitles},
+        {"mpv set time-pos 0", ui->action_Restart},
+        {"mpv frame_step", ui->action_Frame_Step},
+        {"mpv frame_back_step", ui->actionFrame_Back_Step},
+        {"deinterlace", ui->action_Deinterlace},
+        {"interpolate", ui->action_Motion_Interpolation},
+        {"mute", ui->action_Mute},
+        {"screenshot subtitles", ui->actionWith_Subtitles},
+        {"screenshot", ui->actionWithout_Subtitles},
+        {"add_subtitles", ui->action_Add_Subtitle_File},
+        {"add_audio", ui->action_Add_Audio_File},
+        {"fitwindow", ui->action_To_Current_Size},
+        {"fitwindow 50", ui->action50},
+        {"fitwindow 75", ui->action75},
+        {"fitwindow 100", ui->action100},
+        {"fitwindow 150", ui->action150},
+        {"fitwindow 200", ui->action200},
+        {"fullscreen", ui->action_Full_Screen},
+        {"hide_all_controls", ui->actionHide_All_Controls},
+        {"jump", ui->action_Jump_to_Time},
+        {"media_info", ui->actionMedia_Info},
+        {"new", ui->action_New_Player},
+        {"open", ui->action_Open_File},
+        {"open_clipboard", ui->actionOpen_Path_from_Clipboard},
+        {"open_location", ui->actionOpen_URL},
+        {"playlist play +1", ui->actionPlay_Next_File},
+        {"playlist play -1", ui->actionPlay_Previous_File},
+        {"playlist repeat off", ui->action_Off},
+        {"playlist repeat playlist", ui->action_Playlist},
+        {"playlist repeat this", ui->action_This_File},
+        {"playlist shuffle", ui->actionSh_uffle},
+        {"playlist toggle", ui->action_Show_Playlist},
+        {"playlist full", ui->action_Hide_Album_Art},
+        {"dim", ui->action_Dim_Lights},
+        {"play_pause", ui->action_Play},
+        {"quit", ui->actionE_xit},
+        {"show_in_folder", ui->actionShow_in_Folder},
+        {"stop", ui->action_Stop},
+        {"volume +5", ui->action_Increase_Volume},
+        {"volume -5", ui->action_Decrease_Volume},
+        {"speed +0.1", ui->action_Increase},
+        {"speed -0.1", ui->action_Decrease},
+        {"speed 1.0", ui->action_Reset},
+        {"output", ui->actionShow_D_ebug_Output},
+        {"preferences", ui->action_Preferences},
+        {"online_help", ui->actionOnline_Help},
+        {"bug_report", ui->action_Report_bugs},
+        {"sys_info", ui->action_System_Information},
+        {"update", ui->action_Check_for_Updates},
+        {"update youtube-dl", ui->actionUpdate_Streaming_Support},
+        {"about", ui->actionAbout_Sugoi_Player}
+    };
+
+    // map actions to commands
+    for(auto action = commandActionMap.begin(); action != commandActionMap.end(); ++action)
+    {
+        const QString cmd = action.key();
+        connect(*action, &QAction::triggered,
+                [=] { sugoi->Command(cmd); });
+    }
+
     connectSignalsAndSlots();
 
     setContextMenuPolicy(Qt::ActionsContextMenu);
+
+    // add multimedia shortcuts
+    ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
+    ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
+    ui->actionPlay_Next_File->setShortcuts({ui->actionPlay_Next_File->shortcut(), QKeySequence(Qt::Key_MediaNext)});
+    ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
 
     Load(backgroundMode);
 }
@@ -436,9 +551,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (quickStartMode)
     {
-        this->hide();
+        if (sugoi != nullptr)
+        {
+            delete sugoi;
+            sugoi = nullptr;
+            mpv = nullptr;
+        }
+        sugoi = new SugoiEngine(this);
+        mpv = sugoi->mpv;
         connectSignalsAndSlots();
+        sugoi->LoadSettings();
         mpv->Initialize();
+        hide();
         sugoi->sysTrayIcon->hide();
         event->ignore();
         return;
@@ -819,120 +943,17 @@ bool MainWindow::IsPlayingVideo(const QString &filePath)
 
 void MainWindow::connectSignalsAndSlots()
 {
-    // initialize managers/handlers
-    if (sugoi != nullptr)
-    {
-        delete sugoi;
-        sugoi = nullptr;
-        mpv = nullptr;
-    }
-    sugoi = new SugoiEngine(this);
-    mpv = sugoi->mpv;
-
-    ui->playlistWidget->AttachEngine(sugoi);
-    ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
-    ui->mpvFrame->setMouseTracking(true);
-    if (autohide != nullptr)
-    {
-        delete autohide;
-        autohide = nullptr;
-    }
-    autohide = new QTimer(this);
-    if (osdLocalTimeUpdater != nullptr)
-    {
-        delete osdLocalTimeUpdater;
-        osdLocalTimeUpdater = nullptr;
-    }
-    osdLocalTimeUpdater = new QTimer(this);
-    if (logo != nullptr)
-    {
-        delete logo;
-        logo = nullptr;
-    }
-    logo = new LogoWidget(this);
-    logo->setGeometry(0, menuBar()->height() / 2, width(),
-                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
-    logo->show();
-
-    ui->playlistButton->setEnabled(true);
-
-    // command action mappings (action (right) performs command (left))
-    commandActionMap = {
-        {"mpv add chapter +1", ui->action_Next_Chapter},
-        {"mpv add chapter -1", ui->action_Previous_Chapter},
-        {"mpv set sub-scale 1", ui->action_Reset_Size},
-        {"mpv add sub-scale +0.1", ui->action_Size},
-        {"mpv add sub-scale -0.1", ui->actionS_ize},
-        {"mpv set video-aspect -1", ui->action_Auto_Detect}, // todo: make these sugoi-commands so we can output messages when they change
-        {"mpv set video-aspect 16:9", ui->actionForce_16_9},
-        {"mpv set video-aspect 2.35:1", ui->actionForce_2_35_1},
-        {"mpv set video-aspect 4:3", ui->actionForce_4_3},
-        {"mpv cycle sub-visibility", ui->actionShow_Subtitles},
-        {"mpv set time-pos 0", ui->action_Restart},
-        {"mpv frame_step", ui->action_Frame_Step},
-        {"mpv frame_back_step", ui->actionFrame_Back_Step},
-        {"deinterlace", ui->action_Deinterlace},
-        {"interpolate", ui->action_Motion_Interpolation},
-        {"mute", ui->action_Mute},
-        {"screenshot subtitles", ui->actionWith_Subtitles},
-        {"screenshot", ui->actionWithout_Subtitles},
-        {"add_subtitles", ui->action_Add_Subtitle_File},
-        {"add_audio", ui->action_Add_Audio_File},
-        {"fitwindow", ui->action_To_Current_Size},
-        {"fitwindow 50", ui->action50},
-        {"fitwindow 75", ui->action75},
-        {"fitwindow 100", ui->action100},
-        {"fitwindow 150", ui->action150},
-        {"fitwindow 200", ui->action200},
-        {"fullscreen", ui->action_Full_Screen},
-        {"hide_all_controls", ui->actionHide_All_Controls},
-        {"jump", ui->action_Jump_to_Time},
-        {"media_info", ui->actionMedia_Info},
-        {"new", ui->action_New_Player},
-        {"open", ui->action_Open_File},
-        {"open_clipboard", ui->actionOpen_Path_from_Clipboard},
-        {"open_location", ui->actionOpen_URL},
-        {"playlist play +1", ui->actionPlay_Next_File},
-        {"playlist play -1", ui->actionPlay_Previous_File},
-        {"playlist repeat off", ui->action_Off},
-        {"playlist repeat playlist", ui->action_Playlist},
-        {"playlist repeat this", ui->action_This_File},
-        {"playlist shuffle", ui->actionSh_uffle},
-        {"playlist toggle", ui->action_Show_Playlist},
-        {"playlist full", ui->action_Hide_Album_Art},
-        {"dim", ui->action_Dim_Lights},
-        {"play_pause", ui->action_Play},
-        {"quit", ui->actionE_xit},
-        {"show_in_folder", ui->actionShow_in_Folder},
-        {"stop", ui->action_Stop},
-        {"volume +5", ui->action_Increase_Volume},
-        {"volume -5", ui->action_Decrease_Volume},
-        {"speed +0.1", ui->action_Increase},
-        {"speed -0.1", ui->action_Decrease},
-        {"speed 1.0", ui->action_Reset},
-        {"output", ui->actionShow_D_ebug_Output},
-        {"preferences", ui->action_Preferences},
-        {"online_help", ui->actionOnline_Help},
-        {"bug_report", ui->action_Report_bugs},
-        {"sys_info", ui->action_System_Information},
-        {"update", ui->action_Check_for_Updates},
-        {"update youtube-dl", ui->actionUpdate_Streaming_Support},
-        {"about", ui->actionAbout_Sugoi_Player}
-    };
-
-    // map actions to commands
-    for(auto action = commandActionMap.begin(); action != commandActionMap.end(); ++action)
-    {
-        const QString cmd = action.key();
-        connect(*action, &QAction::triggered,
-                [=] { sugoi->Command(cmd); });
-    }
-
     connect(this, &MainWindow::openFileFromCmd,
             [=](const QString &filePath)
             {
                 if (!filePath.isEmpty())
                 {
+                    if (firstRun && quickStartMode)
+                    {
+                        close();
+                        BringWindowToFront();
+                        firstRun = false;
+                    }
                     mpv->LoadFile(filePath);
                 }
             });
@@ -1532,11 +1553,7 @@ void MainWindow::connectSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::volumeChanged,
-            [=](int volume)
-            {
-                ui->volumeSlider->setValueNoSignal(volume);
-            });
+    connect(mpv, &MpvHandler::volumeChanged, ui->volumeSlider, &CustomSlider::setValueNoSignal);
 
     connect(mpv, &MpvHandler::speedChanged,
             [=](double speed)
@@ -1618,23 +1635,7 @@ void MainWindow::connectSignalsAndSlots()
                 mpv->Seek(mpv->Relative(((double)i/ui->seekBar->maximum())*mpv->getFileInfo().length), true);
             });
 
-    connect(ui->openButton, &OpenButton::LeftClick,                     // Playback: Open button (left click)
-            [=]
-            {
-                sugoi->Open();
-            });
-
-    connect(ui->openButton, &OpenButton::MiddleClick,                   // Playback: Open button (middle click)
-            [=]
-            {
-                sugoi->Jump();
-            });
-
-    connect(ui->openButton, &OpenButton::RightClick,                    // Playback: Open button (right click)
-            [=]
-            {
-                sugoi->OpenLocation();
-            });
+    connect(ui->openButton, &OpenButton::LeftClick, sugoi, &SugoiEngine::Open);
 
     connect(ui->rewindButton, &QPushButton::clicked,                    // Playback: Rewind button
             [=]
@@ -1648,11 +1649,7 @@ void MainWindow::connectSignalsAndSlots()
                 ui->playlistWidget->PlayIndex(-1, true);
             });
 
-    connect(ui->playButton, &QPushButton::clicked,                      // Playback: Play/pause button
-            [=]
-            {
-                sugoi->PlayPause();
-            });
+    connect(ui->playButton, &QPushButton::clicked, sugoi, &SugoiEngine::PlayPause);
 
     connect(ui->nextButton, &IndexButton::clicked,                      // Playback: Next button
             [=]
@@ -1672,11 +1669,8 @@ void MainWindow::connectSignalsAndSlots()
                 mpv->Volume(i, true);
             });
 
-    connect(ui->playlistButton, &QPushButton::clicked,                  // Playback: Clicked the playlist button
-            [=]
-            {
-                TogglePlaylist();
-            });
+    //connect(ui->playlistButton, &QPushButton::clicked, this, &MainWindow::TogglePlaylist);
+    connect(ui->playlistButton, &QPushButton::clicked, ui->action_Show_Playlist, &QAction::triggered);
 
     connect(ui->splitter, &CustomSplitter::positionChanged,             // Splitter position changed
             [=](int i)
@@ -1790,10 +1784,4 @@ void MainWindow::connectSignalsAndSlots()
                     }
                 }
             });
-
-    // add multimedia shortcuts
-    ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
-    ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
-    ui->actionPlay_Next_File->setShortcuts({ui->actionPlay_Next_File->shortcut(), QKeySequence(Qt::Key_MediaNext)});
-    ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
 }
