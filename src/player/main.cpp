@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
                          {
                              instance.setActivationWindow(mainWindow, true);
                          }
-                         if (!mainWindow->isActiveWindow() && !mainWindow->getQuickStartMode())
+                         if (!mainWindow->isActiveWindow())
                          {
                              instance.activateWindow();
                          }

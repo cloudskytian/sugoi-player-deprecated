@@ -137,7 +137,6 @@ private:
     bool autoUpdateStreamingSupport = true;
     QString skinFile;
     bool firstShow = true;
-    bool firstRun = true;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
@@ -223,6 +222,7 @@ signals:
     void autoUpdatePlayerChanged(bool);
     void autoUpdateStreamingSupportChanged(bool);
     void skinFileChanged(const QString &);
+    void playlistChanged(const QStringList &);
 };
 
 #endif // MAINWINDOW_H

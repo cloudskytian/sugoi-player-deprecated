@@ -17,6 +17,7 @@
 #include <QTime>
 #include <QUrl>
 #include <QCursor>
+#include <QtConcurrent>
 
 #include "sugoiengine.h"
 #include "mpvhandler.h"
@@ -481,7 +482,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (quickStartMode)
     {
-        firstRun = false;
         if (logo != nullptr)
         {
             if (logo->isHidden())
@@ -882,26 +882,7 @@ bool MainWindow::IsPlayingVideo(const QString &filePath)
 
 void MainWindow::connectMpvSignalsAndSlots()
 {
-    connect(mpv, &MpvHandler::playlistChanged,
-            [=](const QStringList &list)
-            {
-                if(list.length() > 1)
-                {
-                    ui->actionSh_uffle->setEnabled(true);
-                    ui->actionStop_after_Current->setEnabled(true);
-                    //ShowPlaylist(true);
-                }
-                else
-                {
-                    ui->actionSh_uffle->setEnabled(false);
-                    ui->actionStop_after_Current->setEnabled(false);
-                }
-
-                if(list.length() > 0)
-                    ui->menuR_epeat->setEnabled(true);
-                else
-                    ui->menuR_epeat->setEnabled(false);
-            });
+    connect(mpv, &MpvHandler::playlistChanged, this, &MainWindow::playlistChanged);
 
     connect(mpv, &MpvHandler::fileInfoChanged,
             [=](const Mpv::FileInfo &fileInfo)
@@ -1780,13 +1761,10 @@ void MainWindow::connectOtherSignalsAndSlots()
             {
                 if (!filePath.isEmpty())
                 {
-                    if (firstRun && quickStartMode)
-                    {
-                        close();
-                        BringWindowToFront();
-                        firstRun = false;
-                    }
-                    mpv->LoadFile(filePath);
+                    QtConcurrent::run([=]
+                                      {
+                                          mpv->LoadFile(filePath);
+                                      });
                 }
             });
 
@@ -1845,6 +1823,27 @@ void MainWindow::connectOtherSignalsAndSlots()
                     Util::SetAlwaysOnTop(this, true);
                 else if(onTop == "never" || (onTop == "playing" && mpv->getPlayState() > 0))
                     Util::SetAlwaysOnTop(this, false);
+            });
+
+    connect(this, &MainWindow::playlistChanged,
+            [=](const QStringList &list)
+            {
+                if(list.length() > 1)
+                {
+                    ui->actionSh_uffle->setEnabled(true);
+                    ui->actionStop_after_Current->setEnabled(true);
+                    //ShowPlaylist(true);
+                }
+                else
+                {
+                    ui->actionSh_uffle->setEnabled(false);
+                    ui->actionStop_after_Current->setEnabled(false);
+                }
+
+                if(list.length() > 0)
+                    ui->menuR_epeat->setEnabled(true);
+                else
+                    ui->menuR_epeat->setEnabled(false);
             });
 }
 

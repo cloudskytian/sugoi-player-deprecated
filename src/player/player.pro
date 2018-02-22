@@ -1,4 +1,4 @@
-QT += core gui widgets svg winextras network
+QT += core gui widgets svg winextras network concurrent
 TEMPLATE = app
 CONFIG += qt c++11
 CONFIG -= app_bundle
