@@ -481,6 +481,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (quickStartMode)
     {
+        firstRun = false;
         if (logo != nullptr)
         {
             if (logo->isHidden())
