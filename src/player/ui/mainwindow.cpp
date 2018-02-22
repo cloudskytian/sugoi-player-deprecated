@@ -79,357 +79,17 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
 
     ui->playlistButton->setEnabled(true);
 
-    // command action mappings (action (right) performs command (left))
-    commandActionMap = {
-        {"mpv add chapter +1", ui->action_Next_Chapter},
-        {"mpv add chapter -1", ui->action_Previous_Chapter},
-        {"mpv set sub-scale 1", ui->action_Reset_Size},
-        {"mpv add sub-scale +0.1", ui->action_Size},
-        {"mpv add sub-scale -0.1", ui->actionS_ize},
-        {"mpv set video-aspect -1", ui->action_Auto_Detect}, // todo: make these sugoi-commands so we can output messages when they change
-        {"mpv set video-aspect 16:9", ui->actionForce_16_9},
-        {"mpv set video-aspect 2.35:1", ui->actionForce_2_35_1},
-        {"mpv set video-aspect 4:3", ui->actionForce_4_3},
-        {"mpv cycle sub-visibility", ui->actionShow_Subtitles},
-        {"mpv set time-pos 0", ui->action_Restart},
-        {"mpv frame_step", ui->action_Frame_Step},
-        {"mpv frame_back_step", ui->actionFrame_Back_Step},
-        {"deinterlace", ui->action_Deinterlace},
-        {"interpolate", ui->action_Motion_Interpolation},
-        {"mute", ui->action_Mute},
-        {"screenshot subtitles", ui->actionWith_Subtitles},
-        {"screenshot", ui->actionWithout_Subtitles},
-        {"add_subtitles", ui->action_Add_Subtitle_File},
-        {"add_audio", ui->action_Add_Audio_File},
-        {"fitwindow", ui->action_To_Current_Size},
-        {"fitwindow 50", ui->action50},
-        {"fitwindow 75", ui->action75},
-        {"fitwindow 100", ui->action100},
-        {"fitwindow 150", ui->action150},
-        {"fitwindow 200", ui->action200},
-        {"fullscreen", ui->action_Full_Screen},
-        {"hide_all_controls", ui->actionHide_All_Controls},
-        {"jump", ui->action_Jump_to_Time},
-        {"media_info", ui->actionMedia_Info},
-        {"new", ui->action_New_Player},
-        {"open", ui->action_Open_File},
-        {"open_clipboard", ui->actionOpen_Path_from_Clipboard},
-        {"open_location", ui->actionOpen_URL},
-        {"playlist play +1", ui->actionPlay_Next_File},
-        {"playlist play -1", ui->actionPlay_Previous_File},
-        {"playlist repeat off", ui->action_Off},
-        {"playlist repeat playlist", ui->action_Playlist},
-        {"playlist repeat this", ui->action_This_File},
-        {"playlist shuffle", ui->actionSh_uffle},
-        {"playlist toggle", ui->action_Show_Playlist},
-        {"playlist full", ui->action_Hide_Album_Art},
-        {"dim", ui->action_Dim_Lights},
-        {"play_pause", ui->action_Play},
-        {"quit", ui->actionE_xit},
-        {"show_in_folder", ui->actionShow_in_Folder},
-        {"stop", ui->action_Stop},
-        {"volume +5", ui->action_Increase_Volume},
-        {"volume -5", ui->action_Decrease_Volume},
-        {"speed +0.1", ui->action_Increase},
-        {"speed -0.1", ui->action_Decrease},
-        {"speed 1.0", ui->action_Reset},
-        {"output", ui->actionShow_D_ebug_Output},
-        {"preferences", ui->action_Preferences},
-        {"online_help", ui->actionOnline_Help},
-        {"bug_report", ui->action_Report_bugs},
-        {"sys_info", ui->action_System_Information},
-        {"update", ui->action_Check_for_Updates},
-        {"update youtube-dl", ui->actionUpdate_Streaming_Support},
-        {"about", ui->actionAbout_Sugoi_Player}
-    };
-
-    // map actions to commands
-    for(auto action = commandActionMap.begin(); action != commandActionMap.end(); ++action)
-    {
-        const QString cmd = action.key();
-        connect(*action, &QAction::triggered,
-                [=] { sugoi->Command(cmd); });
-    }
-
-    connect(this, &MainWindow::skinFileChanged,
-            [=](const QString &skin)
-            {
-                if (skin.isEmpty())
-                {
-                    return;
-                }
-                SkinManager::instance()->setSkin(skin);
-            });
-
-    connect(this, &MainWindow::autoUpdatePlayerChanged,
-            [=](bool isAuto)
-            {
-#ifdef _DEBUG
-                return;
-#endif
-                if (isAuto)
-                {
-                    win_sparkle_set_automatic_check_for_updates(1);
-                }
-                else
-                {
-                    win_sparkle_set_automatic_check_for_updates(0);
-                }
-            });
-
-    connect(this, &MainWindow::osdShowLocalTimeChanged,
-            [=](bool enable)
-            {
-                if (osdLocalTimeUpdater)
-                {
-                    if (enable)
-                    {
-                        if (osdLocalTimeUpdater->isActive())
-                        {
-                            osdLocalTimeUpdater->stop();
-                        }
-                        osdLocalTimeUpdater->start(1000);
-                    }
-                    else
-                    {
-                        osdLocalTimeUpdater->stop();
-                    }
-                }
-            });
-
-    connect(this, &MainWindow::showFullscreenIndicatorChanged,
-            [=](bool show)
-            {
-                if (show)
-                {
-                    if (isFullScreenMode())
-                    {
-                        if (fullscreenProgressIndicator == nullptr)
-                        {
-                            fullscreenProgressIndicator = new ProgressIndicatorBar(this);
-                            fullscreenProgressIndicator->setFixedSize(QSize(width(), (2.0 / 1080.0) * height()));
-                            fullscreenProgressIndicator->move(QPoint(0, height() - fullscreenProgressIndicator->height()));
-                            fullscreenProgressIndicator->setRange(0, 1000);
-                        }
-                        fullscreenProgressIndicator->show();
-                    }
-                }
-                else
-                {
-                    if (fullscreenProgressIndicator)
-                    {
-                        fullscreenProgressIndicator->close();
-                        delete fullscreenProgressIndicator;
-                        fullscreenProgressIndicator = nullptr;
-                    }
-                }
-            });
-
-    connect(this, &MainWindow::langChanged,
-            [=](QString l)
-            {
-                lang = QString::fromLatin1("auto");
-                l = l.replace('-', '_');
-                if (l == QString::fromLatin1("auto") || l == QString::fromLatin1("system") || l == QString::fromLatin1("ui") || l == QString::fromLatin1("locale"))
-                {
-                    QLocale locale;
-                    l = locale.uiLanguages().first();
-                    l = l.replace('-', '_');
-                }
-
-                if (l != QString::fromLatin1("C") && l != QString::fromLatin1("en") && l != QString::fromLatin1("en_US") && l != QString::fromLatin1("en_UK"))
-                {
-                    // load the application translations
-                    if(sugoi->translator != nullptr)
-                    {
-                        qApp->removeTranslator(sugoi->translator);
-                        delete sugoi->translator;
-                        sugoi->translator = nullptr;
-                    }
-                    sugoi->translator = new QTranslator(qApp);
-                    QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-                    if (sugoi->translator->load(QString("sugoi_%0").arg(l), langPath))
-                    {
-                        if (qApp->installTranslator(sugoi->translator))
-                        {
-                            lang = l;
-                        }
-                    }
-                    else
-                    {
-                        delete sugoi->translator;
-                        sugoi->translator = nullptr;
-                    }
-                }
-                else
-                {
-                    if(sugoi->translator != nullptr)
-                    {
-                        qApp->removeTranslator(sugoi->translator);
-                        delete sugoi->translator;
-                        sugoi->translator = nullptr;
-                    }
-                }
-
-                // save strings we want to keep
-                QString title = windowTitle(),
-                        duration = ui->durationLabel->text(),
-                        remaining = ui->remainingLabel->text(),
-                        index = ui->indexLabel->text();
-
-                ui->retranslateUi(this);
-
-                // reload strings we kept
-                setWindowTitle(title);
-                ui->durationLabel->setText(duration);
-                ui->remainingLabel->setText(remaining);
-                ui->indexLabel->setText(index);
-            });
-
-    connect(this, &MainWindow::debugChanged,
-            [=](bool b)
-            {
-                ui->actionShow_D_ebug_Output->setChecked(b);
-                ui->verticalWidget->setVisible(b);
-                mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
-                                               QCursor::pos(),
-                                               Qt::NoButton,Qt::NoButton,Qt::NoModifier));
-                if(b)
-                    ui->inputLineEdit->setFocus();
-            });
-
-    connect(this, &MainWindow::hideAllControlsChanged,
-            [=](bool b)
-            {
-                HideAllControls(b);
-                blockSignals(true);
-                ui->actionHide_All_Controls->setChecked(b);
-                blockSignals(false);
-            });
-
-    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::BringWindowToFront);
-
-    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::messageClicked, this, &MainWindow::BringWindowToFront);
-
-    connect(this, &MainWindow::trayIconVisibleChanged,
-            [=](bool visible)
-            {
-                if (sugoi->sysTrayIcon != nullptr)
-                {
-                    sugoi->sysTrayIcon->setVisible(visible);
-                }
-            });
-
-    connect(this, &MainWindow::quickStartModeChanged,
-            [=](bool quickStart)
-            {
-                if (this->isHidden())
-                {
-                    return;
-                }
-                if (quickStart)
-                {
-                    if (!Util::isAutoStart())
-                    {
-                        const QString exePath = QCoreApplication::applicationFilePath();
-                        const QString exeParam = QString::fromLatin1("--autostart");
-                        Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
-                    }
-                }
-                else
-                {
-                    if (Util::isAutoStart())
-                    {
-                        const QString exePath = QCoreApplication::applicationFilePath();
-                        const QString exeParam = QString::fromLatin1("--noautostart");
-                        Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
-                    }
-                }
-            });
-
-    connect(this, &MainWindow::openFileFromCmd,
-            [=](const QString &filePath)
-            {
-                if (!filePath.isEmpty())
-                {
-                    if (firstRun && quickStartMode)
-                    {
-                        close();
-                        BringWindowToFront();
-                        firstRun = false;
-                    }
-                    mpv->LoadFile(filePath);
-                }
-            });
-
-    connect(this, &MainWindow::onTopChanged,
-            [=](QString onTop)
-            {
-                if(onTop == "never")
-                    Util::SetAlwaysOnTop(this, false);
-                else if(onTop == "always")
-                    Util::SetAlwaysOnTop(this, true);
-                else if(onTop == "playing" && mpv->getPlayState() > 0)
-                    Util::SetAlwaysOnTop(this, true);
-            });
-
-    connect(this, &MainWindow::remainingChanged,
-            [=]
-            {
-                SetRemainingLabels(mpv->getTime());
-            });
-
-    connect(autohide, &QTimer::timeout, // cursor autohide
-            [=]
-            {
-                if(ui->mpvFrame->geometry().contains(ui->mpvFrame->mapFromGlobal(cursor().pos())))
-                    setCursor(QCursor(Qt::BlankCursor));
-                if(autohide)
-                    autohide->stop();
-            });
-
-    connect(osdLocalTimeUpdater, &QTimer::timeout,
-            [=]
-            {
-                if (osdShowLocalTime)
-                {
-                    if (mpv->getPlayState() > 0)
-                    {
-                        QString curTime = QTime::currentTime().toString("hh:mm:ss");
-                        if (!curTime.isEmpty())
-                        {
-                            mpv->ShowText(curTime, 1500);
-                        }
-                    }
-                }
-                else
-                {
-                    osdLocalTimeUpdater->stop();
-                }
-            });
-
-    // dimDialog
-    connect(sugoi->dimDialog, &DimDialog::visbilityChanged,
-            [=](bool dim)
-            {
-                ui->action_Dim_Lights->setChecked(dim);
-                if(dim)
-                    Util::SetAlwaysOnTop(this, true);
-                else if(onTop == "never" || (onTop == "playing" && mpv->getPlayState() > 0))
-                    Util::SetAlwaysOnTop(this, false);
-            });
-
+    connectOtherSignalsAndSlots();
     connectMpvSignalsAndSlots();
-
     connectUiSignalsAndSlots();
-
-    setContextMenuPolicy(Qt::ActionsContextMenu);
 
     // add multimedia shortcuts
     ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
     ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
     ui->actionPlay_Next_File->setShortcuts({ui->actionPlay_Next_File->shortcut(), QKeySequence(Qt::Key_MediaNext)});
     ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
+
+    setContextMenuPolicy(Qt::ActionsContextMenu);
 
     Load(backgroundMode);
 }
@@ -837,8 +497,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
         sugoi = new SugoiEngine(this);
         mpv = sugoi->mpv;
+        reconnectAllSignalsAndSlots();
         ui->playlistWidget->AttachEngine(sugoi);
-        connectMpvSignalsAndSlots();
         sugoi->LoadSettings();
         mpv->Initialize();
         hide();
@@ -1683,6 +1343,17 @@ void MainWindow::connectMpvSignalsAndSlots()
     });
 }
 
+void MainWindow::disconnectMpvSignalsAndSlots()
+{
+    mpv->disconnect();
+}
+
+void MainWindow::reconnectMpvSignalsAndSlots()
+{
+    disconnectMpvSignalsAndSlots();
+    connectMpvSignalsAndSlots();
+}
+
 void MainWindow::connectUiSignalsAndSlots()
 {
     connect(ui->playlistButton, &QPushButton::clicked, this, &MainWindow::TogglePlaylist);
@@ -1694,6 +1365,8 @@ void MainWindow::connectUiSignalsAndSlots()
             });
 
     connect(ui->openButton, &OpenButton::LeftClick, sugoi, &SugoiEngine::Open);
+    connect(ui->openButton, &OpenButton::MiddleClick, sugoi, &SugoiEngine::Jump);
+    connect(ui->openButton, &OpenButton::RightClick, sugoi, &SugoiEngine::OpenLocation);
 
     connect(ui->rewindButton, &QPushButton::clicked,                    // Playback: Rewind button
             [=]
@@ -1802,5 +1475,400 @@ void MainWindow::connectUiSignalsAndSlots()
             {
                 sugoi->Command(s);
                 ui->inputLineEdit->setText("");
+    });
+}
+
+void MainWindow::disconnectUiSignalsAndSlots()
+{
+    ui->playlistButton->disconnect();
+    ui->seekBar->disconnect();
+    ui->openButton->disconnect();
+    ui->rewindButton->disconnect();
+    ui->previousButton->disconnect();
+    ui->playButton->disconnect();
+    ui->nextButton->disconnect();
+    ui->muteButton->disconnect();
+    ui->volumeSlider->disconnect();
+    ui->splitter->disconnect();
+    ui->searchBox->disconnect();
+    ui->indexLabel->disconnect();
+    ui->playlistWidget->disconnect();
+    ui->currentFileButton->disconnect();
+    ui->refreshButton->disconnect();
+    ui->inputLineEdit->disconnect();
+}
+
+void MainWindow::reconnectUiSignalsAndSlots()
+{
+    disconnectUiSignalsAndSlots();
+    connectUiSignalsAndSlots();
+}
+
+void MainWindow::connectOtherSignalsAndSlots()
+{
+    // command action mappings (action (right) performs command (left))
+    commandActionMap = {
+        {"mpv add chapter +1", ui->action_Next_Chapter},
+        {"mpv add chapter -1", ui->action_Previous_Chapter},
+        {"mpv set sub-scale 1", ui->action_Reset_Size},
+        {"mpv add sub-scale +0.1", ui->action_Size},
+        {"mpv add sub-scale -0.1", ui->actionS_ize},
+        {"mpv set video-aspect -1", ui->action_Auto_Detect}, // todo: make these sugoi-commands so we can output messages when they change
+        {"mpv set video-aspect 16:9", ui->actionForce_16_9},
+        {"mpv set video-aspect 2.35:1", ui->actionForce_2_35_1},
+        {"mpv set video-aspect 4:3", ui->actionForce_4_3},
+        {"mpv cycle sub-visibility", ui->actionShow_Subtitles},
+        {"mpv set time-pos 0", ui->action_Restart},
+        {"mpv frame_step", ui->action_Frame_Step},
+        {"mpv frame_back_step", ui->actionFrame_Back_Step},
+        {"deinterlace", ui->action_Deinterlace},
+        {"interpolate", ui->action_Motion_Interpolation},
+        {"mute", ui->action_Mute},
+        {"screenshot subtitles", ui->actionWith_Subtitles},
+        {"screenshot", ui->actionWithout_Subtitles},
+        {"add_subtitles", ui->action_Add_Subtitle_File},
+        {"add_audio", ui->action_Add_Audio_File},
+        {"fitwindow", ui->action_To_Current_Size},
+        {"fitwindow 50", ui->action50},
+        {"fitwindow 75", ui->action75},
+        {"fitwindow 100", ui->action100},
+        {"fitwindow 150", ui->action150},
+        {"fitwindow 200", ui->action200},
+        {"fullscreen", ui->action_Full_Screen},
+        {"hide_all_controls", ui->actionHide_All_Controls},
+        {"jump", ui->action_Jump_to_Time},
+        {"media_info", ui->actionMedia_Info},
+        {"new", ui->action_New_Player},
+        {"open", ui->action_Open_File},
+        {"open_clipboard", ui->actionOpen_Path_from_Clipboard},
+        {"open_location", ui->actionOpen_URL},
+        {"playlist play +1", ui->actionPlay_Next_File},
+        {"playlist play -1", ui->actionPlay_Previous_File},
+        {"playlist repeat off", ui->action_Off},
+        {"playlist repeat playlist", ui->action_Playlist},
+        {"playlist repeat this", ui->action_This_File},
+        {"playlist shuffle", ui->actionSh_uffle},
+        {"playlist toggle", ui->action_Show_Playlist},
+        {"playlist full", ui->action_Hide_Album_Art},
+        {"dim", ui->action_Dim_Lights},
+        {"play_pause", ui->action_Play},
+        {"quit", ui->actionE_xit},
+        {"show_in_folder", ui->actionShow_in_Folder},
+        {"stop", ui->action_Stop},
+        {"volume +5", ui->action_Increase_Volume},
+        {"volume -5", ui->action_Decrease_Volume},
+        {"speed +0.1", ui->action_Increase},
+        {"speed -0.1", ui->action_Decrease},
+        {"speed 1.0", ui->action_Reset},
+        {"output", ui->actionShow_D_ebug_Output},
+        {"preferences", ui->action_Preferences},
+        {"online_help", ui->actionOnline_Help},
+        {"bug_report", ui->action_Report_bugs},
+        {"sys_info", ui->action_System_Information},
+        {"update", ui->action_Check_for_Updates},
+        {"update youtube-dl", ui->actionUpdate_Streaming_Support},
+        {"about", ui->actionAbout_Sugoi_Player}
+    };
+
+    // map actions to commands
+    for(auto action = commandActionMap.begin(); action != commandActionMap.end(); ++action)
+    {
+        const QString cmd = action.key();
+        connect(*action, &QAction::triggered,
+                [=] { sugoi->Command(cmd); });
+    }
+
+    connect(this, &MainWindow::skinFileChanged,
+            [=](const QString &skin)
+            {
+                if (skin.isEmpty())
+                {
+                    return;
+                }
+                SkinManager::instance()->setSkin(skin);
             });
+
+    connect(this, &MainWindow::autoUpdatePlayerChanged,
+            [=](bool isAuto)
+            {
+#ifdef _DEBUG
+                return;
+#endif
+                if (isAuto)
+                {
+                    win_sparkle_set_automatic_check_for_updates(1);
+                }
+                else
+                {
+                    win_sparkle_set_automatic_check_for_updates(0);
+                }
+            });
+
+    connect(this, &MainWindow::osdShowLocalTimeChanged,
+            [=](bool enable)
+            {
+                if (osdLocalTimeUpdater)
+                {
+                    if (enable)
+                    {
+                        if (osdLocalTimeUpdater->isActive())
+                        {
+                            osdLocalTimeUpdater->stop();
+                        }
+                        osdLocalTimeUpdater->start(1000);
+                    }
+                    else
+                    {
+                        osdLocalTimeUpdater->stop();
+                    }
+                }
+            });
+
+    connect(this, &MainWindow::showFullscreenIndicatorChanged,
+            [=](bool show)
+            {
+                if (show)
+                {
+                    if (isFullScreenMode())
+                    {
+                        if (fullscreenProgressIndicator == nullptr)
+                        {
+                            fullscreenProgressIndicator = new ProgressIndicatorBar(this);
+                            fullscreenProgressIndicator->setFixedSize(QSize(width(), (2.0 / 1080.0) * height()));
+                            fullscreenProgressIndicator->move(QPoint(0, height() - fullscreenProgressIndicator->height()));
+                            fullscreenProgressIndicator->setRange(0, 1000);
+                        }
+                        fullscreenProgressIndicator->show();
+                    }
+                }
+                else
+                {
+                    if (fullscreenProgressIndicator)
+                    {
+                        fullscreenProgressIndicator->close();
+                        delete fullscreenProgressIndicator;
+                        fullscreenProgressIndicator = nullptr;
+                    }
+                }
+            });
+
+    connect(this, &MainWindow::langChanged,
+            [=](QString l)
+            {
+                lang = QString::fromLatin1("auto");
+                l = l.replace('-', '_');
+                if (l == QString::fromLatin1("auto") || l == QString::fromLatin1("system") || l == QString::fromLatin1("ui") || l == QString::fromLatin1("locale"))
+                {
+                    QLocale locale;
+                    l = locale.uiLanguages().first();
+                    l = l.replace('-', '_');
+                }
+
+                if (l != QString::fromLatin1("C") && l != QString::fromLatin1("en") && l != QString::fromLatin1("en_US") && l != QString::fromLatin1("en_UK"))
+                {
+                    // load the application translations
+                    if(sugoi->translator != nullptr)
+                    {
+                        qApp->removeTranslator(sugoi->translator);
+                        delete sugoi->translator;
+                        sugoi->translator = nullptr;
+                    }
+                    sugoi->translator = new QTranslator(qApp);
+                    QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+                    if (sugoi->translator->load(QString("sugoi_%0").arg(l), langPath))
+                    {
+                        if (qApp->installTranslator(sugoi->translator))
+                        {
+                            lang = l;
+                        }
+                    }
+                    else
+                    {
+                        delete sugoi->translator;
+                        sugoi->translator = nullptr;
+                    }
+                }
+                else
+                {
+                    if(sugoi->translator != nullptr)
+                    {
+                        qApp->removeTranslator(sugoi->translator);
+                        delete sugoi->translator;
+                        sugoi->translator = nullptr;
+                    }
+                }
+
+                // save strings we want to keep
+                QString title = windowTitle(),
+                        duration = ui->durationLabel->text(),
+                        remaining = ui->remainingLabel->text(),
+                        index = ui->indexLabel->text();
+
+                ui->retranslateUi(this);
+
+                // reload strings we kept
+                setWindowTitle(title);
+                ui->durationLabel->setText(duration);
+                ui->remainingLabel->setText(remaining);
+                ui->indexLabel->setText(index);
+            });
+
+    connect(this, &MainWindow::debugChanged,
+            [=](bool b)
+            {
+                ui->actionShow_D_ebug_Output->setChecked(b);
+                ui->verticalWidget->setVisible(b);
+                mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
+                                               QCursor::pos(),
+                                               Qt::NoButton,Qt::NoButton,Qt::NoModifier));
+                if(b)
+                    ui->inputLineEdit->setFocus();
+            });
+
+    connect(this, &MainWindow::hideAllControlsChanged,
+            [=](bool b)
+            {
+                HideAllControls(b);
+                blockSignals(true);
+                ui->actionHide_All_Controls->setChecked(b);
+                blockSignals(false);
+            });
+
+    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::BringWindowToFront);
+
+    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::messageClicked, this, &MainWindow::BringWindowToFront);
+
+    connect(this, &MainWindow::trayIconVisibleChanged,
+            [=](bool visible)
+            {
+                if (sugoi->sysTrayIcon != nullptr)
+                {
+                    sugoi->sysTrayIcon->setVisible(visible);
+                }
+            });
+
+    connect(this, &MainWindow::quickStartModeChanged,
+            [=](bool quickStart)
+            {
+                if (this->isHidden())
+                {
+                    return;
+                }
+                if (quickStart)
+                {
+                    if (!Util::isAutoStart())
+                    {
+                        const QString exePath = QCoreApplication::applicationFilePath();
+                        const QString exeParam = QString::fromLatin1("--autostart");
+                        Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
+                    }
+                }
+                else
+                {
+                    if (Util::isAutoStart())
+                    {
+                        const QString exePath = QCoreApplication::applicationFilePath();
+                        const QString exeParam = QString::fromLatin1("--noautostart");
+                        Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
+                    }
+                }
+            });
+
+    connect(this, &MainWindow::openFileFromCmd,
+            [=](const QString &filePath)
+            {
+                if (!filePath.isEmpty())
+                {
+                    if (firstRun && quickStartMode)
+                    {
+                        close();
+                        BringWindowToFront();
+                        firstRun = false;
+                    }
+                    mpv->LoadFile(filePath);
+                }
+            });
+
+    connect(this, &MainWindow::onTopChanged,
+            [=](QString onTop)
+            {
+                if(onTop == "never")
+                    Util::SetAlwaysOnTop(this, false);
+                else if(onTop == "always")
+                    Util::SetAlwaysOnTop(this, true);
+                else if(onTop == "playing" && mpv->getPlayState() > 0)
+                    Util::SetAlwaysOnTop(this, true);
+            });
+
+    connect(this, &MainWindow::remainingChanged,
+            [=]
+            {
+                SetRemainingLabels(mpv->getTime());
+            });
+
+    connect(autohide, &QTimer::timeout, // cursor autohide
+            [=]
+            {
+                if(ui->mpvFrame->geometry().contains(ui->mpvFrame->mapFromGlobal(cursor().pos())))
+                    setCursor(QCursor(Qt::BlankCursor));
+                if(autohide)
+                    autohide->stop();
+            });
+
+    connect(osdLocalTimeUpdater, &QTimer::timeout,
+            [=]
+            {
+                if (osdShowLocalTime)
+                {
+                    if (mpv->getPlayState() > 0)
+                    {
+                        QString curTime = QTime::currentTime().toString("hh:mm:ss");
+                        if (!curTime.isEmpty())
+                        {
+                            mpv->ShowText(curTime, 1500);
+                        }
+                    }
+                }
+                else
+                {
+                    osdLocalTimeUpdater->stop();
+                }
+            });
+
+    // dimDialog
+    connect(sugoi->dimDialog, &DimDialog::visbilityChanged,
+            [=](bool dim)
+            {
+                ui->action_Dim_Lights->setChecked(dim);
+                if(dim)
+                    Util::SetAlwaysOnTop(this, true);
+                else if(onTop == "never" || (onTop == "playing" && mpv->getPlayState() > 0))
+                    Util::SetAlwaysOnTop(this, false);
+            });
+}
+
+void MainWindow::disconnectOtherSignalsAndSlots()
+{
+    for(auto action = commandActionMap.begin(); action != commandActionMap.end(); ++action)
+    {
+        static_cast<QObject *>(*action)->disconnect();
+    }
+    sugoi->sysTrayIcon->disconnect();
+    autohide->disconnect();
+    osdLocalTimeUpdater->disconnect();
+    sugoi->dimDialog->disconnect();
+    this->disconnect();
+}
+
+void MainWindow::reconnectOtherSignalsAndSlots()
+{
+    disconnectOtherSignalsAndSlots();
+    connectOtherSignalsAndSlots();
+}
+
+void MainWindow::reconnectAllSignalsAndSlots()
+{
+    reconnectMpvSignalsAndSlots();
+    reconnectUiSignalsAndSlots();
+    reconnectOtherSignalsAndSlots();
 }

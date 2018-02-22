@@ -107,7 +107,15 @@ private slots:
     bool IsPlayingMusic(const QString &filePath);
     bool IsPlayingVideo(const QString &filePath);
     void connectMpvSignalsAndSlots();
+    void disconnectMpvSignalsAndSlots();
+    void reconnectMpvSignalsAndSlots();
     void connectUiSignalsAndSlots();
+    void disconnectUiSignalsAndSlots();
+    void reconnectUiSignalsAndSlots();
+    void connectOtherSignalsAndSlots();
+    void disconnectOtherSignalsAndSlots();
+    void reconnectOtherSignalsAndSlots();
+    void reconnectAllSignalsAndSlots();
     void Load(bool backgroundMode = false);
 
 private:
