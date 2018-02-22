@@ -8,25 +8,6 @@ branches:
 
 skip_tags: false
 
-skip_commits:
-  files:
-    - doc/*
-    - '**/*.html'
-    - '**/*.md'
-    - '**/*.txt'
-    - '**/*.bat'
-    - '**/*.pro'
-    - '**/*.ts'
-    - '**/*.qm'
-    - '**/*.iss'
-    - '**/*.jpg'
-    - '**/*.png'
-    - '**/*.svg'
-    - '**/*.ico'
-    - '**/*.ui'
-    - '**/*.psd'
-    - '**/*.xml'
-
 image: Visual Studio 2017
 
 clone_folder: C:\Sugoi-Player
@@ -58,9 +39,9 @@ build_script:
   - qmake "sugoi-player.pro" -spec win32-msvc "CONFIG+=release"
   - jom qmake_all
   - jom && jom install
-  - 7z a -tzip Sugoi_V%APPVEYOR_BUILD_VERSION%_x64_Portable.zip .\bin64\Release\*
+  - 7z a -tzip Sugoi_x64_Portable.zip .\bin64\Release\*
   - SET "PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%"
-  - ISCC /Dx64 /DCI /O"%APPVEYOR_BUILD_FOLDER%" /F"Sugoi_V%APPVEYOR_BUILD_VERSION%_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\installer.iss"
+  - ISCC /Dx64 /DCI /O"%APPVEYOR_BUILD_FOLDER%" /F"Sugoi_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\installer.iss"
   - jom distclean
   - IF EXIST bin64 RD /S /Q bin64
 
@@ -71,10 +52,8 @@ on_failure:
 test: off
 
 artifacts:
-  - path: Sugoi_V$(appveyor_build_version)_x64_Portable.zip
-    name: Sugoi_x64_Portable.zip
-  - path: Sugoi_V$(appveyor_build_version)_x64_Setup.exe
-    name: Sugoi_x64_Setup.exe
+  - path: Sugoi_x64_Portable.zip
+  - path: Sugoi_x64_Setup.exe
 
 deploy:
   release: Sugoi Player V$(appveyor_build_version)
