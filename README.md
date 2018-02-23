@@ -36,7 +36,7 @@
 
 * [Contact](#contact)
 
-* [Donate](#donate)
+* [Donation](#donation)
 
 
 ## External links
@@ -235,8 +235,8 @@ QQ group number: 643590794
 Do **NOT** contact me through my private QQ number. Contact me through e-mail and QQ group **ONLY**. All messages from my private QQ are ignored.
 
 
-## Donate
+## Donation
 
-I am quite lack of money in fact, but I don't need any kinds of donations.
+Thanks for your concern, but I don't need any kinds of donations.
 
 Sugoi Player will always be free and open-source, and there will never be any kinds of advertisements in it.
