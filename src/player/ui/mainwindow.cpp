@@ -482,9 +482,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (quickStartMode)
     {
-        showMinimized();
+        closing = true;
         QTimer::singleShot(0, [=]
         {
+            showMinimized();
             if (logo != nullptr)
             {
                 if (logo->isHidden())
@@ -506,12 +507,21 @@ void MainWindow::closeEvent(QCloseEvent *event)
             sugoi->LoadSettings();
             mpv->Initialize();
         });
-        QTimer::singleShot(1000, this, &MainWindow::hide);
+        QTimer::singleShot(1000, [=]
+        {
+            hide();
+        });
         event->ignore();
         return;
     }
     event->accept();
     QMainWindow::closeEvent(event);
+}
+
+void MainWindow::hideEvent(QHideEvent *event)
+{
+    QMainWindow::hideEvent(event);
+    closing = false;
 }
 
 void MainWindow::showEvent(QShowEvent *event)
@@ -1765,20 +1775,25 @@ void MainWindow::connectOtherSignalsAndSlots()
             {
                 if (!filePath.isEmpty())
                 {
-                    QtConcurrent::run([=]
+                    if (closing)
                     {
-                        mpv->LoadFile(filePath);
-                    });
+                        QTimer::singleShot(2000, [=]
+                        {
+                            QtConcurrent::run([=]
+                            {
+                                mpv->LoadFile(filePath);
+                            });
+                        });
+                    }
+                    else
+                    {
+                        QtConcurrent::run([=]
+                        {
+                            mpv->LoadFile(filePath);
+                        });
+                    }
                 }
             });
-//    connect(this, &MainWindow::openFileFromCmd,
-//            [=](const QString &filePath)
-//            {
-//                if (!filePath.isEmpty())
-//                {
-//                    mpv->LoadFile(filePath);
-//                }
-//            });
 
     connect(this, &MainWindow::onTopChanged,
             [=](QString onTop)

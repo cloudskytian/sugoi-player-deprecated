@@ -67,6 +67,7 @@ public:
     bool getAutoUpdatePlayer()   { return autoUpdatePlayer; }
     bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
     QString getSkinFile()        { return skinFile; }
+    bool getIsClosing()          { return closing; }
 
     Ui::MainWindow *ui = nullptr;
     QImage albumArt;
@@ -88,6 +89,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
     void changeEvent(QEvent *event);
     void closeEvent(QCloseEvent *event);
+    void hideEvent(QHideEvent *event);
     void showEvent(QShowEvent *event);
     void SetIndexLabels(bool enable);
     void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
@@ -137,6 +139,7 @@ private:
     bool autoUpdateStreamingSupport = true;
     QString skinFile;
     bool firstShow = true;
+    bool closing = false;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
