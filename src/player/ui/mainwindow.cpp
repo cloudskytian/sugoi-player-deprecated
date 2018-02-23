@@ -1168,7 +1168,8 @@ void MainWindow::connectMpvSignalsAndSlots()
                     {
                         if(ui->action_This_File->isChecked()) // repeat this file
                         {
-                            if (isVisible() && windowState() != Qt::WindowMinimized)
+                            if ((quickStartMode && isVisible() && windowState() != Qt::WindowMinimized)
+                                    || (!quickStartMode))
                             {
                                 ui->playlistWidget->PlayIndex(0, true); // restart file
                             }
@@ -1180,7 +1181,8 @@ void MainWindow::connectMpvSignalsAndSlots()
                                 ui->action_Playlist->isChecked() && // we're supposed to restart the playlist
                                 ui->playlistWidget->count() > 0) // playlist isn't empty
                             {
-                                if (isVisible() && windowState() != Qt::WindowMinimized)
+                                if ((quickStartMode && isVisible() && windowState() != Qt::WindowMinimized)
+                                        || (!quickStartMode))
                                 {
                                     ui->playlistWidget->PlayIndex(0); // restart playlist
                                 }
@@ -1199,7 +1201,8 @@ void MainWindow::connectMpvSignalsAndSlots()
                         }
                         else
                         {
-                            if (isVisible() && windowState() != Qt::WindowMinimized)
+                            if ((quickStartMode && isVisible() && windowState() != Qt::WindowMinimized)
+                                    || (!quickStartMode))
                             {
                                 ui->playlistWidget->PlayIndex(1, true);
                             }
