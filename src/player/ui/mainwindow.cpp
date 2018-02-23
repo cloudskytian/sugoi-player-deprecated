@@ -482,27 +482,31 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (quickStartMode)
     {
-        if (logo != nullptr)
+        showMinimized();
+        QTimer::singleShot(0, [=]
         {
-            if (logo->isHidden())
+            if (logo != nullptr)
             {
-                logo->show();
+                if (logo->isHidden())
+                {
+                    logo->show();
+                }
             }
-        }
-        sugoi->sysTrayIcon->hide();
-        if (sugoi != nullptr)
-        {
-            delete sugoi;
-            sugoi = nullptr;
-            mpv = nullptr;
-        }
-        sugoi = new SugoiEngine(this);
-        mpv = sugoi->mpv;
-        reconnectAllSignalsAndSlots();
-        ui->playlistWidget->AttachEngine(sugoi);
-        sugoi->LoadSettings();
-        mpv->Initialize();
-        hide();
+            sugoi->sysTrayIcon->hide();
+            if (sugoi != nullptr)
+            {
+                delete sugoi;
+                sugoi = nullptr;
+                mpv = nullptr;
+            }
+            sugoi = new SugoiEngine(this);
+            mpv = sugoi->mpv;
+            reconnectAllSignalsAndSlots();
+            ui->playlistWidget->AttachEngine(sugoi);
+            sugoi->LoadSettings();
+            mpv->Initialize();
+        });
+        QTimer::singleShot(1000, this, &MainWindow::hide);
         event->ignore();
         return;
     }
@@ -1162,7 +1166,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                     {
                         if(ui->action_This_File->isChecked()) // repeat this file
                         {
-                            if (isVisible())
+                            if (isVisible() && windowState() != Qt::WindowMinimized)
                             {
                                 ui->playlistWidget->PlayIndex(0, true); // restart file
                             }
@@ -1174,7 +1178,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                                 ui->action_Playlist->isChecked() && // we're supposed to restart the playlist
                                 ui->playlistWidget->count() > 0) // playlist isn't empty
                             {
-                                if (isVisible())
+                                if (isVisible() && windowState() != Qt::WindowMinimized)
                                 {
                                     ui->playlistWidget->PlayIndex(0); // restart playlist
                                 }
@@ -1193,7 +1197,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                         }
                         else
                         {
-                            if (isVisible())
+                            if (isVisible() && windowState() != Qt::WindowMinimized)
                             {
                                 ui->playlistWidget->PlayIndex(1, true);
                             }
@@ -1762,11 +1766,19 @@ void MainWindow::connectOtherSignalsAndSlots()
                 if (!filePath.isEmpty())
                 {
                     QtConcurrent::run([=]
-                                      {
-                                          mpv->LoadFile(filePath);
-                                      });
+                    {
+                        mpv->LoadFile(filePath);
+                    });
                 }
             });
+//    connect(this, &MainWindow::openFileFromCmd,
+//            [=](const QString &filePath)
+//            {
+//                if (!filePath.isEmpty())
+//                {
+//                    mpv->LoadFile(filePath);
+//                }
+//            });
 
     connect(this, &MainWindow::onTopChanged,
             [=](QString onTop)

@@ -38,11 +38,10 @@
 **
 ****************************************************************************/
 
-
 #include "qtsingleapplication.h"
 #include "qtlocalpeer.h"
 #include <QWidget>
-
+#include <QTimer>
 
 /*!
     \class QtSingleApplication qtsingleapplication.h
@@ -322,14 +321,17 @@ QWidget* QtSingleApplication::activationWindow() const
 */
 void QtSingleApplication::activateWindow()
 {
-    if (actWin) {
-        if (actWin->isHidden())
-            actWin->show();
-        actWin->showMinimized();
-        actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
-        actWin->raise();
-        actWin->activateWindow();
-    }
+    QTimer::singleShot(0, [=]
+    {
+        if (actWin) {
+            if (actWin->isHidden())
+                actWin->show();
+            actWin->showMinimized();
+            actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
+            actWin->raise();
+            actWin->activateWindow();
+        }
+    });
 }
 
 

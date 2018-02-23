@@ -4,6 +4,7 @@
 #include <QString>
 #include <QFileInfo>
 #include <QMimeDatabase>
+#include <QtConcurrent>
 
 #include <locale.h>
 
@@ -207,9 +208,12 @@ int main(int argc, char *argv[])
                          {
                              instance.activateWindow();
                          }
-                         mainWindow->setPauseWhenMinimized(false);
-                         mainWindow->openFileFromCmd(filePath);
-                         mainWindow->setPauseWhenMinimized(true);
+                         QtConcurrent::run([=]
+                         {
+                             mainWindow->setPauseWhenMinimized(false);
+                             mainWindow->openFileFromCmd(filePath);
+                             mainWindow->setPauseWhenMinimized(true);
+                         });
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
