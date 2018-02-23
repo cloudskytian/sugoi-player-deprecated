@@ -192,59 +192,28 @@ int main(int argc, char *argv[])
                                  filePath = QString();
                              }
                          }
-                         if (mainWindow->getIsClosing())
+                         if (mainWindow->isHidden())
                          {
-                             QTimer::singleShot(2000, [=, &mainWindow, &instance]
-                             {
-                                 if (mainWindow->isHidden())
-                                 {
-                                     mainWindow->show();
-                                 }
-                                 if (mainWindow->windowOpacity() < 1.0)
-                                 {
-                                     mainWindow->setWindowOpacity(1.0);
-                                 }
-                                 if (instance.activationWindow() != mainWindow)
-                                 {
-                                     instance.setActivationWindow(mainWindow, true);
-                                 }
-                                 if (!mainWindow->isActiveWindow())
-                                 {
-                                     instance.activateWindow();
-                                 }
-                                 QtConcurrent::run([=]
-                                 {
-                                     mainWindow->setPauseWhenMinimized(false);
-                                     mainWindow->openFileFromCmd(filePath);
-                                     mainWindow->setPauseWhenMinimized(true);
-                                 });
-                             });
+                             mainWindow->show();
                          }
-                         else
+                         if (mainWindow->windowOpacity() < 1.0)
                          {
-                             if (mainWindow->isHidden())
-                             {
-                                 mainWindow->show();
-                             }
-                             if (mainWindow->windowOpacity() < 1.0)
-                             {
-                                 mainWindow->setWindowOpacity(1.0);
-                             }
-                             if (instance.activationWindow() != mainWindow)
-                             {
-                                 instance.setActivationWindow(mainWindow, true);
-                             }
-                             if (!mainWindow->isActiveWindow())
-                             {
-                                 instance.activateWindow();
-                             }
-                             QtConcurrent::run([=]
-                             {
-                                 mainWindow->setPauseWhenMinimized(false);
-                                 mainWindow->openFileFromCmd(filePath);
-                                 mainWindow->setPauseWhenMinimized(true);
-                             });
+                             mainWindow->setWindowOpacity(1.0);
                          }
+                         if (instance.activationWindow() != mainWindow)
+                         {
+                             instance.setActivationWindow(mainWindow, true);
+                         }
+                         if (!mainWindow->isActiveWindow())
+                         {
+                             instance.activateWindow();
+                         }
+                         QtConcurrent::run([=]
+                         {
+                             mainWindow->setPauseWhenMinimized(false);
+                             mainWindow->openFileFromCmd(filePath);
+                             mainWindow->setPauseWhenMinimized(true);
+                         });
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE

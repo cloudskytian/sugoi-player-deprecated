@@ -482,10 +482,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (quickStartMode)
     {
-        closing = true;
         QTimer::singleShot(0, [=]
         {
-            showMinimized();
             if (logo != nullptr)
             {
                 if (logo->isHidden())
@@ -507,7 +505,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
             sugoi->LoadSettings();
             mpv->Initialize();
         });
-        QTimer::singleShot(1000, [=]
+        QTimer::singleShot(5, [=]
         {
             hide();
         });
@@ -516,12 +514,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     event->accept();
     QMainWindow::closeEvent(event);
-}
-
-void MainWindow::hideEvent(QHideEvent *event)
-{
-    QMainWindow::hideEvent(event);
-    closing = false;
 }
 
 void MainWindow::showEvent(QShowEvent *event)
@@ -1775,23 +1767,10 @@ void MainWindow::connectOtherSignalsAndSlots()
             {
                 if (!filePath.isEmpty())
                 {
-                    if (closing)
+                    QtConcurrent::run([=]
                     {
-                        QTimer::singleShot(2000, [=]
-                        {
-                            QtConcurrent::run([=]
-                            {
-                                mpv->LoadFile(filePath);
-                            });
-                        });
-                    }
-                    else
-                    {
-                        QtConcurrent::run([=]
-                        {
-                            mpv->LoadFile(filePath);
-                        });
-                    }
+                        mpv->LoadFile(filePath);
+                    });
                 }
             });
 
