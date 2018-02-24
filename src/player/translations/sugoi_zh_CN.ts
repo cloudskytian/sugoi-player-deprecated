@@ -2530,7 +2530,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>creates a new instance of Sugoi Player</source>
-        <translation>打开一个新的 Sugoi Player 实例</translation>
+        <translation type="vanished">打开一个新的 Sugoi Player 实例</translation>
     </message>
     <message>
         <source>shows the open location dialog</source>
@@ -2690,6 +2690,14 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>quit Sugoi Player</source>
+        <translation type="vanished">退出 Sugoi Player</translation>
+    </message>
+    <message>
+        <source>creates a new instance of sugoi player</source>
+        <translation>打开一个新的 Sugoi Player 实例</translation>
+    </message>
+    <message>
+        <source>quit sugoi player</source>
         <translation>退出 Sugoi Player</translation>
     </message>
 </context>

@@ -18,7 +18,6 @@
 #include <QUrl>
 #include <QCursor>
 #include <QtConcurrent>
-#include <QProcess>
 
 #include "sugoiengine.h"
 #include "mpvhandler.h"
@@ -1764,17 +1763,6 @@ void MainWindow::connectOtherSignalsAndSlots()
                         const QString exePath = QCoreApplication::applicationFilePath();
                         const QString exeParam = QString::fromLatin1("--noautostart");
                         Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
-#ifdef _WIN64
-                        QString cmd = QString::fromLatin1("SugoiGuard64.exe");
-#else
-                        QString cmd = QString::fromLatin1("SugoiGuard.exe");
-#endif
-                        if (QFileInfo(cmd).exists())
-                        {
-                            QProcess process;
-                            cmd = QString::fromLatin1("TASKKILL /F /IM \"") + cmd + QString::fromLatin1("\"");
-                            process.execute(cmd);
-                        }
                     }
                 }
             });

@@ -133,7 +133,7 @@ private:
          {&SugoiEngine::SugoiNew, // function pointer to command functionality
           {
            // params     description
-           QString(), tr("creates a new instance of Sugoi Player"),
+           QString(), tr("creates a new instance of sugoi player"),
            QString()
           }
          }
@@ -430,7 +430,7 @@ private:
          {&SugoiEngine::SugoiQuit,
           {
            QString(),
-           tr("quit Sugoi Player"),
+           tr("quit sugoi player"),
            QString()
           }
          }
