@@ -500,16 +500,12 @@ bool disableAutoStart()
         settings.remove(QApplication::applicationDisplayName());
     }
 #ifdef _WIN64
-    QString fileName = QString::fromLatin1("SugoiGuard64.exe");
+    QString cmd = QString::fromLatin1("SugoiGuard64.exe");
 #else
-    QString fileName = QString::fromLatin1("SugoiGuard.exe");
+    QString cmd = QString::fromLatin1("SugoiGuard.exe");
 #endif
-    QString filePath = QApplication::applicationDirPath() + QDir::separator() + fileName;
-    if (QFileInfo(filePath).exists())
-    {
-        QString cmd = QString::fromLatin1("TASKKILL /F /IM \"") + fileName + QLatin1Char('"');
-        QProcess::execute(cmd);
-    }
+    cmd = QString::fromLatin1("TASKKILL /F /IM \"") + cmd + QLatin1Char('"');
+    QProcess::execute(cmd);
     return true;
 }
 

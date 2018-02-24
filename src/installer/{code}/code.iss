@@ -70,8 +70,12 @@ procedure kill_running_task;
 var
   ErrorCode : integer;
 begin
+#ifdef x64
+  ShellExec('open', 'taskkill.exe', '/F /IM "SugoiGuard64.exe"', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+#else
+  ShellExec('open', 'taskkill.exe', '/F /IM "SugoiGuard.exe"', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+#endif
   ShellExec('open', 'taskkill.exe', '/F /IM {#MyAppExeName}', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
-  //ShellExec('open', 'tskill.exe', ' {#MyAppName}', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
 end;
 
 //停止轮播计时器
