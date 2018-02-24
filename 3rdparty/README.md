@@ -1,8 +1,8 @@
 ﻿## 3rdparty components version
 
-- libmpv: 2.0.0 (2017-12-25-dev)
+- libmpv: 0.28.0 (2017-12-25-dev)
 
-- YouTube-dl: 2018.02.11
+- YouTube-dl: 2018.02.22
 
 - WinSparkle: 0.6.0
 
