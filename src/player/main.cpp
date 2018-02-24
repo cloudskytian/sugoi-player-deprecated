@@ -50,9 +50,16 @@ int main(int argc, char *argv[])
         {
             if (cmdline.at(i) == QString::fromLatin1("--autostart"))
             {
-                const QString exePath = QApplication::applicationFilePath();
-                const QString exeParam = QString::fromLatin1("--runinbackground");
-                if (!Util::setAutoStart(exePath, exeParam))
+#ifdef _WIN64
+                QString filePath = QString::fromLatin1("SugoiGuard64.exe");
+#else
+                QString filePath = QString::fromLatin1("SugoiGuard.exe");
+#endif
+                if (!QFileInfo(filePath).exists())
+                {
+                    return -1;
+                }
+                if (!Util::setAutoStart(filePath, QString()))
                 {
                     return -1;
                 }

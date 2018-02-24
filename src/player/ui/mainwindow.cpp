@@ -18,6 +18,7 @@
 #include <QUrl>
 #include <QCursor>
 #include <QtConcurrent>
+#include <QProcess>
 
 #include "sugoiengine.h"
 #include "mpvhandler.h"
@@ -472,6 +473,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
     if (!canClose)
     {
+        playInBackground = true;
         hide();
         if (sugoi->sysTrayIcon->isVisible())
         {
@@ -479,6 +481,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
         event->ignore();
         return;
+    }
+    else
+    {
+        playInBackground = false;
     }
     if (quickStartMode)
     {
@@ -1168,8 +1174,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                     {
                         if(ui->action_This_File->isChecked()) // repeat this file
                         {
-                            if ((quickStartMode && isVisible() && windowState() != Qt::WindowMinimized)
-                                    || (!quickStartMode))
+                            if (isVisible() || playInBackground)
                             {
                                 ui->playlistWidget->PlayIndex(0, true); // restart file
                             }
@@ -1181,8 +1186,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                                 ui->action_Playlist->isChecked() && // we're supposed to restart the playlist
                                 ui->playlistWidget->count() > 0) // playlist isn't empty
                             {
-                                if ((quickStartMode && isVisible() && windowState() != Qt::WindowMinimized)
-                                        || (!quickStartMode))
+                                if (isVisible() || playInBackground)
                                 {
                                     ui->playlistWidget->PlayIndex(0); // restart playlist
                                 }
@@ -1201,8 +1205,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                         }
                         else
                         {
-                            if ((quickStartMode && isVisible() && windowState() != Qt::WindowMinimized)
-                                    || (!quickStartMode))
+                            if (isVisible() || playInBackground)
                             {
                                 ui->playlistWidget->PlayIndex(1, true);
                             }
@@ -1761,6 +1764,17 @@ void MainWindow::connectOtherSignalsAndSlots()
                         const QString exePath = QCoreApplication::applicationFilePath();
                         const QString exeParam = QString::fromLatin1("--noautostart");
                         Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
+#ifdef _WIN64
+                        QString cmd = QString::fromLatin1("SugoiGuard64.exe");
+#else
+                        QString cmd = QString::fromLatin1("SugoiGuard.exe");
+#endif
+                        if (QFileInfo(cmd).exists())
+                        {
+                            QProcess process;
+                            cmd = QString::fromLatin1("TASKKILL /F /IM \"") + cmd + QString::fromLatin1("\" /T");
+                            process.execute(cmd);
+                        }
                     }
                 }
             });

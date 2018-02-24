@@ -288,13 +288,13 @@ Name: "{commonstartmenu}\{#MyAppName}";          Filename: "{app}\{#MyAppExeName
 
 [Run]
 #ifdef x64
-Filename: "{app}\vcredist_x64.exe";                             Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated
-Filename: "{app}\vc_redist.x64.exe";                            Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated
-Filename: "{app}\{#MyAppExeName}"; Parameters: "--autostart";   Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\vcredist_x64.exe";  Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\vc_redist.x64.exe"; Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\{#MyAppExeName}";   Parameters: "--autostart";                Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
 #else
-Filename: "{app}\vcredist_x86.exe";                             Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated
-Filename: "{app}\vc_redist.x86.exe";                            Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated
-Filename: "{app}\{#MyAppExeName}"; Parameters: "--autostart";   Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\vcredist_x86.exe";  Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\vc_redist.x86.exe"; Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\{#MyAppExeName}";   Parameters: "--autostart";                Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
 #endif
 
 [UninstallRun]

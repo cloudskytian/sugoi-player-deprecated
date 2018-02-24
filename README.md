@@ -58,7 +58,7 @@ People should know that Sugoi Player is a fork of [**Baka MPlayer**](https://git
 
 Sugoi Player is just an improved edition of Baka MPlayer. It does not compete with any other media players, including Baka MPlayer. It just offers an aditional option to choose from. Just choose what you like.
 
-Baka MPlayer is a great media player. It is beautiful and powerful. I really like it. However, it can still be improved. Because it cannot meet everyone's needs. No media player can meet everyone's needs. And I want to improve it. So there is Sugoi Player. There are no accurate goals of Sugoi Player, I just improve it to meet my personal needs. I still have many great ideas about it, but sadly, due to the limitation of my technique, I cannot achieve them all. I really need some help. Pull requests are welcome. I also need some translators to help me add more translations. Anyway, any contribution will be greatly appreciated.
+Baka MPlayer is a great media player. It is beautiful and powerful. I really like it. However, it can still be improved. Because it cannot meet everyone's needs. No media player can meet everyone's needs. And I want to improve it. So there is Sugoi Player. There are no accurate goals of Sugoi Player, I just improve it to meet my personal needs. I still have many great ideas about it, but sadly, due to the limitation of my technique, I cannot achieve them all. I really need some help. Pull requests are welcome. I also need some translators to help me add more translations. Any suggestions are welcome as well. Anyway, any contribution will be greatly appreciated.
 
 There are many mpv front-ends in the world, some of them are truly great, I hope you can find the one you really like.
 

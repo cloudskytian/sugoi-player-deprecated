@@ -137,6 +137,7 @@ private:
     bool autoUpdateStreamingSupport = true;
     QString skinFile;
     bool firstShow = true;
+    bool playInBackground = false;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
