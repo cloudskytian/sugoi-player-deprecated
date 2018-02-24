@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QtConcurrent>
+#include <QDir>
 
 #include <locale.h>
 
@@ -55,11 +56,12 @@ int main(int argc, char *argv[])
 #else
                 QString filePath = QString::fromLatin1("SugoiGuard.exe");
 #endif
+                filePath = QApplication::applicationDirPath() + QDir::separator() + filePath;
                 if (!QFileInfo(filePath).exists())
                 {
                     return -1;
                 }
-                if (!Util::setAutoStart(filePath, QString()))
+                if (!Util::setAutoStart(QDir::toNativeSeparators(filePath), QString()))
                 {
                     return -1;
                 }

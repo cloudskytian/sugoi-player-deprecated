@@ -5,6 +5,7 @@
 #include <QProcess>
 #include <QFileInfo>
 #include <QThread>
+#include <QDir>
 #include <QDebug>
 
 static bool run = false;
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
 #else
     QString filePath = QString::fromLatin1("Sugoi.exe");
 #endif
+    filePath = QCoreApplication::applicationDirPath() + QDir::separator() + filePath;
     if (!QFileInfo(filePath).exists())
     {
         qDebug() << QString::fromLatin1("Main executable not found.");
@@ -27,7 +29,7 @@ int main(int argc, char *argv[])
     run = true;
     while (run)
     {
-        process.start(filePath);
+        process.start(QDir::toNativeSeparators(filePath));
         if (!process.waitForFinished())
         {
             run = false;
