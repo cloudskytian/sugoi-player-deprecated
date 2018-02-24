@@ -1772,7 +1772,7 @@ void MainWindow::connectOtherSignalsAndSlots()
                         if (QFileInfo(cmd).exists())
                         {
                             QProcess process;
-                            cmd = QString::fromLatin1("TASKKILL /F /IM \"") + cmd + QString::fromLatin1("\" /T");
+                            cmd = QString::fromLatin1("TASKKILL /F /IM \"") + cmd + QString::fromLatin1("\"");
                             process.execute(cmd);
                         }
                     }

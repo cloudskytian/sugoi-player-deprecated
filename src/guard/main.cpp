@@ -8,9 +8,6 @@
 #include <QDir>
 #include <QDebug>
 
-static bool run = false;
-static QProcess process;
-
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -25,17 +22,11 @@ int main(int argc, char *argv[])
         qDebug() << QString::fromLatin1("Main executable not found.");
         return -1;
     }
-    filePath += QString::fromLatin1(" --runinbackground");
-    run = true;
-    while (run)
+    QProcess process;
+    while (true)
     {
-        process.start(QDir::toNativeSeparators(filePath));
-        if (!process.waitForFinished())
-        {
-            run = false;
-            qDebug() << QString::fromLatin1("Process error occurred.");
-            return -1;
-        }
+        process.start(QDir::toNativeSeparators(filePath), QStringList() << QString::fromLatin1("--runinbackground"));
+        process.waitForFinished();
         QThread::msleep(2000);
     }
     return a.exec();
