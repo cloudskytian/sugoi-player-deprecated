@@ -20,9 +20,7 @@
 
 int main(int argc, char *argv[])
 {
-#ifndef _DEBUG
     qInstallMessageHandler(Util::messagesOutputToFile);
-#endif
 
 #if defined(Q_OS_WIN)
     FreeConsole();
@@ -176,6 +174,7 @@ int main(int argc, char *argv[])
     {
         mainWindow = new MainWindow(nullptr, true);
         mainWindow->setWindowOpacity(0.0);
+        mainWindow->setAutoStartFirstRun(true);
         mainWindow->hide();
     }
 

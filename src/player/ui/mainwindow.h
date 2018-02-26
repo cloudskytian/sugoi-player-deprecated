@@ -89,6 +89,7 @@ protected:
     void changeEvent(QEvent *event);
     void closeEvent(QCloseEvent *event);
     void showEvent(QShowEvent *event);
+    void hideEvent(QHideEvent *event);
     void SetIndexLabels(bool enable);
     void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
     void TogglePlaylist();                          // toggles playlist visibility
@@ -138,6 +139,7 @@ private:
     QString skinFile;
     bool firstShow = true;
     bool playInBackground = false;
+    bool autoStartFirstRun = false;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
@@ -196,6 +198,7 @@ public slots:
     void setAutoUpdatePlayer(bool b)  { emit autoUpdatePlayerChanged(autoUpdatePlayer = b); }
     void setAutoUpdateStreamingSupport(bool b) { emit autoUpdateStreamingSupportChanged(autoUpdateStreamingSupport = b); }
     void setSkinFile(const QString &s)  { emit skinFileChanged(skinFile = s); }
+    void setAutoStartFirstRun(bool b)   { autoStartFirstRun = b; }
 
 signals:
     void langChanged(QString);

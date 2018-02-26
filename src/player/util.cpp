@@ -16,6 +16,9 @@
 
 #include <Windows.h>
 
+#include <stdio.h>
+#include <stdlib.h>
+
 namespace Util {
 
 bool IsValidUrl(QString url)
@@ -446,12 +449,15 @@ void messagesOutputToFile(QtMsgType type, const QMessageLogContext &context, con
     QFile file(LogFileLocation());
     file.open(QFile::WriteOnly | QFile::Append | QFile::Text);
     QTextStream ts(&file);
-    ts.setCodec("UTF-8");
     ts << messageStr << "\r\n";
     file.flush();
     file.close();
 
     mutex.unlock();
+
+#ifdef _DEBUG
+    fprintf_s(stderr, "%s\r\n", messageStr.toUtf8().constData());
+#endif
 }
 
 bool setAutoStart(const QString &path, const QString &param)
