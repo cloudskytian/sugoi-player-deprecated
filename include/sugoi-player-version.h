@@ -41,7 +41,7 @@
 #define SUGOI_COMMENTS_STR         _T("Multimedia player for Windows 7+ based on libmpv and Qt.")
 #define SUGOI_COPYRIGHT_STR        _T("GPLv3")
 
-#define LIBMPV_VERSION_STR         _T("0.28.0 (2017-12-25-dev)")
+#define LIBMPV_VERSION_STR         _T("1.26 (mpv 0.28.0)")
 
 #if defined(_WIN64) || defined(x64)
 #define SUGOI_APP_ID_STR    SUGOI_APP_ID_64_STR

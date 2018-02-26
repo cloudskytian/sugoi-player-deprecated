@@ -54,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     mpv = sugoi->mpv;
 
     ui->playlistWidget->AttachEngine(sugoi);
+    ui->playbackLayoutWidget->installEventFilter(this);
     ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
     ui->mpvFrame->setMouseTracking(true);
     if (autohide != nullptr)
@@ -320,7 +321,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         {
             setRemaining(!remaining); // todo: use a sugoicommand
         }
-        else if (ui->mpvFrame->geometry().contains(event->pos())) // mouse is in the mpvFrame
+        else if (ui->mpvFrame->geometry().contains(event->pos())
+                 && !ui->playbackLayoutWidget->geometry().contains(event->pos())) // mouse is in the mpvFrame
         {
             mpv->PlayPause(ui->playlistWidget->CurrentItem());
         }
@@ -338,18 +340,31 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
         QRect playbackRect = geometry();
         playbackRect.setTop(playbackRect.bottom() - 60);
         bool showPlayback = playbackRect.contains(event->globalPos());
-        ui->playbackLayoutWidget->setVisible(showPlayback || ui->outputTextEdit->isVisible());
-        ui->seekBar->setVisible(showPlayback || ui->outputTextEdit->isVisible());
+        bool showBottomControlPanel = showPlayback || ui->outputTextEdit->isVisible();
+
+        if (showBottomControlPanel)
+        {
+            if (fullscreenProgressIndicator)
+            {
+                fullscreenProgressIndicator->hide();
+            }
+            ui->playbackLayoutWidget->show();
+            ui->seekBar->show();
+        }
+        else
+        {
+            ui->seekBar->hide();
+            ui->playbackLayoutWidget->hide();
+            if (fullscreenProgressIndicator)
+            {
+                fullscreenProgressIndicator->show();
+            }
+        }
 
         QRect playlistRect = geometry();
         playlistRect.setLeft(playlistRect.right() - qCeil(playlistRect.width()/7.0));
         bool showPlaylist = playlistRect.contains(event->globalPos());
         ShowPlaylist(showPlaylist);
-
-        if (fullscreenProgressIndicator)
-        {
-            fullscreenProgressIndicator->setVisible(!ui->playbackLayoutWidget->isVisible());
-        }
 
         if(!(showPlayback || showPlaylist) && autohide)
             autohide->start(500);
@@ -359,15 +374,18 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if(obj == ui->mpvFrame && isFullScreenMode() && event->type() == QEvent::MouseMove)
+    if((obj == ui->mpvFrame || obj == ui->playbackLayoutWidget)
+            && isFullScreenMode() && event->type() == QEvent::MouseMove)
     {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         mouseMoveEvent(mouseEvent);
+        return true;
     }
     else if(event->type() == QEvent::KeyPress)
     {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         keyPressEvent(keyEvent);
+        return true;
     }
     return false;
 }
@@ -558,7 +576,8 @@ void MainWindow::showEvent(QShowEvent *event)
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton && ui->mpvFrame->geometry().contains(event->pos())) // if mouse is in the mpvFrame
+    if(event->button() == Qt::LeftButton && ui->mpvFrame->geometry().contains(event->pos())
+            && !ui->playbackLayoutWidget->geometry().contains(event->pos())) // if mouse is in the mpvFrame
     {
         if(!isFullScreen() && ui->action_Full_Screen->isEnabled()) // don't allow people to go full screen if they shouldn't be able to
             FullScreen(true);

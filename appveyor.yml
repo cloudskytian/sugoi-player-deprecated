@@ -43,9 +43,9 @@ build_script:
   - qmake "sugoi-player.pro" -spec win32-msvc "CONFIG+=release"
   - jom qmake_all
   - jom && jom install
-  - 7z a -tzip Sugoi_x64_Portable.zip .\bin64\Release\*
-  - SET "PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%"
-  - ISCC /Dx64 /DCI /O"%APPVEYOR_BUILD_FOLDER%" /F"Sugoi_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\installer.iss"
+  #- 7z a -tzip Sugoi_x64_Portable.zip .\bin64\Release\*
+  #- SET "PATH=C:\Program Files (x86)\Inno Setup 5;%PATH%"
+  #- ISCC /Dx64 /DCI /O"%APPVEYOR_BUILD_FOLDER%" /F"Sugoi_x64_Setup" "%APPVEYOR_BUILD_FOLDER%\src\installer\installer.iss"
   - jom distclean
   - IF EXIST bin64 RD /S /Q bin64
 
@@ -56,22 +56,28 @@ on_failure:
 test: off
 
 artifacts:
-  - path: Sugoi_x64_Portable.zip
-  - path: Sugoi_x64_Setup.exe
+  - path: ci_version.h
+  - path: version.pri
 
-deploy:
-  release: Sugoi Player V$(appveyor_build_version)
-  description: 'New release.'
-  provider: GitHub
-  auth_token:
-    secure: mt/+eFXl/beOPLHdhWm9XmBeb9RCCDPUU19omxC4ra66Aj9EwwHPzi9CUvGJMn3i
-  artifact: Sugoi_x64_Portable.zip, Sugoi_x64_Setup.exe
-  draft: true
-  prerelease: false
-  force_update: true
-  on:
-    branch: master
-    appveyor_repo_tag: true
+#artifacts:
+  #- path: Sugoi_x64_Portable.zip
+  #- path: Sugoi_x64_Setup.exe
+
+deploy: off
+
+#deploy:
+  #release: Sugoi Player V$(appveyor_build_version)
+  #description: 'New release.'
+  #provider: GitHub
+  #auth_token:
+    #secure: mt/+eFXl/beOPLHdhWm9XmBeb9RCCDPUU19omxC4ra66Aj9EwwHPzi9CUvGJMn3i
+  #artifact: Sugoi_x64_Portable.zip, Sugoi_x64_Setup.exe
+  #draft: true
+  #prerelease: false
+  #force_update: true
+  #on:
+    #branch: master
+    #appveyor_repo_tag: true
 
 notifications:
   - provider: Email
