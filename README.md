@@ -93,7 +93,7 @@ There are many mpv front-ends in the world, some of them are truly great, I hope
 
 ## System requirements
 
-- Microsoft Windows 7 or later, 64 bit OS is highly recommended.
+- Microsoft Windows 7 or later (64 bit os is highly recommended).
 
 - A somewhat capable CPU. Hardware decoding might help if the CPU is too slow to
   decode video in realtime, but must be explicitly enabled with the `--hwdec`
