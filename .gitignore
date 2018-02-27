@@ -305,3 +305,6 @@ Thumbs.db
 
 # User specific build script
 build.user.bat
+
+# CI auto generated header file
+ci_version.h

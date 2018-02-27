@@ -1,8 +1,6 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 SUBDIRS += \
-    src/iconlib \
-    src/guard \
-    src/player
-
-player.depends = iconlib guard
+    src/iconlib/iconlib.pro \
+    src/sugoi/guard.pro \
+    src/sugoi/player.pro

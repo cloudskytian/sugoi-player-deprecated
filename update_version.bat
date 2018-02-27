@@ -15,5 +15,3 @@ ECHO #define SUGOI_COMMIT_TIMESTAMP_STR _T("%APPVEYOR_REPO_COMMIT_TIMESTAMP%")>>
 ECHO #define SUGOI_COMMIT_MESSAGE_STR _T("%APPVEYOR_REPO_COMMIT_MESSAGE%")>>ci_version.h
 ECHO #endif>>ci_version.h
 ECHO #endif>>ci_version.h
-IF EXIST version.pri DEL /F version.pri
-ECHO VERSION=%APPVEYOR_BUILD_VERSION% >version.pri

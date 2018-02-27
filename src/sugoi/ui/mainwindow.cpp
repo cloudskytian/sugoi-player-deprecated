@@ -18,6 +18,7 @@
 #include <QUrl>
 #include <QCursor>
 #include <QtConcurrent>
+#include <QApplication>
 
 #include "sugoiengine.h"
 #include "mpvhandler.h"
@@ -1707,7 +1708,11 @@ void MainWindow::connectOtherSignalsAndSlots()
                         sugoi->translator = nullptr;
                     }
                     sugoi->translator = new QTranslator(qApp);
+#ifdef _STATIC_BUILD
+                    QString langPath = QApplication::applicationDirPath() + QDir::separator() + QString::fromLatin1("translations");
+#else
                     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#endif
                     if (sugoi->translator->load(QString("sugoi_%0").arg(l), langPath))
                     {
                         if (qApp->installTranslator(sugoi->translator))

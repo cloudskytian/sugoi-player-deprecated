@@ -1,4 +1,8 @@
-﻿#include "ui/mainwindow.h"
+﻿#ifdef _STATIC_BUILD
+#include "sugoilib.h"
+#endif
+
+#include "ui/mainwindow.h"
 
 #include <QApplication>
 #include <QString>
@@ -18,7 +22,11 @@
 #include "util.h"
 #include "fileassoc.h"
 
+#ifdef _STATIC_BUILD
+int sugoiAppMain(int argc, char *argv[])
+#else
 int main(int argc, char *argv[])
+#endif
 {
     qInstallMessageHandler(Util::messagesOutputToFile);
 

@@ -43,11 +43,6 @@ build_script:
   - qmake "sugoi-player.pro" -spec win32-msvc "CONFIG+=release"
   - jom qmake_all
   - jom && jom install
-  - IF EXIST artifacts RD /S /Q artifacts
-  - MD artifacts
-  - COPY /Y ci_version.h .\artifacts\ci_version.h
-  - COPY /Y version.pri .\artifacts\version.pri
-  - 7z a -tzip artifacts.zip .\artifacts\*
   - jom distclean
   - IF EXIST bin64 RD /S /Q bin64
 
@@ -58,7 +53,7 @@ on_failure:
 test: off
 
 artifacts:
-  - path: artifacts.zip
+  - path: ci_version.h
 
 deploy: off
 

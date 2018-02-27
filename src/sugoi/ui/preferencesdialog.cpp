@@ -16,6 +16,7 @@
 #include <QFileInfoList>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDir>
 
 PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     QDialog(parent),
@@ -307,7 +308,11 @@ void PreferencesDialog::PopulateSkinFiles()
 void PreferencesDialog::PopulateLangs()
 {
     // open the language directory
+#ifdef _STATIC_BUILD
+    QString langPath = QApplication::applicationDirPath() + QDir::separator() + QString::fromLatin1("translations");
+#else
     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#endif
     QDir root(langPath);
     // get files in the directory with .qm extension
     QFileInfoList flist;

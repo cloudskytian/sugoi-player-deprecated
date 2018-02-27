@@ -1,10 +1,14 @@
-QT -= gui
+QT += core gui widgets svg winextras network concurrent
 
-CONFIG += qt c++11 console
+TEMPLATE = lib
+
 CONFIG -= app_bundle
+CONFIG += qt dll c++11
+
+DEFINES += _STATIC_BUILD
 
 # The following define makes your compiler emit warnings if you use
-# any feature of Qt which as been marked deprecated (the exact warnings
+# any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -14,36 +18,35 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += main.cpp
+RC_FILE += player.rc
 
 exists($$PWD/../../ci_version.h) {
     DEFINES += CI
 }
 
 contains(QT_ARCH, x86_64) {
+    LIBS += -L$$PWD/../../lib64 -llibmpv -lWinSparkle
     CONFIG(debug, debug|release) {
-        DESTDIR = $$PWD/../../bin64/Debug
-        TARGET = SugoiGuard64d
+        DLLDESTDIR = $$PWD/../../bin64/Debug
+        TARGET = Sugoi64d
     } else {
-        DESTDIR = $$PWD/../../bin64/Release
-        TARGET = SugoiGuard64
+        DLLDESTDIR = $$PWD/../../bin64/Release
+        TARGET = Sugoi64
     }
 } else {
+    LIBS += -L$$PWD/../../lib -llibmpv -lWinSparkle
     CONFIG(debug, debug|release) {
-        DESTDIR = $$PWD/../../bin/Debug
-        TARGET = SugoiGuardd
+        DLLDESTDIR = $$PWD/../../bin/Debug
+        TARGET = Sugoid
     } else {
-        DESTDIR = $$PWD/../../bin/Release
-        TARGET = SugoiGuard
+        DLLDESTDIR = $$PWD/../../bin/Release
+        TARGET = Sugoi
     }
 }
 
-include($$PWD/../../version.pri)
+LIBS += -lUser32 -lShell32 -lKernel32
 
-QMAKE_TARGET_COMPANY = wangwenx190
-QMAKE_TARGET_DESCRIPTION = Sugoi Player Guard
-QMAKE_TARGET_COPYRIGHT = GPLv3
-QMAKE_TARGET_PRODUCT = Sugoi Player Guard
-RC_ICONS = ../player/resources/player.ico
+HEADERS += sugoilib_global.h sugoilib.h
+SOURCES += guardmain.cpp
 
-QMAKE_POST_LINK += $$quote(windeployqt \"$${DESTDIR}\\$${TARGET}.exe\"$$escape_expand(\\n\\t))
+include(src.pri)

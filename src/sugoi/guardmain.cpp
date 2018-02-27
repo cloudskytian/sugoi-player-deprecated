@@ -1,5 +1,11 @@
-﻿//Hide the console window
+﻿#ifdef _STATIC_BUILD
+#include "sugoilib.h"
+#endif
+
+//Hide the console window
+#ifndef _STATIC_BUILD
 #pragma comment(linker, "/SUBSYSTEM:WINDOWS /ENTRY:\"mainCRTStartup\"")
+#endif
 
 #include <QCoreApplication>
 #include <QProcess>
@@ -8,7 +14,11 @@
 #include <QDir>
 #include <QDebug>
 
+#ifdef _STATIC_BUILD
+int sugoiGuardMain(int argc, char *argv[])
+#else
 int main(int argc, char *argv[])
+#endif
 {
     QCoreApplication a(argc, argv);
 #ifdef _WIN64
