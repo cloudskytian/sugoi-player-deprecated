@@ -568,7 +568,7 @@ void MainWindow::showEvent(QShowEvent *event)
 #endif
     if (firstShow)
     {
-        win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/src/player/appcast.xml");
+        win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/src/sugoi/appcast.xml");
         win_sparkle_set_lang(lang.toUtf8().constData());
         win_sparkle_init();
     }
