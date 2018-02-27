@@ -1,4 +1,4 @@
-![logo](/src/player/resources/player.svg)
+![logo](/src/sugoi/resources/player.svg)
 
 ## Sugoi Player
 
