@@ -8,11 +8,11 @@ int main(int argc, char *argv[])
 #if defined(_WIN64) && defined(_DEBUG)
     HINSTANCE hDll = LoadLibrary(TEXT("Sugoi64d.dll"));
 #elif defined(_WIN64) && !defined(_DEBUG)
-    HINSTANCE hDll = LoadLibrary(_T("Sugoi64.dll"));
+    HINSTANCE hDll = LoadLibrary(TEXT("Sugoi64.dll"));
 #elif !defined(_WIN64) && defined(_DEBUG)
-    HINSTANCE hDll = LoadLibrary(_T("Sugoid.dll"));
+    HINSTANCE hDll = LoadLibrary(TEXT("Sugoid.dll"));
 #elif !defined(_WIN64) && !defined(_DEBUG)
-    HINSTANCE hDll = LoadLibrary(_T("Sugoi.dll"));
+    HINSTANCE hDll = LoadLibrary(TEXT("Sugoi.dll"));
 #endif
     int ret = -1;
     if (hDll != nullptr)

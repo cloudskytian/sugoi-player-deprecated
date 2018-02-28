@@ -311,6 +311,15 @@ Filename: "{app}\{#MyAppExeName}"; Parameters: "--noautostart"; Flags: 32bit ski
 Type: files;          Name: "{app}\*.md"
 Type: filesandordirs; Name: "{app}\script-settings"
 Type: filesandordirs; Name: "{app}\scripts"
+#ifdef static
+Type: files;          Name: "{app}\*.dll"
+Type: filesandordirs; Name: "{app}\plugins"
+Type: filesandordirs; Name: "{app}\bearer"
+Type: filesandordirs; Name: "{app}\iconengines"
+Type: filesandordirs; Name: "{app}\imageformats"
+Type: filesandordirs; Name: "{app}\platforms"
+Type: filesandordirs; Name: "{app}\styles"
+#endif
 
 #ifndef PortableBuild
 [UninstallDelete]

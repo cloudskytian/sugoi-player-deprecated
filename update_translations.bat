@@ -7,7 +7,7 @@ IF NOT EXIST build.user.bat (
 CALL build.user.bat
 CALL "%_QT_DIR%\bin\qtenv2.bat"
 CALL "%_VC_BUILD_DIR%\vcvars64.bat"
-CD /D "%~dp0src\player"
+CD /D "%~dp0src\sugoi"
 lupdate player.pro
 lrelease player.pro
 PAUSE

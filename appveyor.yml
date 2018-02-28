@@ -43,8 +43,6 @@ build_script:
   - qmake "sugoi-player.pro" -spec win32-msvc "CONFIG+=release"
   - jom qmake_all
   - jom && jom install
-  - jom distclean
-  - IF EXIST bin64 RD /S /Q bin64
 
 on_failure:
   - jom distclean

@@ -31,16 +31,6 @@ contains(QT_ARCH, x86_64) {
 
 LIBS += -lKernel32 -lUser32
 
-#QMAKE_CFLAGS_RELEASE += /MT
-#QMAKE_CXXFLAGS_RELEASE += /MT
-#QMAKE_CFLAGS_DEBUG += /MTd
-#QMAKE_CXXFLAGS_DEBUG += /MTd
-#CONFIG(debug,debug|release) {
-#    QMAKE_LFLAGS += /NODEFAULTLIB:\"LIBCMTD.lib\"
-#} else {
-#    QMAKE_LFLAGS += /NODEFAULTLIB:\"LIBCMT.lib\"
-#}
-
 include(deploy.pri)
 
 QMAKE_POST_LINK += $$quote(copy /y \"$$[QT_INSTALL_BINS]\\d3dcompiler_47.dll\" \"$${DESTDIR}\\d3dcompiler_47.dll\"$$escape_expand(\\n\\t))
