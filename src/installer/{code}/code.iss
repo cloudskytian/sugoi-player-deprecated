@@ -70,7 +70,7 @@ procedure kill_running_task;
 var
   ErrorCode : integer;
 begin
-#ifdef x64
+#ifdef _WIN64
   ShellExec('open', 'taskkill.exe', '/F /IM "SugoiGuard64.exe"', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
 #else
   ShellExec('open', 'taskkill.exe', '/F /IM "SugoiGuard.exe"', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
@@ -326,7 +326,7 @@ end;
 //这个函数的作用是判断是否已经安装了将要安装的产品，若已经安装，则返回TRUE，否则返回FALSE
 function is_installed_before() : boolean;
 begin
-#ifndef x64
+#ifndef _WIN64
   if is_platform_windows_7 then
   begin
     if IsWin64 then

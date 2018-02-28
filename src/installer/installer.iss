@@ -9,7 +9,7 @@
 #include "..\..\include\sugoi-player-version.h"
 
 ;指定是否为64位安装程序
-;#define x64
+;#define _WIN64
 
 ;指定是否只能在 Windows 7 SP1 及更新版本的操作系统上安装
 #define Windows7AndNewer
@@ -45,7 +45,7 @@
 #define MyAppLicenseURL   str(SUGOI_LICENSE_URL_STR)
 #define MyAppCopyright    str(SUGOI_COPYRIGHT_STR)
 #define MyAppName         str(SUGOI_APP_NAME_STR)
-#ifdef x64
+#ifdef _WIN64
   #define MyAppBinDir     "..\..\bin64\Release"
   #define MyAppID         str(SUGOI_APP_ID_64_STR)
   #define MyAppExeName    "Sugoi64.exe"
@@ -87,7 +87,7 @@ VersionInfoProductVersion       = {#MyAppVersion}
 VersionInfoProductTextVersion   = {#MyAppVersion}
 VersionInfoTextVersion          = {#MyAppVersion}
 VersionInfoVersion              = {#MyAppVersion}
-SetupIconFile                   = "..\player\resources\player.ico"
+SetupIconFile                   = "..\sugoi\resources\player.ico"
 Compression                     = lzma2/ultra64
 InternalCompressLevel           = ultra64
 SolidCompression                = yes
@@ -103,7 +103,7 @@ SetupMutex                      = {{#MyAppID}Setup,Global\{{#MyAppID}Setup
 LanguageDetectionMethod         = uilanguage
 ShowLanguageDialog              = no
 AllowCancelDuringInstall        = no
-#ifdef x64
+#ifdef _WIN64
 OutputDir                       = "..\..\bin64\Installer"
 ArchitecturesAllowed            = x64
 ArchitecturesInstallIn64BitMode = x64
@@ -129,7 +129,7 @@ PrivilegesRequired              = lowest
 #else
 Uninstallable                   = yes
 PrivilegesRequired              = admin
-#ifdef x64
+#ifdef _WIN64
 UninstallDisplayName            = {#MyAppName} (64-bit)
 #else
 UninstallDisplayName            = {#MyAppName}
@@ -278,7 +278,7 @@ Name: "{app}\Uninstaller"; Attribs: hidden system
 #endif
 
 [Icons]
-#ifdef x64
+#ifdef _WIN64
 Name: "{commondesktop}\{#MyAppName} (64-bit)";   Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
 Name: "{commonstartmenu}\{#MyAppName} (64-bit)"; Filename: "{app}\{#MyAppExeName}"; WorkingDir: "{app}"
 #else
@@ -287,7 +287,7 @@ Name: "{commonstartmenu}\{#MyAppName}";          Filename: "{app}\{#MyAppExeName
 #endif
 
 [Run]
-#ifdef x64
+#ifdef _WIN64
 Filename: "{app}\vcredist_x64.exe";  Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
 Filename: "{app}\vc_redist.x64.exe"; Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
 Filename: "{app}\{#MyAppExeName}";   Parameters: "--autostart";                Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
@@ -299,7 +299,7 @@ Filename: "{app}\{#MyAppExeName}";   Parameters: "--autostart";                F
 
 [UninstallRun]
 ;卸载时运行反注册程序
-#ifdef x64
+#ifdef _WIN64
 Filename: "{app}\{#MyAppExeName}"; Parameters: "--unregall";    Flags: 64bit skipifdoesntexist waituntilterminated runhidden
 Filename: "{app}\{#MyAppExeName}"; Parameters: "--noautostart"; Flags: 64bit skipifdoesntexist waituntilterminated runhidden
 #else
@@ -311,7 +311,7 @@ Filename: "{app}\{#MyAppExeName}"; Parameters: "--noautostart"; Flags: 32bit ski
 Type: files;          Name: "{app}\*.md"
 Type: filesandordirs; Name: "{app}\script-settings"
 Type: filesandordirs; Name: "{app}\scripts"
-#ifdef static
+#ifdef _STATIC
 Type: files;          Name: "{app}\*.dll"
 Type: filesandordirs; Name: "{app}\plugins"
 Type: filesandordirs; Name: "{app}\bearer"

@@ -43,7 +43,7 @@
 
 #define LIBMPV_VERSION_STR         _T("1.26 (mpv 0.28.0)")
 
-#if defined(_WIN64) || defined(x64)
+#ifdef _WIN64
 #define SUGOI_APP_ID_STR    SUGOI_APP_ID_64_STR
 #define SUGOI_APP_MUTEX_STR SUGOI_APP_MUTEX_64_STR
 #else
