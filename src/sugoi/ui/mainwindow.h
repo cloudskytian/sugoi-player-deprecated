@@ -14,6 +14,7 @@
 #include <QAction>
 #include <QRect>
 #include <QMenu>
+#include <QSystemTrayIcon>
 
 #if defined(Q_OS_WIN)
 #include <QWinThumbnailToolBar>
@@ -26,13 +27,12 @@
 #include "widgets/logowidget.h"
 #include "fileassoc.h"
 #include "widgets/progressindicatorbar.h"
+#include "sugoiengine.h"
+#include "mpvhandler.h"
 
 namespace Ui {
 class MainWindow;
 }
-
-class SugoiEngine;
-class MpvHandler;
 
 class MainWindow : public QMainWindow
 {
@@ -67,6 +67,7 @@ public:
     bool getAutoUpdatePlayer()   { return autoUpdatePlayer; }
     bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
     QString getSkinFile()        { return skinFile; }
+    QSystemTrayIcon *getSystemTrayIcon() { return sugoi->sysTrayIcon == nullptr ? nullptr : sugoi->sysTrayIcon; }
 
     Ui::MainWindow *ui = nullptr;
     QImage albumArt;
@@ -89,7 +90,6 @@ protected:
     void changeEvent(QEvent *event);
     void closeEvent(QCloseEvent *event);
     void showEvent(QShowEvent *event);
-    void hideEvent(QHideEvent *event);
     void SetIndexLabels(bool enable);
     void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
     void TogglePlaylist();                          // toggles playlist visibility
@@ -139,7 +139,6 @@ private:
     QString skinFile;
     bool firstShow = true;
     bool playInBackground = false;
-    bool autoStartFirstRun = false;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
@@ -198,7 +197,6 @@ public slots:
     void setAutoUpdatePlayer(bool b)  { emit autoUpdatePlayerChanged(autoUpdatePlayer = b); }
     void setAutoUpdateStreamingSupport(bool b) { emit autoUpdateStreamingSupportChanged(autoUpdateStreamingSupport = b); }
     void setSkinFile(const QString &s)  { emit skinFileChanged(skinFile = s); }
-    void setAutoStartFirstRun(bool b)   { autoStartFirstRun = b; }
 
 signals:
     void langChanged(QString);

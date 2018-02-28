@@ -182,8 +182,11 @@ int main(int argc, char *argv[])
     {
         mainWindow = new MainWindow(nullptr, true);
         mainWindow->setWindowOpacity(0.0);
-        mainWindow->setAutoStartFirstRun(true);
         mainWindow->hide();
+        if (mainWindow->getSystemTrayIcon() != nullptr)
+        {
+            mainWindow->getSystemTrayIcon()->hide();
+        }
     }
 
     QObject::connect(&instance, &QtSingleApplication::messageReceived,

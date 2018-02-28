@@ -20,8 +20,6 @@
 #include <QtConcurrent>
 #include <QApplication>
 
-#include "sugoiengine.h"
-#include "mpvhandler.h"
 #include "overlayhandler.h"
 #include "util.h"
 #include "widgets/dimdialog.h"
@@ -271,7 +269,7 @@ void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
 
 void MainWindow::BringWindowToFront()
 {
-    if (isHidden())
+    if (this->isHidden())
     {
         show();
     }
@@ -529,9 +527,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
             sugoi->LoadSettings();
             mpv->Initialize();
         });
-        QTimer::singleShot(5, [=]
+        QTimer::singleShot(1, [=]
         {
             hide();
+            if (sugoi->sysTrayIcon != nullptr)
+            {
+                sugoi->sysTrayIcon->hide();
+            }
         });
         event->ignore();
         return;
@@ -554,14 +556,6 @@ void MainWindow::showEvent(QShowEvent *event)
             sugoi->sysTrayIcon->hide();
         }
     }
-    if (autoStartFirstRun)
-    {
-        if (sugoi->sysTrayIcon != nullptr)
-        {
-            sugoi->sysTrayIcon->hide();
-        }
-        autoStartFirstRun = false;
-    }
 #ifdef _DEBUG
     firstShow = false;
     return;
@@ -581,19 +575,6 @@ void MainWindow::showEvent(QShowEvent *event)
 //        ui->actionUpdate_Streaming_Support->triggered();
 //    }
     firstShow = false;
-}
-
-void MainWindow::hideEvent(QHideEvent *event)
-{
-    QMainWindow::hideEvent(event);
-    if (autoStartFirstRun)
-    {
-        if (sugoi->sysTrayIcon != nullptr)
-        {
-            sugoi->sysTrayIcon->hide();
-        }
-        autoStartFirstRun = false;
-    }
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
@@ -1779,6 +1760,10 @@ void MainWindow::connectOtherSignalsAndSlots()
     connect(this, &MainWindow::trayIconVisibleChanged,
             [=](bool visible)
             {
+                if (this->isHidden())
+                {
+                    return;
+                }
                 if (sugoi->sysTrayIcon != nullptr)
                 {
                     sugoi->sysTrayIcon->setVisible(visible);
