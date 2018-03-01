@@ -1,9 +1,19 @@
+QMAKE_POST_LINK += $$quote(cd /d \"$${DESTDIR}\"$$escape_expand(\\n\\t))
+
 QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\..\\..\\3rdparty\\youtube-dl.exe\" \"$${DESTDIR}\\youtube-dl.exe\"$$escape_expand(\\n\\t))
 
 contains(QT_ARCH, x86_64) {
     QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\..\\..\\3rdparty\\bin64\\*\" \"$${DESTDIR}\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(if exist \"vcredist_msvc2017_x64.exe\" del /f /q \"vcredist_msvc2017_x64.exe\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(if exist \"vc_redist_msvc2017.x64.exe\" del /f /q \"vc_redist_msvc2017.x64.exe\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(if exist \"vcredist_x64.exe\" ren \"vcredist_x64.exe\" \"vcredist_msvc2017_x64.exe\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(if exist \"vc_redist.x64.exe\" ren \"vc_redist.x64.exe\" \"vc_redist_msvc2017.x64.exe\"$$escape_expand(\\n\\t))
 } else {
     QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\..\\..\\3rdparty\\bin\\*\" \"$${DESTDIR}\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(if exist \"vcredist_msvc2017_x86.exe\" del /f /q \"vcredist_msvc2017_x86.exe\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(if exist \"vc_redist_msvc2017.x86.exe\" del /f /q \"vc_redist_msvc2017.x86.exe\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(if exist \"vcredist_x86.exe\" ren \"vcredist_x86.exe\" \"vcredist_msvc2017_x86.exe\"$$escape_expand(\\n\\t))
+    QMAKE_POST_LINK += $$quote(if exist \"vc_redist.x86.exe\" ren \"vc_redist.x86.exe\" \"vc_redist_msvc2017.x86.exe\"$$escape_expand(\\n\\t))
 }
 
 QMAKE_POST_LINK += $$quote(if exist \"$${DESTDIR}\\translations\" rd /s /q \"$${DESTDIR}\\translations\"$$escape_expand(\\n\\t))
@@ -19,6 +29,7 @@ QMAKE_POST_LINK += $$quote(md \"$${DESTDIR}\\images\"$$escape_expand(\\n\\t))
 QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\resources\\logo.png\" \"$${DESTDIR}\\images\\logo.png\"$$escape_expand(\\n\\t))
 
 CONFIG(release, debug|release) {
+    QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\..\\..\\3rdparty\\vcredist_msvc2010_x86.exe\" \"$${DESTDIR}\\vcredist_msvc2010_x86.exe\"$$escape_expand(\\n\\t))
     QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\..\\..\\doc\\ReadMe.txt.deploy\" \"$${DESTDIR}\\ReadMe.txt\"$$escape_expand(\\n\\t))
     QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\..\\..\\doc\\Changelog.txt.deploy\" \"$${DESTDIR}\\Changelog.txt\"$$escape_expand(\\n\\t))
     QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\..\\..\\doc\\License.txt.deploy\" \"$${DESTDIR}\\License.txt\"$$escape_expand(\\n\\t))

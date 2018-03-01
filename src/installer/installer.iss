@@ -287,14 +287,15 @@ Name: "{commonstartmenu}\{#MyAppName}";          Filename: "{app}\{#MyAppExeName
 #endif
 
 [Run]
+Filename: "{app}\vcredist_msvc2010_x86.exe";  Parameters: "/q /norestart";              Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
 #ifdef _WIN64
-Filename: "{app}\vcredist_x64.exe";  Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
-Filename: "{app}\vc_redist.x64.exe"; Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
-Filename: "{app}\{#MyAppExeName}";   Parameters: "--autostart";                Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\vcredist_msvc2017_x64.exe";  Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\vc_redist_msvc2017.x64.exe"; Parameters: "/install /quiet /norestart"; Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\{#MyAppExeName}";            Parameters: "--autostart";                Flags: 64bit skipifdoesntexist skipifsilent waituntilterminated runhidden
 #else
-Filename: "{app}\vcredist_x86.exe";  Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
-Filename: "{app}\vc_redist.x86.exe"; Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
-Filename: "{app}\{#MyAppExeName}";   Parameters: "--autostart";                Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\vcredist_msvc2017_x86.exe";  Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\vc_redist_msvc2017.x86.exe"; Parameters: "/install /quiet /norestart"; Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
+Filename: "{app}\{#MyAppExeName}";            Parameters: "--autostart";                Flags: 32bit skipifdoesntexist skipifsilent waituntilterminated runhidden
 #endif
 
 [UninstallRun]
