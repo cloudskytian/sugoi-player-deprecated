@@ -68,7 +68,7 @@ public slots:
     void Restart();
     void Rewind();
     void Mute(bool);
-    void SetHwdec(bool);
+    void SetHwdec(bool h);
 
     void Seek(int pos, bool relative = false, bool osd = false);
     int Relative(int pos);

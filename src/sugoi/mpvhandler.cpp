@@ -453,8 +453,9 @@ void MpvHandler::Mute(bool m)
 void MpvHandler::SetHwdec(bool h)
 {
     // request hardware decoding or use software decoding
-    const char *args[] = {"set", "hwdec", h ? "auto" : "no", NULL};
-    AsyncCommand(args);
+    //const char *args[] = {"set", "hwdec", h ? "auto" : "no", NULL};
+    //AsyncCommand(args);
+    mpv_set_option_string(mpv, "hwdec", h ? "auto" : "no");
 }
 
 void MpvHandler::Seek(int pos, bool relative, bool osd)

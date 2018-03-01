@@ -21,6 +21,7 @@
 #include <QWinThumbnailToolButton>
 #include <QWinTaskbarButton>
 #include <QWinTaskbarProgress>
+#include <QWinJumpList>
 #endif
 
 #include "recent.h"
@@ -149,6 +150,7 @@ private:
                             *next_toolbutton = nullptr;
     QWinTaskbarButton       *taskbarButton = nullptr;
     QWinTaskbarProgress     *taskbarProgress = nullptr;
+    QWinJumpList            *jumplist = nullptr;
 #endif
     bool            pathChanged,
                     menuVisible     = true,
