@@ -234,9 +234,10 @@ int main(int argc, char *argv[])
                          }
                          QtConcurrent::run([=]
                          {
+                             bool pWhenM = mainWindow->getPauseWhenMinimized();
                              mainWindow->setPauseWhenMinimized(false);
                              mainWindow->openFileFromCmd(filePath);
-                             mainWindow->setPauseWhenMinimized(true);
+                             mainWindow->setPauseWhenMinimized(pWhenM);
                          });
                      });
 

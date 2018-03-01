@@ -301,14 +301,21 @@ void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
 
 void MainWindow::BringWindowToFront()
 {
+    if (this->isActiveWindow())
+    {
+        return;
+    }
     if (this->isHidden())
     {
         show();
     }
+    bool pWhenM = pauseWhenMinimized;
+    setPauseWhenMinimized(false);
     showMinimized();
     setWindowState(windowState() & ~Qt::WindowMinimized);
     raise();
     activateWindow();
+    setPauseWhenMinimized(pWhenM);
 }
 
 static bool canHandleDrop(const QDragEnterEvent *event)
