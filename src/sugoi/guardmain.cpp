@@ -20,7 +20,10 @@ int sugoiGuardMain(int argc, char *argv[])
 int main(int argc, char *argv[])
 #endif
 {
-    QCoreApplication a(argc, argv);
+    QCoreApplication app(argc, argv);
+#ifdef _STATIC_BUILD
+    QString filePath = QCoreApplication::applicationFilePath();
+#else
 #ifdef _WIN64
     QString filePath = QString::fromLatin1("Sugoi64.exe");
 #else
@@ -29,9 +32,10 @@ int main(int argc, char *argv[])
     filePath = QCoreApplication::applicationDirPath() + QDir::separator() + filePath;
     if (!QFileInfo(filePath).exists())
     {
-        qDebug() << QString::fromLatin1("Main executable not found.");
+        qDebug() << QString::fromLatin1("Main executable file not found.");
         return -1;
     }
+#endif
     QProcess process;
     while (true)
     {
@@ -39,5 +43,5 @@ int main(int argc, char *argv[])
         process.waitForFinished();
         QThread::msleep(2000);
     }
-    return a.exec();
+    return app.exec();
 }

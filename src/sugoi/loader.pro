@@ -5,7 +5,7 @@ CONFIG -= qt
 
 RC_FILE += player.rc
 
-SOURCES += playerloader.cpp
+SOURCES += loader.cpp
 
 exists($$PWD/../../ci_version.h) {
     DEFINES += CI

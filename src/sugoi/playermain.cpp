@@ -4,7 +4,6 @@
 
 #include "ui/mainwindow.h"
 
-#include <QApplication>
 #include <QString>
 #include <QFileInfo>
 #include <QMimeDatabase>
@@ -57,17 +56,23 @@ int main(int argc, char *argv[])
         {
             if (cmdline.at(i) == QString::fromLatin1("--autostart"))
             {
+#ifdef _STATIC_BUILD
+                QString filePath = QtSingleApplication::applicationFilePath();
+                QString fileParam = QString::fromLatin1("--guard");
+#else
 #ifdef _WIN64
                 QString filePath = QString::fromLatin1("SugoiGuard64.exe");
 #else
                 QString filePath = QString::fromLatin1("SugoiGuard.exe");
 #endif
-                filePath = QApplication::applicationDirPath() + QDir::separator() + filePath;
+                filePath = QtSingleApplication::applicationDirPath() + QDir::separator() + filePath;
                 if (!QFileInfo(filePath).exists())
                 {
                     return -1;
                 }
-                if (!Util::setAutoStart(QDir::toNativeSeparators(filePath), QString()))
+                QString fileParam = QString();
+#endif
+                if (!Util::setAutoStart(QDir::toNativeSeparators(filePath), fileParam))
                 {
                     return -1;
                 }
@@ -238,12 +243,12 @@ int main(int argc, char *argv[])
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
                      , reinterpret_cast<const wchar_t *>(QString::fromStdWString(SUGOI_APP_MUTEX_STR).utf16()));
 
-    int ret = instance.exec();
+    int exec = instance.exec();
 
     delete mainWindow;
     mainWindow = nullptr;
 
     CloseHandle(mutexHandle);
 
-    return ret;
+    return exec;
 }
