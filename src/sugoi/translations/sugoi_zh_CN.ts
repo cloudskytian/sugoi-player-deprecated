@@ -1499,6 +1499,22 @@ Note: Value must be from %0 - %1</source>
         <source>Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground.</source>
         <translation>Sugoi Player 正在后台运行，点击通知栏图标以显示主窗口。</translation>
     </message>
+    <message>
+        <source>Enable/Disable hardware decoding. Make sure you have a powerful GPU and player is running under it if you want to enable this.</source>
+        <translation>启用/禁用硬件解码。如果您想开启此功能，请先确保您拥有一个性能强劲的 GPU 并且播放器正在此 GPU 下运行。</translation>
+    </message>
+    <message>
+        <source>Loading...</source>
+        <translation>加载中……</translation>
+    </message>
+    <message>
+        <source>Hardware decoding enabled</source>
+        <translation>硬件解码已开启</translation>
+    </message>
+    <message>
+        <source>Hardware decoding disabled</source>
+        <translation>硬件解码已关闭，正在使用软件解码</translation>
+    </message>
 </context>
 <context>
     <name>MpvHandler</name>

@@ -27,12 +27,23 @@
 #include "screenshotdialog.h"
 #include "winsparkle.h"
 #include "skinmanager.h"
+#include "widgets/seekbar.h"
+#include "widgets/openbutton.h"
+#include "widgets/indexbutton.h"
+#include "widgets/customlabel.h"
+#include "widgets/customlineedit.h"
+#include "widgets/customslider.h"
+#include "widgets/customsplitter.h"
+#include "widgets/playlistwidget.h"
 
 MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    ui->mpvFrame->setAttribute(Qt::WA_DontCreateNativeAncestors);
+    ui->mpvFrame->setAttribute(Qt::WA_NativeWindow);
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
     // update streaming support disabled on unix platforms
@@ -562,7 +573,7 @@ void MainWindow::showEvent(QShowEvent *event)
 #endif
     if (firstShow)
     {
-        win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/src/sugoi/appcast.xml");
+        win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/appcast.xml");
         win_sparkle_set_lang(lang.toUtf8().constData());
         win_sparkle_init();
     }
@@ -1156,12 +1167,13 @@ void MainWindow::connectMpvSignalsAndSlots()
                 switch(playState)
                 {
                 case Mpv::Loaded:
-                    sugoi->mpv->ShowText("Loading...", 0);
+                    sugoi->mpv->ShowText(tr("Loading..."), 0);
                     break;
 
                 case Mpv::Started:
                     if(!init) // will only happen the first time a file is loaded.
                     {
+                        ui->hwdecButton->setEnabled(true);
                         ui->action_Play->setEnabled(true);
                         ui->playButton->setEnabled(true);
 #if defined(Q_OS_WIN)
@@ -1371,6 +1383,12 @@ void MainWindow::reconnectMpvSignalsAndSlots()
 
 void MainWindow::connectUiSignalsAndSlots()
 {
+    connect(ui->hwdecButton, &QPushButton::clicked,
+            [=]
+            {
+                setHwdec(!hwdec);
+            });
+
     connect(ui->playlistButton, &QPushButton::clicked, this, &MainWindow::TogglePlaylist);
 
     connect(ui->seekBar, &SeekBar::valueChanged,                        // Playback: Seekbar clicked
@@ -1495,6 +1513,7 @@ void MainWindow::connectUiSignalsAndSlots()
 
 void MainWindow::disconnectUiSignalsAndSlots()
 {
+    ui->hwdecButton->disconnect();
     ui->playlistButton->disconnect();
     ui->seekBar->disconnect();
     ui->openButton->disconnect();
@@ -1885,6 +1904,23 @@ void MainWindow::connectOtherSignalsAndSlots()
                     ui->menuR_epeat->setEnabled(true);
                 else
                     ui->menuR_epeat->setEnabled(false);
+            });
+
+    connect(this, &MainWindow::hwdecChanged,
+            [=](bool enable)
+            {
+                if (enable)
+                {
+                    mpv->SetHwdec(true);
+                    mpv->ShowText(tr("Hardware decoding enabled"));
+                    ui->hwdecButton->setIcon(QIcon(":/images/default_hwdec.svg"));
+                }
+                else
+                {
+                    mpv->SetHwdec(false);
+                    mpv->ShowText(tr("Hardware decoding disabled"));
+                    ui->hwdecButton->setIcon(QIcon(":/images/disabled_hwdec.svg"));
+                }
             });
 }
 

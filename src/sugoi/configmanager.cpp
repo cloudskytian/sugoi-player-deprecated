@@ -29,6 +29,7 @@ void SugoiEngine::LoadSettings()
     {
         window->setFileAssocType(FileAssoc::reg_type::NONE);
     }
+    window->setHwdec(settings.value(QString::fromLatin1("hwdec"), true).toBool());
     window->setSkinFile(settings.value(QString::fromLatin1("skin"), QString::fromLatin1("Default")).toString());
     window->setAutoUpdatePlayer(settings.value(QString::fromLatin1("autoUpdatePlayer"), true).toBool());
     window->setAutoUpdateStreamingSupport(settings.value(QString::fromLatin1("autoUpdateStreamingSupport"), true).toBool());
@@ -126,7 +127,7 @@ void SugoiEngine::LoadSettings()
     settings.beginGroup(QString::fromLatin1("mpv"));
     mpv->Volume(settings.value(QString::fromLatin1("volume"), 100).toInt());
     mpv->Speed(settings.value(QString::fromLatin1("speed"), 1.0).toDouble());
-    mpv->Vo(settings.value(QString::fromLatin1("vo"), QString()).toString());
+    mpv->Vo(settings.value(QString::fromLatin1("vo"), QString::fromLatin1("gpu")).toString());
     mpv->ScreenshotFormat(settings.value(QString::fromLatin1("screenshot-format"), QString::fromLatin1("png")).toString());
     mpv->ScreenshotTemplate(settings.value(QString::fromLatin1("screenshot-template"), QString::fromLatin1("screenshot%#04n")).toString());
     mpv->ScreenshotDirectory(settings.value(QString::fromLatin1("screenshot-directory"), QString::fromLatin1(".")).toString());
@@ -168,6 +169,7 @@ void SugoiEngine::SaveSettings()
     {
         regType = QString::fromLatin1("none");
     }
+    settings.setValue(QString::fromLatin1("hwdec"), window->getHwdec());
     settings.setValue(QString::fromLatin1("skin"), window->getSkinFile());
     settings.setValue(QString::fromLatin1("autoUpdatePlayer"), window->getAutoUpdatePlayer());
     settings.setValue(QString::fromLatin1("autoUpdateStreamingSupport"), window->getAutoUpdateStreamingSupport());

@@ -27,9 +27,11 @@ MpvHandler::MpvHandler(int64_t wid, QObject *parent):
         throw "Could not create mpv object";
 
     // set mpv options
-    mpv_set_option(mpv, "wid", MPV_FORMAT_INT64, &wid);
-    mpv_set_option_string(mpv, "input-cursor", "no");   // no mouse handling
-    mpv_set_option_string(mpv, "cursor-autohide", "no");// no cursor-autohide, we handle that
+    mpv_set_option(mpv, "wid", MPV_FORMAT_INT64, &wid); // embed the libmpv video output to our GUI
+    mpv_set_option_string(mpv, "input-default-bindings", "no"); // disable mpv default key bindings
+    mpv_set_option_string(mpv, "input-vo-keyboard", "no"); // disable keyboard input on the X11 window
+    mpv_set_option_string(mpv, "input-cursor", "no"); // no mouse handling
+    mpv_set_option_string(mpv, "cursor-autohide", "no"); // no cursor-autohide, we handle that
     mpv_set_option_string(mpv, "ytdl", "yes"); // youtube-dl support
 
     // get updates when these properties change
@@ -446,6 +448,13 @@ void MpvHandler::Mute(bool m)
     }
     else
         setMute(m);
+}
+
+void MpvHandler::SetHwdec(bool h)
+{
+    // request hardware decoding or use software decoding
+    const char *args[] = {"set", "hwdec", h ? "auto" : "no", NULL};
+    AsyncCommand(args);
 }
 
 void MpvHandler::Seek(int pos, bool relative, bool osd)

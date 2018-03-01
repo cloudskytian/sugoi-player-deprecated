@@ -8,6 +8,8 @@
 
 - **Added** quick start mode
 
+- **Added** hardware/software decoding switch
+
 - **Updated** translations
 
 - **Fixed** some known bugs

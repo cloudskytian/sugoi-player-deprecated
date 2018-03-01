@@ -2,7 +2,7 @@
 
 - libmpv: 1.26 (mpv 0.28.0)
 
-- YouTube-dl: 2018.02.22
+- YouTube-dl: 2018.02.26
 
 - WinSparkle: 0.6.0
 

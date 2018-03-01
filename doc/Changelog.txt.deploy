@@ -7,6 +7,7 @@ V1.1.0 - 2018/03/01
 * Added OSD show local time
 * Added fullscreen progress indicator
 * Added quick start mode
+* Added hardware/software decoding switch
 * Updated translations
 * Fixed some known bugs
 * Other minor tweaks

@@ -68,6 +68,7 @@ public:
     bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
     QString getSkinFile()        { return skinFile; }
     QSystemTrayIcon *getSystemTrayIcon() { return sugoi->sysTrayIcon == nullptr ? nullptr : sugoi->sysTrayIcon; }
+    bool getHwdec()              { return hwdec; }
 
     Ui::MainWindow *ui = nullptr;
     QImage albumArt;
@@ -139,6 +140,7 @@ private:
     QString skinFile;
     bool firstShow = true;
     bool playInBackground = false;
+    bool hwdec = true;
 
 #if defined(Q_OS_WIN)
     QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
@@ -197,6 +199,7 @@ public slots:
     void setAutoUpdatePlayer(bool b)  { emit autoUpdatePlayerChanged(autoUpdatePlayer = b); }
     void setAutoUpdateStreamingSupport(bool b) { emit autoUpdateStreamingSupportChanged(autoUpdateStreamingSupport = b); }
     void setSkinFile(const QString &s)  { emit skinFileChanged(skinFile = s); }
+    void setHwdec(bool b)             { emit hwdecChanged(hwdec = b); }
 
 signals:
     void langChanged(QString);
@@ -225,6 +228,7 @@ signals:
     void autoUpdateStreamingSupportChanged(bool);
     void skinFileChanged(const QString &);
     void playlistChanged(const QStringList &);
+    void hwdecChanged(bool);
 };
 
 #endif // MAINWINDOW_H

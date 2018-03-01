@@ -1,6 +1,8 @@
 <RCC>
   <qresource prefix="/images">
     <file alias="add.svg">resources/add.svg</file>
+    <file alias="default_hwdec.svg">resources/default_hwdec.svg</file>
+    <file alias="disabled_hwdec.svg">resources/disabled_hwdec.svg</file>
     <file alias="album-art.png">resources/album-art.png</file>
     <file alias="checked.svg">resources/checked.svg</file>
     <file alias="default_mute.svg">resources/default_mute.svg</file>

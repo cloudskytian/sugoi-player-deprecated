@@ -215,6 +215,15 @@ QPushButton#playButton {
 	min-height: 26px;
 }
 
+QPushButton#hwdecButton {
+	background: none;
+	border: 0px;
+	border-radius: 0px;
+	color: none;
+	min-width: 8px;
+	min-height: 8px;
+}
+
 QPushButton#nextButton {
 	background: none;
 	border: 0px;

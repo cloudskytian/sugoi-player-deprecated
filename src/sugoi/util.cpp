@@ -444,12 +444,12 @@ void messagesOutputToFile(QtMsgType type, const QMessageLogContext &context, con
             .arg(QObject::tr("Function"))
             .arg(context.function)
             .arg(QObject::tr("DateTime"))
-            .arg(dateTimeStr);
+            .arg(dateTimeStr.toUtf8().constData());
 
     QFile file(LogFileLocation());
     file.open(QFile::WriteOnly | QFile::Append | QFile::Text);
     QTextStream ts(&file);
-    ts << messageStr << "\r\n";
+    ts << messageStr.toUtf8().constData() << "\r\n";
     file.flush();
     file.close();
 
