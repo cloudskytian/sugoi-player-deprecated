@@ -90,7 +90,7 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
 
     ui->playlistButton->setEnabled(true);
 
-    menuVisible = true //ui->menubar->isVisible(); // does the OS use a menubar? (appmenu doesn't)
+    menuVisible = true; //ui->menubar->isVisible(); // does the OS use a menubar? (appmenu doesn't)
 #ifdef Q_OS_WIN
     QtWin::enableBlurBehindWindow(this);
 
