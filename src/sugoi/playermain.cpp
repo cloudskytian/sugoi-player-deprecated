@@ -12,7 +12,7 @@
 
 #include <locale.h>
 
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
 #include <Windows.h>
 #endif
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
     qInstallMessageHandler(Util::messagesOutputToFile);
 
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
     FreeConsole();
 #endif
 
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
                 QString filePath = QtSingleApplication::applicationFilePath();
                 QString fileParam = QString::fromLatin1("--guard");
 #else
-#ifdef _WIN64
+#ifdef Q_OS_WIN64
                 QString filePath = QString::fromLatin1("SugoiGuard64.exe");
 #else
                 QString filePath = QString::fromLatin1("SugoiGuard.exe");

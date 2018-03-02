@@ -1071,7 +1071,7 @@ end;
 
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
-  if (CurUninstallStep = usAppMutexCheck) then
+  if (CurUninstallStep = usUninstall) then
   begin
     kill_running_task;
   end;

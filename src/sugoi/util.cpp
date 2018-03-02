@@ -394,7 +394,7 @@ QStringList externalFilesToLoad(const QFileInfo &originalMediaFile, const QStrin
 QString LogFileLocation()
 {
     QString logPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + QDir::separator();
-#ifdef _WIN64
+#ifdef Q_OS_WIN64
     logPath += QString::fromLatin1("debug64.log");
 #else
     logPath += QString::fromLatin1("debug.log");
@@ -411,52 +411,43 @@ void messagesOutputToFile(QtMsgType type, const QMessageLogContext &context, con
     switch (type)
     {
     case QtDebugMsg:
-        msgType = QObject::tr("Debug");
+        msgType = QLatin1String("DEBUG");
         break;
     case QtInfoMsg:
-        msgType = QObject::tr("Information");
+        msgType = QLatin1String("INFORMATION");
         break;
     case QtWarningMsg:
-        msgType = QObject::tr("Warning");
+        msgType = QLatin1String("WARNING");
         break;
     case QtCriticalMsg:
-        msgType = QObject::tr("Critical");
+        msgType = QLatin1String("CRITICAL");
         break;
     case QtFatalMsg:
-        msgType = QObject::tr("Fatal");
+        msgType = QLatin1String("FATAL");
         break;
     /*case QtSystemMsg:
-        msgType = QObject::tr("System");
+        msgType = QLatin1String("SYSTEM");
         break;*/
     default:
-        msgType = QObject::tr("Debug");
+        msgType = QLatin1String("DEBUG");
         break;
     }
 
     QString dateTimeStr = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ddd");
-    QString messageStr = QString("%1: %2, %3: %4, %5: %6, %7: %8, %9: %10;")
-            .arg(msgType.toUtf8().constData())
-            .arg(msg.toUtf8().constData())
-            .arg(QObject::tr("File"))
-            .arg(context.file)
-            .arg(QObject::tr("Line"))
-            .arg(context.line)
-            .arg(QObject::tr("Function"))
-            .arg(context.function)
-            .arg(QObject::tr("DateTime"))
-            .arg(dateTimeStr.toUtf8().constData());
+    QString messageStr = QString("[%1] | Message: %2 | File: %3 | Line: %4 | Function: %5 | DateTime: %6 ;")
+                .arg(msgType).arg(msg).arg(context.file).arg(context.line).arg(context.function).arg(dateTimeStr);
 
     QFile file(LogFileLocation());
     file.open(QFile::WriteOnly | QFile::Append | QFile::Text);
     QTextStream ts(&file);
-    ts << messageStr.toUtf8().constData() << "\r\n";
+    ts << messageStr << "\r\n";
     file.flush();
     file.close();
 
     mutex.unlock();
 
 #ifdef _DEBUG
-    fprintf_s(stderr, "%s\r\n", messageStr.toUtf8().constData());
+    fprintf_s(stderr, "%s\r\n", messageStr.toLocal8Bit().constData());
 #endif
 }
 
@@ -505,7 +496,7 @@ bool disableAutoStart()
     {
         settings.remove(QApplication::applicationDisplayName());
     }
-#ifdef _WIN64
+#ifdef Q_OS_WIN64
     QString cmd = QString::fromLatin1("SugoiGuard64.exe");
 #else
     QString cmd = QString::fromLatin1("SugoiGuard.exe");

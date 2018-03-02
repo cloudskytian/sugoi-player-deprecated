@@ -3,7 +3,7 @@
 
 #include <QtCore/qglobal.h>
 
-#if defined(_STATIC_BUILD)
+#ifdef _STATIC_BUILD
 #  define SUGOILIBSHARED_EXPORT Q_DECL_EXPORT
 #else
 #  define SUGOILIBSHARED_EXPORT Q_DECL_IMPORT

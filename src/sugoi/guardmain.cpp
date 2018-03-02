@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 #ifdef _STATIC_BUILD
     QString filePath = QCoreApplication::applicationFilePath();
 #else
-#ifdef _WIN64
+#ifdef Q_OS_WIN64
     QString filePath = QString::fromLatin1("Sugoi64.exe");
 #else
     QString filePath = QString::fromLatin1("Sugoi.exe");

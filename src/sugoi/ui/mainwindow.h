@@ -16,7 +16,7 @@
 #include <QMenu>
 #include <QSystemTrayIcon>
 
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
 #include <QWinThumbnailToolBar>
 #include <QWinThumbnailToolButton>
 #include <QWinTaskbarButton>
@@ -119,7 +119,6 @@ private slots:
     void disconnectOtherSignalsAndSlots();
     void reconnectOtherSignalsAndSlots();
     void reconnectAllSignalsAndSlots();
-    void Load(bool backgroundMode = false);
 
 private:
     SugoiEngine *sugoi = nullptr;
@@ -143,7 +142,7 @@ private:
     bool playInBackground = false;
     bool hwdec = true;
 
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
     QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
     QWinThumbnailToolButton *prev_toolbutton = nullptr,
                             *playpause_toolbutton = nullptr,

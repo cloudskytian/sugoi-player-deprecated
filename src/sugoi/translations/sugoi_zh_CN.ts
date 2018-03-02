@@ -2172,39 +2172,39 @@ Note: Value must be from %0 - %1</source>
     <name>QObject</name>
     <message>
         <source>Debug</source>
-        <translation>调试</translation>
+        <translation type="vanished">调试</translation>
     </message>
     <message>
         <source>Information</source>
-        <translation>信息</translation>
+        <translation type="vanished">信息</translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>警告</translation>
+        <translation type="vanished">警告</translation>
     </message>
     <message>
         <source>Critical</source>
-        <translation>严重</translation>
+        <translation type="vanished">严重</translation>
     </message>
     <message>
         <source>Fatal</source>
-        <translation>致命</translation>
+        <translation type="vanished">致命</translation>
     </message>
     <message>
         <source>File</source>
-        <translation>文件</translation>
+        <translation type="vanished">文件</translation>
     </message>
     <message>
         <source>Line</source>
-        <translation>行</translation>
+        <translation type="vanished">行</translation>
     </message>
     <message>
         <source>Function</source>
-        <translation>函数</translation>
+        <translation type="vanished">函数</translation>
     </message>
     <message>
         <source>DateTime</source>
-        <translation>日期时间</translation>
+        <translation type="vanished">日期时间</translation>
     </message>
 </context>
 <context>

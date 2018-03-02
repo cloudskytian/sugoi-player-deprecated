@@ -370,7 +370,7 @@ void SugoiEngine::SugoiUpdate(QStringList &args)
         win_sparkle_check_update_with_ui();
     else
     {
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
         QString arg = args.front();
         args.pop_front();
         if(arg == "youtube-dl")

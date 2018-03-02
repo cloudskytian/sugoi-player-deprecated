@@ -90,6 +90,44 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
 
     ui->playlistButton->setEnabled(true);
 
+    menuVisible = ui->menubar->isVisible(); // does the OS use a menubar? (appmenu doesn't)
+#ifdef Q_OS_WIN
+    QtWin::enableBlurBehindWindow(this);
+
+    jumplist = new QWinJumpList(this);
+    jumplist->recent()->setVisible(true);
+
+    taskbarButton = new QWinTaskbarButton(this);
+    taskbarButton->setWindow(this->windowHandle());
+
+    taskbarProgress = taskbarButton->progress();
+    taskbarProgress->setMinimum(0);
+    taskbarProgress->setMaximum(1000);
+
+    // add windows 7+ thubnail toolbar buttons
+    thumbnail_toolbar = new QWinThumbnailToolBar(this);
+    thumbnail_toolbar->setWindow(this->windowHandle());
+
+    prev_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    prev_toolbutton->setEnabled(false);
+    prev_toolbutton->setToolTip(tr("Previous"));
+    prev_toolbutton->setIcon(QIcon(":/images/tool-previous.ico"));
+
+    playpause_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    playpause_toolbutton->setEnabled(false);
+    playpause_toolbutton->setToolTip(tr("Play"));
+    playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
+
+    next_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    next_toolbutton->setEnabled(false);
+    next_toolbutton->setToolTip(tr("Next"));
+    next_toolbutton->setIcon(QIcon(":/images/tool-next.ico"));
+
+    thumbnail_toolbar->addButton(prev_toolbutton);
+    thumbnail_toolbar->addButton(playpause_toolbutton);
+    thumbnail_toolbar->addButton(next_toolbutton);
+#endif
+
     connectOtherSignalsAndSlots();
     connectMpvSignalsAndSlots();
     connectUiSignalsAndSlots();
@@ -102,115 +140,6 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
 
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    Load(backgroundMode);
-}
-
-MainWindow::~MainWindow()
-{
-    win_sparkle_cleanup();
-
-    if(current != nullptr)
-    {
-        int t = mpv->getTime(),
-            l = mpv->getFileInfo().length;
-        if(t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
-            current->time = t;
-        else
-            current->time = 0;
-    }
-
-    sugoi->SaveSettings();
-
-#if defined(Q_OS_WIN)
-    delete prev_toolbutton;
-    delete playpause_toolbutton;
-    delete next_toolbutton;
-    delete thumbnail_toolbar;
-    delete taskbarProgress;
-    delete taskbarButton;
-    delete jumplist;
-#endif
-    delete sugoi;
-    delete ui;
-}
-
-void MainWindow::Load(bool backgroundMode)
-{
-    // load the settings here--the constructor has already been called
-    // this solves some issues with setting things before the constructor has ended
-    menuVisible = true/*ui->menubar->isVisible()*/; // does the OS use a menubar? (appmenu doesn't)
-#if defined(Q_OS_WIN)
-    QtWin::enableBlurBehindWindow(this);
-
-    if (jumplist == nullptr)
-    {
-        jumplist = new QWinJumpList(this);
-    }
-    jumplist->recent()->setVisible(true);
-
-    if (taskbarButton == nullptr)
-    {
-        taskbarButton = new QWinTaskbarButton(this);
-    }
-    taskbarButton->setWindow(this->windowHandle());
-
-    taskbarProgress = taskbarButton->progress();
-    taskbarProgress->setMinimum(0);
-    taskbarProgress->setMaximum(1000);
-
-    // add windows 7+ thubnail toolbar buttons
-    if (thumbnail_toolbar == nullptr)
-    {
-        thumbnail_toolbar = new QWinThumbnailToolBar(this);
-    }
-    thumbnail_toolbar->setWindow(this->windowHandle());
-
-    if (prev_toolbutton == nullptr)
-    {
-        prev_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    }
-    prev_toolbutton->setEnabled(false);
-    prev_toolbutton->setToolTip(tr("Previous"));
-    prev_toolbutton->setIcon(QIcon(":/images/tool-previous.ico"));
-    connect(prev_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                ui->playlistWidget->PlayIndex(-1, true);
-            });
-
-    if (playpause_toolbutton == nullptr)
-    {
-        playpause_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    }
-    playpause_toolbutton->setEnabled(false);
-    playpause_toolbutton->setToolTip(tr("Play"));
-    playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
-    connect(playpause_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                sugoi->PlayPause();
-            });
-
-    if (next_toolbutton == nullptr)
-    {
-        next_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    }
-    next_toolbutton->setEnabled(false);
-    next_toolbutton->setToolTip(tr("Next"));
-    next_toolbutton->setIcon(QIcon(":/images/tool-next.ico"));
-    connect(next_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                ui->playlistWidget->PlayIndex(1, true);
-            });
-
-    if (firstShow)
-    {
-        thumbnail_toolbar->addButton(prev_toolbutton);
-        thumbnail_toolbar->addButton(playpause_toolbutton);
-        thumbnail_toolbar->addButton(next_toolbutton);
-    }
-#endif
     sugoi->LoadSettings();
     mpv->Initialize();
 
@@ -242,6 +171,35 @@ void MainWindow::Load(bool backgroundMode)
     {
         this->hide();
     }
+}
+
+MainWindow::~MainWindow()
+{
+    win_sparkle_cleanup();
+
+    if(current != nullptr)
+    {
+        int t = mpv->getTime(),
+            l = mpv->getFileInfo().length;
+        if(t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
+            current->time = t;
+        else
+            current->time = 0;
+    }
+
+    sugoi->SaveSettings();
+
+#ifdef Q_OS_WIN
+    delete prev_toolbutton;
+    delete playpause_toolbutton;
+    delete next_toolbutton;
+    delete thumbnail_toolbar;
+    delete taskbarProgress;
+    delete taskbarButton;
+    delete jumplist;
+#endif
+    delete sugoi;
+    delete ui;
 }
 
 void MainWindow::MapShortcuts()
@@ -842,7 +800,7 @@ void MainWindow::SetNextButtonEnabled(bool enable)
 {
     ui->nextButton->setEnabled(enable);
     ui->actionPlay_Next_File->setEnabled(enable);
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
     next_toolbutton->setEnabled(enable);
 #endif
 }
@@ -851,7 +809,7 @@ void MainWindow::SetPreviousButtonEnabled(bool enable)
 {
     ui->previousButton->setEnabled(enable);
     ui->actionPlay_Previous_File->setEnabled(enable);
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
     prev_toolbutton->setEnabled(enable);
 #endif
 }
@@ -862,7 +820,7 @@ void MainWindow::SetPlayButtonIcon(bool play)
     {
         ui->playButton->setIcon(QIcon(":/images/default_play.svg"));
         ui->action_Play->setText(tr("&Play"));
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
         playpause_toolbutton->setToolTip(tr("Play"));
         playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
         taskbarButton->setOverlayIcon(QIcon(":/images/tool-pause.ico"));
@@ -874,7 +832,7 @@ void MainWindow::SetPlayButtonIcon(bool play)
     {
         ui->playButton->setIcon(QIcon(":/images/default_pause.svg"));
         ui->action_Play->setText(tr("&Pause"));
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
         playpause_toolbutton->setToolTip(tr("Pause"));
         playpause_toolbutton->setIcon(QIcon(":/images/tool-pause.ico"));
         taskbarButton->setOverlayIcon(QIcon(":/images/tool-play.ico"));
@@ -1204,7 +1162,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                         ui->hwdecButton->setEnabled(true);
                         ui->action_Play->setEnabled(true);
                         ui->playButton->setEnabled(true);
-#if defined(Q_OS_WIN)
+#ifdef Q_OS_WIN
                         playpause_toolbutton->setEnabled(true);
 #endif
                         //ui->playlistButton->setEnabled(true);
@@ -1411,6 +1369,25 @@ void MainWindow::reconnectMpvSignalsAndSlots()
 
 void MainWindow::connectUiSignalsAndSlots()
 {
+#ifdef Q_OS_WIN
+    connect(prev_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                ui->playlistWidget->PlayIndex(-1, true);
+            });
+
+    connect(playpause_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                sugoi->PlayPause();
+            });
+
+    connect(next_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                ui->playlistWidget->PlayIndex(1, true);
+            });
+#endif
     connect(ui->hwdecButton, &QPushButton::clicked,
             [=]
             {
