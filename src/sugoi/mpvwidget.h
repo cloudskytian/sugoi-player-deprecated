@@ -67,7 +67,6 @@ public Q_SLOTS:
     void Play();
     void Pause();
     void Stop();
-    void TrulyStop();
     void PlayPause(QString fileIfStopped);
     void Restart();
     void Rewind();
@@ -116,9 +115,8 @@ public Q_SLOTS:
     void LoadMetadata();
     void LoadOsdSize();
 
-    void SetOption(QString key, QString val);
-
     void command(const QVariant& params);
+    void setOption(const QString& name, const QVariant& value);
     void setProperty(const QString& name, const QVariant& value);
     QVariant getProperty(const QString& name) const;
 

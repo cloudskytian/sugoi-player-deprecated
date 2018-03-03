@@ -144,7 +144,7 @@ void SugoiEngine::LoadSettings()
             {
                 continue;
             }
-            mpv->SetOption(key, settings.value(QString::fromLatin1("value"), QString()).toString());
+            mpv->setOption(key, settings.value(QString::fromLatin1("value"), QString()).toString());
         }
     }
     settings.endArray();

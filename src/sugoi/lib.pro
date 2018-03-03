@@ -1,4 +1,4 @@
-QT += core gui widgets svg winextras network concurrent
+QT += core gui widgets svg winextras network concurrent opengl
 
 TEMPLATE = lib
 

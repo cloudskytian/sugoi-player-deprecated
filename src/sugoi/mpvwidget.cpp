@@ -38,11 +38,11 @@ MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f, SugoiEngine *se) : QOpe
         throw std::runtime_error("could not create mpv context");
     }
 
-    mpv_set_option_string(mpv, "input-default-bindings", "no"); // disable mpv default key bindings
-    mpv_set_option_string(mpv, "input-vo-keyboard", "no"); // disable keyboard input on the X11 window
-    mpv_set_option_string(mpv, "input-cursor", "no"); // no mouse handling
-    mpv_set_option_string(mpv, "cursor-autohide", "no"); // no cursor-autohide, we handle that
-    mpv_set_option_string(mpv, "ytdl", "yes"); // youtube-dl support
+    setOption(QLatin1String("input-default-bindings"), QLatin1String("no")); // disable mpv default key bindings
+    setOption(QLatin1String("input-vo-keyboard"), QLatin1String("no")); // disable keyboard input on the X11 window
+    setOption(QLatin1String("input-cursor"), QLatin1String("no")); // no mouse handling
+    setOption(QLatin1String("cursor-autohide"), QLatin1String("no")); // no cursor-autohide, we handle that
+    setOption(QLatin1String("ytdl"), QLatin1String("yes")); // youtube-dl support
 
     if (mpv_initialize(mpv) < 0)
     {
@@ -50,7 +50,7 @@ MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f, SugoiEngine *se) : QOpe
     }
 
     // Make use of the MPV_SUB_API_OPENGL_CB API.
-    mpv::qt::set_option_variant(mpv, "vo", "opengl-cb");
+    setOption(QLatin1String("vo"), QLatin1String("opengl-cb"));
 
     mpv_gl = (mpv_opengl_cb_context *)mpv_get_sub_api(mpv, MPV_SUB_API_OPENGL_CB);
     if (!mpv_gl)
@@ -88,6 +88,11 @@ MpvWidget::~MpvWidget()
 void MpvWidget::command(const QVariant& params)
 {
     mpv::qt::command_variant(mpv, params);
+}
+
+void MpvWidget::setOption(const QString& name, const QVariant& value)
+{
+    mpv::qt::set_option_variant(mpv, name, value);
 }
 
 void MpvWidget::setProperty(const QString& name, const QVariant& value)
@@ -471,11 +476,6 @@ void MpvWidget::Stop()
 {
     //Restart();
     //Pause();
-    TrulyStop();
-}
-
-void MpvWidget::TrulyStop()
-{
     command(QLatin1String("stop"));
 }
 
@@ -485,7 +485,7 @@ void MpvWidget::PlayPause(QString fileIfStopped)
         PlayFile(fileIfStopped);
     else
     {
-        setProperty(QLatin1String("cycle"), QLatin1String("pause"));
+        command(QStringList() << QLatin1String("cycle") << QLatin1String("pause"));
     }
 }
 
@@ -531,8 +531,7 @@ void MpvWidget::Hwdec(bool h, bool osd)
     }
     else
     {
-        const char *tmp = QString::fromLatin1(h ? "auto" : "no").toUtf8().constData();
-        mpv_set_option(mpv, "hwdec", MPV_FORMAT_STRING, &tmp);
+        setOption(QLatin1String("hwdec"), QLatin1String(h ? "auto" : "no"));
     }
     setHwdec(h);
 }
@@ -614,7 +613,7 @@ void MpvWidget::Volume(int level, bool osd)
     }
     else
     {
-        mpv_set_option(mpv, "volume", MPV_FORMAT_DOUBLE, &v);
+        setOption(QLatin1String("volume"), v);
         setVolume(level);
     }
 }
@@ -654,19 +653,19 @@ void MpvWidget::Screenshot(bool withSubs)
 
 void MpvWidget::ScreenshotFormat(QString s)
 {
-    SetOption("screenshot-format", s);
+    setOption(QLatin1String("screenshot-format"), s);
     setScreenshotFormat(s);
 }
 
 void MpvWidget::ScreenshotTemplate(QString s)
 {
-    SetOption("screenshot-template", s);
+    setOption(QLatin1String("screenshot-template"), s);
     setScreenshotTemplate(s);
 }
 
 void MpvWidget::ScreenshotDirectory(QString s)
 {
-    SetOption("screenshot-directory", s);
+    setOption(QLatin1String("screenshot-directory"), s);
     setScreenshotDir(s);
 }
 
@@ -729,14 +728,14 @@ void MpvWidget::Interpolate(bool interpolate)
             o.remove(i, QString(":interpolation").length());
     }
     setVo(vos.join(','));
-    SetOption("vo", vo);
+    setOption(QLatin1String("vo"), vo);
     ShowText(tr("Motion Interpolation: %0").arg(interpolate ? tr("enabled") : tr("disabled")));
 }
 
 void MpvWidget::Vo(QString o)
 {
     setVo(o);
-    SetOption("vo", vo);
+    setOption(QLatin1String("vo"), vo);
 }
 
 void MpvWidget::MsgLevel(QString level)
@@ -924,13 +923,6 @@ void MpvWidget::LoadOsdSize()
 {
     osdWidth = getProperty(QLatin1String("osd-width")).toInt();
     osdHeight = getProperty(QLatin1String("osd-height")).toInt();
-}
-
-void MpvWidget::SetOption(QString key, QString val)
-{
-    QByteArray tmp1 = key.toUtf8(),
-               tmp2 = val.toUtf8();
-    HandleErrorCode(mpv_set_option_string(mpv, tmp1.constData(), tmp2.constData()));
 }
 
 void MpvWidget::OpenFile(QString f)
