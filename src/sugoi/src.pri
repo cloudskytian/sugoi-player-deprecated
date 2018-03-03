@@ -7,7 +7,6 @@ TRANSLATIONS += translations/sugoi_zh_CN.ts
 
 HEADERS += \
     sugoiengine.h \
-    mpvhandler.h \
     mpvtypes.h \
     overlayhandler.h \
     overlay.h \
@@ -37,13 +36,13 @@ HEADERS += \
     qtsingleapplication.h \
     qtlockedfile.h \
     ui/sysinfodialog.h \
-    skinmanager.h
+    skinmanager.h \
+    mpvwidget.h
 
 SOURCES += \
     playermain.cpp \
     sugoiengine.cpp \
     sugoicommands.cpp \
-    mpvhandler.cpp \
     overlayhandler.cpp \
     util.cpp \
     widgets/customlabel.cpp \
@@ -73,7 +72,8 @@ SOURCES += \
     qtlockedfile_win.cpp \
     qtlockedfile.cpp \
     ui/sysinfodialog.cpp \
-    skinmanager.cpp
+    skinmanager.cpp \
+    mpvwidget.cpp
 
 FORMS += \
     ui/aboutdialog.ui \

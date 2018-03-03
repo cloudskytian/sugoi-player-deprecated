@@ -1,7 +1,7 @@
 ﻿#include "playlistwidget.h"
 
 #include "sugoiengine.h"
-#include "mpvhandler.h"
+#include "mpvwidget.h"
 
 #include <QListWidgetItem>
 #include <QMenu>
@@ -22,7 +22,7 @@ PlaylistWidget::PlaylistWidget(QWidget *parent) :
 void PlaylistWidget::AttachEngine(SugoiEngine *sugoi)
 {
     this->sugoi = sugoi;
-    connect(sugoi->mpv, &MpvHandler::playlistChanged,
+    connect(sugoi->mpv, &MpvWidget::playlistChanged,
             [=](const QStringList &list)
             {
                 playlist = list;
@@ -35,7 +35,7 @@ void PlaylistWidget::AttachEngine(SugoiEngine *sugoi)
                 }
             });
 
-    connect(sugoi->mpv, &MpvHandler::fileChanged,
+    connect(sugoi->mpv, &MpvWidget::fileChanged,
             [=](QString f)
             {
                 if(newPlaylist)

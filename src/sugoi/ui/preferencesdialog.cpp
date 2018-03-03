@@ -3,7 +3,7 @@
 
 #include "sugoiengine.h"
 #include "ui/mainwindow.h"
-#include "mpvhandler.h"
+#include "mpvwidget.h"
 #include "ui/keydialog.h"
 #include "fileassoc.h"
 

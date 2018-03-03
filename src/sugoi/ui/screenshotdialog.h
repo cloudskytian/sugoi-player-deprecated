@@ -1,10 +1,10 @@
-#ifndef SCREENSHOTDIALOG_H
+﻿#ifndef SCREENSHOTDIALOG_H
 #define SCREENSHOTDIALOG_H
 
 #include <QDialog>
 #include <QString>
 
-#include "mpvhandler.h"
+#include "mpvwidget.h"
 
 namespace Ui {
 class ScreenshotDialog;
@@ -15,10 +15,10 @@ class ScreenshotDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ScreenshotDialog(bool &always, bool &screenshot, MpvHandler *mpv, QWidget *parent = 0);
+    explicit ScreenshotDialog(bool &always, bool &screenshot, MpvWidget *mpv, QWidget *parent = 0);
     ~ScreenshotDialog();
 
-    static int showScreenshotDialog(bool &always, bool &screenshot, MpvHandler *mpv, QWidget *parent = 0);
+    static int showScreenshotDialog(bool &always, bool &screenshot, MpvWidget *mpv, QWidget *parent = 0);
 private:
     Ui::ScreenshotDialog *ui;
     bool &always,

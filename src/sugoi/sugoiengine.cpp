@@ -5,7 +5,7 @@
 
 #include "ui/mainwindow.h"
 #include "ui_mainwindow.h"
-#include "mpvhandler.h"
+#include "mpvwidget.h"
 #include "overlayhandler.h"
 #include "widgets/dimdialog.h"
 #include "util.h"
@@ -13,7 +13,7 @@
 SugoiEngine::SugoiEngine(QObject *parent):
     QObject(parent),
     window(static_cast<MainWindow*>(parent)),
-    mpv(new MpvHandler(window->ui->mpvFrame->winId(), this)),
+    mpv(window->ui->mpvFrame),
     overlay(new OverlayHandler(this)),
     sysTrayIcon(new QSystemTrayIcon(QIcon(":/images/player.svg"), this)),
     translator(nullptr)
@@ -26,7 +26,7 @@ SugoiEngine::SugoiEngine(QObject *parent):
         window->ui->action_Dim_Lights->setEnabled(false);
     }
 
-    connect(mpv, &MpvHandler::messageSignal,
+    connect(mpv, &MpvWidget::messageSignal,
             [=](QString msg)
             {
                 Print(msg, "mpv");
@@ -41,7 +41,7 @@ SugoiEngine::~SugoiEngine()
         delete dimDialog;
     delete sysTrayIcon;
     delete overlay;
-    delete mpv;
+    //delete mpv;
 }
 
 void SugoiEngine::Command(QString command)
@@ -51,7 +51,7 @@ void SugoiEngine::Command(QString command)
     QStringList args = command.split(" ");
     if(!args.empty())
     {
-        if(args.front() == "Sugoi") // implicitly understood
+        if(args.front() == "sugoi") // implicitly understood
             args.pop_front();
 
         if(!args.empty())
@@ -66,7 +66,7 @@ void SugoiEngine::Command(QString command)
                 InvalidCommand(args.join(' '));
         }
         else
-            RequiresParameters("Sugoi");
+            RequiresParameters("sugoi");
     }
     else
         InvalidCommand(args.join(' '));

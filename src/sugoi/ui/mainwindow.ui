@@ -58,7 +58,7 @@
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QFrame" name="mpvFrame">
+       <widget class="MpvWidget" name="mpvFrame">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>1</horstretch>
@@ -1561,6 +1561,11 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>MpvWidget</class>
+   <extends>QOpenGLWidget</extends>
+   <header>mpvwidget.h</header>
+  </customwidget>
   <customwidget>
    <class>CustomSlider</class>
    <extends>QSlider</extends>

@@ -41,9 +41,6 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
 {
     ui->setupUi(this);
 
-    ui->mpvFrame->setAttribute(Qt::WA_DontCreateNativeAncestors);
-    ui->mpvFrame->setAttribute(Qt::WA_NativeWindow);
-
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
     // update streaming support disabled on unix platforms
     ui->actionUpdate_Streaming_Support->setEnabled(false);
@@ -60,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
         mpv = nullptr;
     }
     sugoi = new SugoiEngine(this);
-    mpv = sugoi->mpv;
+    mpv = ui->mpvFrame;
 
     ui->playlistWidget->AttachEngine(sugoi);
     ui->playbackLayoutWidget->installEventFilter(this);
@@ -141,7 +138,6 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
     sugoi->LoadSettings();
-    mpv->Initialize();
 
     if (osdShowLocalTime)
     {
@@ -499,42 +495,42 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         playInBackground = false;
     }
-    if (quickStartMode)
-    {
-        QTimer::singleShot(0, [=]
-        {
-            if (logo != nullptr)
-            {
-                if (logo->isHidden())
-                {
-                    logo->show();
-                }
-            }
-            sugoi->sysTrayIcon->hide();
-            if (sugoi != nullptr)
-            {
-                delete sugoi;
-                sugoi = nullptr;
-                mpv = nullptr;
-            }
-            sugoi = new SugoiEngine(this);
-            mpv = sugoi->mpv;
-            reconnectAllSignalsAndSlots();
-            ui->playlistWidget->AttachEngine(sugoi);
-            sugoi->LoadSettings();
-            mpv->Initialize();
-        });
-        QTimer::singleShot(1, [=]
-        {
-            hide();
-            if (sugoi->sysTrayIcon != nullptr)
-            {
-                sugoi->sysTrayIcon->hide();
-            }
-        });
-        event->ignore();
-        return;
-    }
+//    if (quickStartMode)
+//    {
+//        QTimer::singleShot(0, [=]
+//        {
+//            mpv->Stop();
+//            if (logo != nullptr)
+//            {
+//                if (logo->isHidden())
+//                {
+//                    logo->show();
+//                }
+//            }
+//            sugoi->sysTrayIcon->hide();
+//            if (sugoi != nullptr)
+//            {
+//                delete sugoi;
+//                sugoi = nullptr;
+//                mpv = nullptr;
+//            }
+//            sugoi = new SugoiEngine(this);
+//            mpv = ui->mpvFrame;
+//            reconnectAllSignalsAndSlots();
+//            ui->playlistWidget->AttachEngine(sugoi);
+//            sugoi->LoadSettings();
+//        });
+//        QTimer::singleShot(1, [=]
+//        {
+//            hide();
+//            if (sugoi->sysTrayIcon != nullptr)
+//            {
+//                sugoi->sysTrayIcon->hide();
+//            }
+//        });
+//        event->ignore();
+//        return;
+//    }
     event->accept();
     QMainWindow::closeEvent(event);
 }
@@ -912,9 +908,9 @@ bool MainWindow::IsPlayingVideo(const QString &filePath)
 
 void MainWindow::connectMpvSignalsAndSlots()
 {
-    connect(mpv, &MpvHandler::playlistChanged, this, &MainWindow::playlistChanged);
+    connect(mpv, &MpvWidget::playlistChanged, this, &MainWindow::playlistChanged);
 
-    connect(mpv, &MpvHandler::fileInfoChanged,
+    connect(mpv, &MpvWidget::fileInfoChanged,
             [=](const Mpv::FileInfo &fileInfo)
             {
                 if(mpv->getPlayState() > 0)
@@ -983,7 +979,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::trackListChanged,
+    connect(mpv, &MpvWidget::trackListChanged,
             [=](const QList<Mpv::Track> &trackList)
             {
                 if(mpv->getPlayState() > 0)
@@ -1107,7 +1103,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::chaptersChanged,
+    connect(mpv, &MpvWidget::chaptersChanged,
             [=](const QList<Mpv::Chapter> &chapters)
             {
                 if(mpv->getPlayState() > 0)
@@ -1147,7 +1143,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::playStateChanged,
+    connect(mpv, &MpvWidget::playStateChanged,
             [=](Mpv::PlayState playState)
             {
                 switch(playState)
@@ -1234,14 +1230,14 @@ void MainWindow::connectMpvSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::pathChanged,
+    connect(mpv, &MpvWidget::pathChanged,
             [=](QString path)
             {
                 pathChanged = true;
                 setLastDir(QDir::toNativeSeparators(path));
             });
 
-    connect(mpv, &MpvHandler::fileChanging,
+    connect(mpv, &MpvWidget::fileChanging,
               [=](int t, int l)
               {
                   if(current != nullptr)
@@ -1253,7 +1249,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                   }
               });
 
-    connect(mpv, &MpvHandler::timeChanged,
+    connect(mpv, &MpvWidget::timeChanged,
             [=](int i)
             {
                 const Mpv::FileInfo &fi = mpv->getFileInfo();
@@ -1280,9 +1276,9 @@ void MainWindow::connectMpvSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::volumeChanged, ui->volumeSlider, &CustomSlider::setValueNoSignal);
+    connect(mpv, &MpvWidget::volumeChanged, ui->volumeSlider, &CustomSlider::setValueNoSignal);
 
-    connect(mpv, &MpvHandler::speedChanged,
+    connect(mpv, &MpvWidget::speedChanged,
             [=](double speed)
             {
                 static double last = 1;
@@ -1298,7 +1294,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::sidChanged,
+    connect(mpv, &MpvWidget::sidChanged,
             [=](int sid)
             {
                 QList<QAction*> actions = ui->menuSubtitle_Track->actions();
@@ -1314,7 +1310,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::aidChanged,
+    connect(mpv, &MpvWidget::aidChanged,
             [=](int aid)
             {
                 QList<QAction*> actions = ui->menuAudio_Tracks->actions();
@@ -1330,7 +1326,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                 }
             });
 
-    connect(mpv, &MpvHandler::subtitleVisibilityChanged,
+    connect(mpv, &MpvWidget::subtitleVisibilityChanged,
             [=](bool b)
             {
                 if(ui->actionShow_Subtitles->isEnabled())
@@ -1339,7 +1335,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                     mpv->ShowText(b ? tr("Subtitles visible") : tr("Subtitles hidden"));
             });
 
-    connect(mpv, &MpvHandler::muteChanged,
+    connect(mpv, &MpvWidget::muteChanged,
             [=](bool b)
             {
                 if(b)
@@ -1349,7 +1345,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                 mpv->ShowText(b ? tr("Muted") : tr("Unmuted"));
             });
 
-    connect(mpv, &MpvHandler::voChanged,
+    connect(mpv, &MpvWidget::voChanged,
             [=](QString vo)
             {
                 ui->action_Motion_Interpolation->setChecked(vo.contains("interpolation"));
@@ -1919,16 +1915,13 @@ void MainWindow::connectOtherSignalsAndSlots()
     connect(this, &MainWindow::hwdecChanged,
             [=](bool enable)
             {
+                mpv->Hwdec(enable);
                 if (enable)
                 {
-                    mpv->SetHwdec(true);
-                    mpv->ShowText(tr("Hardware decoding enabled"));
                     ui->hwdecButton->setIcon(QIcon(":/images/default_hwdec.svg"));
                 }
                 else
                 {
-                    mpv->SetHwdec(false);
-                    mpv->ShowText(tr("Hardware decoding disabled"));
                     ui->hwdecButton->setIcon(QIcon(":/images/disabled_hwdec.svg"));
                 }
             });

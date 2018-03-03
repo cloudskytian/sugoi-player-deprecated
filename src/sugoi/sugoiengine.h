@@ -1,5 +1,5 @@
-﻿#ifndef SugoiENGINE_H
-#define SugoiENGINE_H
+﻿#ifndef SUGOIENGINE_H
+#define SUGOIENGINE_H
 
 #include <QObject>
 #include <QString>
@@ -9,7 +9,7 @@
 #include <QTranslator>
 
 class MainWindow;
-class MpvHandler;
+class MpvWidget;
 class OverlayHandler;
 class DimDialog;
 
@@ -21,7 +21,7 @@ public:
     ~SugoiEngine();
 
     MainWindow     *window = nullptr;
-    MpvHandler     *mpv = nullptr;
+    MpvWidget     *mpv = nullptr;
     OverlayHandler *overlay = nullptr;
     DimDialog      *dimDialog = nullptr;
 
@@ -487,4 +487,4 @@ public:
     void Quit();
 };
 
-#endif // SugoiENGINE_H
+#endif // SUGOIENGINE_H

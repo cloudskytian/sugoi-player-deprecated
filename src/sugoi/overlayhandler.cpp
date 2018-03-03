@@ -1,7 +1,7 @@
 ﻿#include "overlayhandler.h"
 
 #include "sugoiengine.h"
-#include "mpvhandler.h"
+#include "mpvwidget.h"
 #include "ui/mainwindow.h"
 #include "ui_mainwindow.h"
 #include "util.h"

@@ -18,7 +18,7 @@
 #include "ui/screenshotdialog.h"
 #include "ui/sysinfodialog.h"
 #include "widgets/dimdialog.h"
-#include "mpvhandler.h"
+#include "mpvwidget.h"
 #include "overlayhandler.h"
 #include "util.h"
 #include "winsparkle.h"
@@ -27,7 +27,7 @@
 void SugoiEngine::SugoiMpv(QStringList &args)
 {
     if(!args.empty())
-        mpv->Command(args);
+        mpv->command(args);
     else
         RequiresParameters("mpv");
 }

@@ -1,10 +1,10 @@
-#include "screenshotdialog.h"
+﻿#include "screenshotdialog.h"
 #include "ui_screenshotdialog.h"
 
 #include <QFileDialog>
 #include <QString>
 
-ScreenshotDialog::ScreenshotDialog(bool &_always, bool &_screenshot, MpvHandler *mpv, QWidget *parent) :
+ScreenshotDialog::ScreenshotDialog(bool &_always, bool &_screenshot, MpvWidget *mpv, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ScreenshotDialog),
     always(_always),
@@ -46,7 +46,7 @@ ScreenshotDialog::~ScreenshotDialog()
     delete ui;
 }
 
-int ScreenshotDialog::showScreenshotDialog(bool &always, bool &screenshot, MpvHandler *mpv, QWidget *parent)
+int ScreenshotDialog::showScreenshotDialog(bool &always, bool &screenshot, MpvWidget *mpv, QWidget *parent)
 {
     ScreenshotDialog dialog(always, screenshot, mpv, parent);
     return dialog.exec();

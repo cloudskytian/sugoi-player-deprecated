@@ -29,7 +29,7 @@
 #include "fileassoc.h"
 #include "widgets/progressindicatorbar.h"
 #include "sugoiengine.h"
-#include "mpvhandler.h"
+#include "mpvwidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -122,7 +122,7 @@ private slots:
 
 private:
     SugoiEngine *sugoi = nullptr;
-    MpvHandler *mpv = nullptr;
+    MpvWidget *mpv = nullptr;
     LogoWidget *logo = nullptr;
     ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
     bool showFullscreenIndicator = true;
