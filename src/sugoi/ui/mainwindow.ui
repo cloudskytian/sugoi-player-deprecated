@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <widget class="CFramelessWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -1573,6 +1573,11 @@
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>CFramelessWindow</class>
+   <extends>QMainWindow</extends>
+   <header>ui/cframelesswindow.h</header>
+  </customwidget>
   <customwidget>
    <class>MpvWidget</class>
    <extends>QOpenGLWidget</extends>

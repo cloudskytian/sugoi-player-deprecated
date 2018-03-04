@@ -36,7 +36,7 @@
 #include "widgets/playlistwidget.h"
 
 MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
-    QMainWindow(parent),
+    CFramelessWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -187,7 +187,7 @@ static bool canHandleDrop(const QDragEnterEvent *event)
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     event->setAccepted(canHandleDrop(event));
-    QMainWindow::dragEnterEvent(event);
+    CFramelessWindow::dragEnterEvent(event);
 }
 
 void MainWindow::dropEvent(QDropEvent *event)
@@ -202,7 +202,7 @@ void MainWindow::dropEvent(QDropEvent *event)
     {
         mpv->LoadFile(filePath.url());
     }
-    QMainWindow::dropEvent(event);
+    CFramelessWindow::dropEvent(event);
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
@@ -219,7 +219,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             mpv->PlayPause(ui->playlistWidget->CurrentItem());
         }
     }
-    QMainWindow::mousePressEvent(event);
+    CFramelessWindow::mousePressEvent(event);
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
@@ -261,7 +261,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
         if(!(showPlayback || showPlaylist) && autohide)
             autohide->start(500);
     }
-    QMainWindow::mouseMoveEvent(event);
+    CFramelessWindow::mouseMoveEvent(event);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -288,7 +288,7 @@ void MainWindow::wheelEvent(QWheelEvent *event)
         mpv->Volume(mpv->getVolume()+5, true);
     else
         mpv->Volume(mpv->getVolume()-5, true);
-    QMainWindow::wheelEvent(event);
+    CFramelessWindow::wheelEvent(event);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
@@ -315,7 +315,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         if(iter != sugoi->input.end())
             sugoi->Command(iter->first); // execute command
     }
-    QMainWindow::keyPressEvent(event);
+    CFramelessWindow::keyPressEvent(event);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -344,7 +344,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
         ui->seekBar->setGeometry(0, height() - ui->playbackLayoutWidget->height() - ui->seekBar->height(),
                                  width(), ui->seekBar->height());
     }
-    QMainWindow::resizeEvent(event);
+    CFramelessWindow::resizeEvent(event);
 }
 
 void MainWindow::changeEvent(QEvent *event)
@@ -362,7 +362,7 @@ void MainWindow::changeEvent(QEvent *event)
             }
         }
     }
-    QMainWindow::changeEvent(event);
+    CFramelessWindow::changeEvent(event);
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -432,12 +432,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 //        return;
 //    }
     event->accept();
-    QMainWindow::closeEvent(event);
+    CFramelessWindow::closeEvent(event);
 }
 
 void MainWindow::showEvent(QShowEvent *event)
 {
-    QMainWindow::showEvent(event);
+    CFramelessWindow::showEvent(event);
     if (sugoi->sysTrayIcon != nullptr)
     {
         if (trayIconVisible && !sugoi->sysTrayIcon->isVisible())
@@ -481,7 +481,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
             FullScreen(false);
         event->accept();
     }
-    QMainWindow::mouseDoubleClickEvent(event);
+    CFramelessWindow::mouseDoubleClickEvent(event);
 }
 
 void MainWindow::SetIndexLabels(bool enable)

@@ -37,7 +37,8 @@ HEADERS += \
     qtlockedfile.h \
     ui/sysinfodialog.h \
     skinmanager.h \
-    mpvwidget.h
+    mpvwidget.h \
+    ui/cframelesswindow.h
 
 SOURCES += \
     playermain.cpp \
@@ -73,7 +74,8 @@ SOURCES += \
     qtlockedfile.cpp \
     ui/sysinfodialog.cpp \
     skinmanager.cpp \
-    mpvwidget.cpp
+    mpvwidget.cpp \
+    ui/cframelesswindow.cpp
 
 FORMS += \
     ui/aboutdialog.ui \

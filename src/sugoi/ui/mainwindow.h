@@ -1,7 +1,6 @@
 ﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include <QStringList>
 #include <QResizeEvent>
 #include <QMouseEvent>
@@ -24,6 +23,7 @@
 #include <QWinJumpList>
 #endif
 
+#include "ui/cframelesswindow.h"
 #include "recent.h"
 #include "widgets/logowidget.h"
 #include "fileassoc.h"
@@ -35,7 +35,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public CFramelessWindow
 {
 friend class SugoiEngine;
     Q_OBJECT
