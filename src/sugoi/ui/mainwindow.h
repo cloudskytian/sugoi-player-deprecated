@@ -92,10 +92,6 @@ protected:
     void changeEvent(QEvent *event);
     void closeEvent(QCloseEvent *event);
     void showEvent(QShowEvent *event);
-    void SetIndexLabels(bool enable);
-    void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
-    void TogglePlaylist();                          // toggles playlist visibility
-    bool isPlaylistVisible();                       // is the playlist visible?
 
 private slots:
     void HideAllControls(bool h, bool s = true);    // hideAllControls--s option is used by fullscreen
@@ -119,6 +115,11 @@ private slots:
     void disconnectOtherSignalsAndSlots();
     void reconnectOtherSignalsAndSlots();
     void reconnectAllSignalsAndSlots();
+    void initMainWindow(bool backgroundMode = false);
+    void SetIndexLabels(bool enable);
+    void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
+    void TogglePlaylist();                          // toggles playlist visibility
+    bool isPlaylistVisible();                       // is the playlist visible?
 
 private:
     SugoiEngine *sugoi = nullptr;

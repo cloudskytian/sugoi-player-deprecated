@@ -40,10 +40,12 @@ public:
     int getSid()                            { return sid; }
     bool getSubtitleVisibility()            { return subtitleVisibility; }
     bool getMute()                          { return mute; }
-    int getPosition()                       { return position; }
-    int getDuration()                       { return duration; }
+    double getPosition()                    { return position; }
+    double getDuration()                    { return duration; }
     QSize getVideoSize()                    { return QSize(videoWidth, videoHeight); }
     bool getHwdec()                         { return hwdec; }
+    double getPercent()                     { return percent; }
+    QSize getVideoDecodeSize()              { return QSize(videoDecodeWidth, videoDecodeHeight); }
 
     int getOsdWidth()                       { return osdWidth; }
     int getOsdHeight()                      { return osdHeight; }
@@ -57,6 +59,8 @@ protected:
     bool FileExists(QString);
 
 public Q_SLOTS:
+    void SetEngine(SugoiEngine *engine);
+
     void LoadFile(QString);
     QString LoadPlaylist(QString);
     bool PlayFile(QString);
@@ -149,10 +153,12 @@ private Q_SLOTS:
     void setSid(int i)                      { Q_EMIT sidChanged(sid = i); }
     void setSubtitleVisibility(bool b)      { Q_EMIT subtitleVisibilityChanged(subtitleVisibility = b); }
     void setMute(bool b)                    { if (mute != b) Q_EMIT muteChanged(mute = b); }
-    void setPosition(int p)                 { Q_EMIT positionChanged(position = p); }
-    void setDuration(int d)                 { Q_EMIT durationChanged(duration = d); }
+    void setPosition(double p)              { Q_EMIT positionChanged(position = p); }
+    void setDuration(double d)              { Q_EMIT durationChanged(duration = d); }
     void setVideoSize(int w, int h)         { Q_EMIT videoSizeChanged(videoWidth = w, videoHeight = h); }
     void setHwdec(bool b)                   { Q_EMIT hwdecChanged(hwdec = b); }
+    void setPercent(double p)               { Q_EMIT percentChanged(percent = p); }
+    void setVideoDecodeSize(int dw, int dh) { Q_EMIT videoDecodeSizeChanged(videoDecodeWidth = dw, videoDecodeHeight = dh); }
 
     void swapped();
     void on_mpv_events();
@@ -185,10 +191,12 @@ Q_SIGNALS:
     void debugChanged(bool);
     void subtitleVisibilityChanged(bool);
     void muteChanged(bool);
-    void durationChanged(int);
-    void positionChanged(int);
+    void durationChanged(double);
+    void positionChanged(double);
     void videoSizeChanged(int, int);
     void hwdecChanged(bool);
+    void percentChanged(double);
+    void videoDecodeSizeChanged(int, int);
 
     void messageSignal(QString m);
 
@@ -207,10 +215,11 @@ private:
                 suffix,
                 vo,
                 msgLevel;
-    double      speed = 1;
-    int         time = 0,
+    double      speed = 1,
                 position = 0,
                 duration = 0,
+                percent = 0;
+    int         time = 0,
                 lastTime = 0,
                 volume = 100,
                 index = 0,
@@ -225,7 +234,9 @@ private:
     int         osdWidth,
                 osdHeight,
                 videoWidth,
-                videoHeight;
+                videoHeight,
+                videoDecodeWidth,
+                videoDecodeHeight;
 
 private:
     void handle_mpv_event(mpv_event *event);

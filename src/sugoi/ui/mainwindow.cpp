@@ -50,36 +50,15 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
 
     // initialize managers/handlers
-    if (sugoi != nullptr)
-    {
-        delete sugoi;
-        sugoi = nullptr;
-        mpv = nullptr;
-    }
     sugoi = new SugoiEngine(this);
     mpv = ui->mpvFrame;
+    mpv->SetEngine(sugoi);
 
     ui->playlistWidget->AttachEngine(sugoi);
     ui->playbackLayoutWidget->installEventFilter(this);
     ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
-    ui->mpvFrame->setMouseTracking(true);
-    if (autohide != nullptr)
-    {
-        delete autohide;
-        autohide = nullptr;
-    }
     autohide = new QTimer(this);
-    if (osdLocalTimeUpdater != nullptr)
-    {
-        delete osdLocalTimeUpdater;
-        osdLocalTimeUpdater = nullptr;
-    }
     osdLocalTimeUpdater = new QTimer(this);
-    if (logo != nullptr)
-    {
-        delete logo;
-        logo = nullptr;
-    }
     logo = new LogoWidget(this);
     logo->setGeometry(0, menuBar()->height() / 2, width(),
                 height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
@@ -87,86 +66,7 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
 
     ui->playlistButton->setEnabled(true);
 
-    menuVisible = true; //ui->menubar->isVisible(); // does the OS use a menubar? (appmenu doesn't)
-#ifdef Q_OS_WIN
-    QtWin::enableBlurBehindWindow(this);
-
-    jumplist = new QWinJumpList(this);
-    jumplist->recent()->setVisible(true);
-
-    taskbarButton = new QWinTaskbarButton(this);
-    taskbarButton->setWindow(this->windowHandle());
-
-    taskbarProgress = taskbarButton->progress();
-    taskbarProgress->setMinimum(0);
-    taskbarProgress->setMaximum(1000);
-
-    // add windows 7+ thubnail toolbar buttons
-    thumbnail_toolbar = new QWinThumbnailToolBar(this);
-    thumbnail_toolbar->setWindow(this->windowHandle());
-
-    prev_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    prev_toolbutton->setEnabled(false);
-    prev_toolbutton->setToolTip(tr("Previous"));
-    prev_toolbutton->setIcon(QIcon(":/images/tool-previous.ico"));
-
-    playpause_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    playpause_toolbutton->setEnabled(false);
-    playpause_toolbutton->setToolTip(tr("Play"));
-    playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
-
-    next_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
-    next_toolbutton->setEnabled(false);
-    next_toolbutton->setToolTip(tr("Next"));
-    next_toolbutton->setIcon(QIcon(":/images/tool-next.ico"));
-
-    thumbnail_toolbar->addButton(prev_toolbutton);
-    thumbnail_toolbar->addButton(playpause_toolbutton);
-    thumbnail_toolbar->addButton(next_toolbutton);
-#endif
-
-    connectOtherSignalsAndSlots();
-    connectMpvSignalsAndSlots();
-    connectUiSignalsAndSlots();
-
-    // add multimedia shortcuts
-    ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
-    ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
-    ui->actionPlay_Next_File->setShortcuts({ui->actionPlay_Next_File->shortcut(), QKeySequence(Qt::Key_MediaNext)});
-    ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
-
-    setContextMenuPolicy(Qt::ActionsContextMenu);
-
-    sugoi->LoadSettings();
-
-    if (osdShowLocalTime)
-    {
-        if (osdLocalTimeUpdater)
-        {
-            if (osdLocalTimeUpdater->isActive())
-            {
-                osdLocalTimeUpdater->stop();
-            }
-            osdLocalTimeUpdater->start(1000);
-        }
-    }
-
-    if (!backgroundMode)
-    {
-        FileAssoc fileAssoc;
-        setFileAssocState(fileAssoc.getMediaFilesRegisterState());
-        if (getAlwaysCheckFileAssoc())
-        {
-            if (getFileAssocType() != FileAssoc::reg_type::NONE && getFileAssocState() != FileAssoc::reg_state::ALL_REGISTERED)
-            {
-                SetFileAssoc(getFileAssocType(), true);
-            }
-        }
-    }
-    else
-    {
-        this->hide();
-    }
+    initMainWindow(backgroundMode);
 }
 
 MainWindow::~MainWindow()
@@ -1951,4 +1851,86 @@ void MainWindow::reconnectAllSignalsAndSlots()
     reconnectMpvSignalsAndSlots();
     reconnectUiSignalsAndSlots();
     reconnectOtherSignalsAndSlots();
+}
+
+void MainWindow::initMainWindow(bool backgroundMode)
+{
+    menuVisible = true; //ui->menubar->isVisible(); // does the OS use a menubar? (appmenu doesn't)
+#ifdef Q_OS_WIN
+    QtWin::enableBlurBehindWindow(this);
+
+    jumplist = new QWinJumpList(this);
+    jumplist->recent()->setVisible(true);
+
+    taskbarButton = new QWinTaskbarButton(this);
+    taskbarButton->setWindow(this->windowHandle());
+
+    taskbarProgress = taskbarButton->progress();
+    taskbarProgress->setMinimum(0);
+    taskbarProgress->setMaximum(1000);
+
+    // add windows 7+ thubnail toolbar buttons
+    thumbnail_toolbar = new QWinThumbnailToolBar(this);
+    thumbnail_toolbar->setWindow(this->windowHandle());
+
+    prev_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    prev_toolbutton->setEnabled(false);
+    prev_toolbutton->setToolTip(tr("Previous"));
+    prev_toolbutton->setIcon(QIcon(":/images/tool-previous.ico"));
+
+    playpause_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    playpause_toolbutton->setEnabled(false);
+    playpause_toolbutton->setToolTip(tr("Play"));
+    playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
+
+    next_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
+    next_toolbutton->setEnabled(false);
+    next_toolbutton->setToolTip(tr("Next"));
+    next_toolbutton->setIcon(QIcon(":/images/tool-next.ico"));
+
+    thumbnail_toolbar->addButton(prev_toolbutton);
+    thumbnail_toolbar->addButton(playpause_toolbutton);
+    thumbnail_toolbar->addButton(next_toolbutton);
+#endif
+
+    connectOtherSignalsAndSlots();
+    connectMpvSignalsAndSlots();
+    connectUiSignalsAndSlots();
+
+    // add multimedia shortcuts
+    ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
+    ui->action_Stop->setShortcuts({ui->action_Stop->shortcut(), QKeySequence(Qt::Key_MediaStop)});
+    ui->actionPlay_Next_File->setShortcuts({ui->actionPlay_Next_File->shortcut(), QKeySequence(Qt::Key_MediaNext)});
+    ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
+
+    sugoi->LoadSettings();
+
+    if (osdShowLocalTime)
+    {
+        if (osdLocalTimeUpdater)
+        {
+            if (osdLocalTimeUpdater->isActive())
+            {
+                osdLocalTimeUpdater->stop();
+            }
+            osdLocalTimeUpdater->start(1000);
+        }
+    }
+
+    if (!backgroundMode)
+    {
+        FileAssoc fileAssoc;
+        setFileAssocState(fileAssoc.getMediaFilesRegisterState());
+        if (getAlwaysCheckFileAssoc())
+        {
+            if (getFileAssocType() != FileAssoc::reg_type::NONE && getFileAssocState() != FileAssoc::reg_state::ALL_REGISTERED)
+            {
+                SetFileAssoc(getFileAssocType(), true);
+            }
+        }
+    }
+    else
+    {
+        this->hide();
+    }
 }

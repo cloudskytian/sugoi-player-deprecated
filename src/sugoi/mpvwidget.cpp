@@ -62,7 +62,14 @@ MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f, SugoiEngine *se) : QOpe
 
     mpv_observe_property(mpv, 0, "duration", MPV_FORMAT_DOUBLE);
     mpv_observe_property(mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(mpv, 0, "percent-pos", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(mpv, 0, "width", MPV_FORMAT_INT64);
+    mpv_observe_property(mpv, 0, "height", MPV_FORMAT_INT64);
+    mpv_observe_property(mpv, 0, "dwidth", MPV_FORMAT_INT64);
+    mpv_observe_property(mpv, 0, "dheight", MPV_FORMAT_INT64);
     mpv_observe_property(mpv, 0, "playback-time", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(mpv, 0, "time-remaining", MPV_FORMAT_DOUBLE);
+    mpv_observe_property(mpv, 0, "playtime-remaining", MPV_FORMAT_DOUBLE);
     mpv_observe_property(mpv, 0, "ao-volume", MPV_FORMAT_DOUBLE);
     mpv_observe_property(mpv, 0, "sid", MPV_FORMAT_INT64);
     mpv_observe_property(mpv, 0, "aid", MPV_FORMAT_INT64);
@@ -150,10 +157,49 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
                 lastTime = time;
             }
         }
+        else if(QString(prop->name) == "percent-pos")
+        {
+            if(prop->format == MPV_FORMAT_DOUBLE)
+                setPercent((int)*(double*)prop->data);
+        }
+        else if(QString(prop->name) == "time-pos")
+        {
+            if(prop->format == MPV_FORMAT_DOUBLE)
+                setPosition((int)*(double*)prop->data);
+        }
+        else if(QString(prop->name) == "duration")
+        {
+            if(prop->format == MPV_FORMAT_DOUBLE)
+                setDuration((int)*(double*)prop->data);
+        }
         else if(QString(prop->name) == "ao-volume")
         {
             if(prop->format == MPV_FORMAT_DOUBLE)
                 setVolume((int)*(double*)prop->data);
+        }
+        else if(QString(prop->name) == "width")
+        {
+            int w = getProperty(QLatin1String("width")).toInt();
+            int h = getProperty(QLatin1String("height")).toInt();
+            setVideoSize(w, h);
+        }
+        else if(QString(prop->name) == "height")
+        {
+            int w = getProperty(QLatin1String("width")).toInt();
+            int h = getProperty(QLatin1String("height")).toInt();
+            setVideoSize(w, h);
+        }
+        else if(QString(prop->name) == "dwidth")
+        {
+            int dw = getProperty(QLatin1String("dwidth")).toInt();
+            int dh = getProperty(QLatin1String("dheight")).toInt();
+            setVideoDecodeSize(dw, dh);
+        }
+        else if(QString(prop->name) == "dheight")
+        {
+            int dw = getProperty(QLatin1String("dwidth")).toInt();
+            int dh = getProperty(QLatin1String("dheight")).toInt();
+            setVideoDecodeSize(dw, dh);
         }
         else if(QString(prop->name) == "sid")
         {
@@ -368,6 +414,15 @@ bool MpvWidget::FileExists(QString f)
     return QFile(f).exists();
 }
 
+void MpvWidget::SetEngine(SugoiEngine *engine)
+{
+    if (engine == nullptr)
+    {
+        return;
+    }
+    sugoi = engine;
+}
+
 void MpvWidget::LoadFile(QString f)
 {
     PlayFile(LoadPlaylist(f));
@@ -474,9 +529,9 @@ void MpvWidget::Pause()
 
 void MpvWidget::Stop()
 {
-    //Restart();
-    //Pause();
-    command(QLatin1String("stop"));
+    Restart();
+    Pause();
+    //command(QLatin1String("stop"));
 }
 
 void MpvWidget::PlayPause(QString fileIfStopped)
@@ -747,7 +802,11 @@ void MpvWidget::MsgLevel(QString level)
 
 void MpvWidget::ShowText(QString text, int duration)
 {
-    //sugoi->overlay->showStatusText(text, duration);
+    if (sugoi == nullptr)
+    {
+        return;
+    }
+    sugoi->overlay->showStatusText(text, duration);
 }
 
 void MpvWidget::LoadFileInfo()

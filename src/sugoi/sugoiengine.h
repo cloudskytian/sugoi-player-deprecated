@@ -21,7 +21,7 @@ public:
     ~SugoiEngine();
 
     MainWindow     *window = nullptr;
-    MpvWidget     *mpv = nullptr;
+    MpvWidget      *mpv = nullptr;
     OverlayHandler *overlay = nullptr;
     DimDialog      *dimDialog = nullptr;
 
