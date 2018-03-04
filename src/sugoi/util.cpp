@@ -200,7 +200,7 @@ bool DimLightsSupported()
     return true;
 }
 
-void SetAlwaysOnTop(QMainWindow *window, bool ontop)
+void SetAlwaysOnTop(QWidget *window, bool ontop)
 {
     window->setWindowFlag(Qt::WindowStaysOnTopHint, ontop);
     window->show();

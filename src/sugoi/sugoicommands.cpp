@@ -431,7 +431,9 @@ void SugoiEngine::SugoiFitWindow(QStringList &args)
 
 void SugoiEngine::FitWindow(int percent, bool msg)
 {
-    if(window->isFullScreen() || window->isMaximized() || !window->ui->menuFit_Window->isEnabled())
+    if(window->isFullScreen() || window->isMaximized() || window->isHidden()
+            || window->isMinimized() || (window->windowOpacity() < 1.0)
+            || !window->ui->menuFit_Window->isEnabled())
         return;
 
     mpv->LoadVideoParams();

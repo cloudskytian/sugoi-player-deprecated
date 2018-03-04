@@ -170,6 +170,33 @@ QSlider#seekBar::sub-page:horizontal {
 	background: #008098;
 }
 
+QPushButton#minimizeButton {
+	background: none;
+	border: 0px;
+	border-radius: 0px;
+	color: none;
+	min-width: 8px;
+	min-height: 8px;
+}
+
+QPushButton#maximizeButton {
+	background: none;
+	border: 0px;
+	border-radius: 0px;
+	color: none;
+	min-width: 8px;
+	min-height: 8px;
+}
+
+QPushButton#closeButton {
+	background: none;
+	border: 0px;
+	border-radius: 0px;
+	color: none;
+	min-width: 8px;
+	min-height: 8px;
+}
+
 QPushButton#openButton {
 	background: none;
 	border: 0px;

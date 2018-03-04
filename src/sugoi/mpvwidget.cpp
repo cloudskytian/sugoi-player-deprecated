@@ -260,7 +260,7 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
         setPlayState(Mpv::Stopped);
         break;
     case MPV_EVENT_SHUTDOWN:
-        //QCoreApplication::quit();
+        QCoreApplication::quit();
         break;
     case MPV_EVENT_LOG_MESSAGE:
     {

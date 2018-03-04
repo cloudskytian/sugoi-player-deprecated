@@ -41,13 +41,16 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
 {
     ui->setupUi(this);
 
+    setTitleBar(ui->titleBarWidget);
+    addIgnoreWidget(ui->windowTitleLabel);
+
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
     // update streaming support disabled on unix platforms
     ui->actionUpdate_Streaming_Support->setEnabled(false);
 #endif
 
     ShowPlaylist(false);
-    addActions(ui->menubar->actions()); // makes menubar shortcuts work even when menubar is hidden
+    addActions(ui->menuBarWidget->actions()); // makes menubar shortcuts work even when menubar is hidden
 
     // initialize managers/handlers
     sugoi = new SugoiEngine(this);
@@ -60,8 +63,9 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     autohide = new QTimer(this);
     osdLocalTimeUpdater = new QTimer(this);
     logo = new LogoWidget(this);
-    logo->setGeometry(0, menuBar()->height() / 2, width(),
-                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+    logo->setGeometry(0, ui->titleBarWidget->height(), width(),
+                height() - ui->titleBarWidget->height() - ui->menuBarWidget->height()
+                      - ui->seekBar->height() - ui->playbackLayoutWidget->height());
     logo->show();
 
     ui->playlistButton->setEnabled(true);
@@ -324,13 +328,16 @@ void MainWindow::resizeEvent(QResizeEvent *event)
         sugoi->overlay->showInfoText();
     if (!isPlaylistVisible())
     {
-        logo->setGeometry(0, menuBar()->height() / 2, width(),
-                    height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+        logo->setGeometry(0, ui->titleBarWidget->height(), width(),
+                    height() - ui->titleBarWidget->height() - ui->menuBarWidget->height()
+                          - ui->seekBar->height() - ui->playbackLayoutWidget->height());
     }
     else
     {
-        logo->setGeometry(0, menuBar()->height() / 2, width() - ui->splitter->position(),
-                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+        logo->setGeometry(0, ui->titleBarWidget->height(),
+                          width() - ui->splitter->position(), height() - ui->titleBarWidget->height()
+                          - ui->menuBarWidget->height() - ui->seekBar->height()
+                          - ui->playbackLayoutWidget->height());
     }
     if (hideAllControls)
     {
@@ -556,14 +563,14 @@ void MainWindow::HideAllControls(bool w, bool s)
     {
         if(s || !hideAllControls)
             playlistState = ui->playlistLayoutWidget->isVisible();
-        ui->menubar->setVisible(false);
+        ui->menuBarWidget->setVisible(false);
 
         ui->playbackLayoutWidget->hide();
         ui->seekBar->hide();
-        ui->centralwidget->layout()->removeWidget(ui->playbackLayoutWidget);
+        ui->centralWidget->layout()->removeWidget(ui->playbackLayoutWidget);
         ui->playbackLayoutWidget->setParent(this);
         ui->playbackLayoutWidget->move(QPoint(0, geometry().height() - ui->playbackLayoutWidget->height()));
-        ui->centralwidget->layout()->removeWidget(ui->seekBar);
+        ui->centralWidget->layout()->removeWidget(ui->seekBar);
         ui->seekBar->setParent(this);
         ui->seekBar->move(QPoint(0, geometry().height() - ui->playbackLayoutWidget->height() - ui->seekBar->height()));
 
@@ -595,13 +602,13 @@ void MainWindow::HideAllControls(bool w, bool s)
             fullscreenProgressIndicator = nullptr;
         }
 
-        ui->seekBar->setParent(centralWidget());
-        ui->centralwidget->layout()->addWidget(ui->seekBar);
-        ui->playbackLayoutWidget->setParent(centralWidget());
-        ui->centralwidget->layout()->addWidget(ui->playbackLayoutWidget);
+        ui->seekBar->setParent(ui->centralWidget);
+        ui->centralWidget->layout()->addWidget(ui->seekBar);
+        ui->playbackLayoutWidget->setParent(ui->centralWidget);
+        ui->centralWidget->layout()->addWidget(ui->playbackLayoutWidget);
 
         if(menuVisible)
-            ui->menubar->setVisible(true);
+            ui->menuBarWidget->setVisible(true);
         ui->seekBar->setVisible(true);
         ui->playbackLayoutWidget->setVisible(true);
         setCursor(QCursor(Qt::ArrowCursor)); // show cursor
@@ -647,8 +654,10 @@ void MainWindow::ShowPlaylist(bool visible)
     if(visible)
     {
         ui->splitter->setPosition(ui->splitter->normalPosition()); // bring splitter position to normal
-        logo->setGeometry(0, menuBar()->height() / 2, width() - ui->splitter->normalPosition(),
-                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+        logo->setGeometry(0, ui->titleBarWidget->height(),
+                          width() - ui->splitter->normalPosition(), height() - ui->titleBarWidget->height()
+                          - ui->menuBarWidget->height() - ui->seekBar->height()
+                          - ui->playbackLayoutWidget->height());
     }
     else
     {
@@ -656,8 +665,6 @@ void MainWindow::ShowPlaylist(bool visible)
             ui->splitter->setNormalPosition(ui->splitter->position()); // save current splitter position as the normal position
         ui->splitter->setPosition(0); // set splitter position to right-most
         setFocus();
-//        logo->setGeometry(0, menuBar()->height() / 2, width(),
-//                height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
     }
 }
 
@@ -1297,6 +1304,33 @@ void MainWindow::connectUiSignalsAndSlots()
                 ui->playlistWidget->PlayIndex(1, true);
             });
 #endif
+    connect(ui->minimizeButton, &QPushButton::clicked,
+            [=]
+            {
+                showMinimized();
+            });
+
+    connect(ui->maximizeButton, &QPushButton::clicked,
+            [=]
+            {
+                if (isMaximized())
+                {
+                    showNormal();
+                    ui->maximizeButton->setIcon(QIcon(":/images/disabled_maximize.svg"));
+                }
+                else
+                {
+                    showMaximized();
+                    ui->maximizeButton->setIcon(QIcon(":/images/disabled_restore.svg"));
+                }
+            });
+
+    connect(ui->closeButton, &QPushButton::clicked,
+            [=]
+            {
+                close();
+            });
+
     connect(ui->hwdecButton, &QPushButton::clicked,
             [=]
             {
@@ -1372,8 +1406,10 @@ void MainWindow::connectUiSignalsAndSlots()
                 if(ui->actionMedia_Info->isChecked())
                     sugoi->overlay->showInfoText();
 
-                logo->setGeometry(0, menuBar()->height() / 2, width() - i,
-                    height() - menuBar()->height() / 2 - ui->seekBar->height() - ui->playbackLayoutWidget->height());
+                logo->setGeometry(0, ui->titleBarWidget->height(),
+                                  width() - i, height() - ui->titleBarWidget->height()
+                                  - ui->menuBarWidget->height() - ui->seekBar->height()
+                                  - ui->playbackLayoutWidget->height());
             });
 
     connect(ui->searchBox, &QLineEdit::textChanged,                     // Playlist: Search box
@@ -1432,6 +1468,9 @@ void MainWindow::disconnectUiSignalsAndSlots()
     playpause_toolbutton->disconnect();
     next_toolbutton->disconnect();
 #endif
+    ui->minimizeButton->disconnect();
+    ui->maximizeButton->disconnect();
+    ui->closeButton->disconnect();
     ui->hwdecButton->disconnect();
     ui->playlistButton->disconnect();
     ui->seekBar->disconnect();
@@ -1854,7 +1893,7 @@ void MainWindow::reconnectAllSignalsAndSlots()
 
 void MainWindow::initMainWindow(bool backgroundMode)
 {
-    menuVisible = true; //ui->menubar->isVisible(); // does the OS use a menubar? (appmenu doesn't)
+    menuVisible = true; //ui->menuBarWidget->isVisible(); // does the OS use a menubar? (appmenu doesn't)
 #ifdef Q_OS_WIN
     QtWin::enableBlurBehindWindow(this);
 

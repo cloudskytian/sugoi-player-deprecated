@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QString>
 #include <QTextStream>
-#include <QMainWindow>
 #include <QFile>
 #include <QFileInfo>
 
@@ -23,7 +22,7 @@ QStringList externalFilesToLoad(const QFile &originalMediaFile, const QString &f
 QStringList externalFilesToLoad(const QFileInfo &originalMediaFile, const QString &fileType);
 
 bool DimLightsSupported();
-void SetAlwaysOnTop(QMainWindow *window, bool);
+void SetAlwaysOnTop(QWidget *window, bool);
 QString SettingsLocation();
 QString LogFileLocation();
 
