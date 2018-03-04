@@ -177,30 +177,6 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
             if(prop->format == MPV_FORMAT_DOUBLE)
                 setVolume((int)*(double*)prop->data);
         }
-        else if(QString(prop->name) == "width")
-        {
-            int w = getProperty(QLatin1String("width")).toInt();
-            int h = getProperty(QLatin1String("height")).toInt();
-            setVideoSize(w, h);
-        }
-        else if(QString(prop->name) == "height")
-        {
-            int w = getProperty(QLatin1String("width")).toInt();
-            int h = getProperty(QLatin1String("height")).toInt();
-            setVideoSize(w, h);
-        }
-        else if(QString(prop->name) == "dwidth")
-        {
-            int dw = getProperty(QLatin1String("dwidth")).toInt();
-            int dh = getProperty(QLatin1String("dheight")).toInt();
-            setVideoDecodeSize(dw, dh);
-        }
-        else if(QString(prop->name) == "dheight")
-        {
-            int dw = getProperty(QLatin1String("dwidth")).toInt();
-            int dh = getProperty(QLatin1String("dheight")).toInt();
-            setVideoDecodeSize(dw, dh);
-        }
         else if(QString(prop->name) == "sid")
         {
             if(prop->format == MPV_FORMAT_INT64)
@@ -243,6 +219,21 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
         }
         break;
     }
+    case MPV_EVENT_VIDEO_RECONFIG:
+    {
+        // Retrieve the new video size.
+        int vw = 0, vh = 0;
+        vw = getProperty(QLatin1String("width")).toInt();
+        vh = getProperty(QLatin1String("height")).toInt();
+        if (vw > 10 && vh > 10)
+        {
+            if (vw != videoWidth || vh != videoHeight)
+            {
+                setVideoSize(vw, vh);
+            }
+        }
+        break;
+    }
     case MPV_EVENT_IDLE:
         fileInfo.length = 0;
         setTime(0);
@@ -281,26 +272,6 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
     default: // unhandled events
         break;
     }
-
-//    switch (event->event_id) {
-//    case MPV_EVENT_PROPERTY_CHANGE: {
-//        mpv_event_property *prop = (mpv_event_property *)event->data;
-//        if (strcmp(prop->name, "time-pos") == 0) {
-//            if (prop->format == MPV_FORMAT_DOUBLE) {
-//                double time = *(double *)prop->data;
-//                Q_Q_EMIT positionChanged(time);
-//            }
-//        } else if (strcmp(prop->name, "duration") == 0) {
-//            if (prop->format == MPV_FORMAT_DOUBLE) {
-//                double time = *(double *)prop->data;
-//                Q_Q_EMIT durationChanged(time);
-//            }
-//        }
-//        break;
-//    }
-//    default: ;
-//        // Ignore uninteresting or unknown events.
-//    }
 }
 
 // Make Qt invoke mpv_opengl_cb_draw() to draw a new/updated video frame.

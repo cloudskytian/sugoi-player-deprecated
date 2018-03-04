@@ -45,7 +45,6 @@ public:
     QSize getVideoSize()                    { return QSize(videoWidth, videoHeight); }
     bool getHwdec()                         { return hwdec; }
     double getPercent()                     { return percent; }
-    QSize getVideoDecodeSize()              { return QSize(videoDecodeWidth, videoDecodeHeight); }
 
     int getOsdWidth()                       { return osdWidth; }
     int getOsdHeight()                      { return osdHeight; }
@@ -158,7 +157,6 @@ private Q_SLOTS:
     void setVideoSize(int w, int h)         { Q_EMIT videoSizeChanged(videoWidth = w, videoHeight = h); }
     void setHwdec(bool b)                   { Q_EMIT hwdecChanged(hwdec = b); }
     void setPercent(double p)               { Q_EMIT percentChanged(percent = p); }
-    void setVideoDecodeSize(int dw, int dh) { Q_EMIT videoDecodeSizeChanged(videoDecodeWidth = dw, videoDecodeHeight = dh); }
 
     void swapped();
     void on_mpv_events();
@@ -196,7 +194,6 @@ Q_SIGNALS:
     void videoSizeChanged(int, int);
     void hwdecChanged(bool);
     void percentChanged(double);
-    void videoDecodeSizeChanged(int, int);
 
     void messageSignal(QString m);
 
@@ -234,9 +231,7 @@ private:
     int         osdWidth,
                 osdHeight,
                 videoWidth,
-                videoHeight,
-                videoDecodeWidth,
-                videoDecodeHeight;
+                videoHeight;
 
 private:
     void handle_mpv_event(mpv_event *event);

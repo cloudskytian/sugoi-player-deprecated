@@ -808,6 +808,19 @@ bool MainWindow::IsPlayingVideo(const QString &filePath)
 
 void MainWindow::connectMpvSignalsAndSlots()
 {
+    connect(mpv, &MpvWidget::hwdecChanged,
+            [=](bool enable)
+            {
+                if (enable)
+                {
+                    ui->hwdecButton->setIcon(QIcon(":/images/default_hwdec.svg"));
+                }
+                else
+                {
+                    ui->hwdecButton->setIcon(QIcon(":/images/disabled_hwdec.svg"));
+                }
+            });
+
     connect(mpv, &MpvWidget::playlistChanged, this, &MainWindow::playlistChanged);
 
     connect(mpv, &MpvWidget::fileInfoChanged,
@@ -1287,7 +1300,7 @@ void MainWindow::connectUiSignalsAndSlots()
     connect(ui->hwdecButton, &QPushButton::clicked,
             [=]
             {
-                setHwdec(!hwdec);
+                mpv->Hwdec(!mpv->getHwdec(), true);
             });
 
     connect(ui->playlistButton, &QPushButton::clicked, this, &MainWindow::TogglePlaylist);
@@ -1810,20 +1823,6 @@ void MainWindow::connectOtherSignalsAndSlots()
                     ui->menuR_epeat->setEnabled(true);
                 else
                     ui->menuR_epeat->setEnabled(false);
-            });
-
-    connect(this, &MainWindow::hwdecChanged,
-            [=](bool enable)
-            {
-                mpv->Hwdec(enable);
-                if (enable)
-                {
-                    ui->hwdecButton->setIcon(QIcon(":/images/default_hwdec.svg"));
-                }
-                else
-                {
-                    ui->hwdecButton->setIcon(QIcon(":/images/disabled_hwdec.svg"));
-                }
             });
 }
 
