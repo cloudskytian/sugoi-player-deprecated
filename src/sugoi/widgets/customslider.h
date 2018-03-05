@@ -2,7 +2,6 @@
 #define CUSTOMSLIDER_H
 
 #include <QSlider>
-#include <QMouseEvent>
 
 class CustomSlider : public QSlider
 {

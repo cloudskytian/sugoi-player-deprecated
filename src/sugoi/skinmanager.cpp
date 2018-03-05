@@ -5,6 +5,7 @@
 #include <QTextStream>
 #include <QDir>
 #include <QCoreApplication>
+#include <QApplication>
 
 SkinManager::SkinManager(QObject *parent) : QObject(parent)
 {

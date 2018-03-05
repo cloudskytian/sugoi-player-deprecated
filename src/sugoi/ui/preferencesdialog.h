@@ -2,10 +2,10 @@
 #define PREFERENCESDIALOG_H
 
 #include <QDialog>
-#include <QString>
 #include <QPair>
 #include <QMutex>
-#include <QTableWidget>
+
+class QTableWidget;
 
 namespace Ui {
 class PreferencesDialog;

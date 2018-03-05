@@ -1,10 +1,10 @@
-#ifndef DIMWIDGET_H
+﻿#ifndef DIMWIDGET_H
 #define DIMWIDGET_H
 
 #include <QDialog>
-#include <QMouseEvent>
 
 class MainWindow;
+
 class DimDialog : public QDialog
 {
     Q_OBJECT

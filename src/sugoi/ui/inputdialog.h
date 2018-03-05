@@ -1,8 +1,7 @@
-#ifndef INPUTDIALOG_H
+﻿#ifndef INPUTDIALOG_H
 #define INPUTDIALOG_H
 
 #include <QDialog>
-#include <QString>
 
 #include <functional>
 

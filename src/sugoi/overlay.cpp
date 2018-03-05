@@ -1,4 +1,8 @@
-#include "overlay.h"
+﻿#include "overlay.h"
+
+#include <QLabel>
+#include <QImage>
+#include <QTimer>
 
 Overlay::Overlay(QLabel *label, QImage *canvas, QTimer *timer, QObject *parent):
     QObject(parent)

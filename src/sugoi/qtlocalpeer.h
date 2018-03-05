@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 **
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
@@ -41,11 +41,11 @@
 #ifndef QTLOCALPEER_H
 #define QTLOCALPEER_H
 
-#include <QLocalServer>
-#include <QLocalSocket>
-#include <QDir>
+#include <QObject>
 
 #include "qtlockedfile.h"
+
+class QLocalServer;
 
 class QtLocalPeer : public QObject
 {

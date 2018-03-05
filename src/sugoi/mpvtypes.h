@@ -1,11 +1,8 @@
-#ifndef MPVTYPES_H
+﻿#ifndef MPVTYPES_H
 #define MPVTYPES_H
 
 #include <QMetaType>
-#include <QString>
-#include <QStringList>
 #include <QMap>
-#include <QList>
 
 namespace Mpv
 {

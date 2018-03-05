@@ -2,9 +2,8 @@
 #define SCREENSHOTDIALOG_H
 
 #include <QDialog>
-#include <QString>
 
-#include "mpvwidget.h"
+class MpvWidget;
 
 namespace Ui {
 class ScreenshotDialog;

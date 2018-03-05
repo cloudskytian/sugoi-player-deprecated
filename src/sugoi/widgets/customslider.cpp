@@ -1,6 +1,7 @@
 ﻿#include "customslider.h"
 
 #include <QStyle>
+#include <QMouseEvent>
 
 CustomSlider::CustomSlider(QWidget *parent):
     QSlider(parent)

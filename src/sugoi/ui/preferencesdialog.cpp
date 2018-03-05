@@ -17,6 +17,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QDir>
+#include <QTableWidget>
 
 PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     QDialog(parent),

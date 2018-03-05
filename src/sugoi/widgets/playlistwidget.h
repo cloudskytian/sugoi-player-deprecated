@@ -2,9 +2,6 @@
 #define PLAYLISTWIDGET_H
 
 #include <QListWidget>
-#include <QContextMenuEvent>
-#include <QDropEvent>
-#include <QAction>
 
 class SugoiEngine;
 

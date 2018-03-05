@@ -12,11 +12,6 @@
 
 #ifdef Q_OS_WIN
 
-#include <QWidget>
-#include <QList>
-#include <QMargins>
-#include <QRect>
-
 class CFramelessWindow : public QWidget
 {
     Q_OBJECT

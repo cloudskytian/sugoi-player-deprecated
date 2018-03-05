@@ -1,4 +1,6 @@
-#include "customlineedit.h"
+﻿#include "customlineedit.h"
+
+#include <QKeyEvent>
 
 CustomLineEdit::CustomLineEdit(QWidget *parent) :
     QLineEdit(parent)

@@ -4,11 +4,11 @@
 
 #include "ui/mainwindow.h"
 
-#include <QString>
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QtConcurrent>
 #include <QDir>
+#include <QSystemTrayIcon>
 
 #include <locale.h>
 

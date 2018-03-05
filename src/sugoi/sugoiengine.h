@@ -2,11 +2,10 @@
 #define SUGOIENGINE_H
 
 #include <QObject>
-#include <QString>
-#include <QStringList>
 #include <QHash>
-#include <QSystemTrayIcon>
-#include <QTranslator>
+
+class QSystemTrayIcon;
+class QTranslator;
 
 class MainWindow;
 class MpvWidget;

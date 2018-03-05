@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <QRect>
 #include <QStyle>
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 #include "util.h"
 

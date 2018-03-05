@@ -1,13 +1,13 @@
 ﻿#ifndef UTIL_H
 #define UTIL_H
 
-#include <QWidget>
-#include <QString>
 #include <QTextStream>
-#include <QFile>
-#include <QFileInfo>
 
 #include "recent.h"
+
+class QWidget;
+class QFile;
+class QFileInfo;
 
 namespace Util {
 

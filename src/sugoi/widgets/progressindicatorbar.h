@@ -1,5 +1,5 @@
-﻿#ifndef ProgressIndicatorBar_H
-#define ProgressIndicatorBar_H
+﻿#ifndef PROGRESSINDICATORBAR_H
+#define PROGRESSINDICATORBAR_H
 
 #include <QWidget>
 
@@ -31,4 +31,4 @@ private:
     int m_currentProgress, min, max;
 };
 
-#endif // ProgressIndicatorBar_H
+#endif // PROGRESSINDICATORBAR_H

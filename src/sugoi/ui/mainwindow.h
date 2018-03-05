@@ -1,35 +1,26 @@
 ﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QStringList>
-#include <QResizeEvent>
-#include <QMouseEvent>
-#include <QWheelEvent>
-#include <QKeyEvent>
-#include <QEvent>
 #include <QTimer>
-#include <QTranslator>
 #include <QHash>
 #include <QAction>
-#include <QRect>
-#include <QMenu>
-#include <QSystemTrayIcon>
-
-#ifdef Q_OS_WIN
-#include <QWinThumbnailToolBar>
-#include <QWinThumbnailToolButton>
-#include <QWinTaskbarButton>
-#include <QWinTaskbarProgress>
-#include <QWinJumpList>
-#endif
 
 #include "ui/cframelesswindow.h"
 #include "recent.h"
-#include "widgets/logowidget.h"
 #include "fileassoc.h"
 #include "widgets/progressindicatorbar.h"
-#include "sugoiengine.h"
-#include "mpvwidget.h"
+
+#ifdef Q_OS_WIN
+class QWinThumbnailToolBar;
+class QWinThumbnailToolButton;
+class QWinTaskbarButton;
+class QWinTaskbarProgress;
+class QWinJumpList;
+#endif
+class QSystemTrayIcon;
+
+class SugoiEngine;
+class MpvWidget;
 
 namespace Ui {
 class MainWindow;
@@ -68,7 +59,7 @@ public:
     bool getAutoUpdatePlayer()   { return autoUpdatePlayer; }
     bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
     QString getSkinFile()        { return skinFile; }
-    QSystemTrayIcon *getSystemTrayIcon() { return sugoi->sysTrayIcon == nullptr ? nullptr : sugoi->sysTrayIcon; }
+    QSystemTrayIcon *getSystemTrayIcon() { return sysTrayIcon; }
 
     Ui::MainWindow *ui = nullptr;
     QImage albumArt;
@@ -120,11 +111,12 @@ private slots:
     void TogglePlaylist();                          // toggles playlist visibility
     bool isPlaylistVisible();                       // is the playlist visible?
     void SetWindowTitle2(const QString &text);
+    void updateTitleBarButtons(const QPoint &pos);
 
 private:
     SugoiEngine *sugoi = nullptr;
     MpvWidget *mpv = nullptr;
-    LogoWidget *logo = nullptr;
+    QSystemTrayIcon *sysTrayIcon = nullptr;
     ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
     bool showFullscreenIndicator = true;
     FileAssoc::reg_type  regType;

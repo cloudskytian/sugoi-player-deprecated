@@ -2,7 +2,8 @@
 #define SKINMANAGER_H
 
 #include <QObject>
-#include <QApplication>
+
+class QApplication;
 
 class SkinManager : public QObject
 {

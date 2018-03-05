@@ -15,6 +15,8 @@
 #include <QTimer>
 #include <QFontMetrics>
 #include <QThread>
+#include <QImage>
+#include <QLabel>
 
 #define OVERLAY_INFO 62
 #define OVERLAY_STATUS 63

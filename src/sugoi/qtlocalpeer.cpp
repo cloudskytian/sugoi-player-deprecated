@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 **
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
@@ -40,9 +40,13 @@
 
 
 #include "qtlocalpeer.h"
+
 #include <QCoreApplication>
 #include <QDataStream>
 #include <QTime>
+#include <QLocalServer>
+#include <QLocalSocket>
+#include <QDir>
 
 #if defined(Q_OS_WIN)
 #include <QLibrary>

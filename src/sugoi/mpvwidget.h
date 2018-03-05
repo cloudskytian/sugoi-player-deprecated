@@ -2,8 +2,6 @@
 #define MPVWIDGET_H
 
 #include <QOpenGLWidget>
-#include <QString>
-#include <QStringList>
 #include <QObject>
 
 #include <mpv/client.h>

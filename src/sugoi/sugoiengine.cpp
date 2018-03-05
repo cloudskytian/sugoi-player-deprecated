@@ -2,6 +2,8 @@
 
 #include <QMessageBox>
 #include <QDir>
+#include <QTranslator>
+#include <QSystemTrayIcon>
 
 #include "ui/mainwindow.h"
 #include "ui_mainwindow.h"
@@ -41,7 +43,6 @@ SugoiEngine::~SugoiEngine()
         delete dimDialog;
     delete sysTrayIcon;
     delete overlay;
-    //delete mpv;
 }
 
 void SugoiEngine::Command(QString command)

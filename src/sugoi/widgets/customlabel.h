@@ -1,8 +1,7 @@
-#ifndef CUSTOMLABEL_H
+﻿#ifndef CUSTOMLABEL_H
 #define CUSTOMLABEL_H
 
 #include <QLabel>
-#include <QMouseEvent>
 
 class CustomLabel : public QLabel
 {

@@ -1,10 +1,11 @@
-#ifndef OVERLAY_H
+﻿#ifndef OVERLAY_H
 #define OVERLAY_H
 
 #include <QObject>
-#include <QLabel>
-#include <QImage>
-#include <QTimer>
+
+class QLabel;
+class QImage;
+class QTimer;
 
 class Overlay : public QObject
 {

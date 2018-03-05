@@ -20,7 +20,6 @@ HEADERS += \
     widgets/openbutton.h \
     widgets/playlistwidget.h \
     widgets/seekbar.h \
-    widgets/logowidget.h \
     ui/aboutdialog.h \
     ui/inputdialog.h \
     ui/jumpdialog.h \
@@ -55,7 +54,6 @@ SOURCES += \
     widgets/openbutton.cpp \
     widgets/playlistwidget.cpp \
     widgets/seekbar.cpp \
-    widgets/logowidget.cpp \
     ui/aboutdialog.cpp \
     ui/inputdialog.cpp \
     ui/jumpdialog.cpp \

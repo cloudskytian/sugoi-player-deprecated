@@ -16,13 +16,27 @@
 #include <QCursor>
 #include <QtConcurrent>
 #include <QApplication>
+#include <QTranslator>
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QWheelEvent>
+#include <QKeyEvent>
+#include <QEvent>
+#include <QSystemTrayIcon>
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
 #include <QtWinExtras>
 #include <QtWin>
+#include <QWinThumbnailToolBar>
+#include <QWinThumbnailToolButton>
+#include <QWinTaskbarButton>
+#include <QWinTaskbarProgress>
+#include <QWinJumpList>
 #endif
 
+#include "sugoiengine.h"
+#include "mpvwidget.h"
 #include "overlayhandler.h"
 #include "util.h"
 #include "widgets/dimdialog.h"
@@ -62,16 +76,13 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     mpv = ui->mpvFrame;
     mpv->SetEngine(sugoi);
 
+    sysTrayIcon = sugoi->sysTrayIcon;
+
     ui->playlistWidget->AttachEngine(sugoi);
     ui->playbackLayoutWidget->installEventFilter(this);
     ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
     autohide = new QTimer(this);
     osdLocalTimeUpdater = new QTimer(this);
-    logo = new LogoWidget(this);
-    logo->setGeometry(0, ui->titleBarWidget->height() + 5, width(),
-                height() - ui->titleBarWidget->height() - ui->menuBarWidget->height()
-                      - ui->seekBar->height() - ui->playbackLayoutWidget->height());
-    logo->show();
 
     ui->playlistButton->setEnabled(true);
 
@@ -248,7 +259,9 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    if(isFullScreenMode())
+    updateTitleBarButtons(event->globalPos());
+
+    if (isFullScreenMode())
     {
         setCursor(QCursor(Qt::ArrowCursor)); // show the cursor
         autohide->stop();
@@ -282,8 +295,10 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
         bool showPlaylist = playlistRect.contains(event->globalPos());
         ShowPlaylist(showPlaylist);
 
-        if(!(showPlayback || showPlaylist) && autohide)
+        if (!(showPlayback || showPlaylist) && autohide)
+        {
             autohide->start(500);
+        }
     }
     CFramelessWindow::mouseMoveEvent(event);
 }
@@ -345,20 +360,10 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     if(ui->actionMedia_Info->isChecked())
+    {
         sugoi->overlay->showInfoText();
-    if (!isPlaylistVisible())
-    {
-        logo->setGeometry(0, ui->titleBarWidget->height() + 5, width(),
-                    height() - ui->titleBarWidget->height() - ui->menuBarWidget->height()
-                          - ui->seekBar->height() - ui->playbackLayoutWidget->height());
     }
-    else
-    {
-        logo->setGeometry(0, ui->titleBarWidget->height() + 5,
-                          width() - ui->splitter->position(), height() - ui->titleBarWidget->height()
-                          - ui->menuBarWidget->height() - ui->seekBar->height()
-                          - ui->playbackLayoutWidget->height());
-    }
+
     if (hideAllControls)
     {
         if (fullscreenProgressIndicator)
@@ -371,6 +376,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
         ui->seekBar->setGeometry(0, height() - ui->playbackLayoutWidget->height() - ui->seekBar->height(),
                                  width(), ui->seekBar->height());
     }
+
     CFramelessWindow::resizeEvent(event);
 }
 
@@ -430,42 +436,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         playInBackground = false;
     }
-//    if (quickStartMode)
-//    {
-//        QTimer::singleShot(0, [=]
-//        {
-//            mpv->Stop();
-//            if (logo != nullptr)
-//            {
-//                if (logo->isHidden())
-//                {
-//                    logo->show();
-//                }
-//            }
-//            sugoi->sysTrayIcon->hide();
-//            if (sugoi != nullptr)
-//            {
-//                delete sugoi;
-//                sugoi = nullptr;
-//                mpv = nullptr;
-//            }
-//            sugoi = new SugoiEngine(this);
-//            mpv = ui->mpvFrame;
-//            reconnectAllSignalsAndSlots();
-//            ui->playlistWidget->AttachEngine(sugoi);
-//            sugoi->LoadSettings();
-//        });
-//        QTimer::singleShot(1, [=]
-//        {
-//            hide();
-//            if (sugoi->sysTrayIcon != nullptr)
-//            {
-//                sugoi->sysTrayIcon->hide();
-//            }
-//        });
-//        event->ignore();
-//        return;
-//    }
     event->accept();
     CFramelessWindow::closeEvent(event);
 }
@@ -697,6 +667,52 @@ void MainWindow::SetWindowTitle2(const QString &text)
     ui->windowTitleLabel->setText(text);
 }
 
+void MainWindow::updateTitleBarButtons(const QPoint &pos)
+{
+    if (ui->titleBarWidget->isHidden())
+    {
+        return;
+    }
+    if (ui->minimizeButton->geometry().contains(pos))
+    {
+        ui->minimizeButton->setIcon(QIcon(":/images/default_minimize.svg"));
+    }
+    else
+    {
+        ui->minimizeButton->setIcon(QIcon(":/images/disabled_minimize.svg"));
+    }
+    if (ui->closeButton->geometry().contains(pos))
+    {
+        ui->closeButton->setIcon(QIcon(":/images/default_close.svg"));
+    }
+    else
+    {
+        ui->closeButton->setIcon(QIcon(":/images/disabled_close.svg"));
+    }
+    if (ui->maximizeButton->geometry().contains(pos))
+    {
+        if (isMaximized())
+        {
+            ui->maximizeButton->setIcon(QIcon(":/images/default_restore.svg"));
+        }
+        else
+        {
+            ui->maximizeButton->setIcon(QIcon(":/images/default_maximize.svg"));
+        }
+    }
+    else
+    {
+        if (isMaximized())
+        {
+            ui->maximizeButton->setIcon(QIcon(":/images/disabled_restore.svg"));
+        }
+        else
+        {
+            ui->maximizeButton->setIcon(QIcon(":/images/disabled_maximize.svg"));
+        }
+    }
+}
+
 void MainWindow::TogglePlaylist()
 {
     ShowPlaylist(!isPlaylistVisible());
@@ -710,10 +726,6 @@ void MainWindow::ShowPlaylist(bool visible)
     if(visible)
     {
         ui->splitter->setPosition(ui->splitter->normalPosition()); // bring splitter position to normal
-        logo->setGeometry(0, ui->titleBarWidget->height() + 5,
-                          width() - ui->splitter->normalPosition(), height() - ui->titleBarWidget->height()
-                          - ui->menuBarWidget->height() - ui->seekBar->height()
-                          - ui->playbackLayoutWidget->height());
     }
     else
     {
@@ -871,12 +883,6 @@ bool MainWindow::IsPlayingVideo(const QString &filePath)
 
 void MainWindow::connectMpvSignalsAndSlots()
 {
-    connect(mpv, &MpvWidget::videoSizeChanged,
-            [=]
-            {
-                sugoi->FitWindow(autoFit, false);
-            });
-
     connect(mpv, &MpvWidget::hwdecChanged,
             [=](bool enable)
             {
@@ -1079,7 +1085,7 @@ void MainWindow::connectMpvSignalsAndSlots()
 
                     if(pathChanged && autoFit)
                     {
-                        //sugoi->FitWindow(autoFit, false);
+                        sugoi->FitWindow(autoFit, false);
                         pathChanged = false;
                     }
                 }
@@ -1155,8 +1161,6 @@ void MainWindow::connectMpvSignalsAndSlots()
                     SetPlayButtonIcon(false);
                     if(onTop == "playing")
                         Util::SetAlwaysOnTop(this, true);
-                    if (logo->isVisible())
-                        logo->hide();
                     break;
 
                 case Mpv::Paused:
@@ -1196,8 +1200,6 @@ void MainWindow::connectMpvSignalsAndSlots()
                                 ui->actionStop_after_Current->setChecked(false);
                                 if(ui->mpvFrame->styleSheet() != QString()) // remove filler album art
                                     ui->mpvFrame->setStyleSheet("");
-                                if (logo->isHidden())
-                                    logo->show();
                             }
                         }
                         else
@@ -1467,11 +1469,6 @@ void MainWindow::connectUiSignalsAndSlots()
                 blockSignals(false);
                 if(ui->actionMedia_Info->isChecked())
                     sugoi->overlay->showInfoText();
-
-                logo->setGeometry(0, ui->titleBarWidget->height() + 5,
-                                  width() - i, height() - ui->titleBarWidget->height()
-                                  - ui->menuBarWidget->height() - ui->seekBar->height()
-                                  - ui->playbackLayoutWidget->height());
             });
 
     connect(ui->searchBox, &QLineEdit::textChanged,                     // Playlist: Search box

@@ -13,6 +13,9 @@
 #include <QDateTime>
 #include <QApplication>
 #include <QSettings>
+#include <QWidget>
+#include <QFile>
+#include <QFileInfo>
 
 #include <Windows.h>
 

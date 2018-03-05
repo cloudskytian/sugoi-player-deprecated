@@ -2,14 +2,13 @@
 #define OVERLAYHANDLER_H
 
 #include <QObject>
-#include <QString>
-#include <QImage>
-#include <QPoint>
 #include <QHash>
+#include <QMutex>
 #include <QFont>
 #include <QColor>
-#include <QLabel>
-#include <QMutex>
+#include <QPoint>
+
+class QTimer;
 
 class SugoiEngine;
 class Overlay;
@@ -18,7 +17,7 @@ class OverlayHandler : public QObject
 {
     Q_OBJECT
 public:
-    explicit OverlayHandler(QObject *parent = 0);
+    explicit OverlayHandler(QObject *parent = nullptr);
     ~OverlayHandler();
 
 public slots:
@@ -30,12 +29,12 @@ protected slots:
     void remove(int id);
 
 private:
-    SugoiEngine *sugoi;
+    SugoiEngine *sugoi = nullptr;
 
     QHash<int, Overlay*> overlays;
     QMutex overlay_mutex;
 
-    QTimer *refresh_timer;
+    QTimer *refresh_timer = nullptr;
     int min_overlay,
         max_overlay,
         overlay_id;

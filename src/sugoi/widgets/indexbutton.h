@@ -1,9 +1,7 @@
-#ifndef INDEXBUTTON_H
+﻿#ifndef INDEXBUTTON_H
 #define INDEXBUTTON_H
 
 #include <QPushButton>
-#include <QPaintEvent>
-#include <QMouseEvent>
 
 class IndexButton : public QPushButton
 {

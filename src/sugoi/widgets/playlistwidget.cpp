@@ -7,6 +7,9 @@
 #include <QMenu>
 #include <QFont>
 #include <QMessageBox>
+#include <QContextMenuEvent>
+#include <QDropEvent>
+#include <QAction>
 
 #include <algorithm> // for std::random_shuffle and std::sort
 

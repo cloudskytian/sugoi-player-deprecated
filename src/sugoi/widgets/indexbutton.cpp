@@ -1,4 +1,4 @@
-#include "indexbutton.h"
+﻿#include "indexbutton.h"
 
 #include <QRect>
 #include <QPainter>
@@ -6,6 +6,8 @@
 #include <QFont>
 #include <QToolTip>
 #include <QString>
+#include <QPaintEvent>
+#include <QMouseEvent>
 
 IndexButton::IndexButton(QWidget *parent) :
     QPushButton(parent),

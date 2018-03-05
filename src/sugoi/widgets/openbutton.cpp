@@ -1,4 +1,6 @@
-#include "openbutton.h"
+﻿#include "openbutton.h"
+
+#include <QMouseEvent>
 
 OpenButton::OpenButton(QWidget *parent):
     QPushButton(parent)

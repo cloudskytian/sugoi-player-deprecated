@@ -1,8 +1,7 @@
-#ifndef OPENBUTTON_H
+﻿#ifndef OPENBUTTON_H
 #define OPENBUTTON_H
 
 #include <QPushButton>
-#include <QMouseEvent>
 
 class OpenButton : public QPushButton
 {

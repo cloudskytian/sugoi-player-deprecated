@@ -2,7 +2,8 @@
 #include "ui_screenshotdialog.h"
 
 #include <QFileDialog>
-#include <QString>
+
+#include "mpvwidget.h"
 
 ScreenshotDialog::ScreenshotDialog(bool &_always, bool &_screenshot, MpvWidget *mpv, QWidget *parent) :
     QDialog(parent),

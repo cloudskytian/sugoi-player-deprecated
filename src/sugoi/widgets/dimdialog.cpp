@@ -7,6 +7,7 @@
 #include <QApplication>
 #include <QWindow>
 #include <QDesktopWidget>
+#include <QMouseEvent>
 
 DimDialog::DimDialog(MainWindow *window, QWidget *parent) :
     QDialog(parent),

@@ -1,8 +1,7 @@
-#ifndef CUSTOMLINEEDIT_H
+﻿#ifndef CUSTOMLINEEDIT_H
 #define CUSTOMLINEEDIT_H
 
 #include <QLineEdit>
-#include <QKeyEvent>
 
 class CustomLineEdit : public QLineEdit
 {

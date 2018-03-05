@@ -1,10 +1,6 @@
 ﻿#ifndef SEEKBAR_H
 #define SEEKBAR_H
 
-#include <QMouseEvent>
-#include <QPaintEvent>
-#include <QList>
-
 #include "customslider.h"
 
 class SeekBar : public CustomSlider
