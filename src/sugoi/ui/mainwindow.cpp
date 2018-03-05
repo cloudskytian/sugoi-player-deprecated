@@ -6,8 +6,6 @@
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QDesktopWidget>
-#include <QtWinExtras>
-#include <QtWin>
 #include <QDebug>
 #include <QFileInfo>
 #include <QDir>
@@ -18,6 +16,12 @@
 #include <QCursor>
 #include <QtConcurrent>
 #include <QApplication>
+
+#ifdef Q_OS_WIN
+#include <qt_windows.h>
+#include <QtWinExtras>
+#include <QtWin>
+#endif
 
 #include "overlayhandler.h"
 #include "util.h"
@@ -43,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
 
     setTitleBar(ui->titleBarWidget);
     addIgnoreWidget(ui->windowTitleLabel);
+    setContentsMargins(0, 0, 0, 0);
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
     // update streaming support disabled on unix platforms
@@ -63,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     autohide = new QTimer(this);
     osdLocalTimeUpdater = new QTimer(this);
     logo = new LogoWidget(this);
-    logo->setGeometry(0, ui->titleBarWidget->height(), width(),
+    logo->setGeometry(0, ui->titleBarWidget->height() + 5, width(),
                 height() - ui->titleBarWidget->height() - ui->menuBarWidget->height()
                       - ui->seekBar->height() - ui->playbackLayoutWidget->height());
     logo->show();
@@ -211,9 +216,9 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton)
+    if (event->button() == Qt::LeftButton)
     {
-        if(ui->remainingLabel->rect().contains(ui->remainingLabel->mapFrom(this, event->pos()))) // clicked timeLayoutWidget
+        if (ui->remainingLabel->rect().contains(ui->remainingLabel->mapFrom(this, event->pos()))) // clicked timeLayoutWidget
         {
             setRemaining(!remaining); // todo: use a sugoicommand
         }
@@ -221,6 +226,21 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                  && !ui->playbackLayoutWidget->geometry().contains(event->pos())) // mouse is in the mpvFrame
         {
             mpv->PlayPause(ui->playlistWidget->CurrentItem());
+        }
+        else if (!ui->seekBar->geometry().contains(event->pos()))
+        {
+            if (!isFullScreen() && !isMaximized())
+            {
+#ifdef Q_OS_WIN
+                if (ReleaseCapture())
+                {
+                    SendMessage(HWND(winId()), WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
+                }
+                event->ignore();
+#else
+                //TODO: Other platforms
+#endif
+            }
         }
     }
     CFramelessWindow::mousePressEvent(event);
@@ -328,13 +348,13 @@ void MainWindow::resizeEvent(QResizeEvent *event)
         sugoi->overlay->showInfoText();
     if (!isPlaylistVisible())
     {
-        logo->setGeometry(0, ui->titleBarWidget->height(), width(),
+        logo->setGeometry(0, ui->titleBarWidget->height() + 5, width(),
                     height() - ui->titleBarWidget->height() - ui->menuBarWidget->height()
                           - ui->seekBar->height() - ui->playbackLayoutWidget->height());
     }
     else
     {
-        logo->setGeometry(0, ui->titleBarWidget->height(),
+        logo->setGeometry(0, ui->titleBarWidget->height() + 5,
                           width() - ui->splitter->position(), height() - ui->titleBarWidget->height()
                           - ui->menuBarWidget->height() - ui->seekBar->height()
                           - ui->playbackLayoutWidget->height());
@@ -367,6 +387,14 @@ void MainWindow::changeEvent(QEvent *event)
                     mpv->Pause();
                 }
             }
+        }
+        else if (windowState() == Qt::WindowMaximized)
+        {
+            ui->maximizeButton->setIcon(QIcon(":/images/disabled_restore.svg"));
+        }
+        else if (windowState() == Qt::WindowNoState)
+        {
+            ui->maximizeButton->setIcon(QIcon(":/images/disabled_maximize.svg"));
         }
     }
     CFramelessWindow::changeEvent(event);
@@ -619,19 +647,41 @@ void MainWindow::HideAllControls(bool w, bool s)
 
 void MainWindow::FullScreen(bool fs)
 {
-    if(fs)
+    static Qt::WindowStates oldState;
+    if (fs)
     {
         if(sugoi->dimDialog && sugoi->dimDialog->isVisible())
             sugoi->Dim(false);
-        setWindowState(windowState() | Qt::WindowFullScreen);
+        if (ui->menuBarWidget && ui->menuBarWidget->isVisible())
+        {
+            ui->menuBarWidget->hide();
+        }
+        if (ui->titleBarWidget->isVisible())
+        {
+            ui->titleBarWidget->hide();
+        }
+        oldState = windowState();
+        showFullScreen();
         if(!hideAllControls)
+        {
             HideAllControls(true, false);
+        }
     }
     else
     {
-        setWindowState(windowState() & ~Qt::WindowFullScreen);
+        setWindowState(oldState);
+        if (!ui->titleBarWidget->isVisible())
+        {
+            ui->titleBarWidget->show();
+        }
+        if (ui->menuBarWidget && !ui->menuBarWidget->isVisible())
+        {
+            ui->menuBarWidget->show();
+        }
         if(!hideAllControls)
+        {
             HideAllControls(false, false);
+        }
     }
 }
 
@@ -639,6 +689,12 @@ bool MainWindow::isPlaylistVisible()
 {
     // if the position is 0, playlist is hidden
     return (ui->splitter->position() != 0);
+}
+
+void MainWindow::SetWindowTitle2(const QString &text)
+{
+    setWindowTitle(text);
+    ui->windowTitleLabel->setText(text);
 }
 
 void MainWindow::TogglePlaylist()
@@ -654,7 +710,7 @@ void MainWindow::ShowPlaylist(bool visible)
     if(visible)
     {
         ui->splitter->setPosition(ui->splitter->normalPosition()); // bring splitter position to normal
-        logo->setGeometry(0, ui->titleBarWidget->height(),
+        logo->setGeometry(0, ui->titleBarWidget->height() + 5,
                           width() - ui->splitter->normalPosition(), height() - ui->titleBarWidget->height()
                           - ui->menuBarWidget->height() - ui->seekBar->height()
                           - ui->playbackLayoutWidget->height());
@@ -815,6 +871,12 @@ bool MainWindow::IsPlayingVideo(const QString &filePath)
 
 void MainWindow::connectMpvSignalsAndSlots()
 {
+    connect(mpv, &MpvWidget::videoSizeChanged,
+            [=]
+            {
+                sugoi->FitWindow(autoFit, false);
+            });
+
     connect(mpv, &MpvWidget::hwdecChanged,
             [=](bool enable)
             {
@@ -836,11 +898,11 @@ void MainWindow::connectMpvSignalsAndSlots()
                 if(mpv->getPlayState() > 0)
                 {
                     if(fileInfo.media_title == "")
-                        setWindowTitle("Sugoi Player");
+                        SetWindowTitle2("Sugoi Player");
                     else if(fileInfo.media_title == "-")
-                        setWindowTitle("Sugoi Player: stdin"); // todo: disable playlist?
+                        SetWindowTitle2("Sugoi Player: stdin"); // todo: disable playlist?
                     else
-                        setWindowTitle(fileInfo.media_title);
+                        SetWindowTitle2(fileInfo.media_title);
 
                     QString f = mpv->getFile(), file = mpv->getPath()+f;
                     if(f != QString() && maxRecent > 0)
@@ -1017,7 +1079,7 @@ void MainWindow::connectMpvSignalsAndSlots()
 
                     if(pathChanged && autoFit)
                     {
-                        sugoi->FitWindow(autoFit, false);
+                        //sugoi->FitWindow(autoFit, false);
                         pathChanged = false;
                     }
                 }
@@ -1128,7 +1190,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                             }
                             else // stop
                             {
-                                setWindowTitle("Sugoi Player");
+                                SetWindowTitle2("Sugoi Player");
                                 SetPlaybackControls(false);
                                 ui->seekBar->setTracking(0);
                                 ui->actionStop_after_Current->setChecked(false);
@@ -1406,7 +1468,7 @@ void MainWindow::connectUiSignalsAndSlots()
                 if(ui->actionMedia_Info->isChecked())
                     sugoi->overlay->showInfoText();
 
-                logo->setGeometry(0, ui->titleBarWidget->height(),
+                logo->setGeometry(0, ui->titleBarWidget->height() + 5,
                                   width() - i, height() - ui->titleBarWidget->height()
                                   - ui->menuBarWidget->height() - ui->seekBar->height()
                                   - ui->playbackLayoutWidget->height());
@@ -1703,7 +1765,7 @@ void MainWindow::connectOtherSignalsAndSlots()
                 ui->retranslateUi(this);
 
                 // reload strings we kept
-                setWindowTitle(title);
+                SetWindowTitle2(title);
                 ui->durationLabel->setText(duration);
                 ui->remainingLabel->setText(remaining);
                 ui->indexLabel->setText(index);

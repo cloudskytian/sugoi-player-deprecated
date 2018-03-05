@@ -119,6 +119,7 @@ private slots:
     void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
     void TogglePlaylist();                          // toggles playlist visibility
     bool isPlaylistVisible();                       // is the playlist visible?
+    void SetWindowTitle2(const QString &text);
 
 private:
     SugoiEngine *sugoi = nullptr;

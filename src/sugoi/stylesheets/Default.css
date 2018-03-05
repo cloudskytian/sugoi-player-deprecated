@@ -171,6 +171,17 @@ QSlider#seekBar::sub-page:horizontal {
 }
 
 QPushButton#minimizeButton {
+	qproperty-icon: url(:/images/disabled_minimize.svg);
+	background: none;
+	border: 0px;
+	border-radius: 0px;
+	color: none;
+	min-width: 8px;
+	min-height: 8px;
+}
+
+QPushButton#minimizeButton:hover {
+	qproperty-icon: url(:/images/default_minimize.svg);
 	background: none;
 	border: 0px;
 	border-radius: 0px;
@@ -180,6 +191,17 @@ QPushButton#minimizeButton {
 }
 
 QPushButton#maximizeButton {
+	qproperty-icon: url(:/images/disabled_maximize.svg);
+	background: none;
+	border: 0px;
+	border-radius: 0px;
+	color: none;
+	min-width: 8px;
+	min-height: 8px;
+}
+
+QPushButton#maximizeButton:hover {
+	qproperty-icon: url(:/images/default_maximize.svg);
 	background: none;
 	border: 0px;
 	border-radius: 0px;
@@ -189,6 +211,17 @@ QPushButton#maximizeButton {
 }
 
 QPushButton#closeButton {
+	qproperty-icon: url(:/images/disabled_close.svg);
+	background: none;
+	border: 0px;
+	border-radius: 0px;
+	color: none;
+	min-width: 8px;
+	min-height: 8px;
+}
+
+QPushButton#closeButton:hover {
+	qproperty-icon: url(:/images/default_close.svg);
 	background: none;
 	border: 0px;
 	border-radius: 0px;

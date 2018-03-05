@@ -21,7 +21,7 @@ class CFramelessWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CFramelessWindow(QWidget *parent = 0);
+    explicit CFramelessWindow(QWidget *parent = nullptr);
 public:
 
     //设置是否可以通过鼠标调整窗口大小
@@ -57,15 +57,15 @@ public:
 public slots:
     void showFullScreen();
 private:
-    QWidget* m_titlebar;
+    QWidget* m_titlebar = nullptr;
     QList<QWidget*> m_whiteList;
-    int m_borderWidth;
+    int m_borderWidth = 5;
 
-    QMargins m_margins;
-    QMargins m_frames;
-    bool m_bJustMaximized;
+    QMargins m_margins = QMargins();
+    QMargins m_frames = QMargins();
+    bool m_bJustMaximized = false;
 
-    bool m_bResizeable;
+    bool m_bResizeable = true;
 };
 
 #endif
