@@ -127,7 +127,7 @@ void SugoiEngine::LoadSettings()
     mpv->Volume(settings.value(QString::fromLatin1("volume"), 100).toInt());
     mpv->Speed(settings.value(QString::fromLatin1("speed"), 1.0).toDouble());
     mpv->Hwdec(settings.value(QString::fromLatin1("hwdec"), true).toBool());
-    mpv->Vo(settings.value(QString::fromLatin1("vo"), QString()).toString());
+    //mpv->Vo(settings.value(QString::fromLatin1("vo"), QString::fromLatin1("opengl-cb")).toString());
     mpv->ScreenshotFormat(settings.value(QString::fromLatin1("screenshot-format"), QString::fromLatin1("png")).toString());
     mpv->ScreenshotTemplate(settings.value(QString::fromLatin1("screenshot-template"), QString::fromLatin1("screenshot%#04n")).toString());
     mpv->ScreenshotDirectory(settings.value(QString::fromLatin1("screenshot-directory"), QString::fromLatin1(".")).toString());

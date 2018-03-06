@@ -260,8 +260,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
-    updateTitleBarButtons(event->globalPos());
-
     if (isFullScreenMode())
     {
         setCursor(QCursor(Qt::ArrowCursor)); // show the cursor
@@ -668,52 +666,6 @@ void MainWindow::SetWindowTitle2(const QString &text)
     ui->windowTitleLabel->setText(text);
 }
 
-void MainWindow::updateTitleBarButtons(const QPoint &pos)
-{
-    if (ui->titleBarWidget->isHidden())
-    {
-        return;
-    }
-    if (ui->minimizeButton->geometry().contains(pos))
-    {
-        ui->minimizeButton->setIcon(QIcon(":/images/default_minimize.svg"));
-    }
-    else
-    {
-        ui->minimizeButton->setIcon(QIcon(":/images/disabled_minimize.svg"));
-    }
-    if (ui->closeButton->geometry().contains(pos))
-    {
-        ui->closeButton->setIcon(QIcon(":/images/default_close.svg"));
-    }
-    else
-    {
-        ui->closeButton->setIcon(QIcon(":/images/disabled_close.svg"));
-    }
-    if (ui->maximizeButton->geometry().contains(pos))
-    {
-        if (isMaximized())
-        {
-            ui->maximizeButton->setIcon(QIcon(":/images/default_restore.svg"));
-        }
-        else
-        {
-            ui->maximizeButton->setIcon(QIcon(":/images/default_maximize.svg"));
-        }
-    }
-    else
-    {
-        if (isMaximized())
-        {
-            ui->maximizeButton->setIcon(QIcon(":/images/disabled_restore.svg"));
-        }
-        else
-        {
-            ui->maximizeButton->setIcon(QIcon(":/images/disabled_maximize.svg"));
-        }
-    }
-}
-
 void MainWindow::TogglePlaylist()
 {
     ShowPlaylist(!isPlaylistVisible());
@@ -816,19 +768,13 @@ void MainWindow::SetPlayButtonIcon(bool play)
 
 void MainWindow::SetRemainingLabels(int time)
 {
-    // todo: move setVisible functions outside of this function which gets called every second and somewhere at the start of a video
     const Mpv::FileInfo &fi = mpv->getFileInfo();
     if (fi.length == 0)
     {
         ui->durationLabel->setText(Util::FormatTime(time, time));
-        //ui->remainingLabel->setVisible(false);
-        //ui->seperatorLabel->setVisible(false);
     }
     else
     {
-        //ui->remainingLabel->setVisible(true);
-        //ui->seperatorLabel->setVisible(true);
-
         ui->durationLabel->setText(Util::FormatTime(time, fi.length));
         if(remaining)
         {

@@ -10,7 +10,6 @@
 #include <QFileInfo>
 #include <QFileInfoList>
 #include <QDateTime>
-#include <QObject>
 
 #include "sugoiengine.h"
 #include "overlayhandler.h"

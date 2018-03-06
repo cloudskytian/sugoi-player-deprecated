@@ -1,18 +1,13 @@
 ﻿#include "cframelesswindow.h"
-#include <QApplication>
-#include <QPoint>
-#include <QSize>
-#ifdef Q_OS_WIN
 
-#include <windows.h>
+#ifdef Q_OS_WIN
+#include <Windows.h>
 #include <WinUser.h>
 #include <windowsx.h>
 #include <dwmapi.h>
-#include <objidl.h> // Fixes error C2504: 'IUnknown' : base class undefined
+#include <objidl.h>
 #include <gdiplus.h>
 #include <GdiPlusColor.h>
-#pragma comment (lib,"Dwmapi.lib") // Adds missing library, fixes error LNK2019: unresolved external symbol __imp__DwmExtendFrameIntoClientArea
-#pragma comment (lib,"user32.lib")
 
 CFramelessWindow::CFramelessWindow(QWidget *parent)
     : QWidget(parent),

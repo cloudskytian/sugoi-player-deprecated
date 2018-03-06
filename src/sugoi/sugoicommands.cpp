@@ -439,7 +439,6 @@ void SugoiEngine::FitWindow(int percent, bool msg)
     const Mpv::VideoParams &vG = mpv->getFileInfo().video_params; // video geometry
     QRect mG = window->ui->mpvFrame->geometry(),                  // mpv geometry
           wfG = window->geometry(),                               // frame geometry of window (window geometry + window frame)
-          wG = window->ui->centralWidget->geometry(),             // window geometry
           aG = qApp->desktop()->availableGeometry(wfG.center());  // available geometry of the screen we're in--(geometry not including the taskbar)
 
     double a, // aspect ratio
@@ -502,16 +501,8 @@ void SugoiEngine::FitWindow(int percent, bool msg)
                                            dH),
                                      percent == 0 ? wfG : aG); // center in window (autofit) or on our screen
 
-    // adjust the rect to compensate for the frame
-//    rect.setLeft(rect.left() + (wG.left() - wfG.left()));
-//    rect.setTop(rect.top() + (wG.top() - wfG.top()));
-//    rect.setRight(rect.right() - (wfG.right() - wG.right()));
-//    rect.setBottom(rect.bottom() - (wfG.bottom() - wG.bottom()));
-
     // finally set the geometry of the window
     window->setGeometry(rect);
-
-    // note: the above block is required because there is no setFrameGeometry function
 
     if(msg)
         mpv->ShowText(tr("Fit Window: %0").arg(percent == 0 ? tr("To Current Size") : (QString::number(percent)+"%")));

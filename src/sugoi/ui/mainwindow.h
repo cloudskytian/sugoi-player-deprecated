@@ -111,7 +111,6 @@ private slots:
     void TogglePlaylist();                          // toggles playlist visibility
     bool isPlaylistVisible();                       // is the playlist visible?
     void SetWindowTitle2(const QString &text);
-    void updateTitleBarButtons(const QPoint &pos);
 
 private:
     SugoiEngine *sugoi = nullptr;

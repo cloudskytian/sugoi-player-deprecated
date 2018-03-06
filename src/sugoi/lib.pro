@@ -44,7 +44,7 @@ contains(QT_ARCH, x86_64) {
     }
 }
 
-LIBS += -lUser32 -lShell32 -lKernel32
+LIBS += -lUser32 -lShell32 -lKernel32 -lDwmapi
 
 HEADERS += sugoilib_global.h sugoilib.h
 SOURCES += guardmain.cpp
