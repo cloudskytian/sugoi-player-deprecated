@@ -11,40 +11,25 @@
 ---
 
 * [External links](#external-links)
-
 * [Overview](#overview)
-
 * [Snapshots](#snapshots)
-
 * [Features](#features)
-
 * [System requirements](#system-requirements)
-
 * [Downloads](#downloads)
-
 * [Changelog](#changelog)
-
 * [Compilation](#compilation)
-
 * [Bug reports & Feature requests](#bug-reports--feature-requests)
-
 * [Contributors](#contributors)
-
 * [Contributing](#contributing)
-
 * [License](#license)
-
 * [Contact](#contact)
-
 * [Donation](#donation)
 
 
 ## External links
 
 * [Wiki](https://github.com/wangwenx190/Sugoi-Player/wiki)
-
 * [FAQ](https://github.com/wangwenx190/Sugoi-Player/wiki/FAQ)
-
 * [MPV Manual](http://mpv.io/manual/master/)
 
 
@@ -73,32 +58,22 @@ There are many mpv front-ends in the world, some of them are truly great, I hope
 ## Features
 
 - Smart playlist
-
 - Dim Desktop
-
 - Hardware accelerated playback (vdpau, vaapi, vda)
-
 - Youtube playback support ([and others](http://rg3.github.io/youtube-dl/supportedsites.html))
-
 - Multilingual support (we are looking for translators!)
-
 - Beautiful and modern interface
-
 - High DPI support
-
 - Support playing almost all kinds of video and audio files
-
 - Much more to be found :)
 
 
 ## System requirements
 
 - Microsoft Windows 7 or later (64 bit os is highly recommended).
-
 - A somewhat capable CPU. Hardware decoding might help if the CPU is too slow to
   decode video in realtime, but must be explicitly enabled with the `--hwdec`
   option.
-
 - A not too crappy GPU. Sugoi Player is not intended to be used with bad GPUs. There are
   many caveats with drivers or system compositors causing tearing, stutter,
   etc. On Windows, you might want to make sure the graphics drivers are
@@ -127,17 +102,11 @@ See [**./doc/CHANGELOG.md**](/doc/CHANGELOG.md) for more information.
 ### Part A: Requirements
 
 - [Visual Studio 2017](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) (Only the build tools are needed, but you can also install the full IDE. The community edition is also fine)
-
   - [**Windows 10 SDK**](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk) (I recommend download the ISO image from this website instead of installing it from the VS installer. Remember to install the CDB debugger while you are installing the Win10 SDK if you want to use Qt Creator)
-
 - [Qt Creator](http://download.qt.io/official_releases/qtcreator/) (Optional, install this software in case of you don't want to install VS. Remember to install the CDB support component if you want to debug)
-
 - [**libmpv**](https://mpv.srsfckn.biz/)
-
 - [**Qt5**](http://download.qt.io/official_releases/qt/)
-
 - [YouTube-dl](https://yt-dl.org/latest/youtube-dl.exe) (Optional, for streaming youtube videos)
-
 - [Inno Setup 5 Unicode](http://jrsoftware.org/isdl.php) (Optional, for building the installer)
 
 **NOTE**
@@ -148,7 +117,6 @@ Using the **latest** version is highly recommended.
 ### Part B: Prepare the environment
 
 Create a file named **build.user.bat** in **`C:\Sugoi-Player\`** (just for example, it could be placed in anywhere you like) containing the following entries, adapted for your system:
-
 ```bat
 @ECHO OFF
 SET "_QT_DIR=C:\Qt\Qt5.10.1\5.10.1\msvc2017_64"
@@ -160,27 +128,19 @@ SET "_INNO_SETUP_DIR=C:\Program Files (x86)\Inno Setup 5"
 ### Part C: Download and compile the source code
 
 1. Use Git to clone Sugoi Player's repository to **`C:\Sugoi-Player\`** (just for example, it could be anywhere you like).
-
    1. Download Git from https://git-for-windows.github.io/ and install.
-
    2. Open Git bash and run:
-
       ```text
       git clone https://github.com/wangwenx190/Sugoi-Player.git
       ```
-
 2. Open the solution file **sugoi-player.pro**. Change the solution's configuration to **Release** (in the toolbar).
-
 3. Press <kbd>Ctrl</kbd> + <kbd>B</kbd> or click **Build** to build the solution.
-
 4. You now have **Sugoi[64].exe** and **iconlib.dll** under **"./bin[64]/Release"**.
 
 **NOTES**
 
 - Alternatively, you can use **build.bat** that can build everything for you.
-
 - How to generate Visual Studio solution file through qmake:
-
    ```bat
    REM Open cmd, call qtenv2.bat in your Qt bin dir
    REM For example:
