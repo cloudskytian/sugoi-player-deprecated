@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN" sourcelanguage="en_US">
 <context>
@@ -388,7 +388,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Fit Window: %0</source>
-        <translation type="vanished">适应窗口: %0</translation>
+        <translation type="vanished">适应窗口：%0</translation>
     </message>
     <message>
         <source>Open Subtitle File</source>
@@ -612,7 +612,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Speed: %0x</source>
-        <translation type="vanished">速度: %0x</translation>
+        <translation type="vanished">速度：%0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
@@ -624,15 +624,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>usage: baka &lt;command&gt; [...]</source>
-        <translation type="vanished">用法: baka &lt;command&gt; [...]</translation>
+        <translation type="vanished">用法：baka &lt;command&gt; [...]</translation>
     </message>
     <message>
         <source>commands:</source>
-        <translation type="vanished">命令:</translation>
+        <translation type="vanished">命令：</translation>
     </message>
     <message>
         <source>usage: %0 %1</source>
-        <translation type="vanished">用法: %0 %1</translation>
+        <translation type="vanished">用法：%0 %1</translation>
     </message>
     <message>
         <source>description:</source>
@@ -640,7 +640,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>advanced:</source>
-        <translation type="vanished">高级:</translation>
+        <translation type="vanished">高级：</translation>
     </message>
     <message>
         <source>invalid command &apos;%0&apos;</source>
@@ -648,7 +648,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>invalid parameter &apos;%0&apos;</source>
-        <translation type="vanished">无效参数:&apos;%0&apos;</translation>
+        <translation type="vanished">无效参数：&apos;%0&apos;</translation>
     </message>
     <message>
         <source>&apos;%0&apos; requires parameters</source>
@@ -851,7 +851,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Please enter a value:</source>
-        <translation>请输入一个值:</translation>
+        <translation>请输入一个值：</translation>
     </message>
     <message>
         <source>&amp;OK</source>
@@ -1055,7 +1055,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>&amp;Add Audio File...</source>
-        <translation>添加音频文件(&amp;A)...</translation>
+        <translation>添加音频文件(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Hide All Controls</source>
@@ -1083,7 +1083,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Open &amp;Location...</source>
-        <translation>打开路径(&amp;L)...</translation>
+        <translation>打开路径(&amp;L)</translation>
     </message>
     <message>
         <source>Open &amp;Copied Link</source>
@@ -1167,7 +1167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>&amp;Open File...</source>
-        <translation>打开文件(&amp;O)...</translation>
+        <translation>打开文件(&amp;O)</translation>
     </message>
     <message>
         <source>Show in &amp;Folder</source>
@@ -1231,7 +1231,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>&amp;Jump to Time...</source>
-        <translation>跳转到时间(&amp;J)...</translation>
+        <translation>跳转到时间(&amp;J)</translation>
     </message>
     <message>
         <source>Online &amp;Help</source>
@@ -1271,7 +1271,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>&amp;Add Subtitle File...</source>
-        <translation>添加字幕文件(&amp;A)...</translation>
+        <translation>添加字幕文件(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Size +</source>
@@ -1299,15 +1299,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>With &amp;Subtitles...</source>
-        <translation>打开字幕(&amp;S)...</translation>
+        <translation>打开字幕(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Without Subtitles...</source>
-        <translation>关闭字幕(&amp;W)...</translation>
+        <translation>关闭字幕(&amp;W)</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation>首选项(&amp;P)...</translation>
+        <translation>首选项(&amp;P)</translation>
     </message>
     <message>
         <source>&amp;Reset</source>
@@ -1352,8 +1352,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     <message>
         <source>Enter the file number you want to play:
 Note: Value must be from %0 - %1</source>
-        <translation>输入你想要播放的文件编号:
-注意: 编号必须在以下范围%0 - %1</translation>
+        <translation>输入你想要播放的文件编号：
+注意：编号必须在以下范围%0 - %1</translation>
     </message>
     <message>
         <source>Enter File Number</source>
@@ -1365,7 +1365,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Speed: %0x</source>
-        <translation>速度: %0x</translation>
+        <translation>速度：%0x</translation>
     </message>
     <message>
         <source>File %0 of %1</source>
@@ -1584,7 +1584,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Buffering...</source>
-        <translation type="vanished">正在缓冲...</translation>
+        <translation type="vanished">正在缓冲……</translation>
     </message>
     <message>
         <source>Your network is slow or stuck, please wait a bit</source>
@@ -1628,7 +1628,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Volume: %0%</source>
-        <translation type="vanished">音量: %0%</translation>
+        <translation type="vanished">音量：%0%</translation>
     </message>
 </context>
 <context>
@@ -1731,7 +1731,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Volume: %0%</source>
-        <translation>音量: %0%</translation>
+        <translation>音量：%0%</translation>
     </message>
     <message>
         <source>Deinterlacing: %0</source>
@@ -1841,7 +1841,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Chang&amp;e...</source>
-        <translation>更改(&amp;E)...</translation>
+        <translation>更改(&amp;E)</translation>
     </message>
     <message>
         <source>File Format:</source>
@@ -1909,7 +1909,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Default Save Location:</source>
-        <translation>默认保存目录:</translation>
+        <translation>默认保存目录：</translation>
     </message>
     <message>
         <source>screenshot%#04n</source>
@@ -1969,7 +1969,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>mpv msg-level:</source>
-        <translation>mpv日志等级:</translation>
+        <translation>mpv日志等级：</translation>
     </message>
     <message>
         <source>fatal</source>
@@ -2327,7 +2327,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Buffering...</source>
-        <translation type="obsolete">正在缓冲...</translation>
+        <translation type="obsolete">正在缓冲……</translation>
     </message>
     <message>
         <source>Your network is slow or stuck, please wait a bit</source>
@@ -2415,7 +2415,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Volume: %0%</source>
-        <translation type="obsolete">音量: %0%</translation>
+        <translation type="obsolete">音量：%0%</translation>
     </message>
     <message>
         <source>Deinterlacing: %0</source>
@@ -2537,7 +2537,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Fit Window: %0</source>
-        <translation>适应窗口: %0</translation>
+        <translation>适应窗口：%0</translation>
     </message>
     <message>
         <source>To Current Size</source>
@@ -2545,7 +2545,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Speed: %0x</source>
-        <translation>速度: %0x</translation>
+        <translation>速度：%0x</translation>
     </message>
     <message>
         <source>Press ESC or double-click to leave full screen</source>
@@ -2557,7 +2557,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>usage: Sugoi &lt;command&gt; [...]</source>
-        <translation>用法： Sugoi &lt;命令&gt; [...]</translation>
+        <translation>用法：sugoi &lt;命令&gt; [...]</translation>
     </message>
     <message>
         <source>commands:</source>
@@ -2565,7 +2565,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>usage: %0 %1</source>
-        <translation>用法： %0 %1</translation>
+        <translation>用法：%0 %1</translation>
     </message>
     <message>
         <source>description:</source>
@@ -3011,7 +3011,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Checking for updates...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;正在检查更新...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;正在检查更新……&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>About 0 second(s) remaining</source>
@@ -3037,7 +3037,7 @@ Note: Value must be from %0 - %1</source>
         <source>Update Available!
 Version: %0</source>
         <translation type="vanished">有可用更新!
-版本: %0</translation>
+版本：%0</translation>
     </message>
     <message>
         <source>About %0 second(s) remaining</source>
@@ -3049,7 +3049,7 @@ Version: %0</source>
     </message>
     <message>
         <source>Calculating...</source>
-        <translation type="vanished">计算中...</translation>
+        <translation type="vanished">计算中……</translation>
     </message>
 </context>
 <context>
@@ -3061,7 +3061,7 @@ Version: %0</source>
     </message>
     <message>
         <source>Extracting...</source>
-        <translation type="vanished">正在解压</translation>
+        <translation type="vanished">正在解压……</translation>
     </message>
     <message>
         <source>Could not open file for writing...</source>
@@ -3069,15 +3069,15 @@ Version: %0</source>
     </message>
     <message>
         <source>Updating...</source>
-        <translation type="vanished">正在更新...</translation>
+        <translation type="vanished">正在更新……</translation>
     </message>
     <message>
         <source>Checking for updates...</source>
-        <translation type="vanished">正在检查更新...</translation>
+        <translation type="vanished">正在检查更新……</translation>
     </message>
     <message>
         <source>Downloading update...</source>
-        <translation type="vanished">正在下载更新...</translation>
+        <translation type="vanished">正在下载更新……</translation>
     </message>
     <message>
         <source>write error</source>
@@ -3089,15 +3089,15 @@ Version: %0</source>
     </message>
     <message>
         <source>Redirected...</source>
-        <translation type="vanished">重定向...</translation>
+        <translation type="vanished">已重定向……</translation>
     </message>
     <message>
         <source>Creating updater script...</source>
-        <translation type="vanished">正在创建更新脚本...</translation>
+        <translation type="vanished">正在创建更新脚本……</translation>
     </message>
     <message>
         <source>Done. Restarting...</source>
-        <translation type="vanished">完成,正在重新启动...</translation>
+        <translation type="vanished">完成，正在重新启动……</translation>
     </message>
 </context>
 </TS>

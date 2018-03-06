@@ -771,10 +771,16 @@ void MainWindow::SetRemainingLabels(int time)
     const Mpv::FileInfo &fi = mpv->getFileInfo();
     if (fi.length == 0)
     {
+        ui->remainingLabel->setVisible(false);
+        ui->seperatorLabel->setVisible(false);
+
         ui->durationLabel->setText(Util::FormatTime(time, time));
     }
     else
     {
+        ui->remainingLabel->setVisible(true);
+        ui->seperatorLabel->setVisible(true);
+
         ui->durationLabel->setText(Util::FormatTime(time, fi.length));
         if(remaining)
         {
@@ -1104,16 +1110,6 @@ void MainWindow::connectMpvSignalsAndSlots()
                     SetPlaybackControls(true);
                     mpv->Play();
                     sugoi->overlay->showStatusText(QString(), 0);
-                    if (mpv->getFileInfo().length == 0)
-                    {
-                        ui->remainingLabel->setVisible(false);
-                        ui->seperatorLabel->setVisible(false);
-                    }
-                    else
-                    {
-                        ui->remainingLabel->setVisible(true);
-                        ui->seperatorLabel->setVisible(true);
-                    }
                 case Mpv::Playing:
                     SetPlayButtonIcon(false);
                     if(onTop == "playing")
