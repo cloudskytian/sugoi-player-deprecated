@@ -768,6 +768,7 @@ void MainWindow::SetPlayButtonIcon(bool play)
 
 void MainWindow::SetRemainingLabels(int time)
 {
+    // todo: move setVisible functions outside of this function which gets called every second and somewhere at the start of a video
     const Mpv::FileInfo &fi = mpv->getFileInfo();
     if (fi.length == 0)
     {
