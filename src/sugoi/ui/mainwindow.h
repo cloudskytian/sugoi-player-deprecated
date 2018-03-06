@@ -36,7 +36,6 @@ public:
 
     QString getLang()          { return lang; }
     QString getOnTop()         { return onTop; }
-    QString getLastDir()       { return lastDir; }
     int getAutoFit()           { return autoFit; }
     int getMaxRecent()         { return maxRecent; }
     bool getHidePopup()        { return hidePopup; }
@@ -154,8 +153,7 @@ private:
     QList<Recent> recent;
     Recent *current = nullptr;
     QString lang,
-            onTop,
-            lastDir;
+            onTop;
     int autoFit,
         maxRecent;
     bool hidePopup,
@@ -169,7 +167,6 @@ private:
 public slots:
     void setLang(QString s)          { emit langChanged(lang = s); }
     void setOnTop(QString s)         { emit onTopChanged(onTop = s); }
-    void setLastDir(QString s)       { emit onLastDirChanged(lastDir = s); }
     void setAutoFit(int i)           { emit autoFitChanged(autoFit = i); }
     void setMaxRecent(int i)         { emit maxRecentChanged(maxRecent = i); }
     void setHidePopup(bool b)        { emit hidePopupChanged(hidePopup = b); }
@@ -195,7 +192,6 @@ public slots:
 signals:
     void langChanged(QString);
     void onTopChanged(QString);
-    void onLastDirChanged(QString);
     void autoFitChanged(int);
     void maxRecentChanged(int);
     void hidePopupChanged(bool);

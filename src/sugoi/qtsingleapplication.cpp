@@ -323,12 +323,14 @@ void QtSingleApplication::activateWindow()
 {
     QTimer::singleShot(0, [=]
     {
-        if (actWin) {
+        if (actWin)
+        {
             if (!actWin->isActiveWindow())
             {
                 if (actWin->isHidden())
+                {
                     actWin->show();
-                actWin->showMinimized();
+                }
                 actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
                 actWin->raise();
                 actWin->activateWindow();

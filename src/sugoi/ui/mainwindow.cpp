@@ -181,13 +181,9 @@ void MainWindow::BringWindowToFront()
     {
         show();
     }
-    bool pWhenM = pauseWhenMinimized;
-    setPauseWhenMinimized(false);
-    showMinimized();
     setWindowState(windowState() & ~Qt::WindowMinimized);
     raise();
     activateWindow();
-    setPauseWhenMinimized(pWhenM);
 }
 
 static bool canHandleDrop(const QDragEnterEvent *event)
@@ -1169,10 +1165,9 @@ void MainWindow::connectMpvSignalsAndSlots()
             });
 
     connect(mpv, &MpvWidget::pathChanged,
-            [=](QString path)
+            [=]
             {
                 pathChanged = true;
-                setLastDir(QDir::toNativeSeparators(path));
             });
 
     connect(mpv, &MpvWidget::fileChanging,

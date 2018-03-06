@@ -96,7 +96,6 @@ void SugoiEngine::LoadSettings()
     window->setResume(settings.value(QString::fromLatin1("resume"), true).toBool());
     window->setHideAllControls(settings.value(QString::fromLatin1("hideAllControls"), false).toBool());
     window->setLang(settings.value(QString::fromLatin1("lang"), QString::fromLatin1("auto")).toString());
-    window->setLastDir(settings.value(QString::fromLatin1("lastDir"), QString::fromLatin1(".")).toString());
 
     window->UpdateRecentFiles();
 
@@ -124,6 +123,7 @@ void SugoiEngine::LoadSettings()
     window->MapShortcuts();
 
     settings.beginGroup(QString::fromLatin1("mpv"));
+    mpv->fileFullPath = settings.value(QString::fromLatin1("lastDir"), QString::fromLatin1(".")).toString();
     mpv->Volume(settings.value(QString::fromLatin1("volume"), 100).toInt());
     mpv->Speed(settings.value(QString::fromLatin1("speed"), 1.0).toDouble());
     mpv->Hwdec(settings.value(QString::fromLatin1("hwdec"), true).toBool());
@@ -194,7 +194,6 @@ void SugoiEngine::SaveSettings()
     settings.setValue(QString::fromLatin1("debug"), window->debug);
     settings.setValue(QString::fromLatin1("maxRecent"), window->maxRecent);
     settings.setValue(QString::fromLatin1("lang"), window->lang);
-    settings.setValue(QString::fromLatin1("lastDir"), window->lastDir);
     settings.setValue(QString::fromLatin1("resume"), window->resume);
     settings.setValue(QString::fromLatin1("hideAllControls"), window->hideAllControls);
 
@@ -247,6 +246,7 @@ void SugoiEngine::SaveSettings()
     }
 
     settings.beginGroup(QString::fromLatin1("mpv"));
+    settings.setValue(QString::fromLatin1("lastDir"), mpv->fileFullPath);
     settings.setValue(QString::fromLatin1("hwdec"), mpv->hwdec);
     settings.setValue(QString::fromLatin1("volume"), mpv->volume);
     settings.setValue(QString::fromLatin1("speed"), mpv->speed);

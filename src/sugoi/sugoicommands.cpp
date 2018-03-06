@@ -8,6 +8,7 @@
 #include <QDir>
 #include <QClipboard>
 #include <QMessageBox>
+#include <QFileInfo>
 
 #include "ui/mainwindow.h"
 #include "ui_mainwindow.h"
@@ -392,7 +393,7 @@ void SugoiEngine::SugoiOpen(QStringList &args)
 void SugoiEngine::Open()
 {
     mpv->LoadFile(QFileDialog::getOpenFileName(window,
-                   tr("Open File"),/*mpv->getPath()*/window->getLastDir(),
+                   tr("Open File"), QFileInfo(mpv->getFileFullPath()).absolutePath(),
                    QString("%0 (%1);;").arg(tr("Media Files"), Mpv::media_filetypes.join(" "))+
                    QString("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(" "))+
                    QString("%0 (%1);;").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" "))+
