@@ -84,8 +84,6 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     autohide = new QTimer(this);
     osdLocalTimeUpdater = new QTimer(this);
 
-    ui->playlistButton->setEnabled(true);
-
     initMainWindow(backgroundMode);
 }
 
@@ -229,6 +227,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
+        bool shouldMove = false;
         if (ui->remainingLabel->rect().contains(ui->remainingLabel->mapFrom(this, event->pos()))) // clicked timeLayoutWidget
         {
             setRemaining(!remaining); // todo: use a sugoicommand
@@ -237,21 +236,23 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                  && !ui->playbackLayoutWidget->geometry().contains(event->pos())) // mouse is in the mpvFrame
         {
             mpv->PlayPause(ui->playlistWidget->CurrentItem());
+            shouldMove = true;
         }
         else if (!ui->seekBar->geometry().contains(event->pos()))
         {
-            if (!isFullScreen() && !isMaximized())
-            {
+            shouldMove = true;
+        }
+        if (shouldMove && !isFullScreen() && !isMaximized())
+        {
 #ifdef Q_OS_WIN
-                if (ReleaseCapture())
-                {
-                    SendMessage(HWND(winId()), WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
-                }
-                event->ignore();
-#else
-                //TODO: Other platforms
-#endif
+            if (ReleaseCapture())
+            {
+                SendMessage(HWND(winId()), WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
             }
+            event->ignore();
+#else
+            //TODO: Other platforms
+#endif
         }
     }
     CFramelessWindow::mousePressEvent(event);
@@ -817,16 +818,16 @@ void MainWindow::SetRemainingLabels(int time)
 {
     // todo: move setVisible functions outside of this function which gets called every second and somewhere at the start of a video
     const Mpv::FileInfo &fi = mpv->getFileInfo();
-    if(fi.length == 0)
+    if (fi.length == 0)
     {
         ui->durationLabel->setText(Util::FormatTime(time, time));
-        ui->remainingLabel->setVisible(false);
-        ui->seperatorLabel->setVisible(false);
+        //ui->remainingLabel->setVisible(false);
+        //ui->seperatorLabel->setVisible(false);
     }
     else
     {
-        ui->remainingLabel->setVisible(true);
-        ui->seperatorLabel->setVisible(true);
+        //ui->remainingLabel->setVisible(true);
+        //ui->seperatorLabel->setVisible(true);
 
         ui->durationLabel->setText(Util::FormatTime(time, fi.length));
         if(remaining)
@@ -1149,7 +1150,7 @@ void MainWindow::connectMpvSignalsAndSlots()
 #ifdef Q_OS_WIN
                         playpause_toolbutton->setEnabled(true);
 #endif
-                        //ui->playlistButton->setEnabled(true);
+                        ui->playlistButton->setEnabled(true);
                         ui->action_Show_Playlist->setEnabled(true);
                         ui->menuAudio_Tracks->setEnabled(true);
                         init = true;
@@ -1157,6 +1158,16 @@ void MainWindow::connectMpvSignalsAndSlots()
                     SetPlaybackControls(true);
                     mpv->Play();
                     sugoi->overlay->showStatusText(QString(), 0);
+                    if (mpv->getFileInfo().length == 0)
+                    {
+                        ui->remainingLabel->setVisible(false);
+                        ui->seperatorLabel->setVisible(false);
+                    }
+                    else
+                    {
+                        ui->remainingLabel->setVisible(true);
+                        ui->seperatorLabel->setVisible(true);
+                    }
                 case Mpv::Playing:
                     SetPlayButtonIcon(false);
                     if(onTop == "playing")

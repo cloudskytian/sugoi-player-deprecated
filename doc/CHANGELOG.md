@@ -3,8 +3,9 @@
 ### V1.1.1 **->** V1.2.0
 
 - **Changed** main window to frameless window
-- **Changed** default vo from "gpu" to "libmpv-cb" (opengl-cb)
+- **Changed** default vo from "gpu" to "libmpv" (opengl-cb)
 - **Updated** libmpv to the latest version
+- **Updated** Qt to the latest version
 - **Updated** translations
 - **Fixed** some known bugs
 - **Other** minor tweaks

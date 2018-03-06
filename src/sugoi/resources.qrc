@@ -49,13 +49,4 @@
     <file alias="tool-next.ico">resources/tool-next.ico</file>
     <file alias="tool-pause.ico">resources/tool-pause.ico</file>
   </qresource>
-  <qresource prefix="/licenses">
-    <file alias="gpl-3.0.en.html">licenses/gpl-3.0.en.html</file>
-    <file alias="gpl-3.0.zh_CN.html">licenses/gpl-3.0.zh_CN.html</file>
-    <file alias="gpl-3.0.zh_TW.html">licenses/gpl-3.0.zh_TW.html</file>
-  </qresource>
-  <qresource prefix="/updatelogs">
-    <file alias="updatelog.en.html">updatelogs/updatelog.en.html</file>
-    <file alias="updatelog.zh_CN.html">updatelogs/updatelog.zh_CN.html</file>
-  </qresource>
 </RCC>

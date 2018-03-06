@@ -1,8 +1,6 @@
 ﻿#ifndef CFRAMELESSWINDOW_H
 #define CFRAMELESSWINDOW_H
 
-#include "qsystemdetection.h"
-#include <QObject>
 #include <QWidget>
 
 //A nice frameless window for both Windows and OS X

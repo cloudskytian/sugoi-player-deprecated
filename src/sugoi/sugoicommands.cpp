@@ -703,7 +703,7 @@ void SugoiEngine::SugoiMsgLevel(QStringList &args)
 void SugoiEngine::About(QString what)
 {
     if(what == QString())
-        AboutDialog::about(window->getLang(), window);
+        AboutDialog::about(window);
     else if(what == "qt")
         qApp->aboutQt();
     else

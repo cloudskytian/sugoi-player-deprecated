@@ -25,11 +25,11 @@
     </message>
     <message>
         <source>Credits</source>
-        <translation>贡献名单</translation>
+        <translation type="vanished">贡献名单</translation>
     </message>
     <message>
         <source>License</source>
-        <translation>许可协议</translation>
+        <translation type="vanished">许可协议</translation>
     </message>
     <message>
         <source>                GNU GENERAL PUBLIC LICENSE
@@ -237,7 +237,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Update Log</source>
-        <translation>更新日志</translation>
+        <translation type="vanished">更新日志</translation>
     </message>
     <message>
         <source>About &amp;Qt</source>
@@ -319,7 +319,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
 &lt;h3&gt;Translations&lt;/h3&gt;
 &lt;h4&gt;Simplified Chinese&lt;/h4&gt;
 &lt;p&gt;amazingfate, Antares95, wangwenx190&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;mpv - 基于 MPlayer/mplayer2 的视频播放器&lt;/h2&gt;
+        <translation type="vanished">&lt;h2&gt;mpv - 基于 MPlayer/mplayer2 的视频播放器&lt;/h2&gt;
 &lt;h3&gt;贡献人员&lt;/h3&gt;
 &lt;p&gt;pigoz, haasn, kevmitch, rossy, wiiaboo, divVerent, giselher, lachs0r, Kovensky, Akemi, Argon-, ChrisK2, ghedo, mathstuf, olifre, xylosper, ubitux, atomnuker, qmega, tmm1, bjin, philipl, pavelxdd, shdown, avih, thebombzen, rr-, dubhater, rrooij, torque, jeeb, sfan5, igv, grigorig, frau, jon-y, TimothyGu, maniak1349, richardpl, Nyx0uf, czarkoff, Coacher, qyot27, Cloudef, linkmauve, DanOscarsson, CounterPillow, henry0312, marcan, fhvwy, jaimeMF, SirCmpwn, xantoz, rcombs, Nikoli, percontation, AoD314, otommod, ahodesuka, LongChair, CyberShadow, michaelforney, sCreami, medhefgo, MadFishTheOne, rozhuk-im, shinchiro, TheAMM, Gusar321, elenril, wrl, mixi, Themaister, lu-zero, pa4, markun, maletor, quilloss, PombeirP, mikaoP, ricardomv, wsldankers, ion1, chneukirchen, ncopa, agiz, viveksjain, hroncok, andre-d, Bilalh, jozzse, elevengu, MoSal, foo86, ryanmjacobs, vitorgalvao, Shudouken, zekica, c-14, eworm-de&lt;/p&gt;
 &lt;h2&gt;Baka MPlayer&lt;/h2&gt;
@@ -1509,15 +1509,142 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Hardware decoding enabled</source>
-        <translation>硬件解码已开启</translation>
+        <translation type="vanished">硬件解码已开启</translation>
     </message>
     <message>
         <source>Hardware decoding disabled</source>
-        <translation>硬件解码已关闭，正在使用软件解码</translation>
+        <translation type="vanished">硬件解码已关闭，正在使用软件解码</translation>
     </message>
 </context>
 <context>
     <name>MpvHandler</name>
+    <message>
+        <source>File</source>
+        <translation type="vanished">文件</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="vanished">标题</translation>
+    </message>
+    <message>
+        <source>File size</source>
+        <translation type="vanished">文件大小</translation>
+    </message>
+    <message>
+        <source>Date created</source>
+        <translation type="vanished">创建日期</translation>
+    </message>
+    <message>
+        <source>Media length</source>
+        <translation type="vanished">媒体时长</translation>
+    </message>
+    <message>
+        <source>Video (x%0)</source>
+        <translation type="vanished">视频 (x%0)</translation>
+    </message>
+    <message>
+        <source>Video Output</source>
+        <translation type="vanished">视频输出</translation>
+    </message>
+    <message>
+        <source>Resolution</source>
+        <translation type="vanished">分辨率</translation>
+    </message>
+    <message>
+        <source>FPS</source>
+        <translation type="vanished">刷新率</translation>
+    </message>
+    <message>
+        <source>A/V Sync</source>
+        <translation type="vanished">音视频同步</translation>
+    </message>
+    <message>
+        <source>%0 kbps</source>
+        <translation type="vanished">%0 kbps</translation>
+    </message>
+    <message>
+        <source>Audio (x%0)</source>
+        <translation type="vanished">音频 (x%0)</translation>
+    </message>
+    <message>
+        <source>Audio Output</source>
+        <translation type="vanished">音频输出</translation>
+    </message>
+    <message>
+        <source>Sample Rate</source>
+        <translation type="vanished">采样率</translation>
+    </message>
+    <message>
+        <source>Chapters</source>
+        <translation type="vanished">章节</translation>
+    </message>
+    <message>
+        <source>Metadata</source>
+        <translation type="vanished">元数据</translation>
+    </message>
+    <message>
+        <source>Buffering...</source>
+        <translation type="vanished">正在缓冲...</translation>
+    </message>
+    <message>
+        <source>Your network is slow or stuck, please wait a bit</source>
+        <translation type="vanished">你的网络速度较慢，请稍后片刻</translation>
+    </message>
+    <message>
+        <source>File couldn&apos;t be opened</source>
+        <translation type="vanished">文件无法打开</translation>
+    </message>
+    <message>
+        <source>Deinterlacing: %0</source>
+        <translation type="vanished">反交错：%0</translation>
+    </message>
+    <message>
+        <source>enabled</source>
+        <translation type="vanished">开启</translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation type="vanished">关闭</translation>
+    </message>
+    <message>
+        <source>Motion Interpolation: %0</source>
+        <translation type="vanished">运动插值：%0</translation>
+    </message>
+    <message>
+        <source>Bitrate</source>
+        <translation type="vanished">比特率</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="vanished">频道</translation>
+    </message>
+    <message>
+        <source>File does not exist</source>
+        <translation type="vanished">文件不存在</translation>
+    </message>
+    <message>
+        <source>File no longer exists</source>
+        <translation type="vanished">文件已不存在</translation>
+    </message>
+    <message>
+        <source>Volume: %0%</source>
+        <translation type="vanished">音量: %0%</translation>
+    </message>
+</context>
+<context>
+    <name>MpvWidget</name>
+    <message>
+        <source>Buffering...</source>
+        <translation>正在缓冲……</translation>
+    </message>
+    <message>
+        <source>Your network is slow or stuck, please wait a bit</source>
+        <translation>您网速较慢，请耐心等待</translation>
+    </message>
+    <message>
+        <source>File couldn&apos;t be opened</source>
+        <translation>文件无法打开</translation>
+    </message>
     <message>
         <source>File</source>
         <translation>文件</translation>
@@ -1559,6 +1686,10 @@ Note: Value must be from %0 - %1</source>
         <translation>音视频同步</translation>
     </message>
     <message>
+        <source>Bitrate</source>
+        <translation>比特率</translation>
+    </message>
+    <message>
         <source>%0 kbps</source>
         <translation>%0 kbps</translation>
     </message>
@@ -1575,48 +1706,16 @@ Note: Value must be from %0 - %1</source>
         <translation>采样率</translation>
     </message>
     <message>
+        <source>Channels</source>
+        <translation>频道</translation>
+    </message>
+    <message>
         <source>Chapters</source>
         <translation>章节</translation>
     </message>
     <message>
         <source>Metadata</source>
         <translation>元数据</translation>
-    </message>
-    <message>
-        <source>Buffering...</source>
-        <translation>正在缓冲...</translation>
-    </message>
-    <message>
-        <source>Your network is slow or stuck, please wait a bit</source>
-        <translation>你的网络速度较慢，请稍后片刻</translation>
-    </message>
-    <message>
-        <source>File couldn&apos;t be opened</source>
-        <translation>文件无法打开</translation>
-    </message>
-    <message>
-        <source>Deinterlacing: %0</source>
-        <translation>反交错：%0</translation>
-    </message>
-    <message>
-        <source>enabled</source>
-        <translation>开启</translation>
-    </message>
-    <message>
-        <source>disabled</source>
-        <translation>关闭</translation>
-    </message>
-    <message>
-        <source>Motion Interpolation: %0</source>
-        <translation>运动插值：%0</translation>
-    </message>
-    <message>
-        <source>Bitrate</source>
-        <translation>比特率</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation>频道</translation>
     </message>
     <message>
         <source>File does not exist</source>
@@ -1627,8 +1726,28 @@ Note: Value must be from %0 - %1</source>
         <translation>文件已不存在</translation>
     </message>
     <message>
+        <source>Hardware decoding</source>
+        <translation>硬件解码</translation>
+    </message>
+    <message>
         <source>Volume: %0%</source>
         <translation>音量: %0%</translation>
+    </message>
+    <message>
+        <source>Deinterlacing: %0</source>
+        <translation>反交错：%0</translation>
+    </message>
+    <message>
+        <source>enabled</source>
+        <translation>启用</translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation>禁用</translation>
+    </message>
+    <message>
+        <source>Motion Interpolation: %0</source>
+        <translation>运动插值：%0</translation>
     </message>
 </context>
 <context>
@@ -2205,6 +2324,114 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>DateTime</source>
         <translation type="vanished">日期时间</translation>
+    </message>
+    <message>
+        <source>Buffering...</source>
+        <translation type="obsolete">正在缓冲...</translation>
+    </message>
+    <message>
+        <source>Your network is slow or stuck, please wait a bit</source>
+        <translation type="obsolete">你的网络速度较慢，请稍后片刻</translation>
+    </message>
+    <message>
+        <source>File couldn&apos;t be opened</source>
+        <translation type="obsolete">文件无法打开</translation>
+    </message>
+    <message>
+        <source>Title</source>
+        <translation type="obsolete">标题</translation>
+    </message>
+    <message>
+        <source>File size</source>
+        <translation type="obsolete">文件大小</translation>
+    </message>
+    <message>
+        <source>Date created</source>
+        <translation type="obsolete">创建日期</translation>
+    </message>
+    <message>
+        <source>Media length</source>
+        <translation type="obsolete">媒体时长</translation>
+    </message>
+    <message>
+        <source>Video (x%0)</source>
+        <translation type="obsolete">视频 (x%0)</translation>
+    </message>
+    <message>
+        <source>Video Output</source>
+        <translation type="obsolete">视频输出</translation>
+    </message>
+    <message>
+        <source>Resolution</source>
+        <translation type="obsolete">分辨率</translation>
+    </message>
+    <message>
+        <source>FPS</source>
+        <translation type="obsolete">刷新率</translation>
+    </message>
+    <message>
+        <source>A/V Sync</source>
+        <translation type="obsolete">音视频同步</translation>
+    </message>
+    <message>
+        <source>Bitrate</source>
+        <translation type="obsolete">比特率</translation>
+    </message>
+    <message>
+        <source>%0 kbps</source>
+        <translation type="obsolete">%0 kbps</translation>
+    </message>
+    <message>
+        <source>Audio (x%0)</source>
+        <translation type="obsolete">音频 (x%0)</translation>
+    </message>
+    <message>
+        <source>Audio Output</source>
+        <translation type="obsolete">音频输出</translation>
+    </message>
+    <message>
+        <source>Sample Rate</source>
+        <translation type="obsolete">采样率</translation>
+    </message>
+    <message>
+        <source>Channels</source>
+        <translation type="obsolete">频道</translation>
+    </message>
+    <message>
+        <source>Chapters</source>
+        <translation type="obsolete">章节</translation>
+    </message>
+    <message>
+        <source>Metadata</source>
+        <translation type="obsolete">元数据</translation>
+    </message>
+    <message>
+        <source>File does not exist</source>
+        <translation type="obsolete">文件不存在</translation>
+    </message>
+    <message>
+        <source>File no longer exists</source>
+        <translation type="obsolete">文件已不存在</translation>
+    </message>
+    <message>
+        <source>Volume: %0%</source>
+        <translation type="obsolete">音量: %0%</translation>
+    </message>
+    <message>
+        <source>Deinterlacing: %0</source>
+        <translation type="obsolete">反交错：%0</translation>
+    </message>
+    <message>
+        <source>enabled</source>
+        <translation type="obsolete">开启</translation>
+    </message>
+    <message>
+        <source>disabled</source>
+        <translation type="obsolete">关闭</translation>
+    </message>
+    <message>
+        <source>Motion Interpolation: %0</source>
+        <translation type="obsolete">运动插值：%0</translation>
     </message>
 </context>
 <context>

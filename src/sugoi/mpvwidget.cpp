@@ -10,6 +10,7 @@
 #include <QFileInfo>
 #include <QFileInfoList>
 #include <QDateTime>
+#include <QObject>
 
 #include "sugoiengine.h"
 #include "overlayhandler.h"
@@ -553,7 +554,9 @@ void MpvWidget::Hwdec(bool h, bool osd)
     {
         setProperty(QLatin1String("hwdec"), QLatin1String(h ? "auto" : "no"));
         if(osd)
-            ShowText(QString::fromLatin1("%1: %2").arg(tr("Hardware decoding")).arg(tr(h ? "ON" : "OFF")));
+        {
+            ShowText(QString::fromLatin1("%1: %2").arg(tr("Hardware decoding")).arg(h ? tr("enabled") : tr("disabled")));
+        }
     }
     else
     {
