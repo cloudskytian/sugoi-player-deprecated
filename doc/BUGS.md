@@ -1,14 +1,9 @@
 ﻿# Known Bugs
 
-- The first time you opened a media file from the file explorer, SPlayer cannot change it's window size correctly.
-
-- Some translation mistakes.
-
-- The menubar sometimes cannot get focused.
-
-- Sometimes SPlayer will crash, randomly.
-
-- Dim dialog not work.
+- The first time you opened a media file from the file explorer, the player cannot change it's window size correctly
+- There are some translation mistakes
+- Player crashes randomly
+- Main window cannot change it's size correctly when loading music
 
 
 **NOTE**

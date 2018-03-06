@@ -1,21 +1,11 @@
 ﻿## TODO
 
 - [ ] **Fix all known bugs and mistakes**
-
 - [ ] Auto download subtitles from the Internet
-
 - [ ] Add Properties dialog
-
 - [ ] Add more translations (**HELP NEEDED**)
-
 - [ ] Show lyrics while playing music (if there are lyrics available)
-
 - [ ] Maybe we need some window animations
-
-- [ ] Custom frameless window
-
 - [ ] Add more modern and beautiful skins
-
 - [ ] Improve the look of the installer, it's too ugly currently
-
 - [ ] Add real time video preview
