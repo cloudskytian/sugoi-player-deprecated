@@ -17,7 +17,6 @@ class QWinTaskbarButton;
 class QWinTaskbarProgress;
 class QWinJumpList;
 #endif
-class QSystemTrayIcon;
 
 class SugoiEngine;
 class MpvWidget;
@@ -31,7 +30,7 @@ class MainWindow : public CFramelessWindow
 friend class SugoiEngine;
     Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = nullptr, bool backgroundMode = false);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
     QString getLang()          { return lang; }
@@ -58,7 +57,6 @@ public:
     bool getAutoUpdatePlayer()   { return autoUpdatePlayer; }
     bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
     QString getSkinFile()        { return skinFile; }
-    QSystemTrayIcon *getSystemTrayIcon() { return sysTrayIcon; }
 
     Ui::MainWindow *ui = nullptr;
     QImage albumArt;
@@ -67,6 +65,8 @@ public slots:
     void MapShortcuts();
     void SetFileAssoc(FileAssoc::reg_type type = FileAssoc::reg_type::ALL, bool showUI = false);
     void BringWindowToFront();
+    void initMainWindow(bool backgroundMode = false);
+    void setSysTrayIconVisibility(bool v = true);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);    // drag file into
@@ -104,7 +104,6 @@ private slots:
     void disconnectOtherSignalsAndSlots();
     void reconnectOtherSignalsAndSlots();
     void reconnectAllSignalsAndSlots();
-    void initMainWindow(bool backgroundMode = false);
     void SetIndexLabels(bool enable);
     void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
     void TogglePlaylist();                          // toggles playlist visibility
@@ -114,7 +113,6 @@ private slots:
 private:
     SugoiEngine *sugoi = nullptr;
     MpvWidget *mpv = nullptr;
-    QSystemTrayIcon *sysTrayIcon = nullptr;
     ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
     bool showFullscreenIndicator = true;
     FileAssoc::reg_type  regType;

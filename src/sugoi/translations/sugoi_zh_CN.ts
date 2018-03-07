@@ -1501,7 +1501,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Enable/Disable hardware decoding. Make sure you have a powerful GPU and player is running under it if you want to enable this.</source>
-        <translation>启用/禁用硬件解码。如果您想开启此功能，请先确保您拥有一个性能强劲的 GPU 并且播放器正在此 GPU 下运行。</translation>
+        <translation>启用/禁用硬件解码。如果您想开启此功能，请先确保您拥有一个性能强劲的显卡并且播放器正在此显卡下运行。</translation>
     </message>
     <message>
         <source>Loading...</source>
@@ -2222,6 +2222,30 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>Chang&amp;e</source>
         <translation>更改(&amp;E)</translation>
+    </message>
+    <message>
+        <source>Renderer</source>
+        <translation>渲染引擎</translation>
+    </message>
+    <message>
+        <source>OpenGL</source>
+        <translation>OpenGL</translation>
+    </message>
+    <message>
+        <source>Direct3D11</source>
+        <translation>Direct3D11</translation>
+    </message>
+    <message>
+        <source>Direct2D</source>
+        <translation>Direct2D</translation>
+    </message>
+    <message>
+        <source>GDI</source>
+        <translation>GDI</translation>
+    </message>
+    <message>
+        <source>IMPORTANT: You will need a powerful GPU to enable hardware decoding.</source>
+        <translation>重要须知：你需要一个性能强劲的显卡来启用硬件解码。</translation>
     </message>
 </context>
 <context>

@@ -7,7 +7,6 @@
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QDir>
-#include <QSystemTrayIcon>
 
 #include <locale.h>
 
@@ -175,35 +174,31 @@ int main(int argc, char *argv[])
     // the LC_NUMERIC category to be set to "C", so change it back.
     setlocale(LC_NUMERIC, "C");
 
-    MainWindow *mainWindow = nullptr;
+    MainWindow mainWindow;
     if (!runInBackground)
     {
-        mainWindow = new MainWindow(nullptr, false);
-        SetParent(reinterpret_cast<HWND>(mainWindow->winId()), GetDesktopWindow());
-        mainWindow->show();
-        mainWindow->openFileFromCmd(command);
+        mainWindow.initMainWindow(false);
+        mainWindow.show();
+        mainWindow.openFileFromCmd(command);
     }
     else
     {
-        mainWindow = new MainWindow(nullptr, true);
-        SetParent(reinterpret_cast<HWND>(mainWindow->winId()), GetDesktopWindow());
-        mainWindow->setWindowOpacity(0.0);
-        mainWindow->hide();
-        if (mainWindow->getSystemTrayIcon() != nullptr)
-        {
-            mainWindow->getSystemTrayIcon()->hide();
-        }
+        mainWindow.initMainWindow(true);
+        mainWindow.setWindowOpacity(0.0);
+        mainWindow.hide();
+        mainWindow.setSysTrayIconVisibility(false);
     }
+    SetParent(reinterpret_cast<HWND>(mainWindow.winId()), GetDesktopWindow());
 
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
-                     [=, &mainWindow, &instance](const QString &message)
+                     [=, &mainWindow](const QString &message)
                      {
                          QString filePath(message);
                          if (message == QString::fromLatin1("exit")
                                  || message == QString::fromLatin1("quit")
                                  || message == QString::fromLatin1("close"))
                          {
-                             mainWindow->close();
+                             mainWindow.close();
                              return;
                          }
                          else if (message == QString::fromLatin1("runinbackground"))
@@ -217,17 +212,15 @@ int main(int argc, char *argv[])
                                  filePath = QString();
                              }
                          }
-                         mainWindow->BringWindowToFront();
-                         mainWindow->openFileFromCmd(filePath);
+                         mainWindow.BringWindowToFront();
+                         mainWindow.openFileFromCmd(filePath);
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
                      , reinterpret_cast<const wchar_t *>(QString::fromStdWString(SUGOI_APP_MUTEX_STR).utf16()));
 
-    int exec = instance.exec();
-
-    delete mainWindow;
-    mainWindow = nullptr;
+    int exec = -1;
+    exec = instance.exec();
 
     CloseHandle(mutexHandle);
 

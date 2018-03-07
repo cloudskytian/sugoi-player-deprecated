@@ -53,11 +53,12 @@
 #include "widgets/customsplitter.h"
 #include "widgets/playlistwidget.h"
 
-MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
-    CFramelessWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : CFramelessWindow(parent)
+  , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    setMinimumSize(size());
 
     setTitleBar(ui->titleBarWidget);
     addIgnoreWidget(ui->windowTitleLabel);
@@ -76,15 +77,15 @@ MainWindow::MainWindow(QWidget *parent, bool backgroundMode):
     mpv = ui->mpvFrame;
     mpv->SetEngine(sugoi);
 
-    sysTrayIcon = sugoi->sysTrayIcon;
-
     ui->playlistWidget->AttachEngine(sugoi);
     ui->playbackLayoutWidget->installEventFilter(this);
     ui->mpvFrame->installEventFilter(this); // capture events on mpvFrame in the eventFilter function
     autohide = new QTimer(this);
     osdLocalTimeUpdater = new QTimer(this);
 
-    initMainWindow(backgroundMode);
+    connectOtherSignalsAndSlots();
+    connectMpvSignalsAndSlots();
+    connectUiSignalsAndSlots();
 }
 
 MainWindow::~MainWindow()
@@ -784,15 +785,27 @@ void MainWindow::SetRemainingLabels(int time)
     const Mpv::FileInfo &fi = mpv->getFileInfo();
     if (fi.length == 0)
     {
-        ui->remainingLabel->setVisible(false);
-        ui->seperatorLabel->setVisible(false);
+        if (ui->remainingLabel->isVisible())
+        {
+            ui->remainingLabel->hide();
+        }
+        if (ui->seperatorLabel->isVisible())
+        {
+            ui->seperatorLabel->hide();
+        }
 
         ui->durationLabel->setText(Util::FormatTime(time, time));
     }
     else
     {
-        ui->remainingLabel->setVisible(true);
-        ui->seperatorLabel->setVisible(true);
+        if (ui->remainingLabel->isHidden())
+        {
+            ui->remainingLabel->show();
+        }
+        if (ui->seperatorLabel->isHidden())
+        {
+            ui->seperatorLabel->show();
+        }
 
         ui->durationLabel->setText(Util::FormatTime(time, fi.length));
         if(remaining)
@@ -1314,25 +1327,6 @@ void MainWindow::reconnectMpvSignalsAndSlots()
 
 void MainWindow::connectUiSignalsAndSlots()
 {
-#ifdef Q_OS_WIN
-    connect(prev_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                ui->playlistWidget->PlayIndex(-1, true);
-            });
-
-    connect(playpause_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                sugoi->PlayPause();
-            });
-
-    connect(next_toolbutton, &QWinThumbnailToolButton::clicked,
-            [=]
-            {
-                ui->playlistWidget->PlayIndex(1, true);
-            });
-#endif
     connect(ui->minimizeButton, &QPushButton::clicked,
             [=]
             {
@@ -1953,11 +1947,25 @@ void MainWindow::initMainWindow(bool backgroundMode)
     thumbnail_toolbar->addButton(prev_toolbutton);
     thumbnail_toolbar->addButton(playpause_toolbutton);
     thumbnail_toolbar->addButton(next_toolbutton);
-#endif
 
-    connectOtherSignalsAndSlots();
-    connectMpvSignalsAndSlots();
-    connectUiSignalsAndSlots();
+    connect(prev_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                ui->playlistWidget->PlayIndex(-1, true);
+            });
+
+    connect(playpause_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                sugoi->PlayPause();
+            });
+
+    connect(next_toolbutton, &QWinThumbnailToolButton::clicked,
+            [=]
+            {
+                ui->playlistWidget->PlayIndex(1, true);
+            });
+#endif
 
     // add multimedia shortcuts
     ui->action_Play->setShortcuts({ui->action_Play->shortcut(), QKeySequence(Qt::Key_MediaPlay)});
@@ -1966,18 +1974,6 @@ void MainWindow::initMainWindow(bool backgroundMode)
     ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
 
     sugoi->LoadSettings();
-
-    if (osdShowLocalTime)
-    {
-        if (osdLocalTimeUpdater)
-        {
-            if (osdLocalTimeUpdater->isActive())
-            {
-                osdLocalTimeUpdater->stop();
-            }
-            osdLocalTimeUpdater->start(1000);
-        }
-    }
 
     if (!backgroundMode)
     {
@@ -1991,8 +1987,17 @@ void MainWindow::initMainWindow(bool backgroundMode)
             }
         }
     }
-    else
+}
+
+void MainWindow::setSysTrayIconVisibility(bool v)
+{
+    if (sugoi == nullptr)
     {
-        hide();
+        return;
     }
+    if (sugoi->sysTrayIcon == nullptr)
+    {
+        return;
+    }
+    sugoi->sysTrayIcon->setVisible(v);
 }
