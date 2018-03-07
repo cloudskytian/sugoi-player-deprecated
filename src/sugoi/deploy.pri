@@ -1,5 +1,7 @@
 QMAKE_POST_LINK += $$quote(cd /d \"$${DESTDIR}\"$$escape_expand(\\n\\t))
 
+QMAKE_POST_LINK += $$quote(if exist \"d3dcompiler_47.dll\" ren \"d3dcompiler_47.dll\" \"D3DCompiler_47.dll\"$$escape_expand(\\n\\t))
+
 QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\..\\..\\3rdparty\\youtube-dl.exe\" \"$${DESTDIR}\\youtube-dl.exe\"$$escape_expand(\\n\\t))
 
 contains(QT_ARCH, x86_64) {

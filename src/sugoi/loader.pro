@@ -31,9 +31,9 @@ contains(QT_ARCH, x86_64) {
 
 LIBS += -lKernel32 -lUser32
 
-include(deploy.pri)
-
-QMAKE_POST_LINK += $$quote(copy /y \"$$[QT_INSTALL_BINS]\\d3dcompiler_47.dll\" \"$${DESTDIR}\\d3dcompiler_47.dll\"$$escape_expand(\\n\\t))
+QMAKE_POST_LINK += $$quote(copy /y \"$$[QT_INSTALL_BINS]\\d3dcompiler_47.dll\" \"$${DESTDIR}\\D3DCompiler_47.dll\"$$escape_expand(\\n\\t))
 QMAKE_POST_LINK += $$quote(copy /y \"$$[QT_INSTALL_BINS]\\libEGL.dll\" \"$${DESTDIR}\\libEGL.dll\"$$escape_expand(\\n\\t))
 QMAKE_POST_LINK += $$quote(copy /y \"$$[QT_INSTALL_BINS]\\libGLESv2.dll\" \"$${DESTDIR}\\libGLESv2.dll\"$$escape_expand(\\n\\t))
 QMAKE_POST_LINK += $$quote(copy /y \"$$[QT_INSTALL_BINS]\\opengl32sw.dll\" \"$${DESTDIR}\\opengl32sw.dll\"$$escape_expand(\\n\\t))
+
+include(deploy.pri)
