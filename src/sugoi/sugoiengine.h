@@ -27,6 +27,7 @@ public:
     QSystemTrayIcon *sysTrayIcon = nullptr;
 
     QTranslator     *translator = nullptr;
+    QTranslator     *qtTranslator = nullptr;
 
     // input hash-table provides O(1) input-command lookups
     QHash<QString, QPair<QString, QString>> input; // [shortcut] = QPair<command, comment>

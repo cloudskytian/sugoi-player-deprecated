@@ -18,7 +18,8 @@ SugoiEngine::SugoiEngine(QObject *parent):
     mpv(window->ui->mpvFrame),
     overlay(new OverlayHandler(this)),
     sysTrayIcon(new QSystemTrayIcon(QIcon(":/images/player.svg"), this)),
-    translator(nullptr)
+    translator(nullptr),
+    qtTranslator(nullptr)
 {
     if(Util::DimLightsSupported())
         dimDialog = new DimDialog(window, nullptr);
@@ -37,10 +38,18 @@ SugoiEngine::SugoiEngine(QObject *parent):
 
 SugoiEngine::~SugoiEngine()
 {
-    if(translator != nullptr)
+    if (translator != nullptr)
+    {
         delete translator;
-    if(dimDialog != nullptr)
+    }
+    if (qtTranslator != nullptr)
+    {
+        delete qtTranslator;
+    }
+    if (dimDialog != nullptr)
+    {
         delete dimDialog;
+    }
     delete sysTrayIcon;
     delete overlay;
 }

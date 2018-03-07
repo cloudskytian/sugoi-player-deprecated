@@ -314,19 +314,31 @@ void PreferencesDialog::PopulateLangs()
 #else
     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
 #endif
-    QDir root(langPath);
-    // get files in the directory with .qm extension
-    QFileInfoList flist;
-    flist = root.entryInfoList({"*.qm"}, QDir::Files);
-    // add the languages to the combo box
-    ui->langComboBox->addItem(tr("auto"), QVariant(QString::fromLatin1("auto")));
-    for(auto &i : flist)
+    QDir dir(langPath);
+    dir.setFilter(QDir::Files | QDir::NoSymLinks);
+    dir.setSorting(QDir::Name);
+    QFileInfoList fileList = dir.entryInfoList();
+    int fileCount = fileList.count();
+    if (fileCount < 1)
     {
-        QString lang = i.fileName().mid(i.fileName().indexOf("_") + 1); // sugoi_....
-        lang.chop(3); // -  .qm
+        return;
+    }
+    for (int i = 0; i < fileCount; ++i)
+    {
+        QFileInfo fi = fileList.at(i);
+        QString fileName = fi.completeBaseName();
+        if (fileName.startsWith(QString::fromLatin1("qt"), Qt::CaseInsensitive))
+        {
+            continue;
+        }
+        QString lang = fileName.mid(fileName.indexOf("_") + 1);
         lang = lang.replace('-', '_');
         QLocale locale(lang);
         ui->langComboBox->addItem(locale.nativeLanguageName(), lang);
+    }
+    if (ui->langComboBox->count() > 0)
+    {
+        ui->langComboBox->insertItem(0, tr("auto"), QString::fromLatin1("auto"));
     }
 }
 

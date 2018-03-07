@@ -1676,7 +1676,30 @@ void MainWindow::connectOtherSignalsAndSlots()
 
                 if (l != QString::fromLatin1("C") && l != QString::fromLatin1("en") && l != QString::fromLatin1("en_US") && l != QString::fromLatin1("en_UK"))
                 {
-                    // load the application translations
+                    // load Qt translations
+                    if(sugoi->qtTranslator != nullptr)
+                    {
+                        qApp->removeTranslator(sugoi->qtTranslator);
+                        delete sugoi->qtTranslator;
+                        sugoi->qtTranslator = nullptr;
+                    }
+                    sugoi->qtTranslator = new QTranslator();
+#ifdef _STATIC_BUILD
+                    QString langPath = QApplication::applicationDirPath() + QDir::separator() + QString::fromLatin1("translations");
+#else
+                    QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#endif
+                    if (sugoi->qtTranslator->load(QString("qt_%0").arg(l), langPath))
+                    {
+                        qApp->installTranslator(sugoi->qtTranslator);
+                    }
+                    else
+                    {
+                        delete sugoi->qtTranslator;
+                        sugoi->qtTranslator = nullptr;
+                    }
+
+                    // load application translations
                     if(sugoi->translator != nullptr)
                     {
                         qApp->removeTranslator(sugoi->translator);
@@ -1684,11 +1707,6 @@ void MainWindow::connectOtherSignalsAndSlots()
                         sugoi->translator = nullptr;
                     }
                     sugoi->translator = new QTranslator(qApp);
-#ifdef _STATIC_BUILD
-                    QString langPath = QApplication::applicationDirPath() + QDir::separator() + QString::fromLatin1("translations");
-#else
-                    QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-#endif
                     if (sugoi->translator->load(QString("sugoi_%0").arg(l), langPath))
                     {
                         if (qApp->installTranslator(sugoi->translator))
@@ -1709,6 +1727,12 @@ void MainWindow::connectOtherSignalsAndSlots()
                         qApp->removeTranslator(sugoi->translator);
                         delete sugoi->translator;
                         sugoi->translator = nullptr;
+                    }
+                    if(sugoi->qtTranslator != nullptr)
+                    {
+                        qApp->removeTranslator(sugoi->qtTranslator);
+                        delete sugoi->qtTranslator;
+                        sugoi->qtTranslator = nullptr;
                     }
                 }
 

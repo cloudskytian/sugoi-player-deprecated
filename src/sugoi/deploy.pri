@@ -16,8 +16,8 @@ contains(QT_ARCH, x86_64) {
     QMAKE_POST_LINK += $$quote(if exist \"vc_redist.x86.exe\" ren \"vc_redist.x86.exe\" \"vc_redist_msvc2017.x86.exe\"$$escape_expand(\\n\\t))
 }
 
-QMAKE_POST_LINK += $$quote(if exist \"$${DESTDIR}\\translations\" rd /s /q \"$${DESTDIR}\\translations\"$$escape_expand(\\n\\t))
-QMAKE_POST_LINK += $$quote(md \"$${DESTDIR}\\translations\"$$escape_expand(\\n\\t))
+QMAKE_POST_LINK += $$quote(copy /y \"$$[QT_INSTALL_TRANSLATIONS]\\qt_zh_CN.qm\" \"$${DESTDIR}\\translations\\qt_zh_CN.qm\"$$escape_expand(\\n\\t))
+QMAKE_POST_LINK += $$quote(copy /y \"$$[QT_INSTALL_TRANSLATIONS]\\qt_zh_TW.qm\" \"$${DESTDIR}\\translations\\qt_zh_TW.qm\"$$escape_expand(\\n\\t))
 QMAKE_POST_LINK += $$quote(copy /y \"$${PWD}\\translations\\*.qm\" \"$${DESTDIR}\\translations\"$$escape_expand(\\n\\t))
 
 QMAKE_POST_LINK += $$quote(if exist \"$${DESTDIR}\\stylesheets\" rd /s /q \"$${DESTDIR}\\stylesheets\"$$escape_expand(\\n\\t))
