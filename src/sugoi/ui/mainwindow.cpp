@@ -181,6 +181,10 @@ void MainWindow::BringWindowToFront()
     {
         show();
     }
+    if (windowOpacity() < 1.0)
+    {
+        setWindowOpacity(1.0);
+    }
     setWindowState(windowState() & ~Qt::WindowMinimized);
     if (isActiveWindow())
     {

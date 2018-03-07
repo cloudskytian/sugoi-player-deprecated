@@ -217,22 +217,7 @@ int main(int argc, char *argv[])
                                  filePath = QString();
                              }
                          }
-                         if (mainWindow->isHidden())
-                         {
-                             mainWindow->show();
-                         }
-                         if (mainWindow->windowOpacity() < 1.0)
-                         {
-                             mainWindow->setWindowOpacity(1.0);
-                         }
-                         if (instance.activationWindow() != mainWindow)
-                         {
-                             instance.setActivationWindow(mainWindow, true);
-                         }
-                         if (!mainWindow->isActiveWindow())
-                         {
-                             instance.activateWindow();
-                         }
+                         mainWindow->BringWindowToFront();
                          mainWindow->openFileFromCmd(filePath);
                      });
 
