@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 **
 ** Copyright (C) 2013 Digia Plc and/or its subsidiary(-ies).
 ** Contact: http://www.qt-project.org/legal
@@ -98,8 +98,8 @@ Q_SIGNALS:
 
 private:
     void sysInit(const QString &appId = QString());
-    QtLocalPeer *peer;
-    QWidget *actWin;
+    QtLocalPeer *peer = nullptr;
+    QWidget *actWin = nullptr;
 };
 
 #endif // QTSINGLEAPPLICATION_H

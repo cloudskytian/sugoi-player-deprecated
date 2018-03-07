@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN" sourcelanguage="en_US">
 <context>
@@ -1055,7 +1055,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>&amp;Add Audio File...</source>
-        <translation>添加音频文件(&amp;A)</translation>
+        <translation type="vanished">添加音频文件(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Hide All Controls</source>
@@ -1083,7 +1083,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Open &amp;Location...</source>
-        <translation>打开路径(&amp;L)</translation>
+        <translation type="vanished">打开路径(&amp;L)</translation>
     </message>
     <message>
         <source>Open &amp;Copied Link</source>
@@ -1167,7 +1167,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>&amp;Open File...</source>
-        <translation>打开文件(&amp;O)</translation>
+        <translation type="vanished">打开文件(&amp;O)</translation>
     </message>
     <message>
         <source>Show in &amp;Folder</source>
@@ -1231,7 +1231,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>&amp;Jump to Time...</source>
-        <translation>跳转到时间(&amp;J)</translation>
+        <translation type="vanished">跳转到时间(&amp;J)</translation>
     </message>
     <message>
         <source>Online &amp;Help</source>
@@ -1271,7 +1271,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>&amp;Add Subtitle File...</source>
-        <translation>添加字幕文件(&amp;A)</translation>
+        <translation type="vanished">添加字幕文件(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Size +</source>
@@ -1299,15 +1299,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>With &amp;Subtitles...</source>
-        <translation>打开字幕(&amp;S)</translation>
+        <translation type="vanished">打开字幕(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;Without Subtitles...</source>
-        <translation>关闭字幕(&amp;W)</translation>
+        <translation type="vanished">关闭字幕(&amp;W)</translation>
     </message>
     <message>
         <source>&amp;Preferences...</source>
-        <translation>首选项(&amp;P)</translation>
+        <translation type="vanished">首选项(&amp;P)</translation>
     </message>
     <message>
         <source>&amp;Reset</source>
@@ -1514,6 +1514,38 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>Hardware decoding disabled</source>
         <translation type="vanished">硬件解码已关闭，正在使用软件解码</translation>
+    </message>
+    <message>
+        <source>&amp;Open File</source>
+        <translation>打开文件(&amp;O)</translation>
+    </message>
+    <message>
+        <source>Open &amp;Location</source>
+        <translation>打开路径(&amp;L)</translation>
+    </message>
+    <message>
+        <source>&amp;Jump to Time</source>
+        <translation>跳转到时间(&amp;J)</translation>
+    </message>
+    <message>
+        <source>&amp;Add Subtitle File</source>
+        <translation>添加字幕文件(&amp;A)</translation>
+    </message>
+    <message>
+        <source>With &amp;Subtitles</source>
+        <translation>附带字幕(&amp;S)</translation>
+    </message>
+    <message>
+        <source>&amp;Without Subtitles</source>
+        <translation>不带字幕(&amp;W)</translation>
+    </message>
+    <message>
+        <source>&amp;Preferences</source>
+        <translation>首选项(&amp;P)</translation>
+    </message>
+    <message>
+        <source>&amp;Add Audio File</source>
+        <translation>添加音频文件(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -1841,7 +1873,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Chang&amp;e...</source>
-        <translation>更改(&amp;E)</translation>
+        <translation type="vanished">更改(&amp;E)</translation>
     </message>
     <message>
         <source>File Format:</source>
@@ -2186,6 +2218,10 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>Show in file explorer</source>
         <translation>在文件浏览器中显示</translation>
+    </message>
+    <message>
+        <source>Chang&amp;e</source>
+        <translation>更改(&amp;E)</translation>
     </message>
 </context>
 <context>
@@ -2557,7 +2593,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>usage: Sugoi &lt;command&gt; [...]</source>
-        <translation>用法：sugoi &lt;命令&gt; [...]</translation>
+        <translation type="vanished">用法：sugoi &lt;命令&gt; [...]</translation>
     </message>
     <message>
         <source>commands:</source>
@@ -2942,6 +2978,10 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>quit sugoi player</source>
         <translation>退出 Sugoi Player</translation>
+    </message>
+    <message>
+        <source>usage: sugoi &lt;command&gt; [...]</source>
+        <translation>用法：sugoi &lt;命令&gt; [...]</translation>
     </message>
 </context>
 <context>

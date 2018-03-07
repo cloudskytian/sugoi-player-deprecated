@@ -173,15 +173,27 @@ void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
 
 void MainWindow::BringWindowToFront()
 {
-    if (this->isActiveWindow())
+    if (isActiveWindow())
     {
         return;
     }
-    if (this->isHidden())
+    if (isHidden())
     {
         show();
     }
     setWindowState(windowState() & ~Qt::WindowMinimized);
+    if (isActiveWindow())
+    {
+        return;
+    }
+    Qt::WindowFlags oldFlags = windowFlags();
+    setWindowFlags(oldFlags | Qt::WindowStaysOnTopHint);
+    setWindowFlags(oldFlags);
+    show();
+    if (isActiveWindow())
+    {
+        return;
+    }
     raise();
     activateWindow();
 }
@@ -1745,7 +1757,7 @@ void MainWindow::connectOtherSignalsAndSlots()
     connect(this, &MainWindow::trayIconVisibleChanged,
             [=](bool visible)
             {
-                if (this->isHidden())
+                if (isHidden())
                 {
                     return;
                 }
@@ -1758,7 +1770,7 @@ void MainWindow::connectOtherSignalsAndSlots()
     connect(this, &MainWindow::quickStartModeChanged,
             [=](bool quickStart)
             {
-                if (this->isHidden())
+                if (isHidden())
                 {
                     return;
                 }
@@ -1883,7 +1895,7 @@ void MainWindow::disconnectOtherSignalsAndSlots()
     autohide->disconnect();
     osdLocalTimeUpdater->disconnect();
     sugoi->dimDialog->disconnect();
-    this->disconnect();
+    disconnect();
 }
 
 void MainWindow::reconnectOtherSignalsAndSlots()
@@ -1909,7 +1921,7 @@ void MainWindow::initMainWindow(bool backgroundMode)
     jumplist->recent()->setVisible(true);
 
     taskbarButton = new QWinTaskbarButton(this);
-    taskbarButton->setWindow(this->windowHandle());
+    taskbarButton->setWindow(windowHandle());
 
     taskbarProgress = taskbarButton->progress();
     taskbarProgress->setMinimum(0);
@@ -1917,7 +1929,7 @@ void MainWindow::initMainWindow(bool backgroundMode)
 
     // add windows 7+ thubnail toolbar buttons
     thumbnail_toolbar = new QWinThumbnailToolBar(this);
-    thumbnail_toolbar->setWindow(this->windowHandle());
+    thumbnail_toolbar->setWindow(windowHandle());
 
     prev_toolbutton = new QWinThumbnailToolButton(thumbnail_toolbar);
     prev_toolbutton->setEnabled(false);
@@ -1977,6 +1989,6 @@ void MainWindow::initMainWindow(bool backgroundMode)
     }
     else
     {
-        this->hide();
+        hide();
     }
 }

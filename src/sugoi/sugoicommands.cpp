@@ -633,7 +633,7 @@ void SugoiEngine::SugoiHelp(QStringList &args)
 {
     if(args.empty())
     {
-        Print(tr("usage: Sugoi <command> [...]"));
+        Print(tr("usage: sugoi <command> [...]"));
         Print(tr("commands:"));
         int len, max_len = 22;
         for(auto command = SugoiCommandMap.begin(); command != SugoiCommandMap.end(); ++command)

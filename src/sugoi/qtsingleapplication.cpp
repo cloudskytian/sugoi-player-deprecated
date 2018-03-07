@@ -40,8 +40,8 @@
 
 #include "qtsingleapplication.h"
 #include "qtlocalpeer.h"
+
 #include <QWidget>
-#include <QTimer>
 
 /*!
     \class QtSingleApplication qtsingleapplication.h
@@ -134,7 +134,7 @@
 
 void QtSingleApplication::sysInit(const QString &appId)
 {
-    actWin = 0;
+    actWin = nullptr;
     peer = new QtLocalPeer(this, appId);
     connect(peer, SIGNAL(messageReceived(const QString&)), SIGNAL(messageReceived(const QString&)));
 }
@@ -321,22 +321,33 @@ QWidget* QtSingleApplication::activationWindow() const
 */
 void QtSingleApplication::activateWindow()
 {
-    QTimer::singleShot(0, [=]
+    if (actWin == nullptr)
     {
-        if (actWin)
-        {
-            if (!actWin->isActiveWindow())
-            {
-                if (actWin->isHidden())
-                {
-                    actWin->show();
-                }
-                actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
-                actWin->raise();
-                actWin->activateWindow();
-            }
-        }
-    });
+        return;
+    }
+    if (actWin->isActiveWindow())
+    {
+        return;
+    }
+    if (actWin->isHidden())
+    {
+        actWin->show();
+    }
+    actWin->setWindowState(actWin->windowState() & ~Qt::WindowMinimized);
+    if (actWin->isActiveWindow())
+    {
+        return;
+    }
+    Qt::WindowFlags oldFlags = actWin->windowFlags();
+    actWin->setWindowFlags(oldFlags | Qt::WindowStaysOnTopHint);
+    actWin->setWindowFlags(oldFlags);
+    actWin->show();
+    if (actWin->isActiveWindow())
+    {
+        return;
+    }
+    actWin->raise();
+    actWin->activateWindow();
 }
 
 

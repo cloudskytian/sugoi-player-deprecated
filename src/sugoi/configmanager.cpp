@@ -123,14 +123,14 @@ void SugoiEngine::LoadSettings()
     window->MapShortcuts();
 
     settings.beginGroup(QString::fromLatin1("mpv"));
-    mpv->fileFullPath = settings.value(QString::fromLatin1("lastDir"), QString::fromLatin1(".")).toString();
+    mpv->fileFullPath = settings.value(QString::fromLatin1("lastFile"), QString::fromLatin1(".")).toString();
     mpv->Volume(settings.value(QString::fromLatin1("volume"), 100).toInt());
     mpv->Speed(settings.value(QString::fromLatin1("speed"), 1.0).toDouble());
     mpv->Hwdec(settings.value(QString::fromLatin1("hwdec"), true).toBool());
     //mpv->Vo(settings.value(QString::fromLatin1("vo"), QString::fromLatin1("opengl-cb")).toString());
     mpv->ScreenshotFormat(settings.value(QString::fromLatin1("screenshot-format"), QString::fromLatin1("png")).toString());
     mpv->ScreenshotTemplate(settings.value(QString::fromLatin1("screenshot-template"), QString::fromLatin1("screenshot%#04n")).toString());
-    mpv->ScreenshotDirectory(settings.value(QString::fromLatin1("screenshot-directory"), QString::fromLatin1(".")).toString());
+    mpv->ScreenshotDirectory(settings.value(QString::fromLatin1("screenshot-directory"), Util::SnapDirLocation()).toString());
     mpv->MsgLevel(settings.value(QString::fromLatin1("msg-level"), QString::fromLatin1("status")).toString());
 
     size = settings.beginReadArray(QString::fromLatin1("options"));
@@ -246,7 +246,7 @@ void SugoiEngine::SaveSettings()
     }
 
     settings.beginGroup(QString::fromLatin1("mpv"));
-    settings.setValue(QString::fromLatin1("lastDir"), mpv->fileFullPath);
+    settings.setValue(QString::fromLatin1("lastFile"), QDir::toNativeSeparators(mpv->fileFullPath));
     settings.setValue(QString::fromLatin1("hwdec"), mpv->hwdec);
     settings.setValue(QString::fromLatin1("volume"), mpv->volume);
     settings.setValue(QString::fromLatin1("speed"), mpv->speed);

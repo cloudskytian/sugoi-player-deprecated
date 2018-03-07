@@ -1448,12 +1448,12 @@
   </action>
   <action name="action_Open_File">
    <property name="text">
-    <string>&amp;Open File...</string>
+    <string>&amp;Open File</string>
    </property>
   </action>
   <action name="actionOpen_URL">
    <property name="text">
-    <string>Open &amp;Location...</string>
+    <string>Open &amp;Location</string>
    </property>
   </action>
   <action name="actionOpen_Path_from_Clipboard">
@@ -1604,7 +1604,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>&amp;Jump to Time...</string>
+    <string>&amp;Jump to Time</string>
    </property>
   </action>
   <action name="action_Show_Playlist">
@@ -1713,7 +1713,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;Add Subtitle File...</string>
+    <string>&amp;Add Subtitle File</string>
    </property>
   </action>
   <action name="action_none">
@@ -1794,17 +1794,17 @@
   </action>
   <action name="actionWith_Subtitles">
    <property name="text">
-    <string>With &amp;Subtitles...</string>
+    <string>With &amp;Subtitles</string>
    </property>
   </action>
   <action name="actionWithout_Subtitles">
    <property name="text">
-    <string>&amp;Without Subtitles...</string>
+    <string>&amp;Without Subtitles</string>
    </property>
   </action>
   <action name="action_Preferences">
    <property name="text">
-    <string>&amp;Preferences...</string>
+    <string>&amp;Preferences</string>
    </property>
   </action>
   <action name="action_none_3">
@@ -1883,7 +1883,7 @@
   </action>
   <action name="action_Add_Audio_File">
    <property name="text">
-    <string>&amp;Add Audio File...</string>
+    <string>&amp;Add Audio File</string>
    </property>
   </action>
   <action name="actionHide_All_Controls">

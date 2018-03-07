@@ -6,7 +6,6 @@
 
 #include <QFileInfo>
 #include <QMimeDatabase>
-#include <QtConcurrent>
 #include <QDir>
 #include <QSystemTrayIcon>
 
@@ -179,13 +178,15 @@ int main(int argc, char *argv[])
     MainWindow *mainWindow = nullptr;
     if (!runInBackground)
     {
-        mainWindow = new MainWindow();
+        mainWindow = new MainWindow(nullptr, false);
+        SetParent(reinterpret_cast<HWND>(mainWindow->winId()), GetDesktopWindow());
         mainWindow->show();
         mainWindow->openFileFromCmd(command);
     }
     else
     {
         mainWindow = new MainWindow(nullptr, true);
+        SetParent(reinterpret_cast<HWND>(mainWindow->winId()), GetDesktopWindow());
         mainWindow->setWindowOpacity(0.0);
         mainWindow->hide();
         if (mainWindow->getSystemTrayIcon() != nullptr)
@@ -232,10 +233,7 @@ int main(int argc, char *argv[])
                          {
                              instance.activateWindow();
                          }
-                         QtConcurrent::run([=]
-                         {
-                             mainWindow->openFileFromCmd(filePath);
-                         });
+                         mainWindow->openFileFromCmd(filePath);
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE

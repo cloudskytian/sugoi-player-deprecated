@@ -25,6 +25,7 @@ bool DimLightsSupported();
 void SetAlwaysOnTop(QWidget *window, bool);
 QString SettingsLocation();
 QString LogFileLocation();
+QString SnapDirLocation();
 
 void messagesOutputToFile(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 

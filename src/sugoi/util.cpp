@@ -509,4 +509,10 @@ bool disableAutoStart()
     return true;
 }
 
+QString SnapDirLocation()
+{
+    QString snapDirPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
+    return QDir::toNativeSeparators(snapDirPath);
+}
+
 }
