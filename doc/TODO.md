@@ -9,3 +9,4 @@
 - [ ] Add more modern and beautiful skins
 - [ ] Improve the look of the installer, it's too ugly currently
 - [ ] Add real time video preview
+- [ ] Support other renderers such as D3D11, D2D and GDI (currently is OpenGL only)
