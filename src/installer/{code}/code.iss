@@ -1034,6 +1034,9 @@ end;
 
 //安装步骤改变时会调用这个函数
 procedure CurStepChanged(CurStep : TSetupStep);
+var
+  ResultCode : integer;
+  NewCmdLine : string;
 begin
   if (CurStep = ssInstall) then
   begin
@@ -1044,12 +1047,16 @@ begin
 #ifdef RegisteAssociations
     check_if_need_change_associations();
 #endif
-    //and do OTHER THINGS
   end;
   if (CurStep = ssDone) then
   begin
     is_wizardform_released := True;
     release_installer();
+    if (WizardSilent() = True) then
+    begin
+      NewCmdLine := '--showchangelog' + GetCmdTail();
+      Exec(ExpandConstant('{app}\{#MyAppExeName}'), NewCmdLine, ExpandConstant('{app}'), SW_SHOW, ewNoWait, ResultCode);
+    end;
   end;
 end;
 
