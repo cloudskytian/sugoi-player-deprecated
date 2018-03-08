@@ -335,7 +335,7 @@ QString MpvWidget::getMediaInfo()
     if(fileInfo.video_params.codec != QString())
         out += outer.arg(tr("Video (x%0)").arg(QString::number(vtracks)), fileInfo.video_params.codec) +
             inner.arg(tr("Video Output"), QString("%0 (hwdec %1)").arg(current_vo, hwdec_active)) +
-            inner.arg(tr("Resolution"), QString("%0 × %1 (%2)").arg(QString::number(fileInfo.video_params.width),
+            inner.arg(tr("Resolution"), QString("%0 x %1 (%2)").arg(QString::number(fileInfo.video_params.width),
                                                                     QString::number(fileInfo.video_params.height),
                                                                     Util::Ratio(fileInfo.video_params.width, fileInfo.video_params.height))) +
             inner.arg(tr("FPS"), QString::number(fps)) +
