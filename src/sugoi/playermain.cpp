@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QDir>
+#include <QCommandLineParser>
 
 #include <locale.h>
 
@@ -18,6 +19,20 @@
 #include "qtsingleapplication.h"
 #include "util.h"
 #include "fileassoc.h"
+
+QString checkFilePathValidation(const QString &filePath)
+{
+    QFileInfo fi(filePath);
+    if (fi.exists() && fi.isFile())
+    {
+        QMimeDatabase mdb;
+        if (Util::supportedMimeTypes().contains(mdb.mimeTypeForFile(fi).name()))
+        {
+            return filePath;
+        }
+    }
+    return QString();
+}
 
 #ifdef _STATIC_BUILD
 int sugoiAppMain(int argc, char *argv[])
@@ -42,124 +57,157 @@ int main(int argc, char *argv[])
 
     QtSingleApplication instance(QString::fromStdWString(SUGOI_APP_MUTEX_STR), argc, argv);
 
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QString::fromStdWString(SUGOI_COMMENTS_STR));
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("source", QtSingleApplication::translate("main", "Source file to copy."));
+    parser.addPositionalArgument("destination", QtSingleApplication::translate("main", "Destination directory."));
+
+    QCommandLineOption autoStartOption(QStringList() << "s" << "autostart",
+                                       QtSingleApplication::translate("main", "Make Sugoi Player auto start. Quick start mode only."));
+    parser.addOption(autoStartOption);
+    QCommandLineOption noAutoStartOption(QStringList() << "t" << "noautostart",
+                                         QtSingleApplication::translate("main", "Disable Sugoi Player auto start."));
+    parser.addOption(noAutoStartOption);
+    QCommandLineOption regAllOption(QStringList() << "a" << "regall",
+                                    QtSingleApplication::translate("main", "Register all media file types."));
+    parser.addOption(regAllOption);
+    QCommandLineOption regVideoOption(QStringList() << "v" << "regvideo",
+                                      QtSingleApplication::translate("main", "Register video media file types."));
+    parser.addOption(regVideoOption);
+    QCommandLineOption regAudioOption(QStringList() << "m" << "regaudio",
+                                      QtSingleApplication::translate("main", "Register audio media file types."));
+    parser.addOption(regAudioOption);
+    QCommandLineOption unregAllOption(QStringList() << "u" << "unregall",
+                                      QtSingleApplication::translate("main", "Unregister all media file types."));
+    parser.addOption(unregAllOption);
+    QCommandLineOption unregVideoOption(QStringList() << "d" << "unregvideo",
+                                        QtSingleApplication::translate("main", "Unregister video media file types."));
+    parser.addOption(unregVideoOption);
+    QCommandLineOption unregAudioOption(QStringList() << "o" << "unregaudio",
+                                        QtSingleApplication::translate("main", "Unregister audio media file types."));
+    parser.addOption(unregAudioOption);
+    QCommandLineOption exitOption(QStringList() << "e" << "exit",
+                                  QtSingleApplication::translate("main", "Terminate all running Sugoi Player instances."));
+    parser.addOption(exitOption);
+    QCommandLineOption newInstanceOption(QStringList() << "n" << "newinstance",
+                                         QtSingleApplication::translate("main", "Create a new Sugoi Player instance."));
+    parser.addOption(newInstanceOption);
+    QCommandLineOption runInBackgroundOption(QStringList() << "q" << "runinbackground",
+                                             QtSingleApplication::translate("main", "Run a new instance in background (main window is hidden). Quick start mode only."));
+    parser.addOption(runInBackgroundOption);
+    QCommandLineOption fileOption(QStringList() << "f" << "file",
+                                  QtSingleApplication::translate("main", "Play the given url <url>. It can be a local file or a web url."),
+                                  QtSingleApplication::translate("main", "url"));
+    parser.addOption(fileOption);
+
+    parser.process(instance);
+
     bool singleInstance = true;
     bool runInBackground = false;
-
-    QStringList cmdline = instance.arguments();
     QString command = QString();
 
-    if (cmdline.count() > 1)
+    if (parser.isSet(autoStartOption))
     {
-        for (int i = 1; i <= (cmdline.count() - 1); ++i)
-        {
-            if (cmdline.at(i) == QString::fromLatin1("--autostart"))
-            {
 #ifdef _STATIC_BUILD
-                QString filePath = QtSingleApplication::applicationFilePath();
-                QString fileParam = QString::fromLatin1("--guard");
+        QString filePath = QtSingleApplication::applicationFilePath();
+        QString fileParam = QString::fromLatin1("--guard");
 #else
 #ifdef Q_OS_WIN64
-                QString filePath = QString::fromLatin1("SugoiGuard64.exe");
+        QString filePath = QString::fromLatin1("SugoiGuard64.exe");
 #else
-                QString filePath = QString::fromLatin1("SugoiGuard.exe");
+        QString filePath = QString::fromLatin1("SugoiGuard.exe");
 #endif
-                filePath = QtSingleApplication::applicationDirPath() + QDir::separator() + filePath;
-                if (!QFileInfo(filePath).exists())
-                {
-                    return -1;
-                }
-                QString fileParam = QString();
-#endif
-                if (!Util::setAutoStart(QDir::toNativeSeparators(filePath), fileParam))
-                {
-                    return -1;
-                }
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--noautostart"))
-            {
-                if (!Util::disableAutoStart())
-                {
-                    return -1;
-                }
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--regall"))
-            {
-                FileAssoc fileAssoc;
-                if (!fileAssoc.registerMediaFiles(FileAssoc::reg_type::ALL))
-                {
-                    return -1;
-                }
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--regvideo"))
-            {
-                FileAssoc fileAssoc;
-                if (!fileAssoc.registerMediaFiles(FileAssoc::reg_type::VIDEO_ONLY))
-                {
-                    return -1;
-                }
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--regaudio"))
-            {
-                FileAssoc fileAssoc;
-                if (!fileAssoc.registerMediaFiles(FileAssoc::reg_type::AUDIO_ONLY))
-                {
-                    return -1;
-                }
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--unregall"))
-            {
-                FileAssoc fileAssoc;
-                fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::ALL);
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--unregvideo"))
-            {
-                FileAssoc fileAssoc;
-                fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::VIDEO_ONLY);
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--unregaudio"))
-            {
-                FileAssoc fileAssoc;
-                fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::AUDIO_ONLY);
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--newinstance"))
-            {
-                singleInstance = false;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--exit")
-                     || cmdline.at(i) == QString::fromLatin1("--quit")
-                     || cmdline.at(i) == QString::fromLatin1("--close"))
-            {
-                instance.sendMessage(QString::fromLatin1("exit"));
-                return 0;
-            }
-            else if (cmdline.at(i) == QString::fromLatin1("--runinbackground"))
-            {
-                runInBackground = true;
-                command = QString::fromLatin1("runinbackground");
-                break;
-            }
-            else
-            {
-                QFileInfo fi(cmdline.at(i));
-                if (fi.exists() && fi.isFile())
-                {
-                    QMimeDatabase mdb;
-                    if (Util::supportedMimeTypes().contains(mdb.mimeTypeForFile(fi).name()))
-                    {
-                        command = cmdline.at(i);
-                        break;
-                    }
-                }
-            }
+        filePath = QtSingleApplication::applicationDirPath() + QDir::separator() + filePath;
+        if (!QFileInfo(filePath).exists())
+        {
+            return -1;
         }
+        QString fileParam = QString();
+#endif
+        if (!Util::setAutoStart(QDir::toNativeSeparators(filePath), fileParam))
+        {
+            return -1;
+        }
+        return 0;
+    }
+    else if (parser.isSet(noAutoStartOption))
+    {
+        if (!Util::disableAutoStart())
+        {
+            return -1;
+        }
+        return 0;
+    }
+    else if (parser.isSet(regAllOption))
+    {
+        FileAssoc fileAssoc;
+        if (!fileAssoc.registerMediaFiles(FileAssoc::reg_type::ALL))
+        {
+            return -1;
+        }
+        return 0;
+    }
+    else if (parser.isSet(regVideoOption))
+    {
+        FileAssoc fileAssoc;
+        if (!fileAssoc.registerMediaFiles(FileAssoc::reg_type::VIDEO_ONLY))
+        {
+            return -1;
+        }
+        return 0;
+    }
+    else if (parser.isSet(regAudioOption))
+    {
+        FileAssoc fileAssoc;
+        if (!fileAssoc.registerMediaFiles(FileAssoc::reg_type::AUDIO_ONLY))
+        {
+            return -1;
+        }
+        return 0;
+    }
+    else if (parser.isSet(unregAllOption))
+    {
+        FileAssoc fileAssoc;
+        fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::ALL);
+        return 0;
+    }
+    else if (parser.isSet(unregVideoOption))
+    {
+        FileAssoc fileAssoc;
+        fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::VIDEO_ONLY);
+        return 0;
+    }
+    else if (parser.isSet(unregAudioOption))
+    {
+        FileAssoc fileAssoc;
+        fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::AUDIO_ONLY);
+        return 0;
+    }
+    else if (parser.isSet(newInstanceOption))
+    {
+        singleInstance = false;
+    }
+    else if (parser.isSet(exitOption))
+    {
+        instance.sendMessage(QString::fromLatin1("exit"));
+        return 0;
+    }
+    else if (parser.isSet(runInBackgroundOption))
+    {
+        runInBackground = true;
+        command = QString::fromLatin1("runinbackground");
+    }
+    else if (parser.isSet(fileOption))
+    {
+        QString path = parser.value(fileOption);
+        command = checkFilePathValidation(path);
+    }
+    else
+    {
+        QString path = instance.arguments().at(instance.arguments().count() - 1);
+        command = checkFilePathValidation(path);
     }
 
     if (singleInstance)
