@@ -64,41 +64,49 @@ int main(int argc, char *argv[])
     parser.addPositionalArgument("source", QtSingleApplication::translate("main", "Source file to copy."));
     parser.addPositionalArgument("destination", QtSingleApplication::translate("main", "Destination directory."));
 
-    QCommandLineOption autoStartOption(QStringList() << "s" << "autostart",
-                                       QtSingleApplication::translate("main", "Make Sugoi Player auto start. Quick start mode only."));
+    QCommandLineOption autoStartOption(QString::fromLatin1("autostart"),
+                  QtSingleApplication::translate("main", "Make Sugoi Player auto start. Quick start mode only."));
     parser.addOption(autoStartOption);
-    QCommandLineOption noAutoStartOption(QStringList() << "t" << "noautostart",
-                                         QtSingleApplication::translate("main", "Disable Sugoi Player auto start."));
+    QCommandLineOption noAutoStartOption(QString::fromLatin1("noautostart"),
+                                      QtSingleApplication::translate("main", "Disable Sugoi Player auto start."));
     parser.addOption(noAutoStartOption);
-    QCommandLineOption regAllOption(QStringList() << "a" << "regall",
-                                    QtSingleApplication::translate("main", "Register all media file types."));
+    QCommandLineOption regAllOption(QString::fromLatin1("regall"),
+                                        QtSingleApplication::translate("main", "Register all media file types."));
     parser.addOption(regAllOption);
-    QCommandLineOption regVideoOption(QStringList() << "v" << "regvideo",
+    QCommandLineOption regVideoOption(QString::fromLatin1("regvideo"),
                                       QtSingleApplication::translate("main", "Register video media file types."));
     parser.addOption(regVideoOption);
-    QCommandLineOption regAudioOption(QStringList() << "m" << "regaudio",
+    QCommandLineOption regAudioOption(QString::fromLatin1("regaudio"),
                                       QtSingleApplication::translate("main", "Register audio media file types."));
     parser.addOption(regAudioOption);
-    QCommandLineOption unregAllOption(QStringList() << "u" << "unregall",
+    QCommandLineOption unregAllOption(QString::fromLatin1("unregall"),
                                       QtSingleApplication::translate("main", "Unregister all media file types."));
     parser.addOption(unregAllOption);
-    QCommandLineOption unregVideoOption(QStringList() << "d" << "unregvideo",
-                                        QtSingleApplication::translate("main", "Unregister video media file types."));
+    QCommandLineOption unregVideoOption(QString::fromLatin1("unregvideo"),
+                                    QtSingleApplication::translate("main", "Unregister video media file types."));
     parser.addOption(unregVideoOption);
-    QCommandLineOption unregAudioOption(QStringList() << "o" << "unregaudio",
-                                        QtSingleApplication::translate("main", "Unregister audio media file types."));
+    QCommandLineOption unregAudioOption(QString::fromLatin1("unregaudio"),
+                                    QtSingleApplication::translate("main", "Unregister audio media file types."));
     parser.addOption(unregAudioOption);
-    QCommandLineOption exitOption(QStringList() << "e" << "exit",
-                                  QtSingleApplication::translate("main", "Terminate all running Sugoi Player instances."));
+    QCommandLineOption exitOption(QString::fromLatin1("exit"),
+                         QtSingleApplication::translate("main", "Terminate all running Sugoi Player instances."));
     parser.addOption(exitOption);
-    QCommandLineOption newInstanceOption(QStringList() << "n" << "newinstance",
-                                         QtSingleApplication::translate("main", "Create a new Sugoi Player instance."));
+    QCommandLineOption closeOption(QString::fromLatin1("close"),
+                         QtSingleApplication::translate("main", "Terminate all running Sugoi Player instances."));
+    parser.addOption(closeOption);
+    QCommandLineOption quitOption(QString::fromLatin1("quit"),
+                         QtSingleApplication::translate("main", "Terminate all running Sugoi Player instances."));
+    parser.addOption(quitOption);
+    QCommandLineOption newInstanceOption(QString::fromLatin1("newinstance"),
+                                   QtSingleApplication::translate("main", "Create a new Sugoi Player instance."));
     parser.addOption(newInstanceOption);
-    QCommandLineOption runInBackgroundOption(QStringList() << "q" << "runinbackground",
-                                             QtSingleApplication::translate("main", "Run a new instance in background (main window is hidden). Quick start mode only."));
+    QCommandLineOption runInBackgroundOption(QString::fromLatin1("runinbackground"),
+                         QtSingleApplication::translate("main",
+                             "Run a new instance in background (main window is hidden). Quick start mode only."));
     parser.addOption(runInBackgroundOption);
     QCommandLineOption fileOption(QStringList() << "f" << "file",
-                                  QtSingleApplication::translate("main", "Play the given url <url>. It can be a local file or a web url."),
+                                  QtSingleApplication::translate("main",
+                                                "Play the given url <url>. It can be a local file or a web url."),
                                   QtSingleApplication::translate("main", "url"));
     parser.addOption(fileOption);
 
@@ -106,6 +114,7 @@ int main(int argc, char *argv[])
 
     bool singleInstance = true;
     bool runInBackground = false;
+
     QString command = QString();
 
     if (parser.isSet(autoStartOption))
@@ -189,7 +198,7 @@ int main(int argc, char *argv[])
     {
         singleInstance = false;
     }
-    else if (parser.isSet(exitOption))
+    else if (parser.isSet(exitOption) || parser.isSet(closeOption) || parser.isSet(quitOption))
     {
         instance.sendMessage(QString::fromLatin1("exit"));
         return 0;
