@@ -6,15 +6,22 @@ branches:
   except:
     - gh-pages
 
-skip_tags: false
+skip_tags: true
 
-skip_commits:
+only_commits:
   files:
-    - '**/*.md'
+    - '**/*.h'
+    - '**/*.hpp'
+    - '**/*.cpp'
+    - '**/*.pro'
+    - '**/*.pri'
+    - '**/*.rc'
+    - '**/*.qrc'
+    - '**/*.ui'
 
 image: Visual Studio 2017
 
-clone_folder: C:\Sugoi-Player
+clone_folder: C:\projects\sugoi-player
 
 shallow_clone: true
 

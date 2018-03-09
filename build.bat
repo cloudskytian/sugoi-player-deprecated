@@ -13,8 +13,8 @@ IF EXIST bin64 RD /S /Q bin64
 qmake "sugoi-player.pro" -spec win32-msvc "CONFIG+=release"
 jom qmake_all
 jom && jom install
-CALL build-artifacts.bat
-jom distclean
-IF EXIST bin64 RD /S /Q bin64
+REM CALL build-artifacts.bat
+REM jom distclean
+REM IF EXIST bin64 RD /S /Q bin64
 PAUSE
 EXIT
