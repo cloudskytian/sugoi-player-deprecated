@@ -19,6 +19,7 @@
 #include "qtsingleapplication.h"
 #include "util.h"
 #include "fileassoc.h"
+#include "mpvtypes.h"
 
 QString checkFilePathValidation(const QString &filePath)
 {
@@ -61,8 +62,8 @@ int main(int argc, char *argv[])
     parser.setApplicationDescription(QString::fromStdWString(SUGOI_COMMENTS_STR));
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("source", QtSingleApplication::translate("main", "Source file to copy."));
-    parser.addPositionalArgument("destination", QtSingleApplication::translate("main", "Destination directory."));
+    parser.addPositionalArgument("name", QtSingleApplication::translate("main", "The name of the option you want to enable."));
+    parser.addPositionalArgument("value", QtSingleApplication::translate("main", "The value of the option, if it has."));
 
     QCommandLineOption autoStartOption(QString::fromLatin1("autostart"),
                   QtSingleApplication::translate("main", "Make Sugoi Player auto start. Quick start mode only."));
@@ -230,6 +231,13 @@ int main(int argc, char *argv[])
     // Qt sets the locale in the QApplication constructor, but libmpv requires
     // the LC_NUMERIC category to be set to "C", so change it back.
     setlocale(LC_NUMERIC, "C");
+
+    qRegisterMetaType<Mpv::PlayState>();
+    qRegisterMetaType<Mpv::Chapter>();
+    qRegisterMetaType<Mpv::Track>();
+    qRegisterMetaType<Mpv::VideoParams>();
+    qRegisterMetaType<Mpv::AudioParams>();
+    qRegisterMetaType<Mpv::FileInfo>();
 
     MainWindow mainWindow;
     if (!runInBackground)

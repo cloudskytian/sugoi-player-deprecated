@@ -2,7 +2,10 @@
 #define MPVTYPES_H
 
 #include <QMetaType>
+#include <QString>
+#include <QStringList>
 #include <QMap>
+#include <QList>
 
 namespace Mpv
 {
@@ -72,6 +75,7 @@ namespace Mpv
         QList<Chapter> chapters;
     };
 }
+
 Q_DECLARE_METATYPE(Mpv::PlayState) // so we can pass it with signals & slots
 Q_DECLARE_METATYPE(Mpv::Chapter)
 Q_DECLARE_METATYPE(Mpv::Track)
