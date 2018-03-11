@@ -82,7 +82,7 @@ There are many mpv front-ends in the world, some of them are truly great, I hope
 
 **NOTE**
 
-Sugoi Player is only tested on the latest 64 bit Windows 10 Pro stable edition (that's my work environment). I am very sorry that I don't known wether Sugoi Player works well or not on other platforms. You have to compile Sugoi Player yourself to get the correct binary files for Linux and macOS. The source code is some sort of compatible, you need to change a little bit, but not much I guess.
+Sugoi Player is only tested on the latest 64 bit Windows 10 Pro stable edition (that's my work environment). I am very sorry that I don't known whether Sugoi Player works well or not on other platforms. You have to compile Sugoi Player yourself to get the correct binary files for Linux and macOS. The source code is some sort of compatible, but you need to change a little bit.
 
 
 ## Downloads
@@ -93,7 +93,7 @@ https://github.com/wangwenx190/Sugoi-Player/releases.
 
 ## Changelog
 
-See [**./doc/CHANGELOG.md**](/doc/CHANGELOG.md) for more information.
+See [**doc/CHANGELOG.md**](/doc/CHANGELOG.md) for more information.
 
 
 ## Compilation
@@ -135,7 +135,7 @@ SET "_INNO_SETUP_DIR=C:\Program Files (x86)\Inno Setup 5"
       ```
 2. Open the solution file **sugoi-player.pro**. Change the solution's configuration to **Release** (in the toolbar).
 3. Press <kbd>Ctrl</kbd> + <kbd>B</kbd> or click **Build** to build the solution.
-4. You now have **Sugoi[64].exe** and **iconlib.dll** under **"./bin[64]/Release"**.
+4. You now have **Sugoi[64].exe** and **iconlib.dll** under **"bin[64]/Release"**.
 
 **NOTES**
 
@@ -167,12 +167,12 @@ will likely be ignored or closed as invalid.
 
 ## Contributors
 
-See [**./doc/CONTRIBUTORS.md**](/doc/CONTRIBUTORS.md) for more information.
+See [**doc/CONTRIBUTORS.md**](/doc/CONTRIBUTORS.md) for more information.
 
 
 ## Contributing
 
-See [**./doc/CONTRIBUTING.md**](/doc/CONTRIBUTING.md) for more information.
+See [**doc/CONTRIBUTING.md**](/doc/CONTRIBUTING.md) for more information.
 
 
 ## License
