@@ -400,7 +400,7 @@ void MainWindow::changeEvent(QEvent *event)
         {
             if (pauseWhenMinimized)
             {
-                if (IsPlayingVideo(mpv->getFileFullPath()))
+                if (IsPlayingVideo(mpv->getFile()))
                 {
                     mpv->Pause();
                 }
@@ -422,7 +422,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
     sugoi->SaveSettings();
     bool canClose = true;
-    if (IsPlayingMusic(mpv->getFileFullPath()))
+    if (IsPlayingMusic(mpv->getFile()))
     {
         if (allowRunInBackground)
         {

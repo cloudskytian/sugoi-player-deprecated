@@ -80,7 +80,8 @@ HEADERS += \
     $$PWD/skinmanager.h \
     $$PWD/mpvwidget.h \
     $$PWD/ui/cframelesswindow.h \
-    $$PWD/playbackmanager.h
+    $$PWD/playbackmanager.h \
+    $$PWD/widgets/logowidget.h
 
 SOURCES += \
     $$PWD/playermain.cpp \
@@ -117,7 +118,8 @@ SOURCES += \
     $$PWD/skinmanager.cpp \
     $$PWD/mpvwidget.cpp \
     $$PWD/ui/cframelesswindow.cpp \
-    $$PWD/playbackmanager.cpp
+    $$PWD/playbackmanager.cpp \
+    $$PWD/widgets/logowidget.cpp
 
 FORMS += \
     $$PWD/ui/aboutdialog.ui \
