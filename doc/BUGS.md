@@ -1,8 +1,8 @@
 ﻿# Known Bugs
 
-- The first time you opened a media file from the file explorer, the player cannot change it's window size correctly
+- The first time you opened a media file from the file explorer, the player cannot change it's window size correctly (randomly, but mostly)
 - There are some translation mistakes
-- Player crashes randomly
+- Player crashes (randomly)
 - Main window cannot change it's size correctly when loading music
 
 

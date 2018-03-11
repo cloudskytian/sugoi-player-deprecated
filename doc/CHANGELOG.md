@@ -1,6 +1,7 @@
 ﻿## Change log
 
-### V1.1.1 **->** V1.2.0
+
+### V1.2.0
 
 - **Changed** main window to frameless window
 - **Changed** default vo from "gpu" to "libmpv" (opengl-cb)
@@ -10,11 +11,8 @@
 - **Fixed** some known bugs
 - **Other** minor tweaks
 
-### V1.1.0 **->** V1.1.1
 
-- **Fixed** thumbnail toolbar buttons do not work well
-
-### V1.0.0 **->** V1.1.0
+### V1.0.0
 
 - **Added** OSD show local time
 - **Added** fullscreen progress indicator
