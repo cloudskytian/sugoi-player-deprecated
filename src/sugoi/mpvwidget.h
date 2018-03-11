@@ -1,7 +1,9 @@
 ﻿#ifndef MPVWIDGET_H
 #define MPVWIDGET_H
 
+#include <QObject>
 #include <QOpenGLWidget>
+#include <QColor>
 
 #include <mpv/client.h>
 #include <mpv/opengl_cb.h>
@@ -9,233 +11,141 @@
 
 #include "mpvtypes.h"
 
-class SugoiEngine;
+class QThread;
+class QWidget;
+class MpvWidgetInterface;
+class MpvController;
+class LogoDrawer;
 
-class MpvWidget Q_DECL_FINAL: public QOpenGLWidget
+// FIXME: implement MpvVulkanWidget
+typedef MpvGLWidget MpvVulkanWidget;
+// FIXME: implement MpvD3DWidget
+typedef MpvGLWidget MpvD3DWidget;
+// FIXME: implement MpvD2DWidget
+typedef MpvGLWidget MpvD2DWidget;
+// FIXME: implement MpvGDIWidget
+typedef MpvGLWidget MpvGDIWidget;
+
+class MpvObject : public QObject
 {
-friend class SugoiEngine;
     Q_OBJECT
 public:
-    explicit MpvWidget(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = 0, SugoiEngine *se = Q_NULLPTR);
-    ~MpvWidget();
+    explicit MpvObject(QObject *parent = nullptr, const QString &clientName = "mpv");
+    ~MpvObject();
 
-    const Mpv::FileInfo &getFileInfo()      { return fileInfo; }
-    Mpv::PlayState getPlayState()           { return playState; }
-    QString getFile()                       { return file; }
-    QString getPath()                       { return path; }
-    QString getFileFullPath()               { return fileFullPath; }
-    QString getScreenshotFormat()           { return screenshotFormat; }
-    QString getScreenshotTemplate()         { return screenshotTemplate; }
-    QString getScreenshotDir()              { return screenshotDir; }
-    QString getVo()                         { return vo; }
-    QString getMsgLevel()                   { return msgLevel; }
-    double getSpeed()                       { return speed; }
-    int getTime()                           { return time; }
-    int getVolume()                         { return volume; }
-    int getVid()                            { return vid; }
-    int getAid()                            { return aid; }
-    int getSid()                            { return sid; }
-    bool getSubtitleVisibility()            { return subtitleVisibility; }
-    bool getMute()                          { return mute; }
-    double getPosition()                    { return position; }
-    double getDuration()                    { return duration; }
-    QSize getVideoSize()                    { return QSize(videoWidth, videoHeight); }
-    bool getHwdec()                         { return hwdec; }
-    double getPercent()                     { return percent; }
+signals:
+    void mpvCommand(const QVariant &params);
+    void mpvSetOption(const QString &name, const QVariant &value);
+    void mpvSetProperty(const QString &name, const QVariant &value);
+    void logoSizeChanged(QSize size);
 
-    int getOsdWidth()                       { return osdWidth; }
-    int getOsdHeight()                      { return osdHeight; }
+public slots:
+    QString mpvVersion() const;
+    MpvController *mpvController() const;
+    QWidget *mpvWidget() const;
+    QVariant mpvProperty(const QString &name) const;
 
-    QString getMediaInfo();
+public slots:
+    void setHostWindow(QObject *newHostWindow);
+    void setRendererType(Mpv::Renderers newRendererType = Mpv::Renderers::GL);
+    void setLogoUrl(const QString &filename);
+    void setLogoBackground(const QColor &color);
+
+private:
+    Mpv::Renderers currentRendererType = Mpv::Renderers::Null;
+    QWidget *currentHostWindow = nullptr;
+    MpvController *currentController = nullptr;
+    MpvWidgetInterface *currentWidget = nullptr;
+    QThread *currentWorker = nullptr;
+};
+
+class MpvWidgetInterface
+{
+public:
+    explicit MpvWidgetInterface(MpvObject *object);
+    virtual ~MpvWidgetInterface();
+
+    void setController(MpvController *newController);
+
+    virtual QWidget *self() = 0;
+    virtual void initMpv() = 0;
+    virtual void setLogoUrl(const QString &filename);
+    virtual void setLogoBackground(const QColor &color);
+    virtual void setDrawLogo(bool yes);
 
 protected:
-    void initializeGL() Q_DECL_OVERRIDE;
-    void paintGL() Q_DECL_OVERRIDE;
+    MpvObject *currentMpvObject = nullptr;
+    MpvController *currentController = nullptr;
+};
+Q_DECLARE_INTERFACE(MpvWidgetInterface, "wangwenx190.SugoiPlayer.MpvWidgetInterface/1.0")
 
-    bool FileExists(QString);
+class MpvGLWidget : public QOpenGLWidget, public MpvWidgetInterface
+{
+    Q_OBJECT
+    Q_INTERFACES(MpvWidgetInterface)
 
-public Q_SLOTS:
-    void SetEngine(SugoiEngine *engine);
+public:
+    explicit MpvGLWidget(MpvObject *object, QWidget *parent = nullptr);
+    ~MpvGLWidget();
 
-    void LoadFile(QString);
-    QString LoadPlaylist(QString);
-    bool PlayFile(QString);
+    QWidget *self();
+    void initMpv();
+    void setLogoUrl(const QString &filename);
+    void setLogoBackground(const QColor &color);
+    void setDrawLogo(bool yes);
 
-    void AddOverlay(int id, int x, int y, QString file, int offset, int w, int h);
-    void RemoveOverlay(int id);
+protected:
+    void initializeGL();
+    void paintGL();
+    void resizeGL(int w, int h);
 
-    void Play();
-    void Pause();
-    void Stop();
-    void PlayPause(QString fileIfStopped);
-    void Restart();
-    void Rewind();
-    void Mute(bool);
-    void Hwdec(bool h, bool osd = true);
+private:
+    static void onMpvUpdate(void *ctx);
 
-    void Seek(int pos, bool relative = false, bool osd = false);
-    int Relative(int pos);
-    void FrameStep();
-    void FrameBackStep();
-
-    void Chapter(int);
-    void NextChapter();
-    void PreviousChapter();
-
-    void Volume(int, bool osd = false);
-    void Speed(double);
-    void Aspect(QString);
-    void Vid(int);
-    void Aid(int);
-    void Sid(int);
-
-    void Screenshot(bool withSubs = false);
-
-    void ScreenshotFormat(QString);
-    void ScreenshotTemplate(QString);
-    void ScreenshotDirectory(QString);
-
-    void AddSubtitleTrack(QString);
-    void AddAudioTrack(QString);
-    void ShowSubtitles(bool);
-    void SubtitleScale(double scale, bool relative = false);
-
-    void Deinterlace(bool);
-    void Interpolate(bool);
-    void Vo(QString);
-
-    void MsgLevel(QString level);
-
-    void ShowText(QString text, int duration = 4000);
-
-    void LoadTracks();
-    void LoadChapters();
-    void LoadVideoParams();
-    void LoadAudioParams();
-    void LoadMetadata();
-    void LoadOsdSize();
-
-    void command(const QVariant& params);
-    void setOption(const QString& name, const QVariant& value);
-    void setProperty(const QString& name, const QVariant& value);
-    QVariant getProperty(const QString& name) const;
-
-protected Q_SLOTS:
-    void OpenFile(QString);
-    QString PopulatePlaylist();
-    void LoadFileInfo();
-    void SetProperties();
-
-    void HandleErrorCode(int);
-
-private Q_SLOTS:
-    void setPlaylist(const QStringList& l)  { Q_EMIT playlistChanged(l); }
-    void setFileInfo()                      { Q_EMIT fileInfoChanged(fileInfo); }
-    void setPlayState(Mpv::PlayState s)     { Q_EMIT playStateChanged(playState = s); }
-    void setFile(QString s)                 { Q_EMIT fileChanged(file = s); }
-    void setPath(QString s)                 { Q_EMIT pathChanged(path = s); }
-    void setFileFullPath(QString s)         { Q_EMIT fileFullPathChanged(fileFullPath = s); }
-    void setScreenshotFormat(QString s)     { Q_EMIT screenshotFormatChanged(screenshotFormat = s); }
-    void setScreenshotTemplate(QString s)   { Q_EMIT screenshotTemplateChanged(screenshotTemplate = s); }
-    void setScreenshotDir(QString s)        { Q_EMIT screenshotDirChanged(screenshotDir = s); }
-    void setVo(QString s)                   { Q_EMIT voChanged(vo = s); }
-    void setMsgLevel(QString s)             { Q_EMIT msgLevelChanged(msgLevel = s); }
-    void setSpeed(double d)                 { Q_EMIT speedChanged(speed = d); }
-    void setTime(int i)                     { Q_EMIT timeChanged(time = i); }
-    void setVolume(int i)                   { Q_EMIT volumeChanged(volume = i); }
-    void setIndex(int i)                    { Q_EMIT indexChanged(index = i); }
-    void setVid(int i)                      { Q_EMIT vidChanged(vid = i); }
-    void setAid(int i)                      { Q_EMIT aidChanged(aid = i); }
-    void setSid(int i)                      { Q_EMIT sidChanged(sid = i); }
-    void setSubtitleVisibility(bool b)      { Q_EMIT subtitleVisibilityChanged(subtitleVisibility = b); }
-    void setMute(bool b)                    { if (mute != b) Q_EMIT muteChanged(mute = b); }
-    void setPosition(double p)              { Q_EMIT positionChanged(position = p); }
-    void setDuration(double d)              { Q_EMIT durationChanged(duration = d); }
-    void setVideoSize(int w, int h)         { Q_EMIT videoSizeChanged(videoWidth = w, videoHeight = h); }
-    void setHwdec(bool b)                   { Q_EMIT hwdecChanged(hwdec = b); }
-    void setPercent(double p)               { Q_EMIT percentChanged(percent = p); }
-
-    void swapped();
-    void on_mpv_events();
+private slots:
     void maybeUpdate();
-
-Q_SIGNALS:
-    void playlistChanged(const QStringList&);
-    void fileInfoChanged(const Mpv::FileInfo&);
-    void trackListChanged(const QList<Mpv::Track>&);
-    void chaptersChanged(const QList<Mpv::Chapter>&);
-    void videoParamsChanged(const Mpv::VideoParams&);
-    void audioParamsChanged(const Mpv::AudioParams&);
-    void playStateChanged(Mpv::PlayState);
-    void fileChanging(int, int);
-    void fileChanged(QString);
-    void pathChanged(QString);
-    void fileFullPathChanged(QString);
-    void screenshotFormatChanged(QString);
-    void screenshotTemplateChanged(QString);
-    void screenshotDirChanged(QString);
-    void voChanged(QString);
-    void msgLevelChanged(QString);
-    void speedChanged(double);
-    void timeChanged(int);
-    void volumeChanged(int);
-    void indexChanged(int);
-    void vidChanged(int);
-    void aidChanged(int);
-    void sidChanged(int);
-    void debugChanged(bool);
-    void subtitleVisibilityChanged(bool);
-    void muteChanged(bool);
-    void durationChanged(double);
-    void positionChanged(double);
-    void videoSizeChanged(int, int);
-    void hwdecChanged(bool);
-    void percentChanged(double);
-
-    void messageSignal(QString m);
+    void self_frameSwapped();
+    void self_playbackStarted();
+    void self_playbackFinished();
 
 private:
-    SugoiEngine *sugoi = nullptr;
+    mpv_opengl_cb_context *glMpv = nullptr;
+    bool drawLogo = true;
+    LogoDrawer *logo = nullptr;
+    int glWidth = 0, glHeight = 0;
+};
 
-    // variables
-    Mpv::PlayState playState = Mpv::Idle;
-    Mpv::FileInfo fileInfo;
-    QString     file,
-                path,
-                fileFullPath,
-                screenshotFormat,
-                screenshotTemplate,
-                screenshotDir,
-                suffix,
-                vo,
-                msgLevel;
-    double      speed = 1,
-                position = 0,
-                duration = 0,
-                percent = 0;
-    int         time = 0,
-                lastTime = 0,
-                volume = 100,
-                index = 0,
-                vid,
-                aid,
-                sid;
-    bool        init = false,
-                hwdec = true,
-                playlistVisible = false,
-                subtitleVisibility = true,
-                mute = false;
-    int         osdWidth,
-                osdHeight,
-                videoWidth,
-                videoHeight;
+// This controller attempts to shove as much libmpv related business off of
+// the main thread.
+class MpvController : public QObject
+{
+    Q_OBJECT
+public:
+    MpvController(QObject *parent = nullptr);
+    ~MpvController();
+
+signals:
+
+public slots:
+    void mpvCommand(const QVariant &params);
+    void mpvSetOption(const QString &name, const QVariant &value);
+    void mpvSetProperty(const QString &name, const QVariant &value);
+    QVariant mpvProperty(const QString &name) const;
+
+public slots:
+    void create();
+
+    QString clientName() const;
+    unsigned long apiVersion() const;
+    mpv_opengl_cb_context *mpvDrawContext() const;
+    void parseMpvEvents();
 
 private:
-    void handle_mpv_event(mpv_event *event);
-    static void on_update(void *ctx);
+    void handleMpvEvent(mpv_event *event);
+    static void mpvWakeup(void *ctx);
 
     mpv::qt::Handle mpv;
-    mpv_opengl_cb_context *mpv_gl;
+    mpv_opengl_cb_context *glMpv = nullptr;
 };
 
 #endif // MPVWIDGET_H

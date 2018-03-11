@@ -238,6 +238,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Mpv::VideoParams>();
     qRegisterMetaType<Mpv::AudioParams>();
     qRegisterMetaType<Mpv::FileInfo>();
+    qRegisterMetaType<Mpv::Renderers>();
 
     MainWindow mainWindow;
     if (!runInBackground)
