@@ -1036,7 +1036,6 @@ end;
 procedure CurStepChanged(CurStep : TSetupStep);
 var
   ResultCode : integer;
-  NewCmdLine : string;
 begin
   if (CurStep = ssInstall) then
   begin
@@ -1054,8 +1053,14 @@ begin
     release_installer();
     if (WizardSilent() = True) then
     begin
-      NewCmdLine := '--showchangelog' + GetCmdTail();
-      Exec(ExpandConstant('{app}\{#MyAppExeName}'), NewCmdLine, ExpandConstant('{app}'), SW_SHOW, ewNoWait, ResultCode);
+      if (FileExists(ExpandConstant({localappdata}\{#MyAppPublisher}\{#MyAppName}\update.ui))) then
+      begin
+        DeleteFile(ExpandConstant({localappdata}\{#MyAppPublisher}\{#MyAppName}\update.ui));
+        Exec(ExpandConstant('{app}\{#MyAppExeName}'), '--showchangelog', ExpandConstant('{app}'), SW_SHOW, ewNoWait, ResultCode);
+      end else
+      begin
+        ShellExec('open', ExpandConstant('{app}\Changelog.txt'), '', '', SW_SHOW, ewNoWait, ResultCode);
+      end;
     end;
   end;
 end;
