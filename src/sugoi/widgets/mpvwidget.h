@@ -34,7 +34,12 @@ public:
     explicit MpvObject(QObject *parent = nullptr, const QString &clientName = "mpv");
     ~MpvObject();
 
+private:
+    void loadFileInfo();
+
 signals:
+    void playbackStarted();
+    void playbackFinished();
     void mpvCommand(const QVariant &params);
     void mpvSetOption(const QString &name, const QVariant &value);
     void mpvSetProperty(const QString &name, const QVariant &value);
@@ -43,6 +48,37 @@ signals:
     void mousePressed(int x, int y);
     void sugoiCommand(const QString &cmd, const QVariant &params);
 
+    void playlistChanged(const QStringList &);
+    void fileInfoChanged(const Mpv::FileInfo &);
+    void videoReconfig(const Mpv::VideoParams &);
+    void audioReconfig(const Mpv::AudioParams &);
+    void playStateChanged(const Mpv::PlayState &);
+    void fileChanging(int, int);
+    void fileChanged(const QString &);
+    void pathChanged(const QString &);
+    void fullPathChanged(const QString &);
+    void screenshotFormatChanged(const QString &);
+    void screenshotTemplateChanged(const QString &);
+    void screenshotDirectoryChanged(const QString &);
+    void voChanged(const QString &);
+    void msgLevelChanged(const QString &);
+    void aspectChanged(const QString &);
+    void speedChanged(double);
+    void timeChanged(double);
+    void volumeChanged(double);
+    void indexChanged(int);
+    void vidChanged(int);
+    void aidChanged(int);
+    void sidChanged(int);
+    void subtitleVisibilityChanged(bool);
+    void muteChanged(bool);
+    void deinterlaceChanged(bool);
+    void positionChanged(double);
+    void hwdecChanged(bool);
+    void percentChanged(double);
+    void mpvLogMessage(const QString &);
+    void showText(const QString &, int duration = 4000);
+
 public slots:
     QString mpvVersion() const;
     MpvController *mpvController() const;
@@ -50,11 +86,82 @@ public slots:
     QVariant mpvProperty(const QString &name) const;
     QVariant sugoiProperty(const QString &name) const;
 
+    Mpv::FileInfo fileInfo() const;
+    Mpv::PlayState playState() const;
+    QString file() const;
+    QString path() const;
+    QString fullPath() const;
+    QString screenshotFormat() const;
+    QString screenshotTemplate() const;
+    QString screenshotDirectory() const;
+    QString vo() const;
+    QString msgLevel() const;
+    double speed() const;
+    double time() const;
+    double volume() const;
+    int vid() const;
+    int aid() const;
+    int sid() const;
+    bool subtitleVisibility() const;
+    bool mute() const;
+    double position() const;
+    bool hwdec() const;
+    double percent() const;
+    int osdWidth() const;
+    int osdHeight() const;
+    bool deinterlace() const;
+    QString aspect() const;
+    QString mediaInfo() const;
+
 public slots:
     void setHostWindow(QObject *newHostWindow);
     void setRendererType(Mpv::Renderers newRendererType = Mpv::Renderers::GL);
     void setLogoUrl(const QString &filename);
     void setLogoBackground(const QColor &color);
+
+public slots:
+    void setMute(bool newMute = false);
+    void setHwdec(bool newHwdec = true, bool osd = true);
+    void setVolume(double vol = 100.0, bool osd = false);
+    void setSpeed(double newSpeed = 1.0);
+    void setAspect(const QString &newAspect);
+    void setVid(int val = 0);
+    void setAid(int val = 0);
+    void setSid(int val = 0);
+    void setScreenshotFormat(const QString &val);
+    void setScreenshotTemplate(const QString &val);
+    void setScreenshotDirectory(const QString &val);
+    void setSubtitleScale(double scale = 1.0, bool relative = false);
+    void setDeinterlace(bool b = true);
+    void setInterpolate(bool b = true);
+    void setVo(const QString &newVo);
+    void setMsgLevel(const QString &newlevel);
+
+public slots:
+    void load(const QString &file);
+    QString loadPlaylist(const QString &file) const;
+    bool play(const QString &file) const;
+    void play();
+    void pause();
+    void stop();
+    void playPause(const QString &fileIfStopped);
+    void restart();
+    void rewind();
+    void seek(int pos = 0, bool relative = false, bool osd = false);
+    int relative(int pos = 0) const;
+    void screenshot(bool withSubs = false);
+    void frameStep();
+    void frameBackStep();
+    void gotoChapter(int chapter = 0);
+    void nextChapter();
+    void previousChapter();
+    void addSubtitleTrack(const QString &val);
+    void addAudioTrack(const QString &val);
+    void showSubtitles(bool b = true);
+
+private slots:
+    void handleMpvPropertyChanged(const QString &name, const QVariant &v);
+    void handleUnhandledMpvEvent(int eventLevel);
 
 private:
     Mpv::Renderers currentRendererType = Mpv::Renderers::Null;
@@ -62,6 +169,33 @@ private:
     MpvController *currentController = nullptr;
     MpvWidgetInterface *currentWidget = nullptr;
     QThread *currentWorker = nullptr;
+
+    Mpv::PlayState currentPlayState = Mpv::Idle;
+    Mpv::FileInfo currentFileInfo;
+    QString currentFile;
+    QString currentPath;
+    QString currentFullPath;
+    QString currentScreenshotFormat;
+    QString currentScreenshotTemplate;
+    QString currentScreenshotDirectory;
+    QString currentVo;
+    QString currentMsgLevel;
+    QString currentAspect;
+    double currentSpeed = 1.0;
+    double currentPosition = 0.0;
+    double currentPercent = 0.0;
+    double currentTime = 0.0;
+    double currentLastTime = 0.0;
+    double currentVolume = 100.0;
+    int currentVid = 0;
+    int currentAid = 0;
+    int currentSid = 0;
+    bool currentHwdec = true;
+    bool currentSubtitleVisibility = true;
+    bool currentDeinterlace = true;
+    bool currentMute = false;
+    int currentOsdWidth = 0;
+    int currentOsdHeight = 0;
 };
 
 class MpvWidgetInterface
@@ -153,45 +287,11 @@ private:
     void handleMpvEvent(mpv_event *event);
     static void mpvWakeup(void *ctx);
 
-private:
-    void loadFileInfo();
-
 signals:
-    void playbackStarted();
-    void playbackFinished();
     void mpvPropertyChanged(const QString &name, const QVariant &v, uint64_t userData);
     void unhandledMpvEvent(int eventNumber);
-
-    void playlistChanged(const QStringList &);
-    void fileInfoChanged(const Mpv::FileInfo &);
-    void videoReconfig(const Mpv::VideoParams &);
-    void audioReconfig(const Mpv::AudioParams &);
-    void playStateChanged(const Mpv::PlayState &);
-    void fileChanging(int, int);
-    void fileChanged(const QString &);
-    void pathChanged(const QString &);
-    void fullPathChanged(const QString &);
-    void screenshotFormatChanged(const QString &);
-    void screenshotTemplateChanged(const QString &);
-    void screenshotDirectoryChanged(const QString &);
-    void voChanged(const QString &);
-    void msgLevelChanged(const QString &);
-    void aspectChanged(const QString &);
-    void speedChanged(double);
-    void timeChanged(double);
-    void volumeChanged(double);
-    void indexChanged(int);
-    void vidChanged(int);
-    void aidChanged(int);
-    void sidChanged(int);
-    void subtitleVisibilityChanged(bool);
-    void muteChanged(bool);
-    void deinterlaceChanged(bool);
-    void positionChanged(double);
-    void hwdecChanged(bool);
-    void percentChanged(double);
-    void mpvMessage(const QString &);
-    void showText(const QString &, int duration = 4000);
+    void mpvLogMessage(const QString &);
+    void videoReconfig(const Mpv::FileInfo::video_params &);
 
 public slots:
     void mpvCommand(const QVariant &params);
@@ -210,72 +310,6 @@ public slots:
     QString clientName() const;
     unsigned long apiVersion() const;
     mpv_opengl_cb_context *mpvDrawContext() const;
-    Mpv::FileInfo fileInfo() const;
-    Mpv::PlayState playState() const;
-    QString file() const;
-    QString path() const;
-    QString fullPath() const;
-    QString screenshotFormat() const;
-    QString screenshotTemplate() const;
-    QString screenshotDirectory() const;
-    QString vo() const;
-    QString msgLevel() const;
-    double speed() const;
-    double time() const;
-    double volume() const;
-    int vid() const;
-    int aid() const;
-    int sid() const;
-    bool subtitleVisibility() const;
-    bool mute() const;
-    double position() const;
-    bool hwdec() const;
-    double percent() const;
-    int osdWidth() const;
-    int osdHeight() const;
-    bool deinterlace() const;
-    QString aspect() const;
-    QString mediaInfo() const;
-
-public slots:
-    void load(const QString &file);
-    QString loadPlaylist(const QString &file) const;
-    bool play(const QString &file) const;
-    void play();
-    void pause();
-    void stop();
-    void playPause(const QString &fileIfStopped);
-    void restart();
-    void rewind();
-    void seek(int pos = 0, bool relative = false, bool osd = false);
-    int relative(int pos = 0) const;
-    void screenshot(bool withSubs = false);
-    void frameStep();
-    void frameBackStep();
-    void gotoChapter(int chapter = 0);
-    void nextChapter();
-    void previousChapter();
-    void addSubtitleTrack(const QString &val);
-    void addAudioTrack(const QString &val);
-    void showSubtitles(bool b = true);
-
-public slots:
-    void setMute(bool newMute = false);
-    void setHwdec(bool newHwdec = true, bool osd = true);
-    void setVolume(double vol = 100.0, bool osd = false);
-    void setSpeed(double newSpeed = 1.0);
-    void setAspect(const QString &newAspect);
-    void setVid(int val = 0);
-    void setAid(int val = 0);
-    void setSid(int val = 0);
-    void setScreenshotFormat(const QString &val);
-    void setScreenshotTemplate(const QString &val);
-    void setScreenshotDirectory(const QString &val);
-    void setSubtitleScale(double scale = 1.0, bool relative = false);
-    void setDeinterlace(bool b = true);
-    void setInterpolate(bool b = true);
-    void setVo(const QString &newVo);
-    void setMsgLevel(const QString &newlevel);
 
 private:
     mpv::qt::Handle mpv;
@@ -285,33 +319,6 @@ private:
     QSet<QString> throttledProperties;
     typedef QMap<QString,QPair<QVariant,uint64_t>> ThrottledValueMap;
     ThrottledValueMap throttledValues;
-
-    Mpv::PlayState currentPlayState = Mpv::Idle;
-    Mpv::FileInfo currentFileInfo;
-    QString currentFile;
-    QString currentPath;
-    QString currentFullPath;
-    QString currentScreenshotFormat;
-    QString currentScreenshotTemplate;
-    QString currentScreenshotDirectory;
-    QString currentVo;
-    QString currentMsgLevel;
-    QString currentAspect;
-    double currentSpeed = 1.0;
-    double currentPosition = 0.0;
-    double currentPercent = 0.0;
-    double currentTime = 0.0;
-    double currentLastTime = 0.0;
-    double currentVolume = 100.0;
-    int currentVid = 0;
-    int currentAid = 0;
-    int currentSid = 0;
-    bool currentHwdec = true;
-    bool currentSubtitleVisibility = true;
-    bool currentDeinterlace = true;
-    bool currentMute = false;
-    int currentOsdWidth = 0;
-    int currentOsdHeight = 0;
 };
 
 #endif // MPVWIDGET_H
