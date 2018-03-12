@@ -14,7 +14,7 @@
 
 SugoiEngine::SugoiEngine(QObject *parent):
     QObject(parent),
-    window(static_cast<MainWindow*>(parent)),
+    window(qobject_cast<MainWindow*>(parent)),
     mpv(window->ui->mpvFrame),
     overlay(new OverlayHandler(this)),
     sysTrayIcon(new QSystemTrayIcon(QIcon(":/images/player.svg"), this)),

@@ -78,8 +78,8 @@ HEADERS += \
     $$PWD/qtlockedfile.h \
     $$PWD/ui/sysinfodialog.h \
     $$PWD/skinmanager.h \
-    $$PWD/mpvwidget.h \
-    $$PWD/ui/cframelesswindow.h \
+    $$PWD/widgets/mpvwidget.h \
+    $$PWD/widgets/cframelesswindow.h \
     $$PWD/playbackmanager.h \
     $$PWD/widgets/logowidget.h
 
@@ -116,8 +116,8 @@ SOURCES += \
     $$PWD/qtlockedfile.cpp \
     $$PWD/ui/sysinfodialog.cpp \
     $$PWD/skinmanager.cpp \
-    $$PWD/mpvwidget.cpp \
-    $$PWD/ui/cframelesswindow.cpp \
+    $$PWD/widgets/mpvwidget.cpp \
+    $$PWD/widgets/cframelesswindow.cpp \
     $$PWD/playbackmanager.cpp \
     $$PWD/widgets/logowidget.cpp
 

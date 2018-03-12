@@ -35,7 +35,7 @@ private:
     QColor logoBackground;
 };
 
-class LogoWidget : public QOpenGLWidget
+class LogoWidget Q_DECL_FINAL : public QOpenGLWidget
 {
     Q_OBJECT
 public:
@@ -46,9 +46,9 @@ public:
     void setLogoBackground(const QColor &color);
 
 protected:
-    void initializeGL();
-    void paintGL();
-    void resizeGL(int w, int h);
+    void initializeGL() Q_DECL_OVERRIDE;
+    void paintGL() Q_DECL_OVERRIDE;
+    void resizeGL(int w, int h) Q_DECL_OVERRIDE;
 
 private:
     LogoDrawer *logoDrawer = nullptr;

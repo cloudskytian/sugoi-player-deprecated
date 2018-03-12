@@ -77,7 +77,7 @@ namespace Mpv
     struct FileInfo
     {
         QString media_title;
-        int length = 0;
+        int duration = 0;
         QMap<QString, QString> metadata;
         VideoParams video_params;
         AudioParams audio_params;

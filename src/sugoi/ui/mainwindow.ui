@@ -1906,7 +1906,7 @@
   <customwidget>
    <class>CFramelessWindow</class>
    <extends>QWidget</extends>
-   <header>ui/cframelesswindow.h</header>
+   <header>widgets/cframelesswindow.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
