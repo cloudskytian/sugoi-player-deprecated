@@ -36,6 +36,8 @@ public:
 
 private:
     void loadFileInfo();
+    void showCursor();
+    void hideCursor();
 
 signals:
     void playbackStarted();
@@ -120,6 +122,7 @@ public slots:
     void setLogoBackground(const QColor &color);
 
 public slots:
+    void setMouseHideTime(int msec);
     void setMute(bool newMute = false);
     void setHwdec(bool newHwdec = true, bool osd = true);
     void setVolume(double vol = 100.0, bool osd = false);
@@ -138,6 +141,7 @@ public slots:
     void setMsgLevel(const QString &newlevel);
 
 public slots:
+    void open(const QString &file);
     void load(const QString &file);
     QString loadPlaylist(const QString &file) const;
     bool play(const QString &file) const;
@@ -160,15 +164,18 @@ public slots:
     void showSubtitles(bool b = true);
 
 private slots:
-    void handleMpvPropertyChanged(const QString &name, const QVariant &v);
+    void handleMpvChangedProperty(const QString &name, const QVariant &v);
     void handleUnhandledMpvEvent(int eventLevel);
+    void handleMouseMoved();
+    void hideTimerTimeout();
 
 private:
-    Mpv::Renderers currentRendererType = Mpv::Renderers::Null;
-    QWidget *currentHostWindow = nullptr;
-    MpvController *currentController = nullptr;
-    MpvWidgetInterface *currentWidget = nullptr;
-    QThread *currentWorker = nullptr;
+    Mpv::Renderers rendererType = Mpv::Renderers::Null;
+    QWidget *hostWindow = nullptr;
+    MpvController *controller = nullptr;
+    MpvWidgetInterface *widget = nullptr;
+    QThread *worker = nullptr;
+    QTimer *hideTimer = nullptr;
 
     Mpv::PlayState currentPlayState = Mpv::Idle;
     Mpv::FileInfo currentFileInfo;
@@ -213,8 +220,8 @@ public:
     virtual void setDrawLogo(bool yes);
 
 protected:
-    MpvObject *currentMpvObject = nullptr;
-    MpvController *currentController = nullptr;
+    MpvObject *mpvObject = nullptr;
+    MpvController *controller = nullptr;
 };
 Q_DECLARE_INTERFACE(MpvWidgetInterface, "wangwenx190.SugoiPlayer.MpvWidgetInterface/1.0")
 
@@ -286,6 +293,7 @@ private:
     void parseMpvEvents();
     void handleMpvEvent(mpv_event *event);
     static void mpvWakeup(void *ctx);
+    void handleErrorCode(int error_code);
 
 signals:
     void mpvPropertyChanged(const QString &name, const QVariant &v, uint64_t userData);

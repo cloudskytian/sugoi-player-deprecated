@@ -1,6 +1,8 @@
 <RCC>
   <qresource prefix="/images">
     <file alias="add.svg">resources/add.svg</file>
+    <file alias="default_stop.svg">resources/default_stop.svg</file>
+    <file alias="disabled_stop.svg">resources/disabled_stop.svg</file>
     <file alias="default_minimize.svg">resources/default_minimize.svg</file>
     <file alias="disabled_minimize.svg">resources/disabled_minimize.svg</file>
     <file alias="default_maximize.svg">resources/default_maximize.svg</file>
@@ -30,9 +32,7 @@
     <file alias="disabled_previous.svg">resources/disabled_previous.svg</file>
     <file alias="disabled_reverse.svg">resources/disabled_reverse.svg</file>
     <file alias="down-arrow.svg">resources/down-arrow.svg</file>
-    <file alias="download.svg">resources/download.svg</file>
     <file alias="edit.svg">resources/edit.svg</file>
-    <file alias="enabled_hide_files.svg">resources/enabled_hide_files.svg</file>
     <file alias="exists.svg">resources/exists.svg</file>
     <file alias="player.svg">resources/player.svg</file>
     <file alias="not_exists.svg">resources/not_exists.svg</file>
