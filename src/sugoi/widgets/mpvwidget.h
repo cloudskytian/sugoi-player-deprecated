@@ -12,6 +12,7 @@
 #include "mpvtypes.h"
 
 class QThread;
+class QTimer;
 class QWidget;
 class MpvWidgetInterface;
 class MpvController;
@@ -132,10 +133,22 @@ class MpvController : public QObject
 {
     Q_OBJECT
 public:
+    struct MpvProperty
+    {
+        QString name;
+        uint64_t userData;
+        mpv_format format;
+        MpvProperty(const QString &name, uint64_t userData, mpv_format format)
+            : name(name), userData(userData), format(format) {}
+    };
+    typedef QVector<MpvProperty> PropertyList;
+
     MpvController(QObject *parent = nullptr);
     ~MpvController();
 
 private:
+    void setThrottledProperty(const QString &name, const QVariant &v, uint64_t userData);
+    void flushProperties();
     void parseMpvEvents();
     void handleMpvEvent(mpv_event *event);
     static void mpvWakeup(void *ctx);
@@ -146,6 +159,9 @@ private:
 signals:
     void playbackStarted();
     void playbackFinished();
+    void mpvPropertyChanged(const QString &name, const QVariant &v, uint64_t userData);
+    void unhandledMpvEvent(int eventNumber);
+
     void playlistChanged(const QStringList &);
     void fileInfoChanged(const Mpv::FileInfo &);
     void videoReconfig(const Mpv::VideoParams &);
@@ -185,6 +201,10 @@ public slots:
 
 public slots:
     void create();
+    int observeProperties(const MpvController::PropertyList &properties,
+                          const QSet<QString> &throttled = QSet<QString>());
+    int unobservePropertiesById(const QSet<uint64_t> &ids);
+    void setThrottleTime(int msec);
 
 public slots:
     QString clientName() const;
@@ -260,6 +280,11 @@ public slots:
 private:
     mpv::qt::Handle mpv;
     mpv_opengl_cb_context *glMpv = nullptr;
+
+    QTimer *throttler = nullptr;
+    QSet<QString> throttledProperties;
+    typedef QMap<QString,QPair<QVariant,uint64_t>> ThrottledValueMap;
+    ThrottledValueMap throttledValues;
 
     Mpv::PlayState currentPlayState = Mpv::Idle;
     Mpv::FileInfo currentFileInfo;

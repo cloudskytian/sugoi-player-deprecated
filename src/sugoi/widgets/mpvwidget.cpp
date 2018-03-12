@@ -12,6 +12,7 @@
 #include <QDateTime>
 #include <QVBoxLayout>
 #include <QThread>
+#include <QTimer>
 
 #include "sugoiengine.h"
 #include "overlayhandler.h"
@@ -20,6 +21,8 @@
 
 MpvObject::MpvObject(QObject *parent, const QString &clientName) : QObject(parent)
 {
+    Q_UNUSED(clientName);
+
     currentWorker = new QThread(this);
     currentWorker->start();
 
@@ -404,11 +407,30 @@ void MpvGLWidget::self_playbackFinished()
 MpvController::MpvController(QObject *parent) : QObject(parent),
     glMpv(nullptr)
 {
+    throttler = new QTimer(this);
+    connect(throttler, &QTimer::timeout, this, &MpvController::flushProperties);
+    throttler->setInterval(1000/12);
+    throttler->start();
 }
 
 MpvController::~MpvController()
 {
     mpv_set_wakeup_callback(mpv, nullptr, nullptr);
+    throttler->deleteLater();
+}
+
+void MpvController::setThrottledProperty(const QString &name, const QVariant &v, uint64_t userData)
+{
+    throttledValues.insert(name, QPair<QVariant,uint64_t>(v,userData));
+}
+
+void MpvController::flushProperties()
+{
+    for (auto it = throttledValues.begin(); it != throttledValues.end(); it++)
+    {
+        emit mpvPropertyChanged(it.key(), it.value().first, it.value().second);
+    }
+    throttledValues.clear();
 }
 
 void MpvController::mpvCommand(const QVariant &params)
@@ -473,6 +495,32 @@ void MpvController::create()
     mpv_observe_property(mpv, 0, "paused-for-cache", MPV_FORMAT_FLAG);
 
     mpv_set_wakeup_callback(mpv, MpvController::mpvWakeup, this);
+}
+
+int MpvController::observeProperties(const MpvController::PropertyList &properties, const QSet<QString> &throttled)
+{
+    int rval = 0;
+    foreach (const MpvProperty &item, properties)
+    {
+        rval = std::min(rval, mpv_observe_property(mpv, item.userData, item.name.toUtf8().data(), item.format));
+    }
+    throttledProperties.unite(throttled);
+    return rval;
+}
+
+int MpvController::unobservePropertiesById(const QSet<uint64_t> &ids)
+{
+    int rval = 0;
+    foreach (uint64_t id, ids)
+    {
+        rval = std::min(rval, mpv_unobserve_property(mpv, id));
+    }
+    return rval;
+}
+
+void MpvController::setThrottleTime(int msec)
+{
+    throttler->setInterval(msec);
 }
 
 QString MpvController::clientName() const
