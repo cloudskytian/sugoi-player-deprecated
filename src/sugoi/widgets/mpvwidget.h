@@ -42,13 +42,29 @@ private:
 signals:
     void playbackStarted();
     void playbackFinished();
-    void mpvCommand(const QVariant &params);
-    void mpvSetOption(const QString &name, const QVariant &value);
-    void mpvSetProperty(const QString &name, const QVariant &value);
-    void logoSizeChanged(QSize size);
-    void mouseMoved(int x, int y);
-    void mousePressed(int x, int y);
-    void sugoiCommand(const QString &cmd, const QVariant &params);
+    void mpvCommand(const QVariant &);
+    void mpvSetOption(const QString &, const QVariant &);
+    void mpvSetProperty(const QString &, const QVariant &);
+    void logoSizeChanged(QSize);
+    void mouseMoved(int, int);
+    void mousePressed(int, int);
+    void sugoiCommand(const QString &, const QVariant &);
+
+    void seekableChanged(bool);
+
+    // for properties window
+    void playLengthChanged(double);
+    void mediaTitleChanged(const QString &);
+    void metaDataChanged(const QVariantMap &);
+    void chapterDataChanged(const QVariantMap &);
+    void chaptersChanged(const QVariantList &);
+    void tracksChanged(const QVariantList &);
+    void videoSizeChanged(QSize);
+    void fileNameChanged(const QString &);
+    void fileFormatChanged(const QString &);
+    void fileSizeChanged(int64_t);
+    void fileCreationTimeChanged(int64_t);
+    void filePathChanged(const QString &);
 
     void playlistChanged(const QStringList &);
     void fileInfoChanged(const Mpv::FileInfo &);
@@ -168,6 +184,7 @@ private slots:
     void handleUnhandledMpvEvent(int eventLevel);
     void handleMouseMoved();
     void hideTimerTimeout();
+    void self_metadata(const QVariantMap &metadata);
 
 private:
     Mpv::Renderers rendererType = Mpv::Renderers::Null;
@@ -201,6 +218,7 @@ private:
     bool currentSubtitleVisibility = true;
     bool currentDeinterlace = true;
     bool currentMute = false;
+    bool currentSeekable = false;
     int currentOsdWidth = 0;
     int currentOsdHeight = 0;
 };
@@ -245,8 +263,8 @@ private:
     static void onMpvUpdate(void *ctx);
 
 Q_SIGNALS:
-    void mouseMoved(int x, int y);
-    void mousePressed(int x, int y);
+    void mouseMoved(int, int);
+    void mousePressed(int, int);
 
 public Q_SLOTS:
     QWidget *self();
@@ -296,8 +314,8 @@ private:
     void handleErrorCode(int error_code);
 
 signals:
-    void mpvPropertyChanged(const QString &name, const QVariant &v, uint64_t userData);
-    void unhandledMpvEvent(int eventNumber);
+    void mpvPropertyChanged(const QString &, const QVariant &, uint64_t);
+    void unhandledMpvEvent(int);
     void mpvLogMessage(const QString &);
     void videoReconfig(const Mpv::FileInfo::video_params &);
 

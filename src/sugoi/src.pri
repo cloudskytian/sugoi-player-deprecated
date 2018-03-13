@@ -81,7 +81,8 @@ HEADERS += \
     $$PWD/widgets/mpvwidget.h \
     $$PWD/widgets/cframelesswindow.h \
     $$PWD/playbackmanager.h \
-    $$PWD/widgets/logowidget.h
+    $$PWD/widgets/logowidget.h \
+    $$PWD/ui/propertieswindow.h
 
 SOURCES += \
     $$PWD/playermain.cpp \
@@ -119,7 +120,8 @@ SOURCES += \
     $$PWD/widgets/mpvwidget.cpp \
     $$PWD/widgets/cframelesswindow.cpp \
     $$PWD/playbackmanager.cpp \
-    $$PWD/widgets/logowidget.cpp
+    $$PWD/widgets/logowidget.cpp \
+    $$PWD/ui/propertieswindow.cpp
 
 FORMS += \
     $$PWD/ui/aboutdialog.ui \
@@ -130,4 +132,5 @@ FORMS += \
     $$PWD/ui/preferencesdialog.ui \
     $$PWD/ui/screenshotdialog.ui \
     $$PWD/ui/keydialog.ui \
-    $$PWD/ui/sysinfodialog.ui
+    $$PWD/ui/sysinfodialog.ui \
+    $$PWD/ui/propertieswindow.ui

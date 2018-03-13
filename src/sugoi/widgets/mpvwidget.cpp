@@ -97,7 +97,20 @@ MpvObject::MpvObject(QObject *parent, const QString &clientName) : QObject(paren
         { "sub-visibility", 0, MPV_FORMAT_FLAG },
         { "ao-mute", 0, MPV_FORMAT_FLAG },
         { "core-idle", 0, MPV_FORMAT_FLAG },
-        { "paused-for-cache", 0, MPV_FORMAT_FLAG }
+        { "paused-for-cache", 0, MPV_FORMAT_FLAG },
+        { "media-title", 0, MPV_FORMAT_STRING },
+        { "chapter-metadata", 0, MPV_FORMAT_NODE },
+        { "track-list", 0, MPV_FORMAT_NODE },
+        { "chapter-list", 0, MPV_FORMAT_NODE },
+        { "duration", 0, MPV_FORMAT_DOUBLE },
+        { "metadata", 0, MPV_FORMAT_NODE },
+        { "filename", 0, MPV_FORMAT_STRING },
+        { "file-format", 0, MPV_FORMAT_STRING },
+        { "file-size", 0, MPV_FORMAT_STRING },
+        { "file-date-created", 0, MPV_FORMAT_NODE },
+        { "format", 0, MPV_FORMAT_STRING },
+        { "path", 0, MPV_FORMAT_STRING },
+        { "seekable", 0, MPV_FORMAT_FLAG }
     };
     QSet<QString> throttled =
     {
@@ -1078,6 +1091,7 @@ void MpvObject::open(const QString &file)
 {
     emit fileChanging(currentTime, currentFileInfo.duration);
     emit mpvCommand(QStringList() << QLatin1String("loadfile") << file);
+    setMouseHideTime(hideTimer->interval());
 }
 
 #define HANDLE_PROP(p, method, converter, dflt) \
@@ -1101,6 +1115,18 @@ void MpvObject::handleMpvChangedProperty(const QString &name, const QVariant &v)
     HANDLE_PROP("vid", emit vidChanged, toInt, 0);
     HANDLE_PROP("sub-visibility", emit subtitleVisibilityChanged, toBool, true);
     HANDLE_PROP("ao-mute", emit muteChanged, toBool, false);
+    HANDLE_PROP("seekable", emit seekableChanged, toBool, false);
+    HANDLE_PROP("media-title", emit mediaTitleChanged, toString, QString());
+    HANDLE_PROP("chapter-metadata", emit chapterDataChanged, toMap, QVariantMap());
+    HANDLE_PROP("chapter-list", emit chaptersChanged, toList, QVariantList());
+    HANDLE_PROP("track-list", emit tracksChanged, toList, QVariantList());
+    HANDLE_PROP("metadata", emit self_metadata, toMap, QVariantMap());
+    HANDLE_PROP("filename", emit fileNameChanged, toString, QString());
+    HANDLE_PROP("file-format", emit fileFormatChanged, toString, QString());
+    HANDLE_PROP("file-date-created", emit fileCreationTimeChanged, toLongLong, 0ll);
+    HANDLE_PROP("file-size", emit fileSizeChanged, toLongLong, 0ll);
+    HANDLE_PROP("path", emit filePathChanged, toString, QString());
+    HANDLE_PROP("duration", emit playLengthChanged, toDouble, 0.0);
 }
 
 void MpvObject::handleUnhandledMpvEvent(int eventLevel)
@@ -1176,6 +1202,16 @@ void MpvObject::handleMouseMoved()
 void MpvObject::hideTimerTimeout()
 {
     hideCursor();
+}
+
+void MpvObject::self_metadata(const QVariantMap &metadata)
+{
+    QVariantMap map;
+    for (auto it = metadata.begin(); it != metadata.end(); it++)
+    {
+        map.insert(it.key().toLower(), it.value());
+    }
+    emit metaDataChanged(map);
 }
 
 
