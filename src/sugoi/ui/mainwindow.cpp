@@ -35,8 +35,7 @@
 #include <QWinJumpList>
 #endif
 
-#include "sugoiengine.h"
-#include "mpvwidget.h"
+#include "widgets/progressindicatorbar.h"
 #include "overlayhandler.h"
 #include "util.h"
 #include "widgets/dimdialog.h"

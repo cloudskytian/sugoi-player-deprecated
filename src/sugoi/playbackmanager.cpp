@@ -3,8 +3,13 @@
 #include "util.h"
 #include "ui/propertieswindow.h"
 #include "ui/mainwindow.h"
+#include "widgets/mpvwidget.h"
 
 #include <QWidget>
+
+#ifdef Q_OS_WIN
+#include <WinUser.h>
+#endif
 
 PlaybackManager *PlaybackManager::instance()
 {
@@ -14,9 +19,12 @@ PlaybackManager *PlaybackManager::instance()
 
 PlaybackManager::PlaybackManager(QObject *parent) : QObject(parent)
 {
-    m_pMainWindow = new MainWindow();
+    m_pMainWindow = new MainWindow(nullptr);
+    SetParent(reinterpret_cast<HWND>(m_pMainWindow->winId()), GetDesktopWindow());
     m_pMpvObject = new MpvObject(m_pMainWindow);
     m_pPropertiesWindow = new PropertiesWindow(m_pMainWindow);
+
+    connect(m_pMainWindow, &MainWindow::destroyed, this, &PlaybackManager::deleteLater);
 
     connect(m_pMpvObject, &MpvObject::fileNameChanged, m_pPropertiesWindow, &PropertiesWindow::setFileName);
     connect(m_pMpvObject, &MpvObject::fileFormatChanged, m_pPropertiesWindow, &PropertiesWindow::setFileFormat);
@@ -50,6 +58,25 @@ PlaybackManager::~PlaybackManager()
     }
 }
 
+void PlaybackManager::initMainWindow(bool backgroundMode)
+{
+    if (m_pMainWindow == nullptr)
+    {
+        return;
+    }
+    m_pMainWindow->initMainWindow(backgroundMode);
+    if (backgroundMode)
+    {
+        m_pMainWindow->setWindowOpacity(0.0);
+        m_pMainWindow->setSysTrayIconVisibility(false);
+        m_pMainWindow->hide();
+    }
+    else
+    {
+        m_pMainWindow->show();
+    }
+}
+
 void PlaybackManager::showMainWindow()
 {
     if (m_pMainWindow == nullptr)
@@ -66,6 +93,36 @@ void PlaybackManager::hideMainWindow()
         return;
     }
     m_pMainWindow->hide();
+}
+
+void PlaybackManager::closeMainWindow()
+{
+    if (m_pMainWindow == nullptr)
+    {
+        return;
+    }
+    m_pMainWindow->close();
+}
+
+void PlaybackManager::load(const QString &path)
+{
+    if (path.isEmpty())
+    {
+        return;
+    }
+    if (m_pMpvObject == nullptr)
+    {
+        return;
+    }
+    if (m_pMainWindow == nullptr)
+    {
+        return;
+    }
+    if (!m_pMainWindow->isActiveWindow())
+    {
+        m_pMainWindow->BringWindowToFront();
+    }
+    m_pMainWindow->openFileFromCmd(path);
 }
 
 MpvObject *PlaybackManager::mpvObject() const

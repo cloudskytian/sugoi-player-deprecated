@@ -2,8 +2,6 @@
 #include "sugoilib.h"
 #endif
 
-#include "ui/mainwindow.h"
-
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QDir>
@@ -20,6 +18,7 @@
 #include "util.h"
 #include "fileassoc.h"
 #include "mpvtypes.h"
+#include "playbackmanager.h"
 
 QString checkFilePathValidation(const QString &filePath)
 {
@@ -240,31 +239,26 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Mpv::FileInfo>();
     qRegisterMetaType<Mpv::Renderers>();
 
-    MainWindow mainWindow;
+    PlaybackManager playbackManager;
     if (!runInBackground)
     {
-        mainWindow.initMainWindow(false);
-        mainWindow.show();
-        mainWindow.openFileFromCmd(command);
+        playbackManager.initMainWindow(false);
+        playbackManager.load(command);
     }
     else
     {
-        mainWindow.initMainWindow(true);
-        mainWindow.setWindowOpacity(0.0);
-        mainWindow.hide();
-        mainWindow.setSysTrayIconVisibility(false);
+        playbackManager.initMainWindow(true);
     }
-    SetParent(reinterpret_cast<HWND>(mainWindow.winId()), GetDesktopWindow());
 
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
-                     [=, &mainWindow](const QString &message)
+                     [=, &playbackManager](const QString &message)
                      {
                          QString filePath(message);
                          if (message == QString::fromLatin1("exit")
                                  || message == QString::fromLatin1("quit")
                                  || message == QString::fromLatin1("close"))
                          {
-                             mainWindow.close();
+                             playbackManager.closeMainWindow();
                              return;
                          }
                          else if (message == QString::fromLatin1("runinbackground"))
@@ -278,8 +272,7 @@ int main(int argc, char *argv[])
                                  filePath = QString();
                              }
                          }
-                         mainWindow.BringWindowToFront();
-                         mainWindow.openFileFromCmd(filePath);
+                         playbackManager.load(filePath);
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
