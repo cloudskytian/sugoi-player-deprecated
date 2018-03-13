@@ -3,6 +3,7 @@
 
 ### V1.2.0
 
+- **Added** properties window
 - **Changed** main window to frameless window
 - **Changed** default vo from "gpu" to "libmpv" (opengl-cb)
 - **Updated** libmpv to the latest version
