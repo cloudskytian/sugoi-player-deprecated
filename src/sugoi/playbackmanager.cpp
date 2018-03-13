@@ -4,6 +4,14 @@
 #include "ui/propertieswindow.h"
 #include "ui/mainwindow.h"
 
+#include <QWidget>
+
+PlaybackManager *PlaybackManager::instance()
+{
+    static PlaybackManager playbackManager;
+    return &playbackManager;
+}
+
 PlaybackManager::PlaybackManager(QObject *parent) : QObject(parent)
 {
     m_pMainWindow = new MainWindow();
@@ -40,6 +48,24 @@ PlaybackManager::~PlaybackManager()
         delete m_pMainWindow;
         m_pMainWindow = nullptr;
     }
+}
+
+void PlaybackManager::showMainWindow()
+{
+    if (m_pMainWindow == nullptr)
+    {
+        return;
+    }
+    m_pMainWindow->show();
+}
+
+void PlaybackManager::hideMainWindow()
+{
+    if (m_pMainWindow == nullptr)
+    {
+        return;
+    }
+    m_pMainWindow->hide();
 }
 
 MpvObject *PlaybackManager::mpvObject() const

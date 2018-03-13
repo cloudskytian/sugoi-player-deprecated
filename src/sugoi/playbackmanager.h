@@ -15,10 +15,18 @@ class PlaybackManager : public QObject
 {
     Q_OBJECT
 public:
+    static PlaybackManager *instance();
+
+private:
     explicit PlaybackManager(QObject *parent = nullptr);
     ~PlaybackManager();
 
 signals:
+
+public slots:
+    void showMainWindow();
+    void hideMainWindow();
+    void setBackgroundMode(bool enable = false);
 
 public slots:
     MpvObject *mpvObject() const;
