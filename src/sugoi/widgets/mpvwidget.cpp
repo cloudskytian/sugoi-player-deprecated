@@ -77,6 +77,7 @@ MpvObject::MpvObject(QObject *parent, const QString &clientName) : QObject(paren
                                                 &MpvObject::handleMpvChangedProperty, Qt::QueuedConnection);
     connect(controller, &MpvController::mpvLogMessage, this, &MpvObject::mpvLogMessage, Qt::QueuedConnection);
     connect(controller, &MpvController::videoReconfig, this, &MpvObject::videoReconfig, Qt::QueuedConnection);
+    connect(controller, &MpvController::videoSizeChanged, this, &MpvObject::videoSizeChanged, Qt::QueuedConnection);
     connect(controller, &MpvController::unhandledMpvEvent, this,
                                                 &MpvObject::handleUnhandledMpvEvent, Qt::QueuedConnection);
     connect(this, &MpvObject::mouseMoved, this, &MpvObject::handleMouseMoved);
@@ -1644,6 +1645,7 @@ void MpvController::handleMpvEvent(mpv_event *event)
         newFileInfo.video_params.dheight = mpvProperty(QLatin1String("dheight")).toInt();
         newFileInfo.video_params.aspect = mpvProperty(QLatin1String("video-aspect")).toDouble();
         emit videoReconfig(newFileInfo.video_params);
+        emit videoSizeChanged(QSize(newFileInfo.video_params.width, newFileInfo.video_params.height));
         break;
     }
     case MPV_EVENT_LOG_MESSAGE:

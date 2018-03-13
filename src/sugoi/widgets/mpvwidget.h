@@ -318,6 +318,7 @@ signals:
     void unhandledMpvEvent(int);
     void mpvLogMessage(const QString &);
     void videoReconfig(const Mpv::FileInfo::video_params &);
+    void videoSizeChanged(QSize);
 
 public slots:
     void mpvCommand(const QVariant &params);
