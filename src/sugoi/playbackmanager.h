@@ -7,8 +7,10 @@
 
 #include <QObject>
 #include <QHash>
+#include <QImage>
 
 #include "fileassoc.h"
+#include "recent.h"
 
 class QAction;
 class QTimer;
@@ -16,6 +18,7 @@ class MpvObject;
 class MainWindow;
 class PropertiesWindow;
 class SugoiEngine;
+class ProgressIndicatorBar;
 
 class PlaybackManager : public QObject
 {
@@ -71,6 +74,7 @@ private:
     MainWindow *m_pMainWindow = nullptr;
     PropertiesWindow *m_pPropertiesWindow = nullptr;
     SugoiEngine *sugoi = nullptr;
+    ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
 
     bool currentShowFullscreenIndicator = true;
     FileAssoc::reg_type  currentRegType = FileAssoc::reg_type::ALL;
@@ -98,6 +102,11 @@ private:
     bool currentHideAllControls = false;
     QHash<QString, QAction*> commandActionMap;
     QTimer *osdLocalTimeUpdater = nullptr;
+    QImage albumArt;
+    QList<Recent> recent;
+    Recent *currentRecent = nullptr;
+    bool currentPlaylistState = false;
+    bool currentMenuVisible = true;
 };
 
 #endif // PLAYBACKMANAGER_H

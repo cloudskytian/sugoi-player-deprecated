@@ -2,8 +2,6 @@
 #define MAINWINDOW_H
 
 #include "widgets/cframelesswindow.h"
-#include "recent.h"
-#include "fileassoc.h"
 
 #ifdef Q_OS_WIN
 class QWinThumbnailToolBar;
@@ -12,8 +10,6 @@ class QWinTaskbarButton;
 class QWinTaskbarProgress;
 class QWinJumpList;
 #endif
-
-class ProgressIndicatorBar;
 
 namespace Ui {
 class MainWindow;
@@ -26,8 +22,8 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public:
     Ui::MainWindow *ui = nullptr;
-    QImage albumArt;
 
 public slots:
     void initMainWindow(bool backgroundMode = false);
@@ -48,8 +44,6 @@ protected:
     void showEvent(QShowEvent *event);
 
 private:
-    ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
-
     bool firstShow = true;
 
 #ifdef Q_OS_WIN
@@ -66,10 +60,6 @@ private:
                     firstItem       = false,
                     init            = false,
                     playlistState   = false;
-
-    // variables
-    QList<Recent> recent;
-    Recent *current = nullptr;
 };
 
 #endif // MAINWINDOW_H
