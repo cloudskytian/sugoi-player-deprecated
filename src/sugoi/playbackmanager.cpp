@@ -67,6 +67,15 @@ PlaybackManager::PlaybackManager(QObject *parent) : QObject(parent)
     m_pMpvObject = new MpvObject(m_pMainWindow);
     m_pPropertiesWindow = new PropertiesWindow(m_pMainWindow);
 
+    showPlaylist(false);
+
+    sugoi = new SugoiEngine(this);
+
+    ui->playlistWidget->AttachEngine(sugoi);
+    ui->playbackLayoutWidget->installEventFilter(this);
+    ui->mpvFrame->installEventFilter(this);
+    osdLocalTimeUpdater = new QTimer(this);
+
     //connect(m_pMainWindow, &MainWindow::destroyed, qApp, &QCoreApplication::aboutToQuit);
 
     connect(m_pMpvObject, &MpvObject::fileNameChanged, m_pPropertiesWindow, &PropertiesWindow::setFileName);
@@ -238,6 +247,359 @@ void PlaybackManager::setMediaFileAssociations(FileAssoc::reg_type type, bool sh
             setFileAssocState(fileAssoc.getMediaFilesRegisterState());
         }
     }
+}
+
+void PlaybackManager::hideAllControls(bool w, bool s)
+{
+    if(s)
+    {
+        hideAllControls = w;
+        if(isFullScreen())
+            return;
+    }
+    if(w)
+    {
+        if(s || !hideAllControls)
+            playlistState = ui->playlistLayoutWidget->isVisible();
+        ui->menuBarWidget->setVisible(false);
+
+        ui->playbackLayoutWidget->hide();
+        ui->seekBar->hide();
+        ui->centralWidget->layout()->removeWidget(ui->playbackLayoutWidget);
+        ui->playbackLayoutWidget->setParent(this);
+        ui->playbackLayoutWidget->move(QPoint(0, geometry().height() - ui->playbackLayoutWidget->height()));
+        ui->centralWidget->layout()->removeWidget(ui->seekBar);
+        ui->seekBar->setParent(this);
+        ui->seekBar->move(QPoint(0, geometry().height() - ui->playbackLayoutWidget->height() - ui->seekBar->height()));
+
+        if (fullscreenProgressIndicator)
+        {
+            fullscreenProgressIndicator->close();
+            delete fullscreenProgressIndicator;
+            fullscreenProgressIndicator = nullptr;
+        }
+        if (showFullscreenIndicator)
+        {
+            fullscreenProgressIndicator = new ProgressIndicatorBar(this);
+            fullscreenProgressIndicator->setFixedSize(QSize(width(), (2.0 / 1080.0) * height()));
+            fullscreenProgressIndicator->move(QPoint(0, height() - fullscreenProgressIndicator->height()));
+            fullscreenProgressIndicator->setRange(0, 1000);
+            fullscreenProgressIndicator->show();
+        }
+
+        mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
+                                       QCursor::pos(),
+                                       Qt::NoButton,Qt::NoButton,Qt::NoModifier));
+    }
+    else
+    {
+        if (fullscreenProgressIndicator)
+        {
+            fullscreenProgressIndicator->close();
+            delete fullscreenProgressIndicator;
+            fullscreenProgressIndicator = nullptr;
+        }
+
+        ui->seekBar->setParent(ui->centralWidget);
+        ui->centralWidget->layout()->addWidget(ui->seekBar);
+        ui->playbackLayoutWidget->setParent(ui->centralWidget);
+        ui->centralWidget->layout()->addWidget(ui->playbackLayoutWidget);
+
+        if(menuVisible)
+            ui->menuBarWidget->setVisible(true);
+        ui->seekBar->setVisible(true);
+        ui->playbackLayoutWidget->setVisible(true);
+        setCursor(QCursor(Qt::ArrowCursor)); // show cursor
+        autohide->stop();
+        ShowPlaylist(playlistState);
+    }
+}
+
+void PlaybackManager::mainWindowShowFullScreen(bool fs)
+{
+    static Qt::WindowStates oldState;
+    if (fs)
+    {
+        if(sugoi->dimDialog && sugoi->dimDialog->isVisible())
+            sugoi->Dim(false);
+        if (ui->menuBarWidget && ui->menuBarWidget->isVisible())
+        {
+            ui->menuBarWidget->hide();
+        }
+        if (ui->titleBarWidget->isVisible())
+        {
+            ui->titleBarWidget->hide();
+        }
+        oldState = windowState();
+        showFullScreen();
+        if(!hideAllControls)
+        {
+            HideAllControls(true, false);
+        }
+    }
+    else
+    {
+        setWindowState(oldState);
+        if (!ui->titleBarWidget->isVisible())
+        {
+            ui->titleBarWidget->show();
+        }
+        if (ui->menuBarWidget && !ui->menuBarWidget->isVisible())
+        {
+            ui->menuBarWidget->show();
+        }
+        if(!hideAllControls)
+        {
+            HideAllControls(false, false);
+        }
+    }
+}
+
+void PlaybackManager::showPlaylist(bool visible)
+{
+    if(ui->splitter->position() != 0 && visible) // ignore showing if it's already visible as it resets original position
+        return;
+
+    if(visible)
+    {
+        ui->splitter->setPosition(ui->splitter->normalPosition()); // bring splitter position to normal
+    }
+    else
+    {
+        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
+            ui->splitter->setNormalPosition(ui->splitter->position()); // save current splitter position as the normal position
+        ui->splitter->setPosition(0); // set splitter position to right-most
+        setFocus();
+    }
+}
+
+void PlaybackManager::hideAlbumArt(bool hide)
+{
+    if(hide)
+    {
+        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
+            ui->splitter->setNormalPosition(ui->splitter->position()); // save splitter position as the normal position
+        ui->splitter->setPosition(ui->splitter->max()); // bring the splitter position to the left-most
+    }
+    else
+        ui->splitter->setPosition(ui->splitter->normalPosition()); // bring the splitter to normal position
+}
+
+void PlaybackManager::updateRecentFiles()
+{
+    ui->menu_Recently_Opened->clear();
+    QAction *action;
+    int n = 1,
+        N = recent.length();
+    for(auto &f : recent)
+    {
+        action = ui->menu_Recently_Opened->addAction(QString("%0. %1").arg(Util::FormatNumberWithAmpersand(n, N), Util::ShortenPathToParent(f).replace("&","&&")));
+        if(n++ == 1)
+            action->setShortcut(QKeySequence("Ctrl+Z"));
+        connect(action, &QAction::triggered,
+                [=]
+                {
+                    mpv->LoadFile(f);
+                });
+    }
+}
+
+void PlaybackManager::setPlayButtonIcon(bool play)
+{
+    if(play)
+    {
+        ui->playButton->setIcon(QIcon(":/images/default_play.svg"));
+        ui->action_Play->setText(tr("&Play"));
+#ifdef Q_OS_WIN
+        playpause_toolbutton->setToolTip(tr("Play"));
+        playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
+        taskbarButton->setOverlayIcon(QIcon(":/images/tool-pause.ico"));
+        taskbarProgress->show();
+        taskbarProgress->pause();
+#endif
+    }
+    else // pause icon
+    {
+        ui->playButton->setIcon(QIcon(":/images/default_pause.svg"));
+        ui->action_Play->setText(tr("&Pause"));
+#ifdef Q_OS_WIN
+        playpause_toolbutton->setToolTip(tr("Pause"));
+        playpause_toolbutton->setIcon(QIcon(":/images/tool-pause.ico"));
+        taskbarButton->setOverlayIcon(QIcon(":/images/tool-play.ico"));
+        taskbarProgress->show();
+        taskbarProgress->resume();
+#endif
+    }
+}
+
+void PlaybackManager::setNextButtonEnabled(bool enable)
+{
+    ui->nextButton->setEnabled(enable);
+    ui->actionPlay_Next_File->setEnabled(enable);
+#ifdef Q_OS_WIN
+    next_toolbutton->setEnabled(enable);
+#endif
+}
+
+void PlaybackManager::setPreviousButtonEnabled(bool enable)
+{
+    ui->previousButton->setEnabled(enable);
+    ui->actionPlay_Previous_File->setEnabled(enable);
+#ifdef Q_OS_WIN
+    prev_toolbutton->setEnabled(enable);
+#endif
+}
+
+void PlaybackManager::setRemainingLabels(int time)
+{
+    // todo: move setVisible functions outside of this function which gets called every second and somewhere at the start of a video
+    const Mpv::FileInfo &fi = mpv->getFileInfo();
+    if (fi.length == 0)
+    {
+        if (ui->remainingLabel->isVisible())
+        {
+            ui->remainingLabel->hide();
+        }
+        if (ui->seperatorLabel->isVisible())
+        {
+            ui->seperatorLabel->hide();
+        }
+
+        ui->durationLabel->setText(Util::FormatTime(time, time));
+    }
+    else
+    {
+        if (ui->remainingLabel->isHidden())
+        {
+            ui->remainingLabel->show();
+        }
+        if (ui->seperatorLabel->isHidden())
+        {
+            ui->seperatorLabel->show();
+        }
+
+        ui->durationLabel->setText(Util::FormatTime(time, fi.length));
+        if(remaining)
+        {
+            int remainingTime = fi.length - time;
+            QString text = "-" + Util::FormatTime(remainingTime, fi.length);
+            if(mpv->getSpeed() != 1)
+            {
+                double speed = mpv->getSpeed();
+                text += QString("  (-%0)").arg(Util::FormatTime(int(remainingTime/speed), int(fi.length/speed)));
+            }
+            ui->remainingLabel->setText(text);
+        }
+        else
+        {
+            QString text = Util::FormatTime(fi.length, fi.length);
+            if(mpv->getSpeed() != 1)
+            {
+                double speed = mpv->getSpeed();
+                text += QString("  (%0)").arg(Util::FormatTime(int(fi.length/speed), int(fi.length/speed)));
+            }
+            ui->remainingLabel->setText(text);
+        }
+    }
+}
+
+bool PlaybackManager::isPlayingMusic() const
+{
+    if (mpv->getPlayState() > 0)
+    {
+        QFileInfo fi(filePath);
+        QString suffix = QString::fromLatin1("*.") + fi.suffix();
+        if (Mpv::audio_filetypes.contains(suffix))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool PlaybackManager::isPlayingVideo() const
+{
+    if (mpv->getPlayState() > 0)
+    {
+        QFileInfo fi(filePath);
+        QString suffix = QString::fromLatin1("*.") + fi.suffix();
+        if (Mpv::video_filetypes.contains(suffix))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void PlaybackManager::setIndexLabels(bool enable)
+{
+    int i = ui->playlistWidget->currentRow(),
+        index = ui->playlistWidget->CurrentIndex();
+
+    // next file
+    if(enable && index+1 < ui->playlistWidget->count()) // not the last entry
+    {
+        SetNextButtonEnabled(true);
+        ui->nextButton->setIndex(index+2); // starting at 1 instead of at 0 like actual index
+
+    }
+    else
+        SetNextButtonEnabled(false);
+
+    // previous file
+    if(enable && index-1 >= 0) // not the first entry
+    {
+        SetPreviousButtonEnabled(true);
+        ui->previousButton->setIndex(-index); // we use a negative index value for the left button
+    }
+    else
+        SetPreviousButtonEnabled(false);
+
+    if(i == -1) // no selection
+    {
+        ui->indexLabel->setText(tr("No selection"));
+        ui->indexLabel->setEnabled(false);
+    }
+    else
+    {
+        ui->indexLabel->setEnabled(true);
+        ui->indexLabel->setText(tr("%0 / %1").arg(QString::number(i+1), QString::number(ui->playlistWidget->count())));
+    }
+}
+
+void PlaybackManager::setPlaybackControls(bool enable)
+{
+    // playback controls
+    ui->seekBar->setEnabled(enable);
+    ui->rewindButton->setEnabled(enable);
+
+    SetIndexLabels(enable);
+
+    // menubar
+    ui->action_Stop->setEnabled(enable);
+    ui->action_Restart->setEnabled(enable);
+    ui->menuS_peed->setEnabled(enable);
+    ui->action_Jump_to_Time->setEnabled(enable);
+    ui->actionMedia_Info->setEnabled(enable);
+    ui->actionShow_in_Folder->setEnabled(enable && sugoi->mpv->getPath() != QString());
+    ui->action_Full_Screen->setEnabled(enable);
+    if(!enable)
+    {
+        ui->action_Hide_Album_Art->setEnabled(false);
+        ui->menuSubtitle_Track->setEnabled(false);
+        ui->menuFont_Si_ze->setEnabled(false);
+    }
+}
+
+void PlaybackManager::togglePlaylist()
+{
+    ShowPlaylist(!isPlaylistVisible());
+}
+
+bool PlaybackManager::isPlaylistVisible() const
+{
+    // if the position is 0, playlist is hidden
+    return (ui->splitter->position() != 0);
 }
 
 void PlaybackManager::load(const QString &path)

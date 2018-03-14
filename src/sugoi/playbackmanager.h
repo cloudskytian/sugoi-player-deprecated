@@ -15,6 +15,7 @@ class QTimer;
 class MpvObject;
 class MainWindow;
 class PropertiesWindow;
+class SugoiEngine;
 
 class PlaybackManager : public QObject
 {
@@ -35,6 +36,21 @@ public slots:
     void closeMainWindow();
     void activateMainWindow();
     void setMediaFileAssociations(FileAssoc::reg_type type = FileAssoc::reg_type::ALL, bool showUI = false);
+    void hideAllControls(bool w, bool s = true);
+    void mainWindowShowFullScreen(bool fs);
+    void showPlaylist(bool visible);
+    void hideAlbumArt(bool hide);
+    void updateRecentFiles();
+    void setPlayButtonIcon(bool play);
+    void setNextButtonEnabled(bool enable);
+    void setPreviousButtonEnabled(bool enable);
+    void setRemainingLabels(int time);
+    bool isPlayingMusic() const;
+    bool isPlayingVideo() const;
+    void setIndexLabels(bool enable);
+    void setPlaybackControls(bool enable);
+    void togglePlaylist();
+    bool isPlaylistVisible() const;
 
 public slots:
     void load(const QString &path);
@@ -54,6 +70,7 @@ private:
     MpvObject *m_pMpvObject = nullptr;
     MainWindow *m_pMainWindow = nullptr;
     PropertiesWindow *m_pPropertiesWindow = nullptr;
+    SugoiEngine *sugoi = nullptr;
 
     bool currentShowFullscreenIndicator = true;
     FileAssoc::reg_type  currentRegType = FileAssoc::reg_type::ALL;

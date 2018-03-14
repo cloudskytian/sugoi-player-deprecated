@@ -31,6 +31,7 @@ public:
 
 public slots:
     void initMainWindow(bool backgroundMode = false);
+    void setWindowTitle2(const QString &text);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);    // drag file into
@@ -45,24 +46,6 @@ protected:
     void changeEvent(QEvent *event);
     void closeEvent(QCloseEvent *event);
     void showEvent(QShowEvent *event);
-
-private slots:
-    void HideAllControls(bool h, bool s = true);    // hideAllControls--s option is used by fullscreen
-    void FullScreen(bool fs);                       // makes window fullscreen
-    void ShowPlaylist(bool visible);                // sets the playlist visibility
-    void HideAlbumArt(bool hide);                   // hides the album art
-    void UpdateRecentFiles();                       // populate recentFiles menu
-    void SetPlayButtonIcon(bool play);
-    void SetNextButtonEnabled(bool enable);
-    void SetPreviousButtonEnabled(bool enable);
-    void SetRemainingLabels(int time);
-    bool IsPlayingMusic(const QString &filePath);
-    bool IsPlayingVideo(const QString &filePath);
-    void SetIndexLabels(bool enable);
-    void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
-    void TogglePlaylist();                          // toggles playlist visibility
-    bool isPlaylistVisible();                       // is the playlist visible?
-    void SetWindowTitle2(const QString &text);
 
 private:
     ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
