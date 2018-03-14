@@ -34,20 +34,6 @@ MainWindow::MainWindow(QWidget *parent) : CFramelessWindow(parent)
 
 MainWindow::~MainWindow()
 {
-    win_sparkle_cleanup();
-
-    if(current != nullptr)
-    {
-        int t = mpv->getTime(),
-            l = mpv->getFileInfo().length;
-        if(t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
-            current->time = t;
-        else
-            current->time = 0;
-    }
-
-    sugoi->SaveSettings();
-
 #ifdef Q_OS_WIN
     delete prev_toolbutton;
     delete playpause_toolbutton;
@@ -57,94 +43,7 @@ MainWindow::~MainWindow()
     delete taskbarButton;
     delete jumplist;
 #endif
-    delete sugoi;
     delete ui;
-}
-
-void MainWindow::MapShortcuts()
-{
-    auto tmp = commandActionMap;
-    // map shortcuts to actions
-    for(auto input_iter = sugoi->input.begin(); input_iter != sugoi->input.end(); ++input_iter)
-    {
-        auto commandAction = tmp.find(input_iter->first);
-        if(commandAction != tmp.end())
-        {
-            (*commandAction)->setShortcut(QKeySequence(input_iter.key()));
-            tmp.erase(commandAction);
-        }
-    }
-    // clear the rest
-    for(auto iter = tmp.begin(); iter != tmp.end(); ++iter)
-        (*iter)->setShortcut(QKeySequence());
-}
-
-void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
-{
-    const QString path = QCoreApplication::applicationFilePath();
-    QString param = QString::fromLatin1("--regall");
-    if (type == FileAssoc::reg_type::VIDEO_ONLY)
-    {
-        param = QString::fromLatin1("--regvideo");
-    }
-    else if (type == FileAssoc::reg_type::AUDIO_ONLY)
-    {
-        param = QString::fromLatin1("--regaudio");
-    }
-    else if (type == FileAssoc::reg_type::NONE)
-    {
-        param = QString::fromLatin1("--unregall");
-    }
-    bool needChange = true;
-    if (showUI)
-    {
-        if (QMessageBox::question(this, tr("Associate media files"), tr("You have configured Sugoi Player to check "
-             "file associations every time Sugoi Player starts up. And now Sugoi Player found that it is not associated "
-             "with some/all media files. Do you want to associate them now?")) == QMessageBox::No)
-        {
-            needChange = false;
-        }
-    }
-    if (needChange)
-    {
-        if (Util::executeProgramWithAdministratorPrivilege(path, param))
-        {
-            setFileAssocType(type);
-            FileAssoc fileAssoc;
-            setFileAssocState(fileAssoc.getMediaFilesRegisterState());
-        }
-    }
-}
-
-void MainWindow::BringWindowToFront()
-{
-    if (isActiveWindow())
-    {
-        return;
-    }
-    if (isHidden())
-    {
-        show();
-    }
-    if (windowOpacity() < 1.0)
-    {
-        setWindowOpacity(1.0);
-    }
-    setWindowState(windowState() & ~Qt::WindowMinimized);
-    if (isActiveWindow())
-    {
-        return;
-    }
-    Qt::WindowFlags oldFlags = windowFlags();
-    setWindowFlags(oldFlags | Qt::WindowStaysOnTopHint);
-    setWindowFlags(oldFlags);
-    show();
-    if (isActiveWindow())
-    {
-        return;
-    }
-    raise();
-    activateWindow();
 }
 
 static bool canHandleDrop(const QDragEnterEvent *event)
@@ -882,17 +781,4 @@ void MainWindow::initMainWindow(bool backgroundMode)
             }
         }
     }
-}
-
-void MainWindow::setSysTrayIconVisibility(bool v)
-{
-    if (sugoi == nullptr)
-    {
-        return;
-    }
-    if (sugoi->sysTrayIcon == nullptr)
-    {
-        return;
-    }
-    sugoi->sysTrayIcon->setVisible(v);
 }

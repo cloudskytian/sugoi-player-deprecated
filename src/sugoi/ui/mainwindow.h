@@ -26,17 +26,11 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    bool isFullScreenMode()    { return hideAllControls || isFullScreen(); }
-
     Ui::MainWindow *ui = nullptr;
     QImage albumArt;
 
 public slots:
-    void MapShortcuts();
-    void SetFileAssoc(FileAssoc::reg_type type = FileAssoc::reg_type::ALL, bool showUI = false);
-    void BringWindowToFront();
     void initMainWindow(bool backgroundMode = false);
-    void setSysTrayIconVisibility(bool v = true);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);    // drag file into

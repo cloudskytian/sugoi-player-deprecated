@@ -18,7 +18,6 @@ class PropertiesWindow;
 
 class PlaybackManager : public QObject
 {
-friend class MainWindow;
     Q_OBJECT
 public:
     static PlaybackManager *instance();
@@ -34,6 +33,8 @@ public slots:
     void showMainWindow();
     void hideMainWindow();
     void closeMainWindow();
+    void activateMainWindow();
+    void setMediaFileAssociations(FileAssoc::reg_type type = FileAssoc::reg_type::ALL, bool showUI = false);
 
 public slots:
     void load(const QString &path);
@@ -41,11 +42,13 @@ public slots:
 public slots:
     MpvObject *mpvObject() const;
     MainWindow *mainWindow() const;
+    bool fullScreenMode() const;
 
 private slots:
     void connectMpvSignalsAndSlots();
     void connectMainWindowUiSignalsAndSlots();
     void connectMainWindowOtherSignalsAndSlots();
+    void mapShortcuts();
 
 private:
     MpvObject *m_pMpvObject = nullptr;

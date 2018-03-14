@@ -88,6 +88,20 @@ PlaybackManager::PlaybackManager(QObject *parent) : QObject(parent)
 
 PlaybackManager::~PlaybackManager()
 {
+    win_sparkle_cleanup();
+
+    if(current != nullptr)
+    {
+        int t = mpv->getTime(),
+            l = mpv->getFileInfo().length;
+        if(t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
+            current->time = t;
+        else
+            current->time = 0;
+    }
+
+    sugoi->SaveSettings();
+
     if (m_pPropertiesWindow != nullptr)
     {
         delete m_pPropertiesWindow;
@@ -115,7 +129,13 @@ void PlaybackManager::initMainWindow(bool backgroundMode)
     if (backgroundMode)
     {
         m_pMainWindow->setWindowOpacity(0.0);
-        m_pMainWindow->setSysTrayIconVisibility(false);
+        if (sugoi != nullptr)
+        {
+            if (sugoi->sysTrayIcon != nullptr)
+            {
+                sugoi->sysTrayIcon->hide();
+            }
+        }
         m_pMainWindow->hide();
     }
     else
@@ -151,6 +171,75 @@ void PlaybackManager::closeMainWindow()
     m_pMainWindow->close();
 }
 
+void PlaybackManager::activateMainWindow()
+{
+    if (m_pMainWindow->isActiveWindow())
+    {
+        return;
+    }
+    if (m_pMainWindow->isHidden())
+    {
+        m_pMainWindow->show();
+    }
+    if (m_pMainWindow->windowOpacity() < 1.0)
+    {
+        m_pMainWindow->setWindowOpacity(1.0);
+    }
+    m_pMainWindow->setWindowState(m_pMainWindow->windowState() & ~Qt::WindowMinimized);
+    if (m_pMainWindow->isActiveWindow())
+    {
+        return;
+    }
+    Qt::WindowFlags oldFlags = m_pMainWindow->windowFlags();
+    m_pMainWindow->setWindowFlags(oldFlags | Qt::WindowStaysOnTopHint);
+    m_pMainWindow->show();
+    m_pMainWindow->setWindowFlags(oldFlags);
+    m_pMainWindow->show();
+    if (m_pMainWindow->isActiveWindow())
+    {
+        return;
+    }
+    m_pMainWindow->raise();
+    m_pMainWindow->activateWindow();
+}
+
+void PlaybackManager::setMediaFileAssociations(FileAssoc::reg_type type, bool showUI)
+{
+    const QString path = QCoreApplication::applicationFilePath();
+    QString param = QString::fromLatin1("--regall");
+    if (type == FileAssoc::reg_type::VIDEO_ONLY)
+    {
+        param = QString::fromLatin1("--regvideo");
+    }
+    else if (type == FileAssoc::reg_type::AUDIO_ONLY)
+    {
+        param = QString::fromLatin1("--regaudio");
+    }
+    else if (type == FileAssoc::reg_type::NONE)
+    {
+        param = QString::fromLatin1("--unregall");
+    }
+    bool needChange = true;
+    if (showUI)
+    {
+        if (QMessageBox::question(this, tr("Associate media files"), tr("You have configured Sugoi Player to check "
+             "file associations every time Sugoi Player starts up. And now Sugoi Player found that it is not associated "
+             "with some/all media files. Do you want to associate them now?")) == QMessageBox::No)
+        {
+            needChange = false;
+        }
+    }
+    if (needChange)
+    {
+        if (Util::executeProgramWithAdministratorPrivilege(path, param))
+        {
+            setFileAssocType(type);
+            FileAssoc fileAssoc;
+            setFileAssocState(fileAssoc.getMediaFilesRegisterState());
+        }
+    }
+}
+
 void PlaybackManager::load(const QString &path)
 {
     if (path.isEmpty())
@@ -167,7 +256,7 @@ void PlaybackManager::load(const QString &path)
     }
     if (!m_pMainWindow->isActiveWindow())
     {
-        m_pMainWindow->BringWindowToFront();
+        activateMainWindow();
     }
     m_pMainWindow->openFileFromCmd(path);
 }
@@ -180,6 +269,15 @@ MpvObject *PlaybackManager::mpvObject() const
 MainWindow *PlaybackManager::mainWindow() const
 {
     return m_pMainWindow;
+}
+
+bool PlaybackManager::fullScreenMode() const
+{
+    if (m_pMainWindow == nullptr)
+    {
+        return false;
+    }
+    return (currentHideAllControls || m_pMainWindow->isFullScreen());
 }
 
 void PlaybackManager::connectMpvSignalsAndSlots()
@@ -1184,5 +1282,23 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
                     ui->menuR_epeat->setEnabled(true);
                 else
                     ui->menuR_epeat->setEnabled(false);
-            });
+    });
+}
+
+void PlaybackManager::mapShortcuts()
+{
+    auto tmp = commandActionMap;
+    // map shortcuts to actions
+    for(auto input_iter = sugoi->input.begin(); input_iter != sugoi->input.end(); ++input_iter)
+    {
+        auto commandAction = tmp.find(input_iter->first);
+        if(commandAction != tmp.end())
+        {
+            (*commandAction)->setShortcut(QKeySequence(input_iter.key()));
+            tmp.erase(commandAction);
+        }
+    }
+    // clear the rest
+    for(auto iter = tmp.begin(); iter != tmp.end(); ++iter)
+        (*iter)->setShortcut(QKeySequence());
 }
