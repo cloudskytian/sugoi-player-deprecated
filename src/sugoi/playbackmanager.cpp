@@ -921,27 +921,29 @@ void PlaybackManager::connectMpvSignalsAndSlots()
     connect(m_pMpvObject, &MpvObject::chaptersChanged,
             [=](const QList<Mpv::Chapter> &chapters)
             {
-                if(m_pMpvObject->getPlayState() > 0)
+                if (m_pMpvObject->playState() > 0)
                 {
-                    QAction *action;
+                    QAction *action = nullptr;
                     QList<int> ticks;
-                    int n = 1,
-                        N = chapters.length();
+                    int n = 1;
+                    int N = chapters.length();
                     m_pMainWindow->ui->menu_Chapters->clear();
-                    for(auto &ch : chapters)
+                    for (auto &ch : chapters)
                     {
                         action = m_pMainWindow->ui->menu_Chapters->addAction(QString("%0: %1").arg(Util::FormatNumberWithAmpersand(n, N), ch.title));
-                        if(n <= 9)
+                        if (n <= 9)
+                        {
                             action->setShortcut(QKeySequence("Ctrl+"+QString::number(n)));
+                        }
                         connect(action, &QAction::triggered,
                                 [=]
                                 {
-                                    m_pMpvObject->Seek(ch.time);
+                                    m_pMpvObject->seek(ch.time);
                                 });
                         ticks.push_back(ch.time);
                         n++;
                     }
-                    if(m_pMainWindow->ui->menu_Chapters->actions().count() == 0)
+                    if (m_pMainWindow->ui->menu_Chapters->actions().count() == 0)
                     {
                         m_pMainWindow->ui->menu_Chapters->setEnabled(false);
                         m_pMainWindow->ui->action_Next_Chapter->setEnabled(false);
@@ -961,14 +963,13 @@ void PlaybackManager::connectMpvSignalsAndSlots()
     connect(m_pMpvObject, &MpvObject::playStateChanged,
             [=](Mpv::PlayState playState)
             {
-                switch(playState)
+                switch (playState)
                 {
                 case Mpv::Loaded:
-                    sugoi->m_pMpvObject->ShowText(tr("Loading..."), 0);
+                    showText(tr("Loading..."), 0);
                     break;
-
                 case Mpv::Started:
-                    if(!init) // will only happen the first time a file is loaded.
+                    if (!init) // will only happen the first time a file is loaded.
                     {
                         m_pMainWindow->ui->hwdecButton->setEnabled(true);
                         m_pMainWindow->ui->action_Play->setEnabled(true);
@@ -981,40 +982,42 @@ void PlaybackManager::connectMpvSignalsAndSlots()
                         m_pMainWindow->ui->menuAudio_Tracks->setEnabled(true);
                         init = true;
                     }
-                    SetPlaybackControls(true);
-                    m_pMpvObject->Play();
+                    setPlaybackControls(true);
+                    m_pMpvObject->play();
                     sugoi->overlay->showStatusText(QString(), 0);
                 case Mpv::Playing:
-                    SetPlayButtonIcon(false);
-                    if(onTop == "playing")
-                        Util::SetAlwaysOnTop(this, true);
+                    setPlayButtonIcon(false);
+                    if (onTop == "playing")
+                    {
+                        Util::SetAlwaysOnTop(m_pMainWindow, true);
+                    }
                     break;
-
                 case Mpv::Paused:
                 case Mpv::Stopped:
-                    SetPlayButtonIcon(true);
-                    if(onTop == "playing")
-                        Util::SetAlwaysOnTop(this, false);
-                    break;
-
-                case Mpv::Idle:
-                    if(init)
+                    setPlayButtonIcon(true);
+                    if (onTop == "playing")
                     {
-                        if(m_pMainWindow->ui->action_This_File->isChecked()) // repeat this file
+                        Util::SetAlwaysOnTop(m_pMainWindow, false);
+                    }
+                    break;
+                case Mpv::Idle:
+                    if (init)
+                    {
+                        if (m_pMainWindow->ui->action_This_File->isChecked()) // repeat this file
                         {
-                            if (isVisible() || playInBackground)
+                            if (m_pMainWindow->isVisible() || playInBackground)
                             {
                                 m_pMainWindow->ui->playlistWidget->PlayIndex(0, true); // restart file
                             }
                         }
-                        else if(m_pMainWindow->ui->actionStop_after_Current->isChecked() ||  // stop after playing this file
+                        else if (m_pMainWindow->ui->actionStop_after_Current->isChecked() ||  // stop after playing this file
                                 m_pMainWindow->ui->playlistWidget->CurrentIndex() >= m_pMainWindow->ui->playlistWidget->count()-1) // end of the playlist
                         {
-                            if(!m_pMainWindow->ui->actionStop_after_Current->isChecked() && // not supposed to stop after current
+                            if (!m_pMainWindow->ui->actionStop_after_Current->isChecked() && // not supposed to stop after current
                                 m_pMainWindow->ui->action_Playlist->isChecked() && // we're supposed to restart the playlist
                                 m_pMainWindow->ui->playlistWidget->count() > 0) // playlist isn't empty
                             {
-                                if (isVisible() || playInBackground)
+                                if (m_pMainWindow->isVisible() || playInBackground)
                                 {
                                     m_pMainWindow->ui->playlistWidget->PlayIndex(0); // restart playlist
                                 }
@@ -1022,16 +1025,18 @@ void PlaybackManager::connectMpvSignalsAndSlots()
                             else // stop
                             {
                                 m_pMainWindow->setWindowTitle2("Sugoi Player");
-                                SetPlaybackControls(false);
+                                setPlaybackControls(false);
                                 m_pMainWindow->ui->seekBar->setTracking(0);
                                 m_pMainWindow->ui->actionStop_after_Current->setChecked(false);
-                                if(m_pMainWindow->ui->mpvFrame->styleSheet() != QString()) // remove filler album art
+                                if (!m_pMainWindow->ui->mpvFrame->styleSheet().isEmpty()) // remove filler album art
+                                {
                                     m_pMainWindow->ui->mpvFrame->setStyleSheet("");
+                                }
                             }
                         }
                         else
                         {
-                            if (isVisible() || playInBackground)
+                            if (m_pMainWindow->isVisible() || playInBackground)
                             {
                                 m_pMainWindow->ui->playlistWidget->PlayIndex(1, true);
                             }
@@ -1050,19 +1055,23 @@ void PlaybackManager::connectMpvSignalsAndSlots()
     connect(m_pMpvObject, &MpvObject::fileChanging,
               [=](int t, int l)
               {
-                  if(current != nullptr)
+                  if (currentRecent != nullptr)
                   {
-                      if(t > 0.05*l && t < 0.95*l) // only save if within the middle 90%
+                      if (t > 0.05 * l && t < 0.95 * l) // only save if within the middle 90%
+                      {
                           current->time = t;
+                      }
                       else
+                      {
                           current->time = 0;
+                      }
                   }
               });
 
     connect(m_pMpvObject, &MpvObject::timeChanged,
             [=](int i)
             {
-                const Mpv::FileInfo &fi = m_pMpvObject->getFileInfo();
+                const Mpv::FileInfo &fi = m_pMpvObject->fileInfo();
                 // set the seekBar's location with NoSignal function so that it doesn't trigger a seek
                 // the formula is a simple ratio seekBar's max * time/totalTime
                 double currentPercent = (double)i/fi.length;
@@ -1076,10 +1085,10 @@ void PlaybackManager::connectMpvSignalsAndSlots()
                     fullscreenProgressIndicator->setValue(fullscreenProgressIndicator->maximum()*currentPercent);
                 }
 
-                SetRemainingLabels(i);
+                setRemainingLabels(i);
 
                 // set next/previous chapter's enabled state
-                if(fi.chapters.length() > 0)
+                if (fi.chapters.length() > 0)
                 {
                     m_pMainWindow->ui->action_Next_Chapter->setEnabled(i < fi.chapters.last().time);
                     m_pMainWindow->ui->action_Previous_Chapter->setEnabled(i > fi.chapters.first().time);
@@ -1092,14 +1101,20 @@ void PlaybackManager::connectMpvSignalsAndSlots()
             [=](double speed)
             {
                 static double last = 1;
-                if(last != speed)
+                if (last != speed)
                 {
-                    if(init)
-                        m_pMpvObject->ShowText(tr("Speed: %0x").arg(QString::number(speed)));
-                    if(speed <= 0.25)
+                    if (init)
+                    {
+                        showText(tr("Speed: %0x").arg(QString::number(speed)));
+                    }
+                    if (speed <= 0.25)
+                    {
                         m_pMainWindow->ui->action_Decrease->setEnabled(false);
+                    }
                     else
+                    {
                         m_pMainWindow->ui->action_Decrease->setEnabled(true);
+                    }
                     last = speed;
                 }
             });
@@ -1108,15 +1123,17 @@ void PlaybackManager::connectMpvSignalsAndSlots()
             [=](int sid)
             {
                 QList<QAction*> actions = m_pMainWindow->ui->menuSubtitle_Track->actions();
-                for(auto &action : actions)
+                for (auto &action : actions)
                 {
-                    if(action->text().startsWith(QString::number(sid)))
+                    if (action->text().startsWith(QString::number(sid)))
                     {
                         action->setCheckable(true);
                         action->setChecked(true);
                     }
                     else
+                    {
                         action->setChecked(false);
+                    }
                 }
             });
 
@@ -1124,42 +1141,52 @@ void PlaybackManager::connectMpvSignalsAndSlots()
             [=](int aid)
             {
                 QList<QAction*> actions = m_pMainWindow->ui->menuAudio_Tracks->actions();
-                for(auto &action : actions)
+                for (auto &action : actions)
                 {
-                    if(action->text().startsWith(QString::number(aid)))
+                    if (action->text().startsWith(QString::number(aid)))
                     {
                         action->setCheckable(true);
                         action->setChecked(true);
                     }
                     else
+                    {
                         action->setChecked(false);
+                    }
                 }
             });
 
     connect(m_pMpvObject, &MpvObject::subtitleVisibilityChanged,
             [=](bool b)
             {
-                if(m_pMainWindow->ui->actionShow_Subtitles->isEnabled())
+                if (m_pMainWindow->ui->actionShow_Subtitles->isEnabled())
+                {
                     m_pMainWindow->ui->actionShow_Subtitles->setChecked(b);
-                if(init)
-                    m_pMpvObject->ShowText(b ? tr("Subtitles visible") : tr("Subtitles hidden"));
+                }
+                if (init)
+                {
+                    showText(b ? tr("Subtitles visible") : tr("Subtitles hidden"));
+                }
             });
 
     connect(m_pMpvObject, &MpvObject::muteChanged,
             [=](bool b)
             {
-                if(b)
+                if (b)
+                {
                     m_pMainWindow->ui->muteButton->setIcon(QIcon(":/images/default_mute.svg"));
+                }
                 else
+                {
                     m_pMainWindow->ui->muteButton->setIcon(QIcon(":/images/default_unmute.svg"));
-                m_pMpvObject->ShowText(b ? tr("Muted") : tr("Unmuted"));
+                }
+                showText(b ? tr("Muted") : tr("Unmuted"));
             });
 
     connect(m_pMpvObject, &MpvObject::voChanged,
             [=](QString vo)
             {
                 m_pMainWindow->ui->action_Motion_Interpolation->setChecked(vo.contains("interpolation"));
-    });
+            });
 }
 
 void PlaybackManager::connectMainWindowUiSignalsAndSlots()
@@ -1194,15 +1221,15 @@ void PlaybackManager::connectMainWindowUiSignalsAndSlots()
     connect(m_pMainWindow->ui->hwdecButton, &QPushButton::clicked,
             [=]
             {
-                m_pMpvObject->Hwdec(!m_pMpvObject->getHwdec(), true);
+                m_pMpvObject->setHwdec(!m_pMpvObject->hwdec(), true);
             });
 
-    connect(m_pMainWindow->ui->playlistButton, &QPushButton::clicked, this, &MainWindow::TogglePlaylist);
+    connect(m_pMainWindow->ui->playlistButton, &QPushButton::clicked, this, &MainWindow::togglePlaylist);
 
     connect(m_pMainWindow->ui->seekBar, &SeekBar::valueChanged,                        // Playback: Seekbar clicked
             [=](int i)
             {
-                mpv->Seek(mpv->Relative(((double)i/ui->seekBar->maximum())*mpv->getFileInfo().length), true);
+                m_pMpvObject->seek(m_pMpvObject->relative(((double)i/m_pMainWindow->ui->seekBar->maximum())*m_pMpvObject->fileInfo().duration), true);
             });
 
     connect(m_pMainWindow->ui->openButton, &OpenButton::LeftClick, sugoi, &SugoiEngine::Open);
@@ -1212,7 +1239,7 @@ void PlaybackManager::connectMainWindowUiSignalsAndSlots()
     connect(m_pMainWindow->ui->rewindButton, &QPushButton::clicked,                    // Playback: Rewind button
             [=]
             {
-                m_pMpvObject->Rewind();
+                m_pMpvObject->rewind();
             });
 
     connect(m_pMainWindow->ui->previousButton, &IndexButton::clicked,                  // Playback: Previous button
@@ -1232,26 +1259,26 @@ void PlaybackManager::connectMainWindowUiSignalsAndSlots()
     connect(m_pMainWindow->ui->muteButton, &QPushButton::clicked,
             [=]
             {
-                mpv->Mute(!mpv->getMute());
+                m_pMpvObject->setMute(!m_pMpvObject->mute());
             });
 
     connect(m_pMainWindow->ui->volumeSlider, &CustomSlider::valueChanged,              // Playback: Volume slider adjusted
             [=](int i)
             {
-                mpv->Volume(i, true);
+                m_pMpvObject->setVolume(i, true);
             });
 
     connect(m_pMainWindow->ui->splitter, &CustomSplitter::positionChanged,             // Splitter position changed
             [=](int i)
             {
                 blockSignals(true);
-                if(i == 0) // right-most, playlist is hidden
+                if (i == 0) // right-most, playlist is hidden
                 {
                     m_pMainWindow->ui->action_Show_Playlist->setChecked(false);
                     m_pMainWindow->ui->action_Hide_Album_Art->setChecked(false);
                     m_pMainWindow->ui->playlistLayoutWidget->setVisible(false);
                 }
-                else if(i == ui->splitter->max()) // left-most, album art is hidden, playlist is visible
+                else if (i == ui->splitter->max()) // left-most, album art is hidden, playlist is visible
                 {
                     m_pMainWindow->ui->action_Show_Playlist->setChecked(true);
                     m_pMainWindow->ui->action_Hide_Album_Art->setChecked(true);
@@ -1261,10 +1288,12 @@ void PlaybackManager::connectMainWindowUiSignalsAndSlots()
                     m_pMainWindow->ui->action_Show_Playlist->setChecked(true);
                     m_pMainWindow->ui->action_Hide_Album_Art->setChecked(false);
                 }
-                m_pMainWindow->ui->playlistLayoutWidget->setVisible(ui->action_Show_Playlist->isChecked());
+                m_pMainWindow->ui->playlistLayoutWidget->setVisible(m_pMainWindow->ui->action_Show_Playlist->isChecked());
                 blockSignals(false);
-                if(m_pMainWindow->ui->actionMedia_Info->isChecked())
+                if (m_pMainWindow->ui->actionMedia_Info->isChecked())
+                {
                     sugoi->overlay->showInfoText();
+                }
             });
 
     connect(m_pMainWindow->ui->searchBox, &QLineEdit::textChanged,                     // Playlist: Search box
@@ -1278,16 +1307,20 @@ void PlaybackManager::connectMainWindowUiSignalsAndSlots()
             {
                 QString res = InputDialog::getInput(tr("Enter the file number you want to play:\nNote: Value must be from %0 - %1").arg("1", QString::number(ui->playlistWidget->count())),
                                                     tr("Enter File Number"),
-                                                    [this](QString input)
+                                                    [m_pMainWindow](QString input)
                                                     {
                                                         int in = input.toInt();
-                                                        if(in >= 1 && in <= ui->playlistWidget->count())
+                                                        if (in >= 1 && in <= ui->playlistWidget->count())
+                                                        {
                                                             return true;
+                                                         }
                                                         return false;
                                                     },
-                                                    this);
-                if(res != "")
+                                                    m_pMainWindow);
+                if (!res.isEmpty())
+                {
                     m_pMainWindow->ui->playlistWidget->PlayIndex(res.toInt()-1); // user index will be 1 greater than actual
+                }
             });
 
     connect(m_pMainWindow->ui->playlistWidget, &PlaylistWidget::currentRowChanged,     // Playlist: Playlist selection changed
