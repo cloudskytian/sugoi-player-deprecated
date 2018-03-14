@@ -1,10 +1,6 @@
 ﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QTimer>
-#include <QHash>
-#include <QAction>
-
 #include "widgets/cframelesswindow.h"
 #include "recent.h"
 #include "fileassoc.h"
@@ -17,7 +13,6 @@ class QWinTaskbarProgress;
 class QWinJumpList;
 #endif
 
-class PlaybackManager;
 class ProgressIndicatorBar;
 
 namespace Ui {
@@ -69,16 +64,6 @@ private slots:
     void SetRemainingLabels(int time);
     bool IsPlayingMusic(const QString &filePath);
     bool IsPlayingVideo(const QString &filePath);
-    void connectMpvSignalsAndSlots();
-    void disconnectMpvSignalsAndSlots();
-    void reconnectMpvSignalsAndSlots();
-    void connectUiSignalsAndSlots();
-    void disconnectUiSignalsAndSlots();
-    void reconnectUiSignalsAndSlots();
-    void connectOtherSignalsAndSlots();
-    void disconnectOtherSignalsAndSlots();
-    void reconnectOtherSignalsAndSlots();
-    void reconnectAllSignalsAndSlots();
     void SetIndexLabels(bool enable);
     void SetPlaybackControls(bool enable);          // macro to enable/disable playback controls
     void TogglePlaylist();                          // toggles playlist visibility
@@ -86,7 +71,6 @@ private slots:
     void SetWindowTitle2(const QString &text);
 
 private:
-    PlaybackManager *playbackManager = nullptr;
     ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
 
     bool firstShow = true;
@@ -105,12 +89,10 @@ private:
                     firstItem       = false,
                     init            = false,
                     playlistState   = false;
-    QTimer          *osdLocalTimeUpdater = nullptr;
 
     // variables
     QList<Recent> recent;
     Recent *current = nullptr;
-    QHash<QString, QAction*> commandActionMap;
 };
 
 #endif // MAINWINDOW_H

@@ -6,15 +6,19 @@
 // control of the mpv widget away from its host.
 
 #include <QObject>
+#include <QHash>
 
 #include "fileassoc.h"
 
+class QAction;
+class QTimer;
 class MpvObject;
 class MainWindow;
 class PropertiesWindow;
 
 class PlaybackManager : public QObject
 {
+friend class MainWindow;
     Q_OBJECT
 public:
     static PlaybackManager *instance();
@@ -29,7 +33,6 @@ public slots:
     void initMainWindow(bool backgroundMode = false);
     void showMainWindow();
     void hideMainWindow();
-    void setBackgroundMode(bool enable = false);
     void closeMainWindow();
 
 public slots:
@@ -38,6 +41,11 @@ public slots:
 public slots:
     MpvObject *mpvObject() const;
     MainWindow *mainWindow() const;
+
+private slots:
+    void connectMpvSignalsAndSlots();
+    void connectMainWindowUiSignalsAndSlots();
+    void connectMainWindowOtherSignalsAndSlots();
 
 private:
     MpvObject *m_pMpvObject = nullptr;
@@ -59,7 +67,7 @@ private:
     QString currentSkinFile;
     bool currentPlayInBackground = false;
     QString currentUiLanguage = QLatin1String("auto");
-    QString currentOnTop;
+    QString currentOnTop = QLatin1String("never");
     int currentAutoFit = 100;
     int currentMaxRecent = 100;
     bool currentHidePopup = false;
@@ -68,6 +76,8 @@ private:
     bool currentDebug = false;
     bool currentResume = false;
     bool currentHideAllControls = false;
+    QHash<QString, QAction*> commandActionMap;
+    QTimer *osdLocalTimeUpdater = nullptr;
 };
 
 #endif // PLAYBACKMANAGER_H

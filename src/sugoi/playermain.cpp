@@ -239,26 +239,28 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Mpv::FileInfo>();
     qRegisterMetaType<Mpv::Renderers>();
 
-    PlaybackManager playbackManager;
     if (!runInBackground)
     {
-        playbackManager.initMainWindow(false);
-        playbackManager.load(command);
+        PlaybackManager::instance()->initMainWindow(false);
+        if (!command.isEmpty())
+        {
+            PlaybackManager::instance()->load(command);
+        }
     }
     else
     {
-        playbackManager.initMainWindow(true);
+        PlaybackManager::instance()->initMainWindow(true);
     }
 
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
-                     [=, &playbackManager](const QString &message)
+                     [=](const QString &message)
                      {
                          QString filePath(message);
                          if (message == QString::fromLatin1("exit")
                                  || message == QString::fromLatin1("quit")
                                  || message == QString::fromLatin1("close"))
                          {
-                             playbackManager.closeMainWindow();
+                             PlaybackManager::instance()->closeMainWindow();
                              return;
                          }
                          else if (message == QString::fromLatin1("runinbackground"))
@@ -272,7 +274,10 @@ int main(int argc, char *argv[])
                                  filePath = QString();
                              }
                          }
-                         playbackManager.load(filePath);
+                         if (!filePath.isEmpty())
+                         {
+                             PlaybackManager::instance()->load(filePath);
+                         }
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE
