@@ -12,12 +12,10 @@
 #include "fileassoc.h"
 #include "recent.h"
 
-class QAction;
 class QTimer;
 class MpvObject;
 class MainWindow;
 class PropertiesWindow;
-class SugoiEngine;
 class ProgressIndicatorBar;
 
 class PlaybackManager : public QObject
@@ -67,13 +65,11 @@ private slots:
     void connectMpvSignalsAndSlots();
     void connectMainWindowUiSignalsAndSlots();
     void connectMainWindowOtherSignalsAndSlots();
-    void mapShortcuts();
 
 private:
     MpvObject *m_pMpvObject = nullptr;
     MainWindow *m_pMainWindow = nullptr;
     PropertiesWindow *m_pPropertiesWindow = nullptr;
-    SugoiEngine *sugoi = nullptr;
     ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
 
     bool currentShowFullscreenIndicator = true;
@@ -100,7 +96,6 @@ private:
     bool currentDebug = false;
     bool currentResume = false;
     bool currentHideAllControls = false;
-    QHash<QString, QAction*> commandActionMap;
     QTimer *osdLocalTimeUpdater = nullptr;
     QImage albumArt;
     QList<Recent> recent;

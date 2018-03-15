@@ -1740,21 +1740,3 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
                     m_pMainWindow->ui->menuR_epeat->setEnabled(false);
     });
 }
-
-void PlaybackManager::mapShortcuts()
-{
-    auto tmp = commandActionMap;
-    // map shortcuts to actions
-    for(auto input_iter = sugoi->input.begin(); input_iter != sugoi->input.end(); ++input_iter)
-    {
-        auto commandAction = tmp.find(input_iter->first);
-        if(commandAction != tmp.end())
-        {
-            (*commandAction)->setShortcut(QKeySequence(input_iter.key()));
-            tmp.erase(commandAction);
-        }
-    }
-    // clear the rest
-    for(auto iter = tmp.begin(); iter != tmp.end(); ++iter)
-        (*iter)->setShortcut(QKeySequence());
-}
