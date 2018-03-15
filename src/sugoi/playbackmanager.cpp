@@ -1477,9 +1477,9 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
                     {
                         if (fullscreenProgressIndicator == nullptr)
                         {
-                            fullscreenProgressIndicator = new ProgressIndicatorBar(this);
-                            fullscreenProgressIndicator->setFixedSize(QSize(width(), (2.0 / 1080.0) * height()));
-                            fullscreenProgressIndicator->move(QPoint(0, height() - fullscreenProgressIndicator->height()));
+                            fullscreenProgressIndicator = new ProgressIndicatorBar(m_pMainWindow);
+                            fullscreenProgressIndicator->setFixedSize(QSize(m_pMainWindow->width(), (2.0 / 1080.0) * m_pMainWindow->height()));
+                            fullscreenProgressIndicator->move(QPoint(0, m_pMainWindow->height() - fullscreenProgressIndicator->height()));
                             fullscreenProgressIndicator->setRange(0, 1000);
                         }
                         fullscreenProgressIndicator->show();
@@ -1571,30 +1571,30 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
                 }
 
                 // save strings we want to keep
-                QString title = windowTitle(),
-                        duration = ui->durationLabel->text(),
-                        remaining = ui->remainingLabel->text(),
-                        index = ui->indexLabel->text();
+                QString title = m_pMainWindow->windowTitle(),
+                        duration = m_pMainWindow->ui->durationLabel->text(),
+                        remaining = m_pMainWindow->ui->remainingLabel->text(),
+                        index = m_pMainWindow->ui->indexLabel->text();
 
-                ui->retranslateUi(this);
+                m_pMainWindow->ui->retranslateUi(this);
 
                 // reload strings we kept
-                SetWindowTitle2(title);
-                ui->durationLabel->setText(duration);
-                ui->remainingLabel->setText(remaining);
-                ui->indexLabel->setText(index);
+                setWindowTitle2(title);
+                m_pMainWindow->ui->durationLabel->setText(duration);
+                m_pMainWindow->ui->remainingLabel->setText(remaining);
+                m_pMainWindow->ui->indexLabel->setText(index);
             });
 
     connect(this, &MainWindow::debugChanged,
             [=](bool b)
             {
-                ui->actionShow_D_ebug_Output->setChecked(b);
-                ui->verticalWidget->setVisible(b);
+                m_pMainWindow->ui->actionShow_D_ebug_Output->setChecked(b);
+                m_pMainWindow->ui->verticalWidget->setVisible(b);
                 mouseMoveEvent(new QMouseEvent(QMouseEvent::MouseMove,
                                                QCursor::pos(),
                                                Qt::NoButton,Qt::NoButton,Qt::NoModifier));
                 if(b)
-                    ui->inputLineEdit->setFocus();
+                    m_pMainWindow->ui->inputLineEdit->setFocus();
             });
 
     connect(this, &MainWindow::hideAllControlsChanged,
@@ -1602,7 +1602,7 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
             {
                 HideAllControls(b);
                 blockSignals(true);
-                ui->actionHide_All_Controls->setChecked(b);
+                m_pMainWindow->ui->actionHide_All_Controls->setChecked(b);
                 blockSignals(false);
             });
 
@@ -1657,7 +1657,7 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
                 {
                     QtConcurrent::run([=]
                     {
-                        mpv->LoadFile(filePath);
+                        m_pMpvObject->load(filePath);
                     });
                 }
             });
@@ -1676,14 +1676,14 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
     connect(this, &MainWindow::remainingChanged,
             [=]
             {
-                SetRemainingLabels(mpv->getTime());
+                setRemainingLabels(mpv->getTime());
             });
 
     connect(autohide, &QTimer::timeout, // cursor autohide
             [=]
             {
-                if(ui->mpvFrame->geometry().contains(ui->mpvFrame->mapFromGlobal(cursor().pos())))
-                    setCursor(QCursor(Qt::BlankCursor));
+                if(m_pMainWindow->ui->mpvFrame->geometry().contains(ui->mpvFrame->mapFromGlobal(cursor().pos())))
+                    m_pMainWindow->setCursor(QCursor(Qt::BlankCursor));
                 if(autohide)
                     autohide->stop();
             });
@@ -1693,12 +1693,12 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
             {
                 if (osdShowLocalTime)
                 {
-                    if (mpv->getPlayState() > 0)
+                    if (m_pMpvObject->playState() > 0)
                     {
                         QString curTime = QTime::currentTime().toString("hh:mm:ss");
                         if (!curTime.isEmpty())
                         {
-                            mpv->ShowText(curTime, 1500);
+                            showText(curTime, 1500);
                         }
                     }
                 }
@@ -1712,11 +1712,11 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
     connect(sugoi->dimDialog, &DimDialog::visbilityChanged,
             [=](bool dim)
             {
-                ui->action_Dim_Lights->setChecked(dim);
+                m_pMainWindow->ui->action_Dim_Lights->setChecked(dim);
                 if(dim)
-                    Util::SetAlwaysOnTop(this, true);
-                else if(onTop == "never" || (onTop == "playing" && mpv->getPlayState() > 0))
-                    Util::SetAlwaysOnTop(this, false);
+                    Util::SetAlwaysOnTop(m_pMainWindow, true);
+                else if(onTop == "never" || (onTop == "playing" && m_pMpvObject->playState() > 0))
+                    Util::SetAlwaysOnTop(m_pMainWindow, false);
             });
 
     connect(this, &MainWindow::playlistChanged,
@@ -1724,20 +1724,20 @@ void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
             {
                 if(list.length() > 1)
                 {
-                    ui->actionSh_uffle->setEnabled(true);
-                    ui->actionStop_after_Current->setEnabled(true);
+                    m_pMainWindow->ui->actionSh_uffle->setEnabled(true);
+                    m_pMainWindow->ui->actionStop_after_Current->setEnabled(true);
                     //ShowPlaylist(true);
                 }
                 else
                 {
-                    ui->actionSh_uffle->setEnabled(false);
-                    ui->actionStop_after_Current->setEnabled(false);
+                    m_pMainWindow->ui->actionSh_uffle->setEnabled(false);
+                    m_pMainWindow->ui->actionStop_after_Current->setEnabled(false);
                 }
 
                 if(list.length() > 0)
-                    ui->menuR_epeat->setEnabled(true);
+                    m_pMainWindow->ui->menuR_epeat->setEnabled(true);
                 else
-                    ui->menuR_epeat->setEnabled(false);
+                    m_pMainWindow->ui->menuR_epeat->setEnabled(false);
     });
 }
 
