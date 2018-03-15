@@ -1326,13 +1326,13 @@ void PlaybackManager::connectMainWindowUiSignalsAndSlots()
     connect(m_pMainWindow->ui->playlistWidget, &PlaylistWidget::currentRowChanged,     // Playlist: Playlist selection changed
             [=](int)
             {
-                SetIndexLabels(true);
+                setIndexLabels(true);
             });
 
     connect(m_pMainWindow->ui->currentFileButton, &QPushButton::clicked,               // Playlist: Select current file button
             [=]
             {
-                m_pMainWindow->ui->playlistWidget->SelectIndex(ui->playlistWidget->CurrentIndex());
+                m_pMainWindow->ui->playlistWidget->SelectIndex(m_pMainWindow->ui->playlistWidget->CurrentIndex());
             });
 
     connect(m_pMainWindow->ui->refreshButton, &QPushButton::clicked,                   // Playlist: Refresh playlist button
@@ -1352,7 +1352,7 @@ void PlaybackManager::connectMainWindowUiSignalsAndSlots()
 void PlaybackManager::connectMainWindowOtherSignalsAndSlots()
 {
     commandActionMap = {
-        {"mpv add chapter +1", ui->action_Next_Chapter},
+        {"mpv add chapter +1", m_pMainWindow->ui->action_Next_Chapter},
         {"mpv add chapter -1", ui->action_Previous_Chapter},
         {"mpv set sub-scale 1", ui->action_Reset_Size},
         {"mpv add sub-scale +0.1", ui->action_Size},

@@ -48,7 +48,6 @@ RESOURCES += $$PWD/resources.qrc
 TRANSLATIONS += $$PWD/translations/sugoi_zh_CN.ts
 
 HEADERS += \
-    $$PWD/sugoiengine.h \
     $$PWD/mpvtypes.h \
     $$PWD/overlayhandler.h \
     $$PWD/overlay.h \
@@ -86,8 +85,6 @@ HEADERS += \
 
 SOURCES += \
     $$PWD/playermain.cpp \
-    $$PWD/sugoiengine.cpp \
-    $$PWD/sugoicommands.cpp \
     $$PWD/overlayhandler.cpp \
     $$PWD/util.cpp \
     $$PWD/widgets/customlabel.cpp \
