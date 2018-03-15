@@ -90,21 +90,22 @@ MpvObject::MpvObject(QObject *parent, const QString &clientName) : QObject(paren
     MpvController::PropertyList options =
     {
         { "percent-pos", 0, MPV_FORMAT_DOUBLE },
-        { "playback-time", 0, MPV_FORMAT_DOUBLE },
-        { "ao-volume", 0, MPV_FORMAT_DOUBLE },
-        { "sid", 0, MPV_FORMAT_INT64 },
-        { "aid", 0, MPV_FORMAT_INT64 },
-        { "vid", 0, MPV_FORMAT_INT64 },
-        { "sub-visibility", 0, MPV_FORMAT_FLAG },
-        { "ao-mute", 0, MPV_FORMAT_FLAG },
-        { "core-idle", 0, MPV_FORMAT_FLAG },
-        { "paused-for-cache", 0, MPV_FORMAT_FLAG },
+        { "time-pos", 0, MPV_FORMAT_DOUBLE },
+        { "pause", 0, MPV_FORMAT_FLAG },
         { "media-title", 0, MPV_FORMAT_STRING },
         { "chapter-metadata", 0, MPV_FORMAT_NODE },
         { "track-list", 0, MPV_FORMAT_NODE },
         { "chapter-list", 0, MPV_FORMAT_NODE },
         { "duration", 0, MPV_FORMAT_DOUBLE },
+        { "estimated-vf-fps", 0, MPV_FORMAT_DOUBLE },
+        { "avsync", 0, MPV_FORMAT_DOUBLE },
+        { "frame-drop-count", 0, MPV_FORMAT_INT64 },
+        { "decoder-frame-drop-count", 0, MPV_FORMAT_INT64 },
+        { "audio-bitrate", 0, MPV_FORMAT_DOUBLE },
+        { "video-bitrate", 0, MPV_FORMAT_DOUBLE },
+        { "paused-for-cache", 0, MPV_FORMAT_FLAG },
         { "metadata", 0, MPV_FORMAT_NODE },
+        { "audio-device-list", 0, MPV_FORMAT_NODE },
         { "filename", 0, MPV_FORMAT_STRING },
         { "file-format", 0, MPV_FORMAT_STRING },
         { "file-size", 0, MPV_FORMAT_STRING },
@@ -115,7 +116,8 @@ MpvObject::MpvObject(QObject *parent, const QString &clientName) : QObject(paren
     };
     QSet<QString> throttled =
     {
-        "percent-pos", "playback-time"
+        "percent-pos", "time-pos", "avsync", "estimated-vf-fps", "frame-drop-count",
+        "decoder-frame-drop-count", "audio-bitrate", "video-bitrate"
     };
     QMetaObject::invokeMethod(ctrl, "observeProperties", Qt::BlockingQueuedConnection,
                               Q_ARG(const MpvController::PropertyList &, options),

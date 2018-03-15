@@ -15,6 +15,7 @@ class QThread;
 class QTimer;
 class QWidget;
 class MpvWidgetInterface;
+class MpvGLWidget;
 class MpvController;
 class LogoDrawer;
 
