@@ -11,6 +11,7 @@ FOR /F "tokens=5*" %%A IN (
 IF EXIST artifacts RD /S /Q artifacts
 MD artifacts
 "%~dp03rdparty\7za.exe" a -tzip ".\artifacts\Sugoi_x64_Portable.zip" ".\bin64\Release\*"
+IF NOT EXIST "%_ISCC_EXE%" ECHO Inno Setup not found! && GOTO Fin
 SET _CI_FLAG=
 IF EXIST ci_version.h SET "_CI_FLAG=/DCI"
 "%_ISCC_EXE%" /D_WIN64 %_CI_FLAG% /O"%~dp0artifacts" /F"Sugoi_x64_Setup" "%~dp0src\installer\installer.iss"
