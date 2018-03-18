@@ -1,9 +1,6 @@
 @ECHO OFF
-IF NOT EXIST build.user.bat (
-    ECHO Build.user.bat is missing! Compilation aborted!
-    PAUSE
-    EXIT
-)
+SETLOCAL EnableDelayedExpansion
+IF NOT EXIST build.user.bat ECHO Build.user.bat is missing! Compilation aborted! && GOTO Fin
 CALL build.user.bat
 CALL "%_QT_DIR%\bin\qtenv2.bat"
 CALL "%_VC_BUILD_DIR%\vcvars64.bat"
@@ -16,5 +13,9 @@ jom && jom install
 REM CALL build-artifacts.bat
 REM jom distclean
 REM IF EXIST bin64 RD /S /Q bin64
+GOTO Fin
+
+:Fin
+ENDLOCAL
 PAUSE
-EXIT
+EXIT /B
