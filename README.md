@@ -104,8 +104,9 @@ See [**./doc/CHANGELOG.md**](/doc/CHANGELOG.md) for more information.
 - [Visual Studio 2017](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) (Only the build tools are needed, but you can also install the full IDE. The community edition is also fine)
   - [**Windows 10 SDK**](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk) (I recommend download the ISO image from this website instead of installing it from the VS installer. Remember to install the CDB debugger while you are installing the Win10 SDK if you want to use Qt Creator)
 - [Qt Creator](http://download.qt.io/official_releases/qtcreator/) (Optional, install this software in case of you don't want to install VS. Remember to install the CDB support component if you want to debug)
-- [**libmpv**](https://mpv.srsfckn.biz/)
-- [**Qt5**](http://download.qt.io/official_releases/qt/)
+- [**libmpv**](https://sourceforge.net/projects/mpv-player-windows/files/libmpv/)
+- [**WinSparkle**](https://github.com/vslavik/winsparkle/releases/latest)
+- [**Qt5**](http://download.qt.io/archive/qt/)
 - [YouTube-dl](https://yt-dl.org/latest/youtube-dl.exe) (Optional, for streaming youtube videos)
 - [Inno Setup 5 Unicode](http://jrsoftware.org/isdl.php) (Optional, for building the installer)
 
