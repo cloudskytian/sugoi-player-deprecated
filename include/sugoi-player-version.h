@@ -19,7 +19,7 @@
 #define SUGOI_VERSION_BUILD 0
 #ifndef ISPP_INVOKED
 #define SUGOI_VERSION_NUM   SUGOI_VERSION_MAJOR,SUGOI_VERSION_MINOR,SUGOI_VERSION_PATCH,SUGOI_VERSION_BUILD
-#define SUGOI_VERSION_STR   _T("1.2.0.0")
+#define SUGOI_VERSION_STR   _T("2.0.0.0")
 #endif
 #endif
 
@@ -41,7 +41,7 @@
 #define SUGOI_COMMENTS_STR         _T("Multimedia player for Windows 7+ based on libmpv and Qt.")
 #define SUGOI_COPYRIGHT_STR        _T("GPLv3")
 
-#define LIBMPV_VERSION_STR         _T("1.26 (mpv 0.28.0)")
+#define LIBMPV_VERSION_STR         _T("0.29.0-28-git-a5b0d59084")
 
 #ifdef _WIN64
 #define SUGOI_APP_ID_STR    SUGOI_APP_ID_64_STR
