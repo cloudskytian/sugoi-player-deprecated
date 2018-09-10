@@ -48,6 +48,7 @@ RESOURCES += $$PWD/resources.qrc
 TRANSLATIONS += $$PWD/translations/sugoi_zh_CN.ts
 
 HEADERS += \
+    $$PWD/sugoiengine.h \
     $$PWD/mpvtypes.h \
     $$PWD/overlayhandler.h \
     $$PWD/overlay.h \
@@ -77,14 +78,15 @@ HEADERS += \
     $$PWD/qtlockedfile.h \
     $$PWD/ui/sysinfodialog.h \
     $$PWD/skinmanager.h \
-    $$PWD/widgets/mpvwidget.h \
-    $$PWD/widgets/cframelesswindow.h \
+    $$PWD/mpvwidget.h \
+    $$PWD/ui/cframelesswindow.h \
     $$PWD/playbackmanager.h \
-    $$PWD/widgets/logowidget.h \
-    $$PWD/ui/propertieswindow.h
+    $$PWD/widgets/logowidget.h
 
 SOURCES += \
     $$PWD/playermain.cpp \
+    $$PWD/sugoiengine.cpp \
+    $$PWD/sugoicommands.cpp \
     $$PWD/overlayhandler.cpp \
     $$PWD/util.cpp \
     $$PWD/widgets/customlabel.cpp \
@@ -114,11 +116,10 @@ SOURCES += \
     $$PWD/qtlockedfile.cpp \
     $$PWD/ui/sysinfodialog.cpp \
     $$PWD/skinmanager.cpp \
-    $$PWD/widgets/mpvwidget.cpp \
-    $$PWD/widgets/cframelesswindow.cpp \
+    $$PWD/mpvwidget.cpp \
+    $$PWD/ui/cframelesswindow.cpp \
     $$PWD/playbackmanager.cpp \
-    $$PWD/widgets/logowidget.cpp \
-    $$PWD/ui/propertieswindow.cpp
+    $$PWD/widgets/logowidget.cpp
 
 FORMS += \
     $$PWD/ui/aboutdialog.ui \
@@ -129,5 +130,4 @@ FORMS += \
     $$PWD/ui/preferencesdialog.ui \
     $$PWD/ui/screenshotdialog.ui \
     $$PWD/ui/keydialog.ui \
-    $$PWD/ui/sysinfodialog.ui \
-    $$PWD/ui/propertieswindow.ui
+    $$PWD/ui/sysinfodialog.ui

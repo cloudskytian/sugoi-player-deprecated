@@ -132,7 +132,7 @@ bool FileAssoc::add_verbs(const QString &key)
     // Set open command
     settings.setValue(QString::fromLatin1(".")
                       , QLatin1Char('"') + QDir::toNativeSeparators(filePath)
-                      + QString::fromLatin1("\" --file=\"%1\""));
+                      + QString::fromLatin1("\" \"%1\""));
     settings.endGroup();
     settings.endGroup();
     // Add "play" verb
@@ -141,7 +141,7 @@ bool FileAssoc::add_verbs(const QString &key)
     settings.beginGroup(QString::fromLatin1("command"));
     settings.setValue(QString::fromLatin1(".")
                       , QLatin1Char('"') + QDir::toNativeSeparators(filePath)
-                      + QString::fromLatin1("\" --file=\"%1\""));
+                      + QString::fromLatin1("\" \"%1\""));
     settings.endGroup();
     settings.endGroup();
     settings.endGroup();

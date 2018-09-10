@@ -87,9 +87,9 @@ LogoWidget::~LogoWidget()
 void LogoWidget::setLogo(const QString &filename)
 {
     logoUrl = filename;
+    makeCurrent();
     if (logoDrawer)
     {
-        makeCurrent();
         logoDrawer->setLogoUrl(filename);
         logoDrawer->resizeGL(width(), height());
         doneCurrent();

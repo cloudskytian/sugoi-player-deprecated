@@ -2,6 +2,8 @@
 #include "sugoilib.h"
 #endif
 
+#include "ui/mainwindow.h"
+
 #include <QFileInfo>
 #include <QMimeDatabase>
 #include <QDir>
@@ -18,7 +20,6 @@
 #include "util.h"
 #include "fileassoc.h"
 #include "mpvtypes.h"
-#include "playbackmanager.h"
 
 QString checkFilePathValidation(const QString &filePath)
 {
@@ -237,30 +238,32 @@ int main(int argc, char *argv[])
     qRegisterMetaType<Mpv::VideoParams>();
     qRegisterMetaType<Mpv::AudioParams>();
     qRegisterMetaType<Mpv::FileInfo>();
-    qRegisterMetaType<Mpv::Renderers>();
 
+    MainWindow mainWindow;
     if (!runInBackground)
     {
-        PlaybackManager::instance()->initMainWindow(false);
-        if (!command.isEmpty())
-        {
-            PlaybackManager::instance()->load(command);
-        }
+        mainWindow.initMainWindow(false);
+        mainWindow.show();
+        mainWindow.openFileFromCmd(command);
     }
     else
     {
-        PlaybackManager::instance()->initMainWindow(true);
+        mainWindow.initMainWindow(true);
+        mainWindow.setWindowOpacity(0.0);
+        mainWindow.hide();
+        mainWindow.setSysTrayIconVisibility(false);
     }
+    SetParent(reinterpret_cast<HWND>(mainWindow.winId()), GetDesktopWindow());
 
     QObject::connect(&instance, &QtSingleApplication::messageReceived,
-                     [=](const QString &message)
+                     [=, &mainWindow](const QString &message)
                      {
                          QString filePath(message);
                          if (message == QString::fromLatin1("exit")
                                  || message == QString::fromLatin1("quit")
                                  || message == QString::fromLatin1("close"))
                          {
-                             PlaybackManager::instance()->closeMainWindow();
+                             mainWindow.close();
                              return;
                          }
                          else if (message == QString::fromLatin1("runinbackground"))
@@ -274,10 +277,8 @@ int main(int argc, char *argv[])
                                  filePath = QString();
                              }
                          }
-                         if (!filePath.isEmpty())
-                         {
-                             PlaybackManager::instance()->load(filePath);
-                         }
+                         mainWindow.BringWindowToFront();
+                         mainWindow.openFileFromCmd(filePath);
                      });
 
     HANDLE mutexHandle = CreateMutex(NULL, FALSE

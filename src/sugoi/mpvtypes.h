@@ -9,16 +9,6 @@
 
 namespace Mpv
 {
-    enum Renderers
-    {
-        Null = -1,
-        GL,
-        Vulkan,
-        D3D,
-        D2D,
-        GDI
-    };
-
     // filetypes supported by mpv: https://github.com/mpv-player/mpv/blob/master/player/external_files.c
     const QStringList audio_filetypes = {"*.mp3","*.ogg","*.wav","*.wma","*.m4a","*.aac","*.ac3","*.ape","*.flac","*.ra","*.mka","*.dts","*.opus"},
                       video_filetypes = {"*.avi","*.divx","*.mpg","*.mpeg","*.m1v","*.m2v","*.mpv","*.dv","*.3gp","*.mov","*.mp4","*.m4v","*.mqv","*.dat","*.vcd","*.ogm","*.ogv","*.asf","*.wmv","*.vob","*.mkv","*.ram","*.flv","*.rm","*.ts","*.rmvb","*.dvr-ms","*.m2t","*.m2ts","*.rec","*.f4v","*.hdmov","*.webm","*.vp8","*.letv","*.hlv"},
@@ -77,7 +67,7 @@ namespace Mpv
     struct FileInfo
     {
         QString media_title;
-        int duration = 0;
+        int length = 0;
         QMap<QString, QString> metadata;
         VideoParams video_params;
         AudioParams audio_params;
@@ -92,6 +82,6 @@ Q_DECLARE_METATYPE(Mpv::Track)
 Q_DECLARE_METATYPE(Mpv::VideoParams)
 Q_DECLARE_METATYPE(Mpv::AudioParams)
 Q_DECLARE_METATYPE(Mpv::FileInfo)
-Q_DECLARE_METATYPE(Mpv::Renderers)
+
 
 #endif // MPVTYPES_H

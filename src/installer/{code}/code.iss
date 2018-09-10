@@ -329,7 +329,7 @@ begin
 #ifndef _WIN64
   if is_platform_windows_7 then
   begin
-    if Is64BitInstallMode then
+    if IsWin64 then
     begin
       if RegKeyExists(HKEY_LOCAL_MACHINE, PRODUCT_REGISTRY_KEY_64) then
       begin
@@ -1036,6 +1036,7 @@ end;
 procedure CurStepChanged(CurStep : TSetupStep);
 var
   ResultCode : integer;
+  NewCmdLine : string;
 begin
   if (CurStep = ssInstall) then
   begin
@@ -1053,14 +1054,8 @@ begin
     release_installer();
     if (WizardSilent() = True) then
     begin
-      if (FileExists(ExpandConstant({localappdata}\{#MyAppPublisher}\{#MyAppName}\update.ui))) then
-      begin
-        DeleteFile(ExpandConstant({localappdata}\{#MyAppPublisher}\{#MyAppName}\update.ui));
-        Exec(ExpandConstant('{app}\{#MyAppExeName}'), '--showchangelog', ExpandConstant('{app}'), SW_SHOW, ewNoWait, ResultCode);
-      end else
-      begin
-        ShellExec('open', ExpandConstant('{app}\Changelog.txt'), '', '', SW_SHOW, ewNoWait, ResultCode);
-      end;
+      NewCmdLine := '--showchangelog' + GetCmdTail();
+      Exec(ExpandConstant('{app}\{#MyAppExeName}'), NewCmdLine, ExpandConstant('{app}'), SW_SHOW, ewNoWait, ResultCode);
     end;
   end;
 end;

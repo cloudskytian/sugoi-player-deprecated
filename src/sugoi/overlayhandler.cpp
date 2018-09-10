@@ -24,7 +24,7 @@
 
 OverlayHandler::OverlayHandler(QObject *parent):
     QObject(parent),
-    sugoi(qobject_cast<SugoiEngine*>(parent)),
+    sugoi(static_cast<SugoiEngine*>(parent)),
     refresh_timer(nullptr),
     min_overlay(1),
     max_overlay(60),
