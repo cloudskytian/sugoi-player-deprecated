@@ -9,11 +9,16 @@ IF NOT EXIST build.user.bat (
 )
 CALL build.user.bat
 IF EXIST bin%_ARCH% RD /S /Q bin%_ARCH%
-CALL "%_QT_DIR%%_ARCH%\bin\qtenv2.bat"
 IF "%_ARCH%" == "" SET "_ARCH=86"
+IF "%_ARCH%" == "86" (
+    CALL "%_QT_DIR_32%\bin\qtenv2.bat"
+) ELSE (
+    CALL "%_QT_DIR_64%\bin\qtenv2.bat"
+)
 CALL "%_VC_BAT_PATH%" x%_ARCH%
 SET "PATH=%_JOM_DIR%;%PATH%"
 CD /D "%~dp0"
+IF EXIST Makefile jom clean
 qmake "sugoi-player.pro" -spec win32-msvc "CONFIG+=release"
 jom qmake_all
 jom && jom install
@@ -32,5 +37,5 @@ IF EXIST "%_QT_DIR%\bin\libssl-1_1.dll" COPY /Y "%_QT_DIR%\bin\libssl-1_1.dll" "
 CD ..
 jom clean
 ENDLOCAL
-IF "%_ARCH%" == "86" CALL "%~dp0build.bat" 64
+IF "%_ARCH%" == "86" CALL "%0" 64
 EXIT /B
