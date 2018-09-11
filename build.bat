@@ -29,7 +29,7 @@ IF "%_ARCH%" == "86" (
     CD bin64
     windeployqt Sugoi64.exe
 )
-DEL /F /S /Q *.lib
+REM DEL /F /S /Q *.lib
 IF "%_ARCH%" == "86" (
     IF EXIST "%_QT_DIR_32%\bin\libeay32.dll" COPY /Y "%_QT_DIR_32%\bin\libeay32.dll" "%CD%\libeay32.dll"
     IF EXIST "%_QT_DIR_32%\bin\ssleay32.dll" COPY /Y "%_QT_DIR_32%\bin\ssleay32.dll" "%CD%\ssleay32.dll"
@@ -38,11 +38,11 @@ IF "%_ARCH%" == "86" (
 ) ELSE (
     IF EXIST "%_QT_DIR_64%\bin\libeay32.dll" COPY /Y "%_QT_DIR_64%\bin\libeay32.dll" "%CD%\libeay32.dll"
     IF EXIST "%_QT_DIR_64%\bin\ssleay32.dll" COPY /Y "%_QT_DIR_64%\bin\ssleay32.dll" "%CD%\ssleay32.dll"
-    IF EXIST "%_QT_DIR_64%\bin\libcrypto-1_1.dll" COPY /Y "%_QT_DIR_64%\bin\libcrypto-1_1.dll" "%CD%\libcrypto-1_1.dll"
-    IF EXIST "%_QT_DIR_64%\bin\libssl-1_1.dll" COPY /Y "%_QT_DIR_64%\bin\libssl-1_1.dll" "%CD%\libssl-1_1.dll"
+    IF EXIST "%_QT_DIR_64%\bin\libcrypto-1_1-x64.dll" COPY /Y "%_QT_DIR_64%\bin\libcrypto-1_1-x64.dll" "%CD%\libcrypto-1_1-x64.dll"
+    IF EXIST "%_QT_DIR_64%\bin\libssl-1_1-x64.dll" COPY /Y "%_QT_DIR_64%\bin\libssl-1_1-x64.dll" "%CD%\libssl-1_1-x64.dll"
 )
 CD ..
 jom clean
-IF "%_ARCH%" == "86" CALL "%0" 64
+IF "%_ARCH%" == "86" CALL "%~dp0build.bat" 64
 ENDLOCAL
 EXIT /B
