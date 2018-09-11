@@ -19,12 +19,12 @@
 
 #include <Windows.h>
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 namespace Util {
 
-bool IsValidUrl(QString url)
+bool IsValidUrl(const QString& url)
 {
     QRegExp rx("^[a-z]{2,}://", Qt::CaseInsensitive); // url
     return (rx.indexIn(url) != -1);
@@ -34,10 +34,10 @@ QString FormatTime(int _time, int _totalTime)
 {
     QTime time = QTime::fromMSecsSinceStartOfDay(_time * 1000);
     if(_totalTime >= 3600) // hours
-        return time.toString("h:mm:ss");
+        return time.toString(QStringLiteral("h:mm:ss"));
     if(_totalTime >= 60)   // minutes
-        return time.toString("mm:ss");
-    return time.toString("0:ss");   // seconds
+        return time.toString(QStringLiteral("mm:ss"));
+    return time.toString(QStringLiteral("0:ss"));   // seconds
 }
 
 QString FormatRelativeTime(int _time)
@@ -45,45 +45,41 @@ QString FormatRelativeTime(int _time)
     QString prefix;
     if(_time < 0)
     {
-        prefix = "-";
+        prefix = QStringLiteral("-");
         _time = -_time;
     }
     else
-        prefix = "+";
+        prefix = QStringLiteral("+");
     QTime time = QTime::fromMSecsSinceStartOfDay(_time * 1000);
     if(_time >= 3600) // hours
-        return prefix+time.toString("h:mm:ss");
+        return prefix+time.toString(QStringLiteral("h:mm:ss"));
     if(_time >= 60)   // minutes
-        return prefix+time.toString("mm:ss");
-    return prefix+time.toString("0:ss");   // seconds
+        return prefix+time.toString(QStringLiteral("mm:ss"));
+    return prefix+time.toString(QStringLiteral("0:ss"));   // seconds
 }
 
 QString FormatNumber(int val, int length)
 {
     if(length < 10)
         return QString::number(val);
-    else if(length < 100)
-        return QString("%1").arg(val, 2, 10, QChar('0'));
-    else
-        return QString("%1").arg(val, 3, 10, QChar('0'));
+    if(length < 100)
+        return QStringLiteral("%1").arg(val, 2, 10, QChar('0'));
+    return QStringLiteral("%1").arg(val, 3, 10, QChar('0'));
 }
 
 QString FormatNumberWithAmpersand(int val, int length)
 {
     if(length < 10)
         return "&"+QString::number(val);
-    else if(length < 100)
+    if(length < 100)
     {
         if(val < 10)
             return "0&"+QString::number(val);
-        return QString("%1").arg(val, 2, 10, QChar('0'));
+        return QStringLiteral("%1").arg(val, 2, 10, QChar('0'));
     }
-    else
-    {
-        if(val < 10)
-            return "00&"+QString::number(val);
-        return QString("%1").arg(val, 3, 10, QChar('0'));
-    }
+    if(val < 10)
+        return "00&"+QString::number(val);
+    return QStringLiteral("%1").arg(val, 3, 10, QChar('0'));
 }
 
 QString HumanSize(qint64 size)
@@ -91,10 +87,10 @@ QString HumanSize(qint64 size)
     // taken from http://comments.gmane.org/gmane.comp.lib.qt.general/34914
     float num = size;
     QStringList list;
-    list << "KB" << "MB" << "GB" << "TB";
+    list << QStringLiteral("KB") << QStringLiteral("MB") << QStringLiteral("GB") << QStringLiteral("TB");
 
     QStringListIterator i(list);
-    QString unit("bytes");
+    QString unit(QStringLiteral("bytes"));
 
     while(num >= 1024.0 && i.hasNext())
      {
@@ -108,7 +104,7 @@ QString ShortenPathToParent(const Recent &recent)
 {
     const int long_name = 100;
     if(recent.title != QString())
-        return QString("%0 (%1)").arg(recent.title, recent.path);
+        return QStringLiteral("%0 (%1)").arg(recent.title, recent.path);
     QString p = QDir::fromNativeSeparators(recent.path);
     int i = p.lastIndexOf('/');
     if(i != -1)
@@ -122,13 +118,13 @@ QString ShortenPathToParent(const Recent &recent)
             if(parent.length() > long_name)
             {
                 parent.truncate(long_name);
-                parent += "..";
+                parent += QLatin1String("..");
             }
             if(file.length() > long_name)
             {
                 file.truncate(long_name);
                 i = p.lastIndexOf('.');
-                file += "..";
+                file += QLatin1String("..");
                 if(i != -1)
                 {
                     QString ext = p.mid(i);
@@ -142,10 +138,10 @@ QString ShortenPathToParent(const Recent &recent)
     return QDir::toNativeSeparators(recent.path);
 }
 
-QStringList ToNativeSeparators(QStringList list)
+QStringList ToNativeSeparators(const QStringList& list)
 {
     QStringList ret;
-    for(auto element : list)
+    for(const auto& element : list)
     {
         if(Util::IsValidLocation(element))
             ret.push_back(element);
@@ -155,10 +151,10 @@ QStringList ToNativeSeparators(QStringList list)
     return ret;
 }
 
-QStringList FromNativeSeparators(QStringList list)
+QStringList FromNativeSeparators(const QStringList& list)
 {
     QStringList ret;
-    for(auto element : list)
+    for(const auto& element : list)
         ret.push_back(QDir::fromNativeSeparators(element));
     return ret;
 }
@@ -194,8 +190,8 @@ QString Ratio(int w, int h)
 {
     int gcd=GCD(w, h);
     if(gcd == 0)
-        return "0:0";
-    return QString("%0:%1").arg(QString::number(w/gcd), QString::number(h/gcd));
+        return QStringLiteral("0:0");
+    return QStringLiteral("%0:%1").arg(QString::number(w/gcd), QString::number(h/gcd));
 }
 
 bool DimLightsSupported()
@@ -211,85 +207,85 @@ void SetAlwaysOnTop(QWidget *window, bool ontop)
 
 QString SettingsLocation()
 {
-    QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + QDir::separator() + QString::fromLatin1("config.ini");
+    QString configPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + QDir::separator() + QStringLiteral("config.ini");
     return QDir::toNativeSeparators(configPath);
 }
 
-bool IsValidFile(QString path)
+bool IsValidFile(const QString& path)
 {
-    QRegExp rx("^(\\.{1,2}|[a-z]:|\\\\\\\\)", Qt::CaseInsensitive); // relative path, network location, drive
+    QRegExp rx(R"(^(\.{1,2}|[a-z]:|\\\\))", Qt::CaseInsensitive); // relative path, network location, drive
     return (rx.indexIn(path) != -1);
 }
 
-bool IsValidLocation(QString loc)
+bool IsValidLocation(const QString& loc)
 {
-    QRegExp rx("^([a-z]{2,}://|\\.{1,2}|[a-z]:|\\\\\\\\)", Qt::CaseInsensitive); // url, relative path, network location, drive
+    QRegExp rx(R"(^([a-z]{2,}://|\.{1,2}|[a-z]:|\\\\))", Qt::CaseInsensitive); // url, relative path, network location, drive
     return (rx.indexIn(loc) != -1);
 }
 
-void ShowInFolder(QString path, QString file)
+void ShowInFolder(const QString& path, const QString& file)
 {
-    QProcess::startDetached("explorer.exe", QStringList{"/select,", path+file});
+    QProcess::startDetached(QStringLiteral("explorer.exe"), QStringList{"/select,", path+file});
 }
 
 QString MonospaceFont()
 {
-    return "Lucida Console";
+    return QStringLiteral("Lucida Console");
 }
 
 QStringList supportedMimeTypes()
 {
-    return (QStringList() << QString::fromLatin1("audio/ac3")
-            << QString::fromLatin1("audio/eac3")
-            << QString::fromLatin1("audio/vnd.dolby.mlp")
-            << QString::fromLatin1("audio/vnd.dts")
-            << QString::fromLatin1("audio/vnd.dts.hd")
-            << QString::fromLatin1("audio/wav")
-            << QString::fromLatin1("audio/aiff")
-            << QString::fromLatin1("audio/amr")
-            << QString::fromLatin1("audio/amr-wb")
-            << QString::fromLatin1("audio/basic")
-            << QString::fromLatin1("audio/x-ape")
-            << QString::fromLatin1("audio/x-wavpack")
-            << QString::fromLatin1("audio/x-shorten")
-            << QString::fromLatin1("video/vnd.dlna.mpeg-tts")
-            << QString::fromLatin1("audio/vnd.dlna.adts")
-            << QString::fromLatin1("audio/mpeg")
-            << QString::fromLatin1("video/mpeg")
-            << QString::fromLatin1("video/dvd")
-            << QString::fromLatin1("video/mp4")
-            << QString::fromLatin1("audio/mp4")
-            << QString::fromLatin1("audio/aac")
-            << QString::fromLatin1("audio/flac")
-            << QString::fromLatin1("audio/ogg")
-            << QString::fromLatin1("video/ogg")
-            << QString::fromLatin1("application/ogg")
-            << QString::fromLatin1("video/x-matroska")
-            << QString::fromLatin1("audio/x-matroska")
-            << QString::fromLatin1("video/webm")
-            << QString::fromLatin1("audio/webm")
-            << QString::fromLatin1("video/avi")
-            << QString::fromLatin1("video/x-msvideo")
-            << QString::fromLatin1("video/flc")
-            << QString::fromLatin1("application/gxf")
-            << QString::fromLatin1("application/mxf")
-            << QString::fromLatin1("audio/x-ms-wma")
-            << QString::fromLatin1("video/x-ms-wm")
-            << QString::fromLatin1("video/x-ms-wmv")
-            << QString::fromLatin1("video/x-ms-asf")
-            << QString::fromLatin1("video/x-flv")
-            << QString::fromLatin1("video/mp4")
-            << QString::fromLatin1("audio/mp4")
-            << QString::fromLatin1("video/quicktime")
-            << QString::fromLatin1("application/vnd.rn-realmedia")
-            << QString::fromLatin1("application/vnd.rn-realmedia-vbr")
-            << QString::fromLatin1("audio/vnd.rn-realaudio")
-            << QString::fromLatin1("audio/3gpp")
-            << QString::fromLatin1("audio/3gpp2")
-            << QString::fromLatin1("video/3gpp")
-            << QString::fromLatin1("video/3gpp2")
-            << QString::fromLatin1("audio/x-mpegurl")
-            << QString::fromLatin1("audio/x-scpls"));
+    return (QStringList() << QStringLiteral("audio/ac3")
+            << QStringLiteral("audio/eac3")
+            << QStringLiteral("audio/vnd.dolby.mlp")
+            << QStringLiteral("audio/vnd.dts")
+            << QStringLiteral("audio/vnd.dts.hd")
+            << QStringLiteral("audio/wav")
+            << QStringLiteral("audio/aiff")
+            << QStringLiteral("audio/amr")
+            << QStringLiteral("audio/amr-wb")
+            << QStringLiteral("audio/basic")
+            << QStringLiteral("audio/x-ape")
+            << QStringLiteral("audio/x-wavpack")
+            << QStringLiteral("audio/x-shorten")
+            << QStringLiteral("video/vnd.dlna.mpeg-tts")
+            << QStringLiteral("audio/vnd.dlna.adts")
+            << QStringLiteral("audio/mpeg")
+            << QStringLiteral("video/mpeg")
+            << QStringLiteral("video/dvd")
+            << QStringLiteral("video/mp4")
+            << QStringLiteral("audio/mp4")
+            << QStringLiteral("audio/aac")
+            << QStringLiteral("audio/flac")
+            << QStringLiteral("audio/ogg")
+            << QStringLiteral("video/ogg")
+            << QStringLiteral("application/ogg")
+            << QStringLiteral("video/x-matroska")
+            << QStringLiteral("audio/x-matroska")
+            << QStringLiteral("video/webm")
+            << QStringLiteral("audio/webm")
+            << QStringLiteral("video/avi")
+            << QStringLiteral("video/x-msvideo")
+            << QStringLiteral("video/flc")
+            << QStringLiteral("application/gxf")
+            << QStringLiteral("application/mxf")
+            << QStringLiteral("audio/x-ms-wma")
+            << QStringLiteral("video/x-ms-wm")
+            << QStringLiteral("video/x-ms-wmv")
+            << QStringLiteral("video/x-ms-asf")
+            << QStringLiteral("video/x-flv")
+            << QStringLiteral("video/mp4")
+            << QStringLiteral("audio/mp4")
+            << QStringLiteral("video/quicktime")
+            << QStringLiteral("application/vnd.rn-realmedia")
+            << QStringLiteral("application/vnd.rn-realmedia-vbr")
+            << QStringLiteral("audio/vnd.rn-realaudio")
+            << QStringLiteral("audio/3gpp")
+            << QStringLiteral("audio/3gpp2")
+            << QStringLiteral("video/3gpp")
+            << QStringLiteral("video/3gpp2")
+            << QStringLiteral("audio/x-mpegurl")
+            << QStringLiteral("audio/x-scpls"));
 }
 
 QStringList supportedSuffixes()
@@ -302,7 +298,7 @@ QStringList supportedSuffixes()
         const QStringList mSuffixes = mMimeDatabase.mimeTypeForName(mFileType).suffixes();
         for (QString mSuffix : mSuffixes)
         {
-            mSuffix.prepend(QString::fromLatin1("*."));
+            mSuffix.prepend(QLatin1String("*."));
             mSupportedSuffixes << mSuffix;
         }
     }
@@ -364,7 +360,7 @@ QStringList externalFilesToLoad(const QFileInfo &originalMediaFile, const QStrin
     QStringList newFileList;
     for (int i = 0; i < fileCount; ++i)
     {
-        QFileInfo fi(fileList.at(i));
+        const QFileInfo& fi(fileList.at(i));
         if (fi.absoluteFilePath() == originalMediaFile.absoluteFilePath())
         {
             continue;
@@ -372,19 +368,19 @@ QStringList externalFilesToLoad(const QFileInfo &originalMediaFile, const QStrin
         const QString newBaseName = fi.baseName().toLower();
         if (newBaseName == fileBaseName)
         {
-            if (fileType.toLower() == QString::fromLatin1("sub"))
+            if (fileType.toLower() == QLatin1String("sub"))
             {
-                if (fi.suffix().toLower() == QString::fromLatin1("ass")
-                        || fi.suffix().toLower() == QString::fromLatin1("ssa")
-                        || fi.suffix().toLower() == QString::fromLatin1("srt")
-                        || fi.suffix().toLower() == QString::fromLatin1("sup"))
+                if (fi.suffix().toLower() == QLatin1String("ass")
+                        || fi.suffix().toLower() == QLatin1String("ssa")
+                        || fi.suffix().toLower() == QLatin1String("srt")
+                        || fi.suffix().toLower() == QLatin1String("sup"))
                 {
                     newFileList.append(QDir::toNativeSeparators(fi.absoluteFilePath()));
                 }
             }
-            else if (fileType.toLower() == QString::fromLatin1("audio"))
+            else if (fileType.toLower() == QLatin1String("audio"))
             {
-                if (fi.suffix().toLower() == QString::fromLatin1("mka"))
+                if (fi.suffix().toLower() == QLatin1String("mka"))
                 {
                     newFileList.append(QDir::toNativeSeparators(fi.absoluteFilePath()));
                 }
@@ -398,9 +394,9 @@ QString LogFileLocation()
 {
     QString logPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + QDir::separator();
 #ifdef Q_OS_WIN64
-    logPath += QString::fromLatin1("debug64.log");
+    logPath += QLatin1String("debug64.log");
 #else
-    logPath += QString::fromLatin1("debug.log");
+    logPath += QLatin1String("debug.log");
 #endif
     return QDir::toNativeSeparators(logPath);
 }
@@ -414,43 +410,43 @@ void messagesOutputToFile(QtMsgType type, const QMessageLogContext &context, con
     switch (type)
     {
     case QtDebugMsg:
-        msgType = QLatin1String("DEBUG");
+        msgType = QStringLiteral("DEBUG");
         break;
     case QtInfoMsg:
-        msgType = QLatin1String("INFORMATION");
+        msgType = QStringLiteral("INFORMATION");
         break;
     case QtWarningMsg:
-        msgType = QLatin1String("WARNING");
+        msgType = QStringLiteral("WARNING");
         break;
     case QtCriticalMsg:
-        msgType = QLatin1String("CRITICAL");
+        msgType = QStringLiteral("CRITICAL");
         break;
     case QtFatalMsg:
-        msgType = QLatin1String("FATAL");
+        msgType = QStringLiteral("FATAL");
         break;
     /*case QtSystemMsg:
-        msgType = QLatin1String("SYSTEM");
+        msgType = QStringLiteral("SYSTEM");
         break;*/
     default:
-        msgType = QLatin1String("DEBUG");
+        msgType = QStringLiteral("DEBUG");
         break;
     }
 
-    QString dateTimeStr = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ddd");
-    QString messageStr = QString("[%1] | Message: %2 | File: %3 | Line: %4 | Function: %5 | DateTime: %6 ;")
+    QString dateTimeStr = QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm:ss ddd"));
+    QString messageStr = QStringLiteral("[%1] | Message: %2 | File: %3 | Line: %4 | Function: %5 | DateTime: %6 ;")
                 .arg(msgType).arg(msg).arg(context.file).arg(context.line).arg(context.function).arg(dateTimeStr);
 
     QFile file(LogFileLocation());
     file.open(QFile::WriteOnly | QFile::Append | QFile::Text);
     QTextStream ts(&file);
-    ts << messageStr << "\r\n";
+    ts << messageStr << "\n";
     file.flush();
     file.close();
 
     mutex.unlock();
 
 #ifdef _DEBUG
-    fprintf_s(stderr, "%s\r\n", messageStr.toLocal8Bit().constData());
+    fprintf_s(stderr, "%s\n", messageStr.toLocal8Bit().constData());
 #endif
 }
 
@@ -463,13 +459,13 @@ bool setAutoStart(const QString &path, const QString &param)
     {
         return false;
     }
-    const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+    const QString key = QStringLiteral(R"(HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run)");
     QSettings settings(key, QSettings::NativeFormat);
     if (settings.status() != QSettings::NoError)
     {
         return false;
     }
-    QString value = QLatin1Char('"') + path + QString::fromLatin1("\" ") + param;
+    QString value = QLatin1Char('"') + path + QStringLiteral("\" ") + param;
     settings.setValue(QApplication::applicationDisplayName(), QDir::toNativeSeparators(value.trimmed()));
     return true;
 }
@@ -479,13 +475,9 @@ bool isAutoStart()
 #ifdef _DEBUG
     return true;
 #endif
-    const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+    const QString key = QStringLiteral(R"(HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run)");
     QSettings settings(key, QSettings::NativeFormat);
-    if (settings.contains(QApplication::applicationDisplayName()))
-    {
-        return true;
-    }
-    return false;
+    return settings.contains(QApplication::applicationDisplayName());
 }
 
 bool disableAutoStart()
@@ -493,18 +485,18 @@ bool disableAutoStart()
 #ifdef _DEBUG
     return true;
 #endif
-    const QString key = QString::fromLatin1("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+    const QString key = QStringLiteral(R"(HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run)");
     QSettings settings(key, QSettings::NativeFormat);
     if (settings.contains(QApplication::applicationDisplayName()))
     {
         settings.remove(QApplication::applicationDisplayName());
     }
 #ifdef Q_OS_WIN64
-    QString cmd = QString::fromLatin1("SugoiGuard64.exe");
+    QString cmd = QStringLiteral("SugoiGuard64.exe");
 #else
-    QString cmd = QString::fromLatin1("SugoiGuard.exe");
+    QString cmd = QStringLiteral("SugoiGuard.exe");
 #endif
-    cmd = QString::fromLatin1("TASKKILL /F /IM \"") + cmd + QLatin1Char('"');
+    cmd = QStringLiteral("TASKKILL /F /IM \"") + cmd + QLatin1Char('"');
     QProcess::execute(cmd);
     return true;
 }

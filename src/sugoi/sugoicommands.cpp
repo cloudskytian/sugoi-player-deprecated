@@ -39,7 +39,7 @@ void SugoiEngine::SugoiSh(QStringList &args)
     {
         QString arg = args.front();
         args.pop_front();
-        QProcess *p = new QProcess(this);
+        auto *p = new QProcess(this);
         p->start(arg, args);
         connect(p, &QProcess::readyRead,
                 [=]
@@ -101,7 +101,7 @@ void SugoiEngine::SugoiAddSubtitles(QStringList &args)
     {
         trackFile = QFileDialog::getOpenFileName(window, tr("Open Subtitle File"), mpv->getPath(),
                                                  QString("%0 (%1)").arg(tr("Subtitle Files"), Mpv::subtitle_filetypes.join(" ")),
-                                                 0, QFileDialog::DontUseSheet);
+                                                 nullptr, QFileDialog::DontUseSheet);
     }
     else
         trackFile = args.join(' ');
@@ -116,7 +116,7 @@ void SugoiEngine::SugoiAddAudio(QStringList &args)
     {
         trackFile = QFileDialog::getOpenFileName(window, tr("Open Audio File"), mpv->getPath(),
                                                  QString("%0 (%1)").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" ")),
-                                                 0, QFileDialog::DontUseSheet);
+                                                 nullptr, QFileDialog::DontUseSheet);
     }
     else
         trackFile = args.join(' ');
@@ -398,7 +398,7 @@ void SugoiEngine::Open()
                    QString("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(" "))+
                    QString("%0 (%1);;").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" "))+
                    QString("%0 (*.*)").arg(tr("All Files")),
-                   0, QFileDialog::DontUseSheet));
+                   nullptr, QFileDialog::DontUseSheet));
 }
 
 
@@ -692,7 +692,7 @@ void SugoiEngine::SugoiMsgLevel(QStringList &args)
         RequiresParameters("msg_level");
 }
 
-void SugoiEngine::About(QString what)
+void SugoiEngine::About(const QString& what)
 {
     if(what == QString())
         AboutDialog::about(window);

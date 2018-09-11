@@ -29,15 +29,15 @@ QString SnapDirLocation();
 
 void messagesOutputToFile(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
-bool IsValidFile(QString path);
-bool IsValidLocation(QString loc); // combined file and url
+bool IsValidFile(const QString& path);
+bool IsValidLocation(const QString& loc); // combined file and url
 
-void ShowInFolder(QString path, QString file);
+void ShowInFolder(const QString& path, const QString& file);
 
 QString MonospaceFont();
 
 // common
-bool IsValidUrl(QString url);
+bool IsValidUrl(const QString& url);
 
 QString FormatTime(int time, int totalTime);
 QString FormatRelativeTime(int time);
@@ -45,8 +45,8 @@ QString FormatNumber(int val, int length);
 QString FormatNumberWithAmpersand(int val, int length);
 QString HumanSize(qint64);
 QString ShortenPathToParent(const Recent &recent);
-QStringList ToNativeSeparators(QStringList list);
-QStringList FromNativeSeparators(QStringList list);
+QStringList ToNativeSeparators(const QStringList &list);
+QStringList FromNativeSeparators(const QStringList &list);
 int GCD(int v, int u);
 QString Ratio(int w, int h);
 

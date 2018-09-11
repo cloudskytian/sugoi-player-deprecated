@@ -17,9 +17,7 @@ SugoiEngine::SugoiEngine(QObject *parent):
     window(static_cast<MainWindow*>(parent)),
     mpv(window->ui->mpvFrame),
     overlay(new OverlayHandler(this)),
-    sysTrayIcon(new QSystemTrayIcon(QIcon(":/images/player.svg"), this)),
-    translator(nullptr),
-    qtTranslator(nullptr)
+    sysTrayIcon(new QSystemTrayIcon(QIcon(":/images/player.svg"), this))
 {
     if(Util::DimLightsSupported())
         dimDialog = new DimDialog(window, nullptr);
@@ -38,23 +36,14 @@ SugoiEngine::SugoiEngine(QObject *parent):
 
 SugoiEngine::~SugoiEngine()
 {
-    if (translator != nullptr)
-    {
-        delete translator;
-    }
-    if (qtTranslator != nullptr)
-    {
-        delete qtTranslator;
-    }
-    if (dimDialog != nullptr)
-    {
-        delete dimDialog;
-    }
+    delete translator;
+    delete qtTranslator;
+    delete dimDialog;
     delete sysTrayIcon;
     delete overlay;
 }
 
-void SugoiEngine::Command(QString command)
+void SugoiEngine::Command(const QString& command)
 {
     if(command == QString())
         return;
@@ -82,7 +71,7 @@ void SugoiEngine::Command(QString command)
         InvalidCommand(args.join(' '));
 }
 
-void SugoiEngine::Print(QString what, QString who)
+void SugoiEngine::Print(const QString& what, const QString& who)
 {
     QString out = QString("[%0]: %1").arg(who, what);
     (qStdout() << out).flush();
@@ -90,22 +79,22 @@ void SugoiEngine::Print(QString what, QString who)
     window->ui->outputTextEdit->insertPlainText(out);
 }
 
-void SugoiEngine::PrintLn(QString what, QString who)
+void SugoiEngine::PrintLn(const QString& what, const QString& who)
 {
     Print(what+"\n", who);
 }
 
-void SugoiEngine::InvalidCommand(QString command)
+void SugoiEngine::InvalidCommand(const QString& command)
 {
     PrintLn(tr("invalid command '%0'").arg(command));
 }
 
-void SugoiEngine::InvalidParameter(QString parameter)
+void SugoiEngine::InvalidParameter(const QString& parameter)
 {
     PrintLn(tr("invalid parameter '%0'").arg(parameter));
 }
 
-void SugoiEngine::RequiresParameters(QString what)
+void SugoiEngine::RequiresParameters(const QString& what)
 {
     PrintLn(tr("'%0' requires parameters").arg(what));
 }

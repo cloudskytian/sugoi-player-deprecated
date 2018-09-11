@@ -194,7 +194,7 @@ bool FileAssoc::update_extension(const QString &extension, const QString &prog_i
     // Add type to SupportedTypes
     const QString filePath = QCoreApplication::applicationFilePath();
     const QString fileName = QFileInfo(filePath).fileName();
-    const QString key2 = QStringLiteral("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\Applications\\") + fileName + ("\\SupportedTypes");
+    const QString key2 = QStringLiteral("HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\Applications\\") + fileName + QStringLiteral("\\SupportedTypes");
     QSettings settings2(key2, QSettings::NativeFormat);
     if (settings2.status() != QSettings::NoError)
     {

@@ -90,15 +90,15 @@ public slots:
     void LoadSettings();
     void SaveSettings();
 
-    void Command(QString command);
+    void Command(const QString& command);
 
 protected slots:
     // Utility functions
-    void Print(QString what, QString who = QStringLiteral("Sugoi"));
-    void PrintLn(QString what, QString who = QStringLiteral("Sugoi"));
-    void InvalidCommand(QString);
-    void InvalidParameter(QString);
-    void RequiresParameters(QString);
+    void Print(const QString& what, const QString& who = QStringLiteral("Sugoi"));
+    void PrintLn(const QString& what, const QString& who = QStringLiteral("Sugoi"));
+    void InvalidCommand(const QString&);
+    void InvalidParameter(const QString&);
+    void RequiresParameters(const QString&);
 
 signals:
 
@@ -483,7 +483,7 @@ public:
     void Jump();
     void FitWindow(int percent = 0, bool msg = true);
     void Dim(bool dim);
-    void About(QString what = QString());
+    void About(const QString& what = QString());
     void Quit();
 };
 

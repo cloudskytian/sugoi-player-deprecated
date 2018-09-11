@@ -1,6 +1,11 @@
-![logo](/src/sugoi/resources/player.svg)
+<h1 align="center">
+  <a href="https://github.com/wangwenx190/sugoi-player-deprecated"><img src="src/sugoi/resources/player.svg" alt="Sugoi Player" width="256" height="256"/></a><br>
+  <a href="https://github.com/wangwenx190/sugoi-player-deprecated">Sugoi Player</a>
+</h1>
 
-## Sugoi Player
+<p align="center"><em>(forked from "Baka-MPlayer")</em></p>
+
+<h4 align="center">A free multimedia player for Windows based on libmpv and Qt</h4>
 
 [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/wangwenx190/sugoi-player?branch=master&svg=true)](https://ci.appveyor.com/project/wangwenx190/sugoi-player)
 [![Github All Releases](https://img.shields.io/github/downloads/wangwenx190/Sugoi-Player/total.svg)](https://github.com/wangwenx190/Sugoi-Player/releases/latest)
