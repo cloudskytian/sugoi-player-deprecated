@@ -14,10 +14,10 @@ class ScreenshotDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ScreenshotDialog(bool &always, bool &screenshot, MpvWidget *mpv, QWidget *parent = 0);
-    ~ScreenshotDialog();
+    explicit ScreenshotDialog(bool &always, bool &screenshot, MpvWidget *mpv, QWidget *parent = nullptr);
+    ~ScreenshotDialog() override;
 
-    static int showScreenshotDialog(bool &always, bool &screenshot, MpvWidget *mpv, QWidget *parent = 0);
+    static int showScreenshotDialog(bool &always, bool &screenshot, MpvWidget *mpv, QWidget *parent = nullptr);
 private:
     Ui::ScreenshotDialog *ui;
     bool &always,

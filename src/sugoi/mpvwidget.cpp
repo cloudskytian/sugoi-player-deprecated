@@ -1,4 +1,8 @@
-﻿#include "mpvwidget.h"
+﻿#include <utility>
+
+#include <utility>
+
+#include "mpvwidget.h"
 
 #include <stdexcept>
 
@@ -38,11 +42,11 @@ MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f, SugoiEngine *se) : QOpe
         throw std::runtime_error("could not create mpv context");
     }
 
-    setOption(QLatin1String("input-default-bindings"), QLatin1String("no")); // disable mpv default key bindings
-    setOption(QLatin1String("input-vo-keyboard"), QLatin1String("no")); // disable keyboard input on the X11 window
-    setOption(QLatin1String("input-cursor"), QLatin1String("no")); // no mouse handling
-    setOption(QLatin1String("cursor-autohide"), QLatin1String("no")); // no cursor-autohide, we handle that
-    setOption(QLatin1String("ytdl"), QLatin1String("yes")); // youtube-dl support
+    setOption(QStringLiteral("input-default-bindings"), QStringLiteral("no")); // disable mpv default key bindings
+    setOption(QStringLiteral("input-vo-keyboard"), QStringLiteral("no")); // disable keyboard input on the X11 window
+    setOption(QStringLiteral("input-cursor"), QStringLiteral("no")); // no mouse handling
+    setOption(QStringLiteral("cursor-autohide"), QStringLiteral("no")); // no cursor-autohide, we handle that
+    setOption(QStringLiteral("ytdl"), QStringLiteral("yes")); // youtube-dl support
 
     if (mpv_initialize(mpv) < 0)
     {
@@ -50,7 +54,7 @@ MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f, SugoiEngine *se) : QOpe
     }
 
     // Make use of the MPV_SUB_API_OPENGL_CB API.
-    setOption(QLatin1String("vo"), QLatin1String("opengl-cb"));
+    setOption(QStringLiteral("vo"), QStringLiteral("opengl-cb"));
 
     mpv_gl = (mpv_opengl_cb_context *)mpv_get_sub_api(mpv, MPV_SUB_API_OPENGL_CB);
     if (!mpv_gl)
@@ -85,7 +89,7 @@ MpvWidget::~MpvWidget()
 {
     makeCurrent();
     if (mpv_gl)
-        mpv_opengl_cb_set_update_callback(mpv_gl, NULL, NULL);
+        mpv_opengl_cb_set_update_callback(mpv_gl, nullptr, nullptr);
     // Until this call is done, we need to make sure the player remains
     // alive. This is done implicitly with the mpv::qt::Handle instance
     // in this class.
@@ -114,7 +118,7 @@ QVariant MpvWidget::getProperty(const QString &name) const
 
 void MpvWidget::initializeGL()
 {
-    int r = mpv_opengl_cb_init_gl(mpv_gl, NULL, get_proc_address, NULL);
+    int r = mpv_opengl_cb_init_gl(mpv_gl, nullptr, get_proc_address, nullptr);
     if (r < 0)
         throw std::runtime_error("could not initialize OpenGL");
 }
@@ -148,7 +152,7 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
     {
     case MPV_EVENT_PROPERTY_CHANGE:
     {
-        mpv_event_property *prop = (mpv_event_property*)event->data;
+        auto *prop = (mpv_event_property*)event->data;
         if(QString(prop->name) == "playback-time") // playback-time does the same thing as time-pos but works for streaming media
         {
             if(prop->format == MPV_FORMAT_DOUBLE)
@@ -223,8 +227,8 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
     {
         // Retrieve the new video size.
         int vw = 0, vh = 0;
-        vw = getProperty(QLatin1String("width")).toInt();
-        vh = getProperty(QLatin1String("height")).toInt();
+        vw = getProperty(QStringLiteral("width")).toInt();
+        vh = getProperty(QStringLiteral("height")).toInt();
         if (vw > 10 && vh > 10)
         {
             if (vw != videoWidth || vh != videoHeight)
@@ -264,7 +268,7 @@ void MpvWidget::handle_mpv_event(mpv_event *event)
         break;
     case MPV_EVENT_LOG_MESSAGE:
     {
-        mpv_event_log_message *message = static_cast<mpv_event_log_message*>(event->data);
+        auto *message = static_cast<mpv_event_log_message*>(event->data);
         if(message != nullptr)
             Q_EMIT messageSignal(message->text);
         break;
@@ -306,13 +310,13 @@ QString MpvWidget::getMediaInfo()
 
     double avsync, fps, vbitrate, abitrate;
 
-    avsync = getProperty(QLatin1String("avsync")).toDouble();
-    fps = getProperty(QLatin1String("estimated-vf-fps")).toDouble();
-    vbitrate = getProperty(QLatin1String("video-bitrate")).toDouble();
-    abitrate = getProperty(QLatin1String("audio-bitrate")).toDouble();
-    QString current_vo = getProperty(QLatin1String("current-vo")).toString(),
-            current_ao = getProperty(QLatin1String("current-ao")).toString(),
-            hwdec_active = getProperty(QLatin1String("hwdec-active")).toString();
+    avsync = getProperty(QStringLiteral("avsync")).toDouble();
+    fps = getProperty(QStringLiteral("estimated-vf-fps")).toDouble();
+    vbitrate = getProperty(QStringLiteral("video-bitrate")).toDouble();
+    abitrate = getProperty(QStringLiteral("audio-bitrate")).toDouble();
+    QString current_vo = getProperty(QStringLiteral("current-vo")).toString(),
+            current_ao = getProperty(QStringLiteral("current-ao")).toString(),
+            hwdec_active = getProperty(QStringLiteral("hwdec-active")).toString();
 
     int vtracks = 0,
         atracks = 0;
@@ -357,7 +361,7 @@ QString MpvWidget::getMediaInfo()
         out += '\n';
     }
 
-    if(fileInfo.metadata.size() > 0)
+    if(!fileInfo.metadata.empty())
     {
         out += outer.arg(tr("Metadata"), QString());
         for(auto data = fileInfo.metadata.begin(); data != fileInfo.metadata.end(); ++data)
@@ -368,17 +372,17 @@ QString MpvWidget::getMediaInfo()
     return out;
 }
 
-void MpvWidget::AddOverlay(int id, int x, int y, QString file, int offset, int w, int h)
+void MpvWidget::AddOverlay(int id, int x, int y, const QString& file, int offset, int w, int h)
 {
-    command(QVariantList() << QLatin1String("overlay_add") << id << x << y << file << offset << QLatin1String("bgra") << w << h << w * 4);
+    command(QVariantList() << QStringLiteral("overlay_add") << id << x << y << file << offset << QStringLiteral("bgra") << w << h << w * 4);
 }
 
 void MpvWidget::RemoveOverlay(int id)
 {
-    command(QVariantList() << QLatin1String("overlay_remove") << id);
+    command(QVariantList() << QStringLiteral("overlay_remove") << id);
 }
 
-bool MpvWidget::FileExists(QString f)
+bool MpvWidget::FileExists(const QString& f)
 {
     if(Util::IsValidUrl(f)) // web url
         return true;
@@ -396,7 +400,7 @@ void MpvWidget::SetEngine(SugoiEngine *engine)
 
 void MpvWidget::LoadFile(QString f)
 {
-    PlayFile(LoadPlaylist(f));
+    PlayFile(LoadPlaylist(std::move(f)));
 }
 
 QString MpvWidget::LoadPlaylist(QString f)
@@ -422,12 +426,12 @@ QString MpvWidget::LoadPlaylist(QString f)
             ShowText(tr("File does not exist")); // tell the user
             return QString(); // don't do anything more
         }
-        else if(fi.isDir()) // if directory
+         if(fi.isDir()) // if directory
         {
             setPath(QDir::toNativeSeparators(fi.absoluteFilePath() + '/')); // set new path
             return PopulatePlaylist();
         }
-        else if(fi.isFile()) // if file
+         if(fi.isFile()) // if file
         {
             setPath(QDir::toNativeSeparators(fi.absolutePath() + '/')); // set new path
             PopulatePlaylist();
@@ -437,7 +441,7 @@ QString MpvWidget::LoadPlaylist(QString f)
     return f;
 }
 
-bool MpvWidget::PlayFile(QString f)
+bool MpvWidget::PlayFile(const QString& f)
 {
     if(f == QString()) // ignore if file doesn't exist
         return false;
@@ -486,7 +490,7 @@ void MpvWidget::Play()
 {
     if(playState > 0 && mpv)
     {
-        setProperty(QLatin1String("pause"), false);
+        setProperty(QStringLiteral("pause"), false);
     }
 }
 
@@ -494,7 +498,7 @@ void MpvWidget::Pause()
 {
     if(playState > 0 && mpv)
     {
-        setProperty(QLatin1String("pause"), true);
+        setProperty(QStringLiteral("pause"), true);
     }
 }
 
@@ -502,16 +506,16 @@ void MpvWidget::Stop()
 {
     Restart();
     Pause();
-    //command(QLatin1String("stop"));
+    //command(QStringLiteral("stop"));
 }
 
-void MpvWidget::PlayPause(QString fileIfStopped)
+void MpvWidget::PlayPause(const QString& fileIfStopped)
 {
     if(playState < 0) // not playing, play plays the selected playlist file
         PlayFile(fileIfStopped);
     else
     {
-        command(QStringList() << QLatin1String("cycle") << QLatin1String("pause"));
+        command(QStringList() << QStringLiteral("cycle") << QStringLiteral("pause"));
     }
 }
 
@@ -541,7 +545,7 @@ void MpvWidget::Mute(bool m)
 {
     if(playState > 0)
     {
-        setProperty(QLatin1String("ao-mute"), QLatin1String(m ? "yes" : "no"));
+        setProperty(QStringLiteral("ao-mute"), m ? "yes" : "no");
     }
     else
         setMute(m);
@@ -551,7 +555,7 @@ void MpvWidget::Hwdec(bool h, bool osd)
 {
     if (playState > 0)
     {
-        setProperty(QLatin1String("hwdec"), QLatin1String(h ? "auto" : "no"));
+        setProperty(QStringLiteral("hwdec"), h ? "auto" : "no");
         if(osd)
         {
             ShowText(QString::fromLatin1("%1: %2").arg(tr("Hardware decoding")).arg(h ? tr("enabled") : tr("disabled")));
@@ -559,7 +563,7 @@ void MpvWidget::Hwdec(bool h, bool osd)
     }
     else
     {
-        setOption(QLatin1String("hwdec"), QLatin1String(h ? "auto" : "no"));
+        setOption(QStringLiteral("hwdec"), h ? "auto" : "no");
     }
     setHwdec(h);
 }
@@ -573,22 +577,22 @@ void MpvWidget::Seek(int pos, bool relative, bool osd)
             const QString tmp = ((pos >= 0) ? "+" : QString()) + QString::number(pos);
             if(osd)
             {
-                command(QStringList() << QLatin1String("osd-msg") << QLatin1String("seek") << tmp);
+                command(QStringList() << QStringLiteral("osd-msg") << QStringLiteral("seek") << tmp);
             }
             else
             {
-                command(QStringList() << QLatin1String("seek") << tmp);
+                command(QStringList() << QStringLiteral("seek") << tmp);
             }
         }
         else
         {
             if(osd)
             {
-                command(QVariantList() << QLatin1String("osd-msg") << QLatin1String("seek") << pos << QLatin1String("absolute"));
+                command(QVariantList() << QStringLiteral("osd-msg") << QStringLiteral("seek") << pos << QStringLiteral("absolute"));
             }
             else
             {
-                command(QVariantList() << QLatin1String("seek") << pos << QLatin1String("absolute"));
+                command(QVariantList() << QStringLiteral("seek") << pos << QStringLiteral("absolute"));
             }
         }
     }
@@ -603,27 +607,27 @@ int MpvWidget::Relative(int pos)
 
 void MpvWidget::FrameStep()
 {
-    command(QLatin1String("frame_step"));
+    command(QStringLiteral("frame_step"));
 }
 
 void MpvWidget::FrameBackStep()
 {
-    command(QLatin1String("frame_back_step"));
+    command(QStringLiteral("frame_back_step"));
 }
 
 void MpvWidget::Chapter(int c)
 {
-    setProperty(QLatin1String("chapter"), c);
+    setProperty(QStringLiteral("chapter"), c);
 }
 
 void MpvWidget::NextChapter()
 {
-    command(QVariantList() << QLatin1String("add") << QLatin1String("chapter") << 1);
+    command(QVariantList() << QStringLiteral("add") << QStringLiteral("chapter") << 1);
 }
 
 void MpvWidget::PreviousChapter()
 {
-    command(QVariantList() << QLatin1String("add") << QLatin1String("chapter") << -1);
+    command(QVariantList() << QStringLiteral("add") << QStringLiteral("chapter") << -1);
 }
 
 void MpvWidget::Volume(int level, bool osd)
@@ -635,13 +639,13 @@ void MpvWidget::Volume(int level, bool osd)
 
     if(playState > 0)
     {
-        setProperty(QLatin1String("ao-volume"), v);
+        setProperty(QStringLiteral("ao-volume"), v);
         if(osd)
             ShowText(tr("Volume: %0%").arg(QString::number(level)));
     }
     else
     {
-        setOption(QLatin1String("volume"), v);
+        setOption(QStringLiteral("volume"), v);
         setVolume(level);
     }
 }
@@ -649,78 +653,78 @@ void MpvWidget::Volume(int level, bool osd)
 void MpvWidget::Speed(double d)
 {
     if(playState > 0)
-        setProperty(QLatin1String("speed"), d);
+        setProperty(QStringLiteral("speed"), d);
     setSpeed(d);
 }
 
-void MpvWidget::Aspect(QString aspect)
+void MpvWidget::Aspect(const QString& aspect)
 {
-    setProperty(QLatin1String("video-aspect"), aspect);
+    setProperty(QStringLiteral("video-aspect"), aspect);
 }
 
 
 void MpvWidget::Vid(int vid)
 {
-    setProperty(QLatin1String("vid"), vid);
+    setProperty(QStringLiteral("vid"), vid);
 }
 
 void MpvWidget::Aid(int aid)
 {
-    setProperty(QLatin1String("aid"), aid);
+    setProperty(QStringLiteral("aid"), aid);
 }
 
 void MpvWidget::Sid(int sid)
 {
-    setProperty(QLatin1String("sid"), sid);
+    setProperty(QStringLiteral("sid"), sid);
 }
 
 void MpvWidget::Screenshot(bool withSubs)
 {
-    command(QStringList() << QLatin1String("screenshot") << QLatin1String(withSubs ? "subtitles" : "video"));
+    command(QStringList() << QLatin1String("screenshot") << QString::fromLatin1(withSubs ? "subtitles" : "video"));
 }
 
-void MpvWidget::ScreenshotFormat(QString s)
+void MpvWidget::ScreenshotFormat(const QString& s)
 {
-    setOption(QLatin1String("screenshot-format"), s);
+    setOption(QStringLiteral("screenshot-format"), s);
     setScreenshotFormat(s);
 }
 
-void MpvWidget::ScreenshotTemplate(QString s)
+void MpvWidget::ScreenshotTemplate(const QString& s)
 {
-    setOption(QLatin1String("screenshot-template"), s);
+    setOption(QStringLiteral("screenshot-template"), s);
     setScreenshotTemplate(s);
 }
 
-void MpvWidget::ScreenshotDirectory(QString s)
+void MpvWidget::ScreenshotDirectory(const QString& s)
 {
-    setOption(QLatin1String("screenshot-directory"), s);
+    setOption(QStringLiteral("screenshot-directory"), s);
     setScreenshotDir(s);
 }
 
-void MpvWidget::AddSubtitleTrack(QString f)
+void MpvWidget::AddSubtitleTrack(const QString& f)
 {
     if(f == QString())
         return;
-    command(QStringList() << QLatin1String("sub-add") << f);
+    command(QStringList() << QStringLiteral("sub-add") << f);
     // this could be more efficient if we saved tracks in a bst
     auto old = fileInfo.tracks; // save the current track-list
     LoadTracks(); // load the new track list
     auto current = fileInfo.tracks;
-    for(auto track : old) // remove the old tracks in current
+    for(const auto& track : old) // remove the old tracks in current
         current.removeOne(track);
     Mpv::Track &track = current.first();
     ShowText(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.external ? "external" : track.lang));
 }
 
-void MpvWidget::AddAudioTrack(QString f)
+void MpvWidget::AddAudioTrack(const QString& f)
 {
     if(f == QString())
         return;
-    command(QStringList() << QLatin1String("audio-add") << f);
+    command(QStringList() << QStringLiteral("audio-add") << f);
     auto old = fileInfo.tracks;
     LoadTracks();
     auto current = fileInfo.tracks;
-    for(auto track : old)
+    for(const auto& track : old)
         current.removeOne(track);
     Mpv::Track &track = current.first();
     ShowText(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.external ? "external" : track.lang));
@@ -728,24 +732,24 @@ void MpvWidget::AddAudioTrack(QString f)
 
 void MpvWidget::ShowSubtitles(bool b)
 {
-    setProperty(QLatin1String("sub-visibility"), QLatin1String(b ? "yes" : "no"));
+    setProperty(QStringLiteral("sub-visibility"), b ? "yes" : "no");
 }
 
 void MpvWidget::SubtitleScale(double scale, bool relative)
 {
-    command(QVariantList() << QLatin1String(relative ? "add" : "set") << QLatin1String("sub-scale") << scale);
+    command(QVariantList() << QString::fromLatin1(relative ? "add" : "set") << QLatin1String("sub-scale") << scale);
 }
 
 void MpvWidget::Deinterlace(bool deinterlace)
 {
-    setProperty(QLatin1String("deinterlace"), QLatin1String(deinterlace ? "yes" : "auto"));
+    setProperty(QStringLiteral("deinterlace"), deinterlace ? "yes" : "auto");
     ShowText(tr("Deinterlacing: %0").arg(deinterlace ? tr("enabled") : tr("disabled")));
 }
 
 void MpvWidget::Interpolate(bool interpolate)
 {
     if(vo == QString())
-        vo = getProperty(QLatin1String("current-vo")).toString();
+        vo = getProperty(QStringLiteral("current-vo")).toString();
     QStringList vos = vo.split(',');
     for(auto &o : vos)
     {
@@ -756,24 +760,24 @@ void MpvWidget::Interpolate(bool interpolate)
             o.remove(i, QString(":interpolation").length());
     }
     setVo(vos.join(','));
-    setOption(QLatin1String("vo"), vo);
+    setOption(QStringLiteral("vo"), vo);
     ShowText(tr("Motion Interpolation: %0").arg(interpolate ? tr("enabled") : tr("disabled")));
 }
 
 void MpvWidget::Vo(QString o)
 {
-    setVo(o);
-    setOption(QLatin1String("vo"), vo);
+    setVo(std::move(o));
+    setOption(QStringLiteral("vo"), vo);
 }
 
-void MpvWidget::MsgLevel(QString level)
+void MpvWidget::MsgLevel(const QString& level)
 {
     QByteArray tmp = level.toUtf8();
     mpv_request_log_messages(mpv, tmp.constData());
     setMsgLevel(level);
 }
 
-void MpvWidget::ShowText(QString text, int duration)
+void MpvWidget::ShowText(const QString& text, int duration)
 {
     if (sugoi == nullptr)
     {
@@ -785,9 +789,9 @@ void MpvWidget::ShowText(QString text, int duration)
 void MpvWidget::LoadFileInfo()
 {
     // get media-title
-    fileInfo.media_title = getProperty(QLatin1String("media-title")).toString();
+    fileInfo.media_title = getProperty(QStringLiteral("media-title")).toString();
     // get length
-    fileInfo.length = getProperty(QLatin1String("duration")).toInt();
+    fileInfo.length = getProperty(QStringLiteral("duration")).toInt();
 
     LoadTracks();
     LoadChapters();
@@ -905,19 +909,19 @@ void MpvWidget::LoadChapters()
 
 void MpvWidget::LoadVideoParams()
 {
-    fileInfo.video_params.codec = getProperty(QLatin1String("video-codec")).toString();
-    fileInfo.video_params.width = getProperty(QLatin1String("width")).toInt();
-    fileInfo.video_params.height = getProperty(QLatin1String("height")).toInt();
-    fileInfo.video_params.dwidth = getProperty(QLatin1String("dwidth")).toInt();
-    fileInfo.video_params.dheight = getProperty(QLatin1String("dheight")).toInt();
-    fileInfo.video_params.aspect = getProperty(QLatin1String("video-aspect")).toDouble();
+    fileInfo.video_params.codec = getProperty(QStringLiteral("video-codec")).toString();
+    fileInfo.video_params.width = getProperty(QStringLiteral("width")).toInt();
+    fileInfo.video_params.height = getProperty(QStringLiteral("height")).toInt();
+    fileInfo.video_params.dwidth = getProperty(QStringLiteral("dwidth")).toInt();
+    fileInfo.video_params.dheight = getProperty(QStringLiteral("dheight")).toInt();
+    fileInfo.video_params.aspect = getProperty(QStringLiteral("video-aspect")).toDouble();
 
     Q_EMIT videoParamsChanged(fileInfo.video_params);
 }
 
 void MpvWidget::LoadAudioParams()
 {
-    fileInfo.audio_params.codec = getProperty(QLatin1String("audio-codec")).toString();
+    fileInfo.audio_params.codec = getProperty(QStringLiteral("audio-codec")).toString();
     mpv_node node;
     mpv_get_property(mpv, "audio-params", MPV_FORMAT_NODE, &node);
     if(node.format == MPV_FORMAT_NODE_MAP)
@@ -953,15 +957,15 @@ void MpvWidget::LoadMetadata()
 
 void MpvWidget::LoadOsdSize()
 {
-    osdWidth = getProperty(QLatin1String("osd-width")).toInt();
-    osdHeight = getProperty(QLatin1String("osd-height")).toInt();
+    osdWidth = getProperty(QStringLiteral("osd-width")).toInt();
+    osdHeight = getProperty(QStringLiteral("osd-height")).toInt();
 }
 
-void MpvWidget::OpenFile(QString f)
+void MpvWidget::OpenFile(const QString& f)
 {
     Q_EMIT fileChanging(time, fileInfo.length);
 
-    command(QStringList() << QLatin1String("loadfile") << f);
+    command(QStringList() << QStringLiteral("loadfile") << f);
 }
 
 QString MpvWidget::PopulatePlaylist()

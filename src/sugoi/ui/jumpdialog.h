@@ -1,4 +1,4 @@
-#ifndef JUMPDIALOG_H
+﻿#ifndef JUMPDIALOG_H
 #define JUMPDIALOG_H
 
 #include <QDialog>
@@ -12,10 +12,10 @@ class JumpDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit JumpDialog(int maxTime, QWidget *parent = 0);
-    ~JumpDialog();
+    explicit JumpDialog(int maxTime, QWidget *parent = nullptr);
+    ~JumpDialog() override;
 
-    static int getTime(int maxTime, QWidget *parent = 0);
+    static int getTime(int maxTime, QWidget *parent = nullptr);
 
 private slots:
     void validate();
@@ -23,8 +23,7 @@ private slots:
 private:
     Ui::JumpDialog *ui;
 
-    int time,
-        maxTime;
+    int time, maxTime;
 };
 
 #endif // JUMPDIALOG_H

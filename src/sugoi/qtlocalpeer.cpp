@@ -61,6 +61,8 @@ static PProcessIdToSessionId pProcessIdToSessionId = 0;
 #endif
 
 namespace QtLP_Private {
+#include <utility>
+
 #include "qtlockedfile.cpp"
 #if defined(Q_OS_WIN)
 #include "qtlockedfile_win.cpp"
@@ -71,8 +73,8 @@ namespace QtLP_Private {
 
 const char* QtLocalPeer::ack = "ack";
 
-QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
-    : QObject(parent), id(appId)
+QtLocalPeer::QtLocalPeer(QObject* parent, QString appId)
+    : QObject(parent), id(std::move(appId))
 {
     QString prefix = id;
     if (id.isEmpty()) {
@@ -87,12 +89,12 @@ QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
 
     QByteArray idc = id.toUtf8();
     quint16 idNum = qChecksum(idc.constData(), idc.size());
-    socketName = QLatin1String("qtsingleapp-") + prefix
+    socketName = QStringLiteral("qtsingleapp-") + prefix
                  + QLatin1Char('-') + QString::number(idNum, 16);
 
 #if defined(Q_OS_WIN)
     if (!pProcessIdToSessionId) {
-        QLibrary lib("kernel32");
+        QLibrary lib(QStringLiteral("kernel32"));
         pProcessIdToSessionId = (PProcessIdToSessionId)lib.resolve("ProcessIdToSessionId");
     }
     if (pProcessIdToSessionId) {
@@ -107,7 +109,7 @@ QtLocalPeer::QtLocalPeer(QObject* parent, const QString &appId)
     server = new QLocalServer(this);
     QString lockName = QDir(QDir::tempPath()).absolutePath()
                        + QLatin1Char('/') + socketName
-                       + QLatin1String("-lockfile");
+                       + QStringLiteral("-lockfile");
     lockFile.setFileName(lockName);
     lockFile.open(QIODevice::ReadWrite);
 }

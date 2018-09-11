@@ -11,8 +11,8 @@ class Overlay : public QObject
 {
     Q_OBJECT
 public:
-    explicit Overlay(QLabel *label, QImage *canvas, QTimer *timer, QObject *parent = 0);
-    ~Overlay();
+    explicit Overlay(QLabel *label, QImage *canvas, QTimer *timer, QObject *parent = nullptr);
+    ~Overlay() override;
 
 private:
     QLabel *label;

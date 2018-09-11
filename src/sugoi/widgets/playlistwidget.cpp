@@ -1,4 +1,6 @@
-﻿#include "playlistwidget.h"
+﻿#include <random>
+
+#include "playlistwidget.h"
 
 #include "sugoiengine.h"
 #include "mpvwidget.h"
@@ -78,7 +80,7 @@ void PlaylistWidget::Populate()
     else
         item = file;
 
-    if(showAll == true)
+    if(showAll)
     {
         clear();
         addItems(playlist);
@@ -87,9 +89,9 @@ void PlaylistWidget::Populate()
     {
         // filter by suffix
         QStringList newPlaylist;
-        for(auto i = playlist.begin(); i != playlist.end(); ++i)
-            if(i->endsWith(suffix))
-                newPlaylist.append(*i);
+        for(auto & i : playlist)
+            if(i.endsWith(suffix))
+                newPlaylist.append(i);
         // load
         clear();
         addItems(newPlaylist);
@@ -201,10 +203,10 @@ void PlaylistWidget::Search(const QString &s)
         item = file;
 
     QStringList newPlaylist;
-    for(QStringList::iterator item = playlist.begin(); item != playlist.end(); item++)
+    for(auto & item : playlist)
     {
-        if(item->contains(s, Qt::CaseInsensitive) && (showAll || item->endsWith(suffix)))
-            newPlaylist.append(*item);
+        if(item.contains(s, Qt::CaseInsensitive) && (showAll || item.endsWith(suffix)))
+            newPlaylist.append(item);
     }
 
     clear();
@@ -246,7 +248,7 @@ void PlaylistWidget::Shuffle()
     for(int i = 0; i < count(); ++i)
         newPlaylist.append(this->item(i)->text());
 
-    std::random_shuffle(newPlaylist.begin(), newPlaylist.end());
+    std::shuffle(newPlaylist.begin(), newPlaylist.end(), std::mt19937(std::random_device()()));
     // make current playing item the first
     auto iter = std::find(newPlaylist.begin(), newPlaylist.end(), file);
     std::swap(*iter, *newPlaylist.begin());
@@ -286,7 +288,7 @@ void PlaylistWidget::DeleteFromDisk(QListWidgetItem *item)
     playlist.removeOne(item->text());
     QString r = item->text().left(item->text().lastIndexOf('.')+1); // get file root (no extension)
     // check and remove all subtitle_files with the same root as the video
-    for(auto ext : Mpv::subtitle_filetypes)
+    for(const auto& ext : Mpv::subtitle_filetypes)
     {
         QFile subf(r+ext.mid(2));
         if(subf.exists() &&
@@ -324,7 +326,7 @@ void PlaylistWidget::contextMenuEvent(QContextMenuEvent *event)
     QListWidgetItem *item = itemAt(event->pos());
     if(item != nullptr)
     {
-        QMenu *menu = new QMenu();
+        auto *menu = new QMenu();
         connect(menu->addAction(tr("R&emove from Playlist")), &QAction::triggered, // Playlist: Remove from playlist (right-click)
                 [=]
                 {

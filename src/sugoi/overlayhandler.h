@@ -18,12 +18,12 @@ class OverlayHandler : public QObject
     Q_OBJECT
 public:
     explicit OverlayHandler(QObject *parent = nullptr);
-    ~OverlayHandler();
+    ~OverlayHandler() override;
 
 public slots:
     void showStatusText(const QString &text, int duration = 4000);
     void showInfoText(bool show = true);
-    void showText(const QString &text, QFont font, QColor color, QPoint pos, int duration, int id = -1);
+    void showText(const QString &text, QFont font, const QColor& color, QPoint pos, int duration, int id = -1);
 
 protected slots:
     void remove(int id);

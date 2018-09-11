@@ -1,4 +1,4 @@
-#ifndef CUSTOMSPLITTER_H
+﻿#ifndef CUSTOMSPLITTER_H
 #define CUSTOMSPLITTER_H
 
 #include <QSplitter>
@@ -7,7 +7,7 @@ class CustomSplitter : public QSplitter
 {
     Q_OBJECT
 public:
-    explicit CustomSplitter(QWidget *parent = 0);
+    explicit CustomSplitter(QWidget *parent = nullptr);
 
     int position() const;
     int normalPosition() const;

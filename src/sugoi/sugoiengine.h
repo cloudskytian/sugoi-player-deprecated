@@ -17,7 +17,7 @@ class SugoiEngine : public QObject
     Q_OBJECT
 public:
     explicit SugoiEngine(QObject *parent = nullptr);
-    ~SugoiEngine();
+    ~SugoiEngine() override;
 
     MainWindow     *window = nullptr;
     MpvWidget      *mpv = nullptr;
@@ -94,8 +94,8 @@ public slots:
 
 protected slots:
     // Utility functions
-    void Print(QString what, QString who = "Sugoi");
-    void PrintLn(QString what, QString who = "Sugoi");
+    void Print(QString what, QString who = QStringLiteral("Sugoi"));
+    void PrintLn(QString what, QString who = QStringLiteral("Sugoi"));
     void InvalidCommand(QString);
     void InvalidParameter(QString);
     void RequiresParameters(QString);

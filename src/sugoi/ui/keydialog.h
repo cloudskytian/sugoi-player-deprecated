@@ -1,4 +1,4 @@
-#ifndef KEYDIALOG_H
+﻿#ifndef KEYDIALOG_H
 #define KEYDIALOG_H
 
 #include <QDialog>
@@ -12,8 +12,8 @@ class KeyDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit KeyDialog(QWidget *parent = 0);
-    ~KeyDialog();
+    explicit KeyDialog(QWidget *parent = nullptr);
+    ~KeyDialog() override;
 
     QPair<QString, QPair<QString, QString>> SelectKey(bool add, QPair<QString, QPair<QString, QString>> init = (QPair<QString, QPair<QString, QString>>()));
 

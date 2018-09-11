@@ -40,20 +40,20 @@ bool SkinManager::setSkin(const QString &skin)
         return false;
     }
     QString filePath;
-    if (skin.contains(QString::fromLatin1("/")) || skin.contains(QString::fromLatin1("\\")))
+    if (skin.contains(QStringLiteral("/")) || skin.contains(QStringLiteral("\\")))
     {
         filePath = skin;
     }
     else
     {
-        filePath = QApplication::applicationDirPath() + QDir::separator() + QString::fromLatin1("stylesheets")
-                + QDir::separator() + skin + QString::fromLatin1(".css");
+        filePath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("stylesheets")
+                + QDir::separator() + skin + QStringLiteral(".css");
     }
     if (filePath.isEmpty())
     {
         return false;
     }
-    if (!QFileInfo(filePath).exists())
+    if (!QFileInfo::exists(filePath))
     {
         return false;
     }

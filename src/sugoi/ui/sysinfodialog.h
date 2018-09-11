@@ -12,8 +12,8 @@ class SysInfoDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SysInfoDialog(QWidget *parent = 0);
-    ~SysInfoDialog();
+    explicit SysInfoDialog(QWidget *parent = nullptr);
+    ~SysInfoDialog() override;
 
 private slots:
     QString sysInfoText_HTML();

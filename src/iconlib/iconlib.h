@@ -7,7 +7,7 @@
  * when adding/removing icons.
  */
 
-#define IDI_NONE                        -1
+//#define IDI_NONE                        -1
 #define IDI_OTHER_ICON                   0
 #define IDI_AAC_ICON                     1
 #define IDI_AC3_ICON                     2

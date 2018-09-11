@@ -1,6 +1,5 @@
 ﻿
-#ifndef SUGOI_VERSION_H
-#define SUGOI_VERSION_H
+#pragma once
 
 #ifndef _T
 #if !defined(ISPP_INVOKED) && (defined(UNICODE) || defined(_UNICODE))
@@ -49,6 +48,4 @@
 #else
 #define SUGOI_APP_ID_STR    SUGOI_APP_ID_32_STR
 #define SUGOI_APP_MUTEX_STR SUGOI_APP_MUTEX_32_STR
-#endif
-
 #endif

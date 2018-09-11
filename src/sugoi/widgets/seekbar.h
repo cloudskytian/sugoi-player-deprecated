@@ -7,7 +7,7 @@ class SeekBar : public CustomSlider
 {
     Q_OBJECT
 public:
-    explicit SeekBar(QWidget *parent = 0);
+    explicit SeekBar(QWidget *parent = nullptr);
 
 public slots:
     void setTracking(int _totalTime);
@@ -16,8 +16,8 @@ public slots:
 protected:
     QString formatTrackingTime(int _time);
 
-    void mouseMoveEvent(QMouseEvent* event);
-    void paintEvent(QPaintEvent *event);
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     QList<int> ticks;

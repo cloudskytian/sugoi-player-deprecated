@@ -17,7 +17,7 @@ public slots:
     QString currentSkinName() const;
     QString currentSkinPath() const;
     QString currentSkinContent() const;
-    bool setSkin(const QString &skin = QString::fromLatin1("Default"));
+    bool setSkin(const QString &skin = QStringLiteral("Default"));
 
 private:
     explicit SkinManager(QObject *parent = nullptr);

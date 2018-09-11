@@ -17,10 +17,10 @@ class PreferencesDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit PreferencesDialog(SugoiEngine *sugoi, QWidget *parent = 0);
-    ~PreferencesDialog();
+    explicit PreferencesDialog(SugoiEngine *sugoi, QWidget *parent = nullptr);
+    ~PreferencesDialog() override;
 
-    static void showPreferences(SugoiEngine *sugoi, QWidget *parent = 0);
+    static void showPreferences(SugoiEngine *sugoi, QWidget *parent = nullptr);
 
 protected:
     void PopulateSkinFiles();

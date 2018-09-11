@@ -13,7 +13,7 @@ class AboutDialog : public QDialog
 
 public:
     explicit AboutDialog(QWidget *parent = nullptr);
-    ~AboutDialog();
+    ~AboutDialog() override;
 
     static void about(QWidget *parent = nullptr);
 

@@ -11,11 +11,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 QT += core gui widgets svg winextras network concurrent opengl
 
-CONFIG += qt c++11
+CONFIG += c++11
 CONFIG -= app_bundle
 
 contains(QT_ARCH, x86_64) {
-    LIBS += -L$$PWD/../../lib64 -llibmpv -lWinSparkle
+    LIBS += -L$$PWD/../../lib64 -lmpv -lwinsparkle
     CONFIG(debug, debug|release) {
         TARGET = Sugoi64d
         DESTDIR = $$PWD/../../bin64/Debug
@@ -24,7 +24,7 @@ contains(QT_ARCH, x86_64) {
         DESTDIR = $$PWD/../../bin64/Release
     }
 } else {
-    LIBS += -L$$PWD/../../lib -llibmpv -lWinSparkle
+    LIBS += -L$$PWD/../../lib -lmpv -lwinsparkle
     CONFIG(debug, debug|release) {
         TARGET = Sugoid
         DESTDIR = $$PWD/../../bin/Debug
@@ -79,9 +79,7 @@ HEADERS += \
     $$PWD/ui/sysinfodialog.h \
     $$PWD/skinmanager.h \
     $$PWD/mpvwidget.h \
-    $$PWD/ui/cframelesswindow.h \
-    $$PWD/playbackmanager.h \
-    $$PWD/widgets/logowidget.h
+    $$PWD/ui/cframelesswindow.h
 
 SOURCES += \
     $$PWD/playermain.cpp \
@@ -117,9 +115,7 @@ SOURCES += \
     $$PWD/ui/sysinfodialog.cpp \
     $$PWD/skinmanager.cpp \
     $$PWD/mpvwidget.cpp \
-    $$PWD/ui/cframelesswindow.cpp \
-    $$PWD/playbackmanager.cpp \
-    $$PWD/widgets/logowidget.cpp
+    $$PWD/ui/cframelesswindow.cpp
 
 FORMS += \
     $$PWD/ui/aboutdialog.ui \

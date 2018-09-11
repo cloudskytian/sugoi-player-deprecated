@@ -16,6 +16,5 @@ Overlay::~Overlay()
 {
     delete label;
     delete canvas;
-    if(timer != nullptr)
-        delete timer;
+    delete timer;
 }

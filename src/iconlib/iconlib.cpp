@@ -15,7 +15,7 @@ extern "C" __declspec(dllexport) UINT GetIconLibVersion()
 
 extern "C" __declspec(dllexport) int GetIconIndex(LPCTSTR ext)
 {
-    int iconIndex = IDI_NONE;
+    int iconIndex = -1;
 
     if (_tcsicmp(ext, _T(".3g2")) == 0) {
         iconIndex = IDI_MOV_ICON;

@@ -34,17 +34,15 @@ protected slots:
     void DeleteFromDisk(QListWidgetItem *item);
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *event);
-    void dropEvent(QDropEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 
 private:
     SugoiEngine *sugoi = nullptr;
 
     QStringList playlist;
     QString file, suffix;
-    bool newPlaylist,
-         refresh,
-         showAll;
+    bool newPlaylist, refresh, showAll;
 };
 
 #endif // PLAYLISTWIDGET_H

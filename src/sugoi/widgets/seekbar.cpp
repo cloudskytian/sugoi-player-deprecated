@@ -1,4 +1,6 @@
-﻿#include "seekbar.h"
+﻿#include <utility>
+
+#include "seekbar.h"
 
 #include <QTime>
 #include <QToolTip>
@@ -39,7 +41,7 @@ void SeekBar::setTracking(int _totalTime)
 
 void SeekBar::setTicks(QList<int> values)
 {
-    ticks = values; // just set the values
+    ticks = std::move(values); // just set the values
     tickReady = false; // ticks need to be converted when totalTime is obtained
 }
 

@@ -25,7 +25,6 @@
 OverlayHandler::OverlayHandler(QObject *parent):
     QObject(parent),
     sugoi(static_cast<SugoiEngine*>(parent)),
-    refresh_timer(nullptr),
     min_overlay(1),
     max_overlay(60),
     overlay_id(min_overlay)
@@ -74,7 +73,7 @@ void OverlayHandler::showInfoText(bool show)
     }
 }
 
-void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPoint pos, int duration, int id)
+void OverlayHandler::showText(const QString &text, QFont font, const QColor& color, QPoint pos, int duration, int id)
 {
     overlay_mutex.lock();
     // increase next overlay_id
@@ -94,7 +93,7 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     const double fm_correction = 1.3;
     int w = 0,
         h = fm.height()*lines.length();
-    for(auto line : lines)
+    for(const auto& line : lines)
         w = std::max(fm.width(line), w);
     float xF = float(sugoi->window->ui->mpvFrame->width()-2*pos.x()) / (fm_correction*w);
     float yF = float(sugoi->window->ui->mpvFrame->height()-2*pos.y()) / h;
@@ -105,14 +104,14 @@ void OverlayHandler::showText(const QString &text, QFont font, QColor color, QPo
     w = 0;
     QPainterPath path(QPoint(0, 0));
     QPoint p = QPoint(0, h);
-    for(auto line : lines)
+    for(const auto& line : lines)
     {
         path.addText(p, font, line);
         w = std::max(int(fm_correction*path.currentPosition().x()), w);
         p += QPoint(0, h);
     }
 
-    QImage *canvas = new QImage(w, p.y(), QImage::Format_ARGB32); // make the canvas the right size
+    auto *canvas = new QImage(w, p.y(), QImage::Format_ARGB32); // make the canvas the right size
     canvas->fill(QColor(0,0,0,0)); // fill it with nothing
 
     QPainter painter(canvas); // prepare to paint

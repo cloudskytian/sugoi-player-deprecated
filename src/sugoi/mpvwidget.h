@@ -1,4 +1,20 @@
-﻿#ifndef MPVWIDGET_H
+﻿#include <utility>
+
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
+#ifndef MPVWIDGET_H
 #define MPVWIDGET_H
 
 #include <QOpenGLWidget>
@@ -16,8 +32,8 @@ class MpvWidget Q_DECL_FINAL: public QOpenGLWidget
 friend class SugoiEngine;
     Q_OBJECT
 public:
-    explicit MpvWidget(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = 0, SugoiEngine *se = Q_NULLPTR);
-    ~MpvWidget();
+    explicit MpvWidget(QWidget *parent = Q_NULLPTR, Qt::WindowFlags f = nullptr, SugoiEngine *se = Q_NULLPTR);
+    ~MpvWidget() override;
 
     const Mpv::FileInfo &getFileInfo()      { return fileInfo; }
     Mpv::PlayState getPlayState()           { return playState; }
@@ -39,7 +55,7 @@ public:
     bool getMute()                          { return mute; }
     double getPosition()                    { return position; }
     double getDuration()                    { return duration; }
-    QSize getVideoSize()                    { return QSize(videoWidth, videoHeight); }
+    QSize getVideoSize()                    { return {videoWidth, videoHeight}; }
     bool getHwdec()                         { return hwdec; }
     double getPercent()                     { return percent; }
 
@@ -52,22 +68,22 @@ protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;
 
-    bool FileExists(QString);
+    bool FileExists(const QString&);
 
 public Q_SLOTS:
     void SetEngine(SugoiEngine *engine);
 
     void LoadFile(QString);
     QString LoadPlaylist(QString);
-    bool PlayFile(QString);
+    bool PlayFile(const QString&);
 
-    void AddOverlay(int id, int x, int y, QString file, int offset, int w, int h);
+    void AddOverlay(int id, int x, int y, const QString& file, int offset, int w, int h);
     void RemoveOverlay(int id);
 
     void Play();
     void Pause();
     void Stop();
-    void PlayPause(QString fileIfStopped);
+    void PlayPause(const QString& fileIfStopped);
     void Restart();
     void Rewind();
     void Mute(bool);
@@ -84,19 +100,19 @@ public Q_SLOTS:
 
     void Volume(int, bool osd = false);
     void Speed(double);
-    void Aspect(QString);
+    void Aspect(const QString&);
     void Vid(int);
     void Aid(int);
     void Sid(int);
 
     void Screenshot(bool withSubs = false);
 
-    void ScreenshotFormat(QString);
-    void ScreenshotTemplate(QString);
-    void ScreenshotDirectory(QString);
+    void ScreenshotFormat(const QString&);
+    void ScreenshotTemplate(const QString&);
+    void ScreenshotDirectory(const QString&);
 
-    void AddSubtitleTrack(QString);
-    void AddAudioTrack(QString);
+    void AddSubtitleTrack(const QString&);
+    void AddAudioTrack(const QString&);
     void ShowSubtitles(bool);
     void SubtitleScale(double scale, bool relative = false);
 
@@ -104,9 +120,9 @@ public Q_SLOTS:
     void Interpolate(bool);
     void Vo(QString);
 
-    void MsgLevel(QString level);
+    void MsgLevel(const QString& level);
 
-    void ShowText(QString text, int duration = 4000);
+    void ShowText(const QString& text, int duration = 4000);
 
     void LoadTracks();
     void LoadChapters();
@@ -121,7 +137,7 @@ public Q_SLOTS:
     QVariant getProperty(const QString& name) const;
 
 protected Q_SLOTS:
-    void OpenFile(QString);
+    void OpenFile(const QString&);
     QString PopulatePlaylist();
     void LoadFileInfo();
     void SetProperties();
@@ -132,14 +148,14 @@ private Q_SLOTS:
     void setPlaylist(const QStringList& l)  { Q_EMIT playlistChanged(l); }
     void setFileInfo()                      { Q_EMIT fileInfoChanged(fileInfo); }
     void setPlayState(Mpv::PlayState s)     { Q_EMIT playStateChanged(playState = s); }
-    void setFile(QString s)                 { Q_EMIT fileChanged(file = s); }
-    void setPath(QString s)                 { Q_EMIT pathChanged(path = s); }
-    void setFileFullPath(QString s)         { Q_EMIT fileFullPathChanged(fileFullPath = s); }
-    void setScreenshotFormat(QString s)     { Q_EMIT screenshotFormatChanged(screenshotFormat = s); }
-    void setScreenshotTemplate(QString s)   { Q_EMIT screenshotTemplateChanged(screenshotTemplate = s); }
-    void setScreenshotDir(QString s)        { Q_EMIT screenshotDirChanged(screenshotDir = s); }
-    void setVo(QString s)                   { Q_EMIT voChanged(vo = s); }
-    void setMsgLevel(QString s)             { Q_EMIT msgLevelChanged(msgLevel = s); }
+    void setFile(QString s)                 { Q_EMIT fileChanged(file = std::move(s)); }
+    void setPath(QString s)                 { Q_EMIT pathChanged(path = std::move(s)); }
+    void setFileFullPath(QString s)         { Q_EMIT fileFullPathChanged(fileFullPath = std::move(s)); }
+    void setScreenshotFormat(QString s)     { Q_EMIT screenshotFormatChanged(screenshotFormat = std::move(s)); }
+    void setScreenshotTemplate(QString s)   { Q_EMIT screenshotTemplateChanged(screenshotTemplate = std::move(s)); }
+    void setScreenshotDir(QString s)        { Q_EMIT screenshotDirChanged(screenshotDir = std::move(s)); }
+    void setVo(QString s)                   { Q_EMIT voChanged(vo = std::move(s)); }
+    void setMsgLevel(QString s)             { Q_EMIT msgLevelChanged(msgLevel = std::move(s)); }
     void setSpeed(double d)                 { Q_EMIT speedChanged(speed = d); }
     void setTime(int i)                     { Q_EMIT timeChanged(time = i); }
     void setVolume(int i)                   { Q_EMIT volumeChanged(volume = i); }

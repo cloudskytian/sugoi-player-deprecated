@@ -7,10 +7,10 @@ class OpenButton : public QPushButton
 {
     Q_OBJECT
 public:
-    explicit OpenButton(QWidget *parent = 0);
+    explicit OpenButton(QWidget *parent = nullptr);
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
 
 signals:
     void LeftClick();

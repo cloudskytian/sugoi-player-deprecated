@@ -1,6 +1,6 @@
 QT -= gui
 
-CONFIG += qt c++11 console
+CONFIG += c++11 console
 CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use
@@ -40,4 +40,4 @@ contains(QT_ARCH, x86_64) {
 
 RC_FILE += guard.rc
 
-QMAKE_POST_LINK += $$quote(windeployqt \"$${DESTDIR}\\$${TARGET}.exe\"$$escape_expand(\\n\\t))
+#QMAKE_POST_LINK += $$quote(windeployqt \"$${DESTDIR}\\$${TARGET}.exe\"$$escape_expand(\\n\\t))
