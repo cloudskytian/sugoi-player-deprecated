@@ -34,7 +34,20 @@ CONFIG(debug, debug|release) {
 }
 
 target.path = $$BIN_DIR
-INSTALLS += target
+
+qmfiles.files = $$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm $$PWD/translations/*.qm
+qmfiles.path = $$BIN_DIR/translations
+
+skinfiles.files = $$PWD/stylesheets/*.css
+skinfiles.path = $$BIN_DIR/stylesheets
+
+docfiles.files = $$PWD/../../doc/*.md
+docfiles.path = $$BIN_DIR/doc
+
+licensefiles.files = $$PWD/../../doc/licenses/*
+licensefiles.path = $$BIN_DIR/licenses
+
+INSTALLS += target qmfiles skinfiles docfiles licensefiles
 
 LIBS += \
     -lUser32 -lShell32 -lKernel32 -lDwmapi \

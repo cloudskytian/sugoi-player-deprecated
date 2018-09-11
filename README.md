@@ -7,12 +7,6 @@
 
 <h4 align="center">A free multimedia player for Windows based on libmpv and Qt</h4>
 
-[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/wangwenx190/sugoi-player?branch=master&svg=true)](https://ci.appveyor.com/project/wangwenx190/sugoi-player)
-[![Github All Releases](https://img.shields.io/github/downloads/wangwenx190/Sugoi-Player/total.svg)](https://github.com/wangwenx190/Sugoi-Player/releases/latest)
-[![GitHub release](https://img.shields.io/github/release/wangwenx190/Sugoi-Player.svg)](https://github.com/wangwenx190/Sugoi-Player/releases/latest)
-[![Github commits (since latest release)](https://img.shields.io/github/commits-since/wangwenx190/Sugoi-Player/latest.svg)](https://github.com/wangwenx190/Sugoi-Player/releases/latest)
-[![GitHub Release Date](https://img.shields.io/github/release-date/wangwenx190/Sugoi-Player.svg)](https://github.com/wangwenx190/Sugoi-Player/releases/latest)
-
 ---
 
 * [External links](#external-links)
