@@ -18,7 +18,7 @@ jom qmake_all
 jom && jom install
 CD bin64
 windeployqt Sugoi64.exe
-DEL /F iconlib.lib
+DEL /F iconlib64.lib
 IF EXIST "%_QT_DIR_64%\bin\libeay32.dll" COPY /Y "%_QT_DIR_64%\bin\libeay32.dll" "%CD%\libeay32.dll"
 IF EXIST "%_QT_DIR_64%\bin\ssleay32.dll" COPY /Y "%_QT_DIR_64%\bin\ssleay32.dll" "%CD%\ssleay32.dll"
 IF EXIST "%_QT_DIR_64%\bin\libcrypto-1_1-x64.dll" COPY /Y "%_QT_DIR_64%\bin\libcrypto-1_1-x64.dll" "%CD%\libcrypto-1_1-x64.dll"
