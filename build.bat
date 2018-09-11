@@ -36,6 +36,6 @@ IF EXIST "%_QT_DIR%\bin\libcrypto-1_1.dll" COPY /Y "%_QT_DIR%\bin\libcrypto-1_1.
 IF EXIST "%_QT_DIR%\bin\libssl-1_1.dll" COPY /Y "%_QT_DIR%\bin\libssl-1_1.dll" "%CD%\libssl-1_1.dll"
 CD ..
 jom clean
-ENDLOCAL
 IF "%_ARCH%" == "86" CALL "%0" 64
+ENDLOCAL
 EXIT /B
