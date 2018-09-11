@@ -43,6 +43,6 @@ IF "%_ARCH%" == "86" (
 )
 CD ..
 jom clean
-IF "%_ARCH%" == "86" CALL "%~dp0build.bat" 64
+REM IF "%_ARCH%" == "86" CALL "%~dp0build.bat" 64
 ENDLOCAL
 EXIT /B
