@@ -20,24 +20,20 @@ exists($$PWD/../../ci_version.h) {
     DEFINES += CI
 }
 
-contains(QT_ARCH, x86_64) {
-    CONFIG(debug, debug|release) {
-        DESTDIR = $$PWD/../../bin64/Debug
-        TARGET = SugoiGuard64d
-    } else {
-        DESTDIR = $$PWD/../../bin64/Release
-        TARGET = SugoiGuard64
-    }
-} else {
-    CONFIG(debug, debug|release) {
-        DESTDIR = $$PWD/../../bin/Debug
-        TARGET = SugoiGuardd
-    } else {
-        DESTDIR = $$PWD/../../bin/Release
-        TARGET = SugoiGuard
-    }
-}
-
 RC_FILE += guard.rc
 
-#QMAKE_POST_LINK += $$quote(windeployqt \"$${DESTDIR}\\$${TARGET}.exe\"$$escape_expand(\\n\\t))
+TARGET = SugoiGuard
+
+BIN_DIR = $$PWD/../../bin
+
+contains(QT_ARCH, x86_64) {
+    TARGET = $$join(TARGET,,,64)
+    BIN_DIR = $$join(BIN_DIR,,,64)
+}
+
+CONFIG(debug, debug|release) {
+    TARGET = $$join(TARGET,,,d)
+}
+
+target.path = $$BIN_DIR
+INSTALLS += target

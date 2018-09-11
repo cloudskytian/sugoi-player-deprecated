@@ -14,31 +14,31 @@ QT += core gui widgets svg winextras network concurrent opengl
 CONFIG += c++11
 CONFIG -= app_bundle
 
-contains(QT_ARCH, x86_64) {
-    LIBS += -L$$PWD/../../lib64 -lmpv -lwinsparkle
-    CONFIG(debug, debug|release) {
-        TARGET = Sugoi64d
-        DESTDIR = $$PWD/../../bin64/Debug
-    } else {
-        TARGET = Sugoi64
-        DESTDIR = $$PWD/../../bin64/Release
-    }
-} else {
-    LIBS += -L$$PWD/../../lib -lmpv -lwinsparkle
-    CONFIG(debug, debug|release) {
-        TARGET = Sugoid
-        DESTDIR = $$PWD/../../bin/Debug
-    } else {
-        TARGET = Sugoi
-        DESTDIR = $$PWD/../../bin/Release
-    }
-}
-
-LIBS += -lUser32 -lShell32 -lKernel32 -lDwmapi
+TARGET = Sugoi
 
 exists($$PWD/../../ci_version.h) {
     DEFINES += CI
 }
+
+BIN_DIR = $$PWD/../../bin
+LIB_DIR = $$PWD/../../lib
+
+contains(QT_ARCH, x86_64) {
+    TARGET = $$join(TARGET,,,64)
+    BIN_DIR = $$join(BIN_DIR,,,64)
+    LIB_DIR = $$join(LIB_DIR,,,64)
+}
+
+CONFIG(debug, debug|release) {
+    TARGET = $$join(TARGET,,,d)
+}
+
+target.path = $$BIN_DIR
+INSTALLS += target
+
+LIBS += \
+    -lUser32 -lShell32 -lKernel32 -lDwmapi \
+    -L$${LIB_DIR} -lmpv -lwinsparkle
 
 INCLUDEPATH += $$PWD/../../include
 DEPENDPATH += $$PWD/../../include
