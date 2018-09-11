@@ -1,8 +1,4 @@
-﻿#include <utility>
-
-#include <utility>
-
-#include "mpvwidget.h"
+﻿#include "mpvwidget.h"
 
 #include <stdexcept>
 
@@ -27,42 +23,23 @@ static void wakeup(void *ctx)
 static void *get_proc_address(void *ctx, const char *name) {
     Q_UNUSED(ctx);
     QOpenGLContext *glctx = QOpenGLContext::currentContext();
-    if (!glctx)
-        return NULL;
-    return (void *)glctx->getProcAddress(QByteArray(name));
+    if (!glctx) return nullptr;
+    return reinterpret_cast<void *>(glctx->getProcAddress(QByteArray(name)));
 }
 
 MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f, SugoiEngine *se) : QOpenGLWidget(parent, f)
 {
     sugoi = se;
 
-    mpv = mpv::qt::Handle::FromRawHandle(mpv_create());
-    if (!mpv)
-    {
-        throw std::runtime_error("could not create mpv context");
-    }
+    mpv = mpv_create();
+    if (!mpv) throw std::runtime_error("could not create mpv context");
+    if (mpv_initialize(mpv) < 0) throw std::runtime_error("could not initialize mpv context");
 
     setOption(QStringLiteral("input-default-bindings"), QStringLiteral("no")); // disable mpv default key bindings
     setOption(QStringLiteral("input-vo-keyboard"), QStringLiteral("no")); // disable keyboard input on the X11 window
     setOption(QStringLiteral("input-cursor"), QStringLiteral("no")); // no mouse handling
     setOption(QStringLiteral("cursor-autohide"), QStringLiteral("no")); // no cursor-autohide, we handle that
     setOption(QStringLiteral("ytdl"), QStringLiteral("yes")); // youtube-dl support
-
-    if (mpv_initialize(mpv) < 0)
-    {
-        throw std::runtime_error("could not initialize mpv context");
-    }
-
-    // Make use of the MPV_SUB_API_OPENGL_CB API.
-    setOption(QStringLiteral("vo"), QStringLiteral("opengl-cb"));
-
-    mpv_gl = (mpv_opengl_cb_context *)mpv_get_sub_api(mpv, MPV_SUB_API_OPENGL_CB);
-    if (!mpv_gl)
-    {
-        throw std::runtime_error("OpenGL not compiled in");
-    }
-    mpv_opengl_cb_set_update_callback(mpv_gl, MpvWidget::on_update, (void *)this);
-    connect(this, SIGNAL(frameSwapped()), SLOT(swapped()));
 
     mpv_observe_property(mpv, 0, "duration", MPV_FORMAT_DOUBLE);
     mpv_observe_property(mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
@@ -88,12 +65,8 @@ MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f, SugoiEngine *se) : QOpe
 MpvWidget::~MpvWidget()
 {
     makeCurrent();
-    if (mpv_gl)
-        mpv_opengl_cb_set_update_callback(mpv_gl, nullptr, nullptr);
-    // Until this call is done, we need to make sure the player remains
-    // alive. This is done implicitly with the mpv::qt::Handle instance
-    // in this class.
-    mpv_opengl_cb_uninit_gl(mpv_gl);
+    if (mpv_gl) mpv_render_context_free(mpv_gl);
+    mpv_terminate_destroy(mpv);
 }
 
 void MpvWidget::command(const QVariant& params)
@@ -118,19 +91,29 @@ QVariant MpvWidget::getProperty(const QString &name) const
 
 void MpvWidget::initializeGL()
 {
-    int r = mpv_opengl_cb_init_gl(mpv_gl, nullptr, get_proc_address, nullptr);
-    if (r < 0)
-        throw std::runtime_error("could not initialize OpenGL");
+    mpv_opengl_init_params gl_init_params{get_proc_address, nullptr, nullptr};
+    mpv_render_param params[]{
+        {MPV_RENDER_PARAM_API_TYPE, const_cast<char *>(MPV_RENDER_API_TYPE_OPENGL)},
+        {MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, &gl_init_params},
+        {MPV_RENDER_PARAM_INVALID, nullptr}
+    };
+    if (mpv_render_context_create(&mpv_gl, mpv, params) < 0)
+        throw std::runtime_error("failed to initialize mpv GL context");
+    mpv_render_context_set_update_callback(mpv_gl, MpvWidget::on_update, reinterpret_cast<void *>(this));
 }
 
 void MpvWidget::paintGL()
 {
-    mpv_opengl_cb_draw(mpv_gl, defaultFramebufferObject(), width(), -height());
-}
-
-void MpvWidget::swapped()
-{
-    mpv_opengl_cb_report_flip(mpv_gl, 0);
+    mpv_opengl_fbo mpfbo{static_cast<int>(defaultFramebufferObject()), width(), height(), 0};
+    int flip_y{1};
+    mpv_render_param params[] = {
+        {MPV_RENDER_PARAM_OPENGL_FBO, &mpfbo},
+        {MPV_RENDER_PARAM_FLIP_Y, &flip_y},
+        {MPV_RENDER_PARAM_INVALID, nullptr}
+    };
+    // See render_gl.h on what OpenGL environment mpv expects, and
+    // other API details.
+    mpv_render_context_render(mpv_gl, params);
 }
 
 void MpvWidget::on_mpv_events()
@@ -292,7 +275,6 @@ void MpvWidget::maybeUpdate()
         makeCurrent();
         paintGL();
         context()->swapBuffers(context()->surface());
-        swapped();
         doneCurrent();
     } else {
         update();

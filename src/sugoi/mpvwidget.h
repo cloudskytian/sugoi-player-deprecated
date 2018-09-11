@@ -1,26 +1,12 @@
-﻿#include <utility>
-
-#include <utility>
-
-#include <utility>
-
-#include <utility>
-
-#include <utility>
-
-#include <utility>
-
-#include <utility>
-
-#include <utility>
-
-#ifndef MPVWIDGET_H
+﻿#ifndef MPVWIDGET_H
 #define MPVWIDGET_H
+
+#include <utility>
 
 #include <QOpenGLWidget>
 
 #include <mpv/client.h>
-#include <mpv/opengl_cb.h>
+#include <mpv/render_gl.h>
 #include <mpv/qthelper.hpp>
 
 #include "mpvtypes.h"
@@ -171,7 +157,6 @@ private Q_SLOTS:
     void setHwdec(bool b)                   { Q_EMIT hwdecChanged(hwdec = b); }
     void setPercent(double p)               { Q_EMIT percentChanged(percent = p); }
 
-    void swapped();
     void on_mpv_events();
     void maybeUpdate();
 
@@ -250,8 +235,8 @@ private:
     void handle_mpv_event(mpv_event *event);
     static void on_update(void *ctx);
 
-    mpv::qt::Handle mpv;
-    mpv_opengl_cb_context *mpv_gl;
+    mpv_handle *mpv;
+    mpv_render_context *mpv_gl;
 };
 
 #endif // MPVWIDGET_H
