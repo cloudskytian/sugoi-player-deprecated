@@ -50,11 +50,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    QCoreApplication::setApplicationName(QString::fromStdWString(SUGOI_APP_NAME_STR));
-    QCoreApplication::setApplicationDisplayName(QString::fromStdWString(SUGOI_APP_DISPLAY_NAME_STR));
-    QCoreApplication::setApplicationVersion(QString::fromStdWString(SUGOI_VERSION_STR));
-    QCoreApplication::setOrganizationName(QString::fromStdWString(SUGOI_COMPANY_NAME_STR));
-    QCoreApplication::setOrganizationDomain(QString::fromStdWString(SUGOI_COMPANY_URL_STR));
+    QtSingleApplication::setApplicationName(QString::fromStdWString(SUGOI_APP_NAME_STR));
+    QtSingleApplication::setApplicationDisplayName(QString::fromStdWString(SUGOI_APP_DISPLAY_NAME_STR));
+    QtSingleApplication::setApplicationVersion(QString::fromStdWString(SUGOI_VERSION_STR));
+    QtSingleApplication::setOrganizationName(QString::fromStdWString(SUGOI_COMPANY_NAME_STR));
+    QtSingleApplication::setOrganizationDomain(QString::fromStdWString(SUGOI_COMPANY_URL_STR));
 
     QtSingleApplication instance(QString::fromStdWString(SUGOI_APP_MUTEX_STR), argc, argv);
 

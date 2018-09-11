@@ -14,7 +14,9 @@
 #include <QTime>
 #include <QUrl>
 #include <QCursor>
+#ifdef QT_HAS_CONCURRENT
 #include <QtConcurrent>
+#endif
 #include <QApplication>
 #include <QTranslator>
 #include <QResizeEvent>
@@ -26,6 +28,7 @@
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
+#ifdef QT_HAS_WINEXTRAS
 #include <QtWinExtras>
 #include <QtWin>
 #include <QWinThumbnailToolBar>
@@ -33,6 +36,7 @@
 #include <QWinTaskbarButton>
 #include <QWinTaskbarProgress>
 #include <QWinJumpList>
+#endif
 #endif
 
 #include "sugoiengine.h"
@@ -104,7 +108,7 @@ MainWindow::~MainWindow()
 
     sugoi->SaveSettings();
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
     delete prev_toolbutton;
     delete playpause_toolbutton;
     delete next_toolbutton;
@@ -737,7 +741,7 @@ void MainWindow::SetNextButtonEnabled(bool enable)
 {
     ui->nextButton->setEnabled(enable);
     ui->actionPlay_Next_File->setEnabled(enable);
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
     next_toolbutton->setEnabled(enable);
 #endif
 }
@@ -746,7 +750,7 @@ void MainWindow::SetPreviousButtonEnabled(bool enable)
 {
     ui->previousButton->setEnabled(enable);
     ui->actionPlay_Previous_File->setEnabled(enable);
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
     prev_toolbutton->setEnabled(enable);
 #endif
 }
@@ -757,7 +761,7 @@ void MainWindow::SetPlayButtonIcon(bool play)
     {
         ui->playButton->setIcon(QIcon(":/images/default_play.svg"));
         ui->action_Play->setText(tr("&Play"));
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
         playpause_toolbutton->setToolTip(tr("Play"));
         playpause_toolbutton->setIcon(QIcon(":/images/tool-play.ico"));
         taskbarButton->setOverlayIcon(QIcon(":/images/tool-pause.ico"));
@@ -769,7 +773,7 @@ void MainWindow::SetPlayButtonIcon(bool play)
     {
         ui->playButton->setIcon(QIcon(":/images/default_pause.svg"));
         ui->action_Play->setText(tr("&Pause"));
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
         playpause_toolbutton->setToolTip(tr("Pause"));
         playpause_toolbutton->setIcon(QIcon(":/images/tool-pause.ico"));
         taskbarButton->setOverlayIcon(QIcon(":/images/tool-play.ico"));
@@ -1125,7 +1129,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                         ui->hwdecButton->setEnabled(true);
                         ui->action_Play->setEnabled(true);
                         ui->playButton->setEnabled(true);
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
                         playpause_toolbutton->setEnabled(true);
 #endif
                         ui->playlistButton->setEnabled(true);
@@ -1220,9 +1224,9 @@ void MainWindow::connectMpvSignalsAndSlots()
                 double currentPercent = (double)i/fi.length;
                 currentPercent = currentPercent >= 0.0 ? currentPercent : 0.0;
                 ui->seekBar->setValueNoSignal(ui->seekBar->maximum()*currentPercent);
-
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
                 taskbarProgress->setValue(taskbarProgress->maximum()*currentPercent);
-
+#endif
                 if (fullscreenProgressIndicator)
                 {
                     fullscreenProgressIndicator->setValue(fullscreenProgressIndicator->maximum()*currentPercent);
@@ -1481,7 +1485,7 @@ void MainWindow::connectUiSignalsAndSlots()
 
 void MainWindow::disconnectUiSignalsAndSlots()
 {
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
     prev_toolbutton->disconnect();
     playpause_toolbutton->disconnect();
     next_toolbutton->disconnect();
@@ -1821,10 +1825,14 @@ void MainWindow::connectOtherSignalsAndSlots()
             {
                 if (!filePath.isEmpty())
                 {
+#ifdef QT_HAS_CONCURRENT
                     QtConcurrent::run([=]
                     {
                         mpv->LoadFile(filePath);
                     });
+#else
+                    mpv->LoadFile(filePath);
+#endif
                 }
             });
 
@@ -1936,7 +1944,7 @@ void MainWindow::reconnectAllSignalsAndSlots()
 void MainWindow::initMainWindow(bool backgroundMode)
 {
     menuVisible = true; //ui->menuBarWidget->isVisible(); // does the OS use a menubar? (appmenu doesn't)
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
     QtWin::enableBlurBehindWindow(this);
 
     jumplist = new QWinJumpList(this);

@@ -14,7 +14,7 @@
 #include "fileassoc.h"
 #include "widgets/progressindicatorbar.h"
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
 class QWinThumbnailToolBar;
 class QWinThumbnailToolButton;
 class QWinTaskbarButton;
@@ -134,7 +134,7 @@ private:
     bool firstShow = true;
     bool playInBackground = false;
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
     QWinThumbnailToolBar    *thumbnail_toolbar = nullptr;
     QWinThumbnailToolButton *prev_toolbutton = nullptr,
                             *playpause_toolbutton = nullptr,

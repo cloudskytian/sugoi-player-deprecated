@@ -1,6 +1,18 @@
 DEFINES += QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x050000
 
-QT += core gui widgets svg winextras network concurrent opengl
+QT += gui widgets
+qtHaveModule(winextras) {
+    QT += winextras
+    DEFINES += QT_HAS_WINEXTRAS
+}
+qtHaveModule(concurrent) {
+    QT += concurrent
+    DEFINES += QT_HAS_CONCURRENT
+}
+qtHaveModule(network) {
+    QT += network
+    DEFINES += QT_HAS_NETWORK
+}
 
 CONFIG += c++11
 CONFIG -= app_bundle
