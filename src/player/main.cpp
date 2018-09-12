@@ -183,7 +183,10 @@ int main(int argc, char *argv[])
     if (instance.isSecondary())
     {
         AllowSetForegroundWindow(static_cast<DWORD>(instance.primaryPid()));
-        if (!command.isEmpty()) instance.sendMessage(command.toUtf8());
+        if (command.isEmpty())
+            instance.sendMessage("show");
+        else
+            instance.sendMessage(command.toUtf8());
         if (singleInstance) return 0;
     }
 
@@ -197,15 +200,20 @@ int main(int argc, char *argv[])
                         Q_UNUSED(pid)
                         QString message(msg);
                         if (message.isEmpty()) return;
+                        if (message == QStringLiteral("show"))
+                        {
+                            mainWindow.bringToFront();
+                            return;
+                        }
                         if (message == QStringLiteral("exit")
                              || message == QStringLiteral("quit")
                              || message == QStringLiteral("close"))
                         {
                             mainWindow.close();
                             return;
-                         }
-                         mainWindow.bringToFront();
-                         mainWindow.openFileFromCmd(message);
+                        }
+                        mainWindow.bringToFront();
+                        mainWindow.openFileFromCmd(message);
                      });
     }
 
