@@ -1,9 +1,7 @@
-﻿#include <utility>
+﻿#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <utility>
-
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
 
 #include <QTimer>
 #include <QHash>
@@ -68,9 +66,7 @@ public:
 public slots:
     void MapShortcuts();
     void SetFileAssoc(FileAssoc::reg_type type = FileAssoc::reg_type::ALL, bool showUI = false);
-    void BringWindowToFront();
-    void initMainWindow(bool backgroundMode = false);
-    void setSysTrayIconVisibility(bool v = true);
+    void initMainWindow();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;    // drag file into

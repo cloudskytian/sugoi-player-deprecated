@@ -176,37 +176,6 @@ void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
     }
 }
 
-void MainWindow::BringWindowToFront()
-{
-    if (isActiveWindow())
-    {
-        return;
-    }
-    if (isHidden())
-    {
-        show();
-    }
-    if (windowOpacity() < 1.0)
-    {
-        setWindowOpacity(1.0);
-    }
-    setWindowState(windowState() & ~Qt::WindowMinimized);
-    if (isActiveWindow())
-    {
-        return;
-    }
-    Qt::WindowFlags oldFlags = windowFlags();
-    setWindowFlags(oldFlags | Qt::WindowStaysOnTopHint);
-    setWindowFlags(oldFlags);
-    show();
-    if (isActiveWindow())
-    {
-        return;
-    }
-    raise();
-    activateWindow();
-}
-
 static bool canHandleDrop(const QDragEnterEvent *event)
 {
     const QList<QUrl> urls = event->mimeData()->urls();
@@ -1825,14 +1794,7 @@ void MainWindow::connectOtherSignalsAndSlots()
             {
                 if (!filePath.isEmpty())
                 {
-#ifdef QT_HAS_CONCURRENT
-                    QtConcurrent::run([=]
-                    {
-                        mpv->LoadFile(filePath);
-                    });
-#else
                     mpv->LoadFile(filePath);
-#endif
                 }
             });
 
@@ -1941,7 +1903,7 @@ void MainWindow::reconnectAllSignalsAndSlots()
     reconnectOtherSignalsAndSlots();
 }
 
-void MainWindow::initMainWindow(bool backgroundMode)
+void MainWindow::initMainWindow()
 {
     menuVisible = true; //ui->menuBarWidget->isVisible(); // does the OS use a menubar? (appmenu doesn't)
 #if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
@@ -2007,29 +1969,13 @@ void MainWindow::initMainWindow(bool backgroundMode)
 
     sugoi->LoadSettings();
 
-    if (!backgroundMode)
+    FileAssoc fileAssoc;
+    setFileAssocState(fileAssoc.getMediaFilesRegisterState());
+    if (getAlwaysCheckFileAssoc())
     {
-        FileAssoc fileAssoc;
-        setFileAssocState(fileAssoc.getMediaFilesRegisterState());
-        if (getAlwaysCheckFileAssoc())
+        if (getFileAssocType() != FileAssoc::reg_type::NONE && getFileAssocState() != FileAssoc::reg_state::ALL_REGISTERED)
         {
-            if (getFileAssocType() != FileAssoc::reg_type::NONE && getFileAssocState() != FileAssoc::reg_state::ALL_REGISTERED)
-            {
-                SetFileAssoc(getFileAssocType(), true);
-            }
+            SetFileAssoc(getFileAssocType(), true);
         }
     }
-}
-
-void MainWindow::setSysTrayIconVisibility(bool v)
-{
-    if (sugoi == nullptr)
-    {
-        return;
-    }
-    if (sugoi->sysTrayIcon == nullptr)
-    {
-        return;
-    }
-    sugoi->sysTrayIcon->setVisible(v);
 }

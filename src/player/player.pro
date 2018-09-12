@@ -9,13 +9,10 @@ qtHaveModule(winextras) {
     QT += winextras
     DEFINES += QT_HAS_WINEXTRAS
 }
-qtHaveModule(concurrent) {
-    QT += concurrent
-    DEFINES += QT_HAS_CONCURRENT
-}
 qtHaveModule(network) {
     QT += network
-    DEFINES += QT_HAS_NETWORK
+    include($$PWD/../3rdparty/singleapplication/singleapplication.pri)
+    DEFINES += QT_HAS_NETWORK QAPPLICATION_CLASS=QApplication
 }
 
 CONFIG += c++11
@@ -90,9 +87,6 @@ HEADERS += \
     $$PWD/recent.h \
     $$PWD/fileassoc.h \
     $$PWD/widgets/progressindicatorbar.h \
-    $$PWD/qtlocalpeer.h \
-    $$PWD/qtsingleapplication.h \
-    $$PWD/qtlockedfile.h \
     $$PWD/ui/sysinfodialog.h \
     $$PWD/skinmanager.h \
     $$PWD/mpvwidget.h \
@@ -125,10 +119,6 @@ SOURCES += \
     $$PWD/configmanager.cpp \
     $$PWD/fileassoc.cpp \
     $$PWD/widgets/progressindicatorbar.cpp \
-    $$PWD/qtlocalpeer.cpp \
-    $$PWD/qtsingleapplication.cpp \
-    $$PWD/qtlockedfile_win.cpp \
-    $$PWD/qtlockedfile.cpp \
     $$PWD/ui/sysinfodialog.cpp \
     $$PWD/skinmanager.cpp \
     $$PWD/mpvwidget.cpp \

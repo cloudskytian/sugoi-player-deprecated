@@ -102,9 +102,7 @@ See [**doc/CHANGELOG.md**](/doc/CHANGELOG.md) for more information.
 
 - [Visual Studio 2017](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) (Only the build tools are needed, but you can also install the full IDE. The community edition is also fine)
   - [**Windows 10 SDK**](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk) (I recommend download the ISO image from this website instead of installing it from the VS installer. Remember to install the CDB debugger while you are installing the Win10 SDK if you want to use Qt Creator)
-- [Qt Creator](http://download.qt.io/official_releases/qtcreator/) (Optional, install this software in case of you don't want to install VS. Remember to install the CDB support component if you want to debug)
 - [**libmpv**](https://sourceforge.net/projects/mpv-player-windows/files/libmpv/)
-- [**WinSparkle**](https://github.com/vslavik/winsparkle/releases/latest)
 - [**Qt5**](http://download.qt.io/archive/qt/)
 - [YouTube-dl](https://yt-dl.org/latest/youtube-dl.exe) (Optional, for streaming youtube videos)
 - [Inno Setup 5 Unicode](http://jrsoftware.org/isdl.php) (Optional, for building the installer)
@@ -119,9 +117,9 @@ Using the **latest** version is highly recommended.
 Create a file named **build.user.bat** in **`C:\Sugoi-Player\`** (just for example, it could be placed in anywhere you like) containing the following entries, adapted for your system:
 ```bat
 @ECHO OFF
-SET "_QT_DIR=C:\Qt\Qt5.10.1\5.10.1\msvc2017_64"
-SET "_VC_BUILD_DIR=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build"
-SET "_INNO_SETUP_DIR=C:\Program Files (x86)\Inno Setup 5"
+SET "_QT_DIR_32=C:\Qt\Qt5.12.0\5.12.0\msvc2017"
+SET "_VC_BAT_PATH==C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
+SET "_JOM_DIR=C:\Qt\Qt5.12.0\tools\qtcreator\bin"
 ```
 
 
@@ -144,10 +142,10 @@ SET "_INNO_SETUP_DIR=C:\Program Files (x86)\Inno Setup 5"
    ```bat
    REM Open cmd, call qtenv2.bat in your Qt bin dir
    REM For example:
-   CALL "C:\Qt\Qt5.10.1\5.10.1\msvc2017_64\bin\qtenv2.bat"
+   CALL "C:\Qt\Qt5.12.0\5.12.0\msvc2017\bin\qtenv2.bat"
    REM Then call vcvarsall.bat x64 or vcvarsall.bat x86 in your VC build dir
    REM For example:
-   CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
+   CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
    REM If your project TEMPLATE is "subdirs", use this:
    REM qmake -r -tp vc xxx.pro
    REM Other templates use this:
@@ -167,12 +165,12 @@ will likely be ignored or closed as invalid.
 
 ## Contributors
 
-See [**doc/CONTRIBUTORS.md**](/doc/CONTRIBUTORS.md) for more information.
+See [**doc/contributors.md**](/doc/contributors.md) for more information.
 
 
 ## Contributing
 
-See [**doc/CONTRIBUTING.md**](/doc/CONTRIBUTING.md) for more information.
+See [**doc/contributing.md**](/doc/contributing.md) for more information.
 
 
 ## License
