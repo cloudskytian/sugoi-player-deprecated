@@ -81,7 +81,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     void changeEvent(QEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
-    void showEvent(QShowEvent *event) override;
 
 private slots:
     void HideAllControls(bool h, bool s = true);    // hideAllControls--s option is used by fullscreen
@@ -121,14 +120,8 @@ private:
     bool alwaysCheckFileAssoc = true;
     bool pauseWhenMinimized = true;
     bool osdShowLocalTime = true;
-    bool showVideoPreview = true;
     bool allowRunInBackground = true;
-    bool quickStartMode = true;
-    bool trayIconVisible = true;
-    bool autoUpdatePlayer = true;
-    bool autoUpdateStreamingSupport = true;
     QString skinFile;
-    bool firstShow = true;
     bool playInBackground = false;
 
 #if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
@@ -180,12 +173,7 @@ public slots:
     void setPauseWhenMinimized(bool b) { emit pauseWhenMinimizedChanged(pauseWhenMinimized = b); }
     void setShowFullscreenIndicator(bool b) { emit showFullscreenIndicatorChanged(showFullscreenIndicator = b); }
     void setOSDShowLocalTime(bool b)  { emit osdShowLocalTimeChanged(osdShowLocalTime = b); }
-    void setShowVideoPreview(bool b)  { emit showVideoPreviewChanged(showVideoPreview = b); }
     void setAllowRunInBackground(bool b) { emit allowRunInBackgroundChanged(allowRunInBackground = b); }
-    void setQuickStartMode(bool b)    { emit quickStartModeChanged(quickStartMode = b); }
-    void setTrayIconVisible(bool b)   { emit trayIconVisibleChanged(trayIconVisible = b); }
-    void setAutoUpdatePlayer(bool b)  { emit autoUpdatePlayerChanged(autoUpdatePlayer = b); }
-    void setAutoUpdateStreamingSupport(bool b) { emit autoUpdateStreamingSupportChanged(autoUpdateStreamingSupport = b); }
     void setSkinFile(const QString &s)  { emit skinFileChanged(skinFile = s); }
 
 signals:
@@ -206,12 +194,7 @@ signals:
     void pauseWhenMinimizedChanged(bool);
     void showFullscreenIndicatorChanged(bool);
     void osdShowLocalTimeChanged(bool);
-    void showVideoPreviewChanged(bool);
     void allowRunInBackgroundChanged(bool);
-    void quickStartModeChanged(bool);
-    void trayIconVisibleChanged(bool);
-    void autoUpdatePlayerChanged(bool);
-    void autoUpdateStreamingSupportChanged(bool);
     void skinFileChanged(const QString &);
     void playlistChanged(const QStringList &);
 };

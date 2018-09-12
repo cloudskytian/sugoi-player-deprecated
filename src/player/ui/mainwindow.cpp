@@ -21,7 +21,6 @@
 #include <QWheelEvent>
 #include <QKeyEvent>
 #include <QEvent>
-#include <QSystemTrayIcon>
 
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
@@ -43,7 +42,6 @@
 #include "widgets/dimdialog.h"
 #include "inputdialog.h"
 #include "screenshotdialog.h"
-#include "winsparkle.h"
 #include "skinmanager.h"
 #include "widgets/seekbar.h"
 #include "widgets/openbutton.h"
@@ -91,9 +89,7 @@ MainWindow::MainWindow(QWidget *parent) : CFramelessWindow(parent)
 
 MainWindow::~MainWindow()
 {
-    win_sparkle_cleanup();
-
-    if(current != nullptr)
+    if (current != nullptr)
     {
         int t = mpv->getTime(),
             l = mpv->getFileInfo().length;
@@ -132,8 +128,7 @@ void MainWindow::MapShortcuts()
         }
     }
     // clear the rest
-    for(auto iter = tmp.begin(); iter != tmp.end(); ++iter)
-        (*iter)->setShortcut(QKeySequence());
+    for (auto & iter : tmp) iter->setShortcut(QKeySequence());
 }
 
 void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
@@ -176,10 +171,7 @@ void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
 static bool canHandleDrop(const QDragEnterEvent *event)
 {
     const QList<QUrl> urls = event->mimeData()->urls();
-    if (urls.size() < 1)
-    {
-        return false;
-    }
+    if (urls.empty()) return false;
     QMimeDatabase mimeDatabase;
     return Util::supportedMimeTypes().
         contains(mimeDatabase.mimeTypeForUrl(urls.constFirst()).name());
@@ -290,13 +282,13 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     if((obj == ui->mpvFrame || obj == ui->playbackLayoutWidget)
             && isFullScreenMode() && event->type() == QEvent::MouseMove)
     {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        auto *mouseEvent = static_cast<QMouseEvent*>(event);
         mouseMoveEvent(mouseEvent);
         return true;
     }
-    else if(event->type() == QEvent::KeyPress)
+    if(event->type() == QEvent::KeyPress)
     {
-        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        auto *keyEvent = static_cast<QKeyEvent*>(event);
         keyPressEvent(keyEvent);
         return true;
     }
@@ -305,7 +297,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 
 void MainWindow::wheelEvent(QWheelEvent *event)
 {
-    if(event->delta() > 0)
+    if (event->delta() > 0)
         mpv->Volume(mpv->getVolume()+5, true);
     else
         mpv->Volume(mpv->getVolume()-5, true);
@@ -407,59 +399,17 @@ void MainWindow::closeEvent(QCloseEvent *event)
     {
         playInBackground = true;
         hide();
-        if (sugoi->sysTrayIcon->isVisible())
-        {
-            sugoi->sysTrayIcon->showMessage(QString::fromLatin1("Sugoi Player"), tr("Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground."), QIcon(":/images/player.svg"), 4000);
-        }
         event->ignore();
         return;
     }
-    else
-    {
-        playInBackground = false;
-    }
+    playInBackground = false;
     event->accept();
     CFramelessWindow::closeEvent(event);
 }
 
-void MainWindow::showEvent(QShowEvent *event)
-{
-    CFramelessWindow::showEvent(event);
-    if (sugoi->sysTrayIcon != nullptr)
-    {
-        if (trayIconVisible && !sugoi->sysTrayIcon->isVisible())
-        {
-            sugoi->sysTrayIcon->show();
-        }
-        else if (!trayIconVisible && sugoi->sysTrayIcon->isVisible())
-        {
-            sugoi->sysTrayIcon->hide();
-        }
-    }
-#ifdef _DEBUG
-    firstShow = false;
-    return;
-#endif
-    if (firstShow)
-    {
-        win_sparkle_set_appcast_url("https://raw.githubusercontent.com/wangwenx190/Sugoi-Player/master/appcast.xml");
-        win_sparkle_set_lang(lang.toUtf8().constData());
-        win_sparkle_init();
-    }
-    if (autoUpdatePlayer)
-    {
-        win_sparkle_check_update_without_ui();
-    }
-//    if (autoUpdateStreamingSupport)
-//    {
-//        ui->actionUpdate_Streaming_Support->triggered();
-//    }
-    firstShow = false;
-}
-
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton && ui->mpvFrame->geometry().contains(event->pos())
+    if (event->button() == Qt::LeftButton && ui->mpvFrame->geometry().contains(event->pos())
             && !ui->playbackLayoutWidget->geometry().contains(event->pos())) // if mouse is in the mpvFrame
     {
         if(!isFullScreen() && ui->action_Full_Screen->isEnabled()) // don't allow people to go full screen if they shouldn't be able to
@@ -477,7 +427,7 @@ void MainWindow::SetIndexLabels(bool enable)
         index = ui->playlistWidget->CurrentIndex();
 
     // next file
-    if(enable && index+1 < ui->playlistWidget->count()) // not the last entry
+    if (enable && index+1 < ui->playlistWidget->count()) // not the last entry
     {
         SetNextButtonEnabled(true);
         ui->nextButton->setIndex(index+2); // starting at 1 instead of at 0 like actual index
@@ -487,7 +437,7 @@ void MainWindow::SetIndexLabels(bool enable)
         SetNextButtonEnabled(false);
 
     // previous file
-    if(enable && index-1 >= 0) // not the first entry
+    if (enable && index-1 >= 0) // not the first entry
     {
         SetPreviousButtonEnabled(true);
         ui->previousButton->setIndex(-index); // we use a negative index value for the left button
@@ -495,7 +445,7 @@ void MainWindow::SetIndexLabels(bool enable)
     else
         SetPreviousButtonEnabled(false);
 
-    if(i == -1) // no selection
+    if (i == -1) // no selection
     {
         ui->indexLabel->setText(tr("No selection"));
         ui->indexLabel->setEnabled(false);
@@ -533,15 +483,15 @@ void MainWindow::SetPlaybackControls(bool enable)
 
 void MainWindow::HideAllControls(bool w, bool s)
 {
-    if(s)
+    if (s)
     {
         hideAllControls = w;
-        if(isFullScreen())
+        if (isFullScreen())
             return;
     }
-    if(w)
+    if (w)
     {
-        if(s || !hideAllControls)
+        if (s || !hideAllControls)
             playlistState = ui->playlistLayoutWidget->isVisible();
         ui->menuBarWidget->setVisible(false);
 
@@ -587,7 +537,7 @@ void MainWindow::HideAllControls(bool w, bool s)
         ui->playbackLayoutWidget->setParent(ui->centralWidget);
         ui->centralWidget->layout()->addWidget(ui->playbackLayoutWidget);
 
-        if(menuVisible)
+        if (menuVisible)
             ui->menuBarWidget->setVisible(true);
         ui->seekBar->setVisible(true);
         ui->playbackLayoutWidget->setVisible(true);
@@ -602,7 +552,7 @@ void MainWindow::FullScreen(bool fs)
     static Qt::WindowStates oldState;
     if (fs)
     {
-        if(sugoi->dimDialog && sugoi->dimDialog->isVisible())
+        if (sugoi->dimDialog && sugoi->dimDialog->isVisible())
             sugoi->Dim(false);
         if (ui->menuBarWidget && ui->menuBarWidget->isVisible())
         {
@@ -614,7 +564,7 @@ void MainWindow::FullScreen(bool fs)
         }
         oldState = windowState();
         showFullScreen();
-        if(!hideAllControls)
+        if (!hideAllControls)
         {
             HideAllControls(true, false);
         }
@@ -630,7 +580,7 @@ void MainWindow::FullScreen(bool fs)
         {
             ui->menuBarWidget->show();
         }
-        if(!hideAllControls)
+        if (!hideAllControls)
         {
             HideAllControls(false, false);
         }
@@ -656,16 +606,16 @@ void MainWindow::TogglePlaylist()
 
 void MainWindow::ShowPlaylist(bool visible)
 {
-    if(ui->splitter->position() != 0 && visible) // ignore showing if it's already visible as it resets original position
+    if (ui->splitter->position() != 0 && visible) // ignore showing if it's already visible as it resets original position
         return;
 
-    if(visible)
+    if (visible)
     {
         ui->splitter->setPosition(ui->splitter->normalPosition()); // bring splitter position to normal
     }
     else
     {
-        if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
+        if (ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
             ui->splitter->setNormalPosition(ui->splitter->position()); // save current splitter position as the normal position
         ui->splitter->setPosition(0); // set splitter position to right-most
         setFocus();
@@ -674,7 +624,7 @@ void MainWindow::ShowPlaylist(bool visible)
 
 void MainWindow::HideAlbumArt(bool hide)
 {
-    if(hide)
+    if (hide)
     {
         if(ui->splitter->position() != ui->splitter->max() && ui->splitter->position() != 0)
             ui->splitter->setNormalPosition(ui->splitter->position()); // save splitter position as the normal position
@@ -690,7 +640,7 @@ void MainWindow::UpdateRecentFiles()
     QAction *action;
     int n = 1,
         N = recent.length();
-    for(auto &f : recent)
+    for (auto &f : recent)
     {
         action = ui->menu_Recently_Opened->addAction(QString("%0. %1").arg(Util::FormatNumberWithAmpersand(n, N), Util::ShortenPathToParent(f).replace("&","&&")));
         if(n++ == 1)
@@ -723,7 +673,7 @@ void MainWindow::SetPreviousButtonEnabled(bool enable)
 
 void MainWindow::SetPlayButtonIcon(bool play)
 {
-    if(play)
+    if (play)
     {
         ui->playButton->setIcon(QIcon(":/images/default_play.svg"));
         ui->action_Play->setText(tr("&Play"));
@@ -778,11 +728,11 @@ void MainWindow::SetRemainingLabels(int time)
         }
 
         ui->durationLabel->setText(Util::FormatTime(time, fi.length));
-        if(remaining)
+        if (remaining)
         {
             int remainingTime = fi.length - time;
             QString text = "-" + Util::FormatTime(remainingTime, fi.length);
-            if(mpv->getSpeed() != 1)
+            if (mpv->getSpeed() != 1)
             {
                 double speed = mpv->getSpeed();
                 text += QString("  (-%0)").arg(Util::FormatTime(int(remainingTime/speed), int(fi.length/speed)));
@@ -792,7 +742,7 @@ void MainWindow::SetRemainingLabels(int time)
         else
         {
             QString text = Util::FormatTime(fi.length, fi.length);
-            if(mpv->getSpeed() != 1)
+            if (mpv->getSpeed() != 1)
             {
                 double speed = mpv->getSpeed();
                 text += QString("  (%0)").arg(Util::FormatTime(int(fi.length/speed), int(fi.length/speed)));
@@ -896,23 +846,6 @@ void MainWindow::connectMpvSignalsAndSlots()
                         sugoi->MediaInfo(true);
 
                     SetRemainingLabels(fileInfo.length);
-
-                    if(sugoi->sysTrayIcon->isVisible() && !hidePopup)
-                    {
-                        QString title = QString();
-                        if (mpv->getFileInfo().metadata.contains("artist"))
-                        {
-                            title = mpv->getFileInfo().metadata["artist"];
-                        }
-                        if (title.isEmpty())
-                        {
-                            if (mpv->getFileInfo().metadata.contains("author"))
-                            {
-                                title = mpv->getFileInfo().metadata["author"];
-                            }
-                        }
-                        sugoi->sysTrayIcon->showMessage(title, mpv->getFileInfo().media_title, QIcon(":/images/player.svg"), 4000);
-                    }
                 }
             });
 
@@ -946,8 +879,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                                                 mpv->ShowSubtitles(false);
                                                 return;
                                             }
-                                            else
-                                                mpv->ShowSubtitles(true);
+                                            mpv->ShowSubtitles(true);
                                         }
                                         else if(!mpv->getSubtitleVisibility())
                                             mpv->ShowSubtitles(true);
@@ -1414,9 +1346,7 @@ void MainWindow::connectUiSignalsAndSlots()
                                                     [this](QString input)
                                                     {
                                                         int in = input.toInt();
-                                                        if(in >= 1 && in <= ui->playlistWidget->count())
-                                                            return true;
-                                                        return false;
+                                                        return in >= 1 && in <= ui->playlistWidget->count();
                                                     },
                                                     this);
                 if(res != "")
@@ -1553,7 +1483,7 @@ void MainWindow::connectOtherSignalsAndSlots()
     // map actions to commands
     for(auto action = commandActionMap.begin(); action != commandActionMap.end(); ++action)
     {
-        const QString cmd = action.key();
+        const QString& cmd = action.key();
         connect(*action, &QAction::triggered,
                 [=] { sugoi->Command(cmd); });
     }
@@ -1566,22 +1496,6 @@ void MainWindow::connectOtherSignalsAndSlots()
                     return;
                 }
                 SkinManager::instance()->setSkin(skin);
-            });
-
-    connect(this, &MainWindow::autoUpdatePlayerChanged,
-            [=](bool isAuto)
-            {
-#ifdef _DEBUG
-                return;
-#endif
-                if (isAuto)
-                {
-                    win_sparkle_set_automatic_check_for_updates(1);
-                }
-                else
-                {
-                    win_sparkle_set_automatic_check_for_updates(0);
-                }
             });
 
     connect(this, &MainWindow::osdShowLocalTimeChanged,
@@ -1644,7 +1558,7 @@ void MainWindow::connectOtherSignalsAndSlots()
                     l = l.replace('-', '_');
                 }
 
-                if (l != QString::fromLatin1("C") && l != QString::fromLatin1("en") && l != QString::fromLatin1("en_US") && l != QString::fromLatin1("en_UK"))
+                if (l != QString::fromLatin1("C") && !l.startsWith(QStringLiteral("en")))
                 {
                     // load Qt translations
                     if(sugoi->qtTranslator != nullptr)
@@ -1738,50 +1652,6 @@ void MainWindow::connectOtherSignalsAndSlots()
                 blockSignals(false);
             });
 
-    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::BringWindowToFront);
-
-    connect(sugoi->sysTrayIcon, &QSystemTrayIcon::messageClicked, this, &MainWindow::BringWindowToFront);
-
-    connect(this, &MainWindow::trayIconVisibleChanged,
-            [=](bool visible)
-            {
-                if (isHidden())
-                {
-                    return;
-                }
-                if (sugoi->sysTrayIcon != nullptr)
-                {
-                    sugoi->sysTrayIcon->setVisible(visible);
-                }
-            });
-
-    connect(this, &MainWindow::quickStartModeChanged,
-            [=](bool quickStart)
-            {
-                if (isHidden())
-                {
-                    return;
-                }
-                if (quickStart)
-                {
-                    if (!Util::isAutoStart())
-                    {
-                        const QString exePath = QCoreApplication::applicationFilePath();
-                        const QString exeParam = QString::fromLatin1("--autostart");
-                        Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
-                    }
-                }
-                else
-                {
-                    if (Util::isAutoStart())
-                    {
-                        const QString exePath = QCoreApplication::applicationFilePath();
-                        const QString exeParam = QString::fromLatin1("--noautostart");
-                        Util::executeProgramWithAdministratorPrivilege(exePath, exeParam);
-                    }
-                }
-            });
-
     connect(this, &MainWindow::openFileFromCmd,
             [=](const QString &filePath)
             {
@@ -1872,11 +1742,8 @@ void MainWindow::connectOtherSignalsAndSlots()
 
 void MainWindow::disconnectOtherSignalsAndSlots()
 {
-    for(auto action = commandActionMap.begin(); action != commandActionMap.end(); ++action)
-    {
-        static_cast<QObject *>(*action)->disconnect();
-    }
-    sugoi->sysTrayIcon->disconnect();
+    for (auto & action : commandActionMap)
+        static_cast<QObject *>(action)->disconnect();
     autohide->disconnect();
     osdLocalTimeUpdater->disconnect();
     sugoi->dimDialog->disconnect();
