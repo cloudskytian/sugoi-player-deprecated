@@ -5,6 +5,7 @@ RC_FILE += player.rc
 DEFINES += QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x050000
 
 QT += gui widgets
+qtHaveModule(svg): QT += svg
 qtHaveModule(winextras) {
     QT += winextras
     DEFINES += QT_HAS_WINEXTRAS

@@ -700,55 +700,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox_12">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="title">
-          <string>Renderer</string>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_8">
-          <item>
-           <widget class="QComboBox" name="rendererComboBox">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <item>
-             <property name="text">
-              <string>OpenGL</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Direct3D11</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Direct2D</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>GDI</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>IMPORTANT: You will need a powerful GPU to enable hardware decoding.</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

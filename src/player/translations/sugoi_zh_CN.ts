@@ -2225,27 +2225,27 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Renderer</source>
-        <translation>渲染引擎</translation>
+        <translation type="vanished">渲染引擎</translation>
     </message>
     <message>
         <source>OpenGL</source>
-        <translation>OpenGL</translation>
+        <translation type="vanished">OpenGL</translation>
     </message>
     <message>
         <source>Direct3D11</source>
-        <translation>Direct3D11</translation>
+        <translation type="vanished">Direct3D11</translation>
     </message>
     <message>
         <source>Direct2D</source>
-        <translation>Direct2D</translation>
+        <translation type="vanished">Direct2D</translation>
     </message>
     <message>
         <source>GDI</source>
-        <translation>GDI</translation>
+        <translation type="vanished">GDI</translation>
     </message>
     <message>
         <source>IMPORTANT: You will need a powerful GPU to enable hardware decoding.</source>
-        <translation>重要须知：你需要一个性能强劲的显卡来启用硬件解码。</translation>
+        <translation type="vanished">重要须知：你需要一个性能强劲的显卡来启用硬件解码。</translation>
     </message>
     <message>
         <source>Verbose</source>

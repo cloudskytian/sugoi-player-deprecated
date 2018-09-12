@@ -134,18 +134,18 @@ void MainWindow::MapShortcuts()
 void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
 {
     const QString path = QCoreApplication::applicationFilePath();
-    QString param = QString::fromLatin1("--regall");
+    QString param = QStringLiteral("--regall");
     if (type == FileAssoc::reg_type::VIDEO_ONLY)
     {
-        param = QString::fromLatin1("--regvideo");
+        param = QStringLiteral("--regvideo");
     }
     else if (type == FileAssoc::reg_type::AUDIO_ONLY)
     {
-        param = QString::fromLatin1("--regaudio");
+        param = QStringLiteral("--regaudio");
     }
     else if (type == FileAssoc::reg_type::NONE)
     {
-        param = QString::fromLatin1("--unregall");
+        param = QStringLiteral("--unregall");
     }
     bool needChange = true;
     if (showUI)
@@ -292,7 +292,7 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
         keyPressEvent(keyEvent);
         return true;
     }
-    return false;
+    return CFramelessWindow::eventFilter(obj, event);
 }
 
 void MainWindow::wheelEvent(QWheelEvent *event)
@@ -313,12 +313,12 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 
         // TODO: Add more protection/find a better way to protect edit boxes from executing commands
         if(focusWidget() == ui->inputLineEdit &&
-           key == "Return")
+           key == QLatin1String("Return"))
             return;
 
         // Escape exits fullscreen
         if(isFullScreen() &&
-           key == "Esc") {
+           key == QLatin1String("Esc")) {
             FullScreen(false);
             return;
         }
@@ -642,9 +642,9 @@ void MainWindow::UpdateRecentFiles()
         N = recent.length();
     for (auto &f : recent)
     {
-        action = ui->menu_Recently_Opened->addAction(QString("%0. %1").arg(Util::FormatNumberWithAmpersand(n, N), Util::ShortenPathToParent(f).replace("&","&&")));
+        action = ui->menu_Recently_Opened->addAction(QStringLiteral("%0. %1").arg(Util::FormatNumberWithAmpersand(n, N), Util::ShortenPathToParent(f).replace(QLatin1String("&"),QLatin1String("&&"))));
         if(n++ == 1)
-            action->setShortcut(QKeySequence("Ctrl+Z"));
+            action->setShortcut(QKeySequence(QStringLiteral("Ctrl+Z")));
         connect(action, &QAction::triggered,
                 [=]
                 {
@@ -735,7 +735,7 @@ void MainWindow::SetRemainingLabels(int time)
             if (mpv->getSpeed() != 1)
             {
                 double speed = mpv->getSpeed();
-                text += QString("  (-%0)").arg(Util::FormatTime(int(remainingTime/speed), int(fi.length/speed)));
+                text += QStringLiteral("  (-%0)").arg(Util::FormatTime(int(remainingTime/speed), int(fi.length/speed)));
             }
             ui->remainingLabel->setText(text);
         }
@@ -745,7 +745,7 @@ void MainWindow::SetRemainingLabels(int time)
             if (mpv->getSpeed() != 1)
             {
                 double speed = mpv->getSpeed();
-                text += QString("  (%0)").arg(Util::FormatTime(int(fi.length/speed), int(fi.length/speed)));
+                text += QStringLiteral("  (%0)").arg(Util::FormatTime(int(fi.length/speed), int(fi.length/speed)));
             }
             ui->remainingLabel->setText(text);
         }
@@ -757,7 +757,7 @@ bool MainWindow::IsPlayingMusic(const QString &filePath)
     if (mpv->getPlayState() > 0)
     {
         QFileInfo fi(filePath);
-        QString suffix = QString::fromLatin1("*.") + fi.suffix();
+        QString suffix = QStringLiteral("*.") + fi.suffix();
         if (Mpv::audio_filetypes.contains(suffix))
         {
             return true;
@@ -771,7 +771,7 @@ bool MainWindow::IsPlayingVideo(const QString &filePath)
     if (mpv->getPlayState() > 0)
     {
         QFileInfo fi(filePath);
-        QString suffix = QString::fromLatin1("*.") + fi.suffix();
+        QString suffix = QStringLiteral("*.") + fi.suffix();
         if (Mpv::video_filetypes.contains(suffix))
         {
             return true;
@@ -802,10 +802,10 @@ void MainWindow::connectMpvSignalsAndSlots()
             {
                 if(mpv->getPlayState() > 0)
                 {
-                    if(fileInfo.media_title == "")
-                        SetWindowTitle2("Sugoi Player");
-                    else if(fileInfo.media_title == "-")
-                        SetWindowTitle2("Sugoi Player: stdin"); // todo: disable playlist?
+                    if(fileInfo.media_title == QLatin1String(""))
+                        SetWindowTitle2(QStringLiteral("Sugoi Player"));
+                    else if(fileInfo.media_title == QLatin1String("-"))
+                        SetWindowTitle2(QStringLiteral("Sugoi Player: stdin")); // todo: disable playlist?
                     else
                         SetWindowTitle2(fileInfo.media_title);
 
@@ -864,9 +864,9 @@ void MainWindow::connectMpvSignalsAndSlots()
                     ui->menuAudio_Tracks->addAction(ui->action_Add_Audio_File);
                     for(auto &track : trackList)
                     {
-                        if(track.type == "sub")
+                        if(track.type == QLatin1String("sub"))
                         {
-                            action = ui->menuSubtitle_Track->addAction(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang + (track.external ? "*" : "")).replace("&", "&&"));
+                            action = ui->menuSubtitle_Track->addAction(QStringLiteral("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang + (track.external ? "*" : "")).replace(QLatin1String("&"), QLatin1String("&&")));
                             connect(action, &QAction::triggered,
                                     [=]
                                     {
@@ -884,25 +884,25 @@ void MainWindow::connectMpvSignalsAndSlots()
                                         else if(!mpv->getSubtitleVisibility())
                                             mpv->ShowSubtitles(true);
                                         mpv->Sid(track.id);
-                                        mpv->ShowText(QString("%0 %1: %2 (%3)").arg(tr("Sub"), QString::number(track.id), track.title, track.lang + (track.external ? "*" : "")));
+                                        mpv->ShowText(QStringLiteral("%0 %1: %2 (%3)").arg(tr("Sub"), QString::number(track.id), track.title, track.lang + (track.external ? "*" : "")));
                                     });
                         }
-                        else if(track.type == "audio")
+                        else if(track.type == QLatin1String("audio"))
                         {
-                            action = ui->menuAudio_Tracks->addAction(QString("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang).replace("&", "&&"));
+                            action = ui->menuAudio_Tracks->addAction(QStringLiteral("%0: %1 (%2)").arg(QString::number(track.id), track.title, track.lang).replace(QLatin1String("&"), QLatin1String("&&")));
                             connect(action, &QAction::triggered,
                                     [=]
                                     {
                                         if(mpv->getAid() != track.id) // don't allow selection of the same track
                                         {
                                             mpv->Aid(track.id);
-                                            mpv->ShowText(QString("%0 %1: %2 (%3)").arg(tr("Audio"), QString::number(track.id), track.title, track.lang));
+                                            mpv->ShowText(QStringLiteral("%0 %1: %2 (%3)").arg(tr("Audio"), QString::number(track.id), track.title, track.lang));
                                         }
                                         else
                                             action->setChecked(true); // recheck the track
                                     });
                         }
-                        else if(track.type == "video") // video track
+                        else if(track.type == QLatin1String("video")) // video track
                         {
                             if(!track.albumart) // isn't album art
                                 video = true;
@@ -914,7 +914,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                     {
                         // if we were hiding album art, show it--we've gone to a video
                         if(ui->mpvFrame->styleSheet() != QString()) // remove filler album art
-                            ui->mpvFrame->setStyleSheet("");
+                            ui->mpvFrame->setStyleSheet(QLatin1String(""));
                         if(ui->action_Hide_Album_Art->isChecked())
                             HideAlbumArt(false);
                         ui->action_Hide_Album_Art->setEnabled(false);
@@ -945,7 +945,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                         {
                             // put in filler albumArt
                             if(ui->mpvFrame->styleSheet() == QString())
-                                ui->mpvFrame->setStyleSheet("background-image:url(:/images/album-art.png);background-repeat:no-repeat;background-position:center;");
+                                ui->mpvFrame->setStyleSheet(QStringLiteral("background-image:url(:/images/album-art.png);background-repeat:no-repeat;background-position:center;"));
                         }
                         ui->action_Hide_Album_Art->setEnabled(true);
                         ui->menuSubtitle_Track->setEnabled(false);
@@ -984,7 +984,7 @@ void MainWindow::connectMpvSignalsAndSlots()
                     ui->menu_Chapters->clear();
                     for(auto &ch : chapters)
                     {
-                        action = ui->menu_Chapters->addAction(QString("%0: %1").arg(Util::FormatNumberWithAmpersand(n, N), ch.title));
+                        action = ui->menu_Chapters->addAction(QStringLiteral("%0: %1").arg(Util::FormatNumberWithAmpersand(n, N), ch.title));
                         if(n <= 9)
                             action->setShortcut(QKeySequence("Ctrl+"+QString::number(n)));
                         connect(action, &QAction::triggered,
@@ -1040,14 +1040,14 @@ void MainWindow::connectMpvSignalsAndSlots()
                     sugoi->overlay->showStatusText(QString(), 0);
                 case Mpv::Playing:
                     SetPlayButtonIcon(false);
-                    if(onTop == "playing")
+                    if(onTop == QLatin1String("playing"))
                         Util::SetAlwaysOnTop(this, true);
                     break;
 
                 case Mpv::Paused:
                 case Mpv::Stopped:
                     SetPlayButtonIcon(true);
-                    if(onTop == "playing")
+                    if(onTop == QLatin1String("playing"))
                         Util::SetAlwaysOnTop(this, false);
                     break;
 
@@ -1075,12 +1075,12 @@ void MainWindow::connectMpvSignalsAndSlots()
                             }
                             else // stop
                             {
-                                SetWindowTitle2("Sugoi Player");
+                                SetWindowTitle2(QStringLiteral("Sugoi Player"));
                                 SetPlaybackControls(false);
                                 ui->seekBar->setTracking(0);
                                 ui->actionStop_after_Current->setChecked(false);
                                 if(ui->mpvFrame->styleSheet() != QString()) // remove filler album art
-                                    ui->mpvFrame->setStyleSheet("");
+                                    ui->mpvFrame->setStyleSheet(QLatin1String(""));
                             }
                         }
                         else
@@ -1210,9 +1210,9 @@ void MainWindow::connectMpvSignalsAndSlots()
             });
 
     connect(mpv, &MpvWidget::voChanged,
-            [=](QString vo)
+            [=](const QString& vo)
             {
-                ui->action_Motion_Interpolation->setChecked(vo.contains("interpolation"));
+                ui->action_Motion_Interpolation->setChecked(vo.contains(QLatin1String("interpolation")));
     });
 }
 
@@ -1333,7 +1333,7 @@ void MainWindow::connectUiSignalsAndSlots()
             });
 
     connect(ui->searchBox, &QLineEdit::textChanged,                     // Playlist: Search box
-            [=](QString s)
+            [=](const QString& s)
             {
                 ui->playlistWidget->Search(s);
             });
@@ -1343,13 +1343,13 @@ void MainWindow::connectUiSignalsAndSlots()
             {
                 QString res = InputDialog::getInput(tr("Enter the file number you want to play:\nNote: Value must be from %0 - %1").arg("1", QString::number(ui->playlistWidget->count())),
                                                     tr("Enter File Number"),
-                                                    [this](QString input)
+                                                    [this](const QString& input)
                                                     {
                                                         int in = input.toInt();
                                                         return in >= 1 && in <= ui->playlistWidget->count();
                                                     },
                                                     this);
-                if(res != "")
+                if(res != QLatin1String(""))
                     ui->playlistWidget->PlayIndex(res.toInt()-1); // user index will be 1 greater than actual
             });
 
@@ -1372,10 +1372,10 @@ void MainWindow::connectUiSignalsAndSlots()
             });
 
     connect(ui->inputLineEdit, &CustomLineEdit::submitted,
-            [=](QString s)
+            [=](const QString& s)
             {
                 sugoi->Command(s);
-                ui->inputLineEdit->setText("");
+                ui->inputLineEdit->setText(QLatin1String(""));
     });
 }
 
@@ -1474,8 +1474,6 @@ void MainWindow::connectOtherSignalsAndSlots()
         {"preferences", ui->action_Preferences},
         {"online_help", ui->actionOnline_Help},
         {"bug_report", ui->action_Report_bugs},
-        {"sys_info", ui->action_System_Information},
-        {"update", ui->action_Check_for_Updates},
         {"update youtube-dl", ui->actionUpdate_Streaming_Support},
         {"about", ui->actionAbout_Sugoi_Player}
     };
@@ -1549,16 +1547,16 @@ void MainWindow::connectOtherSignalsAndSlots()
     connect(this, &MainWindow::langChanged,
             [=](QString l)
             {
-                lang = QString::fromLatin1("auto");
+                lang = QStringLiteral("auto");
                 l = l.replace('-', '_');
-                if (l == QString::fromLatin1("auto") || l == QString::fromLatin1("system") || l == QString::fromLatin1("ui") || l == QString::fromLatin1("locale"))
+                if (l == QStringLiteral("auto") || l == QStringLiteral("system") || l == QStringLiteral("ui") || l == QStringLiteral("locale"))
                 {
                     QLocale locale;
                     l = locale.uiLanguages().first();
                     l = l.replace('-', '_');
                 }
 
-                if (l != QString::fromLatin1("C") && !l.startsWith(QStringLiteral("en")))
+                if (l != QStringLiteral("C") && !l.startsWith(QStringLiteral("en")))
                 {
                     // load Qt translations
                     if(sugoi->qtTranslator != nullptr)
@@ -1568,8 +1566,10 @@ void MainWindow::connectOtherSignalsAndSlots()
                         sugoi->qtTranslator = nullptr;
                     }
                     sugoi->qtTranslator = new QTranslator();
-                    QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-                    if (sugoi->qtTranslator->load(QString("qt_%0").arg(l), langPath))
+                    QString langPath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("translations");
+                    QDir qmDir(langPath);
+                    if (!qmDir.exists()) langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+                    if (sugoi->qtTranslator->load(QStringLiteral("qt_%0").arg(l), langPath))
                     {
                         qApp->installTranslator(sugoi->qtTranslator);
                     }
@@ -1662,13 +1662,13 @@ void MainWindow::connectOtherSignalsAndSlots()
             });
 
     connect(this, &MainWindow::onTopChanged,
-            [=](QString onTop)
+            [=](const QString& onTop)
             {
-                if(onTop == "never")
+                if(onTop == QLatin1String("never"))
                     Util::SetAlwaysOnTop(this, false);
-                else if(onTop == "always")
+                else if(onTop == QLatin1String("always"))
                     Util::SetAlwaysOnTop(this, true);
-                else if(onTop == "playing" && mpv->getPlayState() > 0)
+                else if(onTop == QLatin1String("playing") && mpv->getPlayState() > 0)
                     Util::SetAlwaysOnTop(this, true);
             });
 
@@ -1714,7 +1714,7 @@ void MainWindow::connectOtherSignalsAndSlots()
                 ui->action_Dim_Lights->setChecked(dim);
                 if(dim)
                     Util::SetAlwaysOnTop(this, true);
-                else if(onTop == "never" || (onTop == "playing" && mpv->getPlayState() > 0))
+                else if(onTop == QLatin1String("never") || (onTop == QLatin1String("playing") && mpv->getPlayState() > 0))
                     Util::SetAlwaysOnTop(this, false);
             });
 

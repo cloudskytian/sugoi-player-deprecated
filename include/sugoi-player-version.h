@@ -37,7 +37,7 @@
 #define SUGOI_README_URL_STR       _T("https://github.com/wangwenx190/Sugoi-Player/blob/master/README.md")
 #define SUGOI_LICENSE_URL_STR      _T("https://github.com/wangwenx190/Sugoi-Player/blob/master/LICENSE.md")
 #define SUGOI_BUG_REPORT_URL_STR   _T("https://github.com/wangwenx190/Sugoi-Player/issues")
-#define SUGOI_COMMENTS_STR         _T("Multimedia player for Windows 7+ based on libmpv and Qt.")
+#define SUGOI_COMMENTS_STR         _T("A free multimedia player for Windows based on libmpv and Qt.")
 #define SUGOI_COPYRIGHT_STR        _T("GPLv3")
 
 #define LIBMPV_VERSION_STR         _T("0.29.0-28-git-a5b0d59084")

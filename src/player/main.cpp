@@ -4,6 +4,7 @@
 #include <QMimeDatabase>
 #include <QDir>
 #include <QCommandLineParser>
+#include <QApplication>
 
 #include <clocale>
 
@@ -18,9 +19,6 @@
 
 #ifdef QT_HAS_NETWORK
 #include <SingleApplication.h>
-#define SugoiApplication SingleApplication
-#else
-#define SugoiApplication QApplication
 #endif
 
 QString checkFilePathValidation(const QString &filePath)
@@ -44,59 +42,59 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    SugoiApplication::setApplicationName(QString::fromStdWString(SUGOI_APP_NAME_STR));
-    SugoiApplication::setApplicationDisplayName(QString::fromStdWString(SUGOI_APP_DISPLAY_NAME_STR));
-    SugoiApplication::setApplicationVersion(QString::fromStdWString(SUGOI_VERSION_STR));
-    SugoiApplication::setOrganizationName(QString::fromStdWString(SUGOI_COMPANY_NAME_STR));
-    SugoiApplication::setOrganizationDomain(QString::fromStdWString(SUGOI_COMPANY_URL_STR));
+    QApplication::setApplicationName(QString::fromStdWString(SUGOI_APP_NAME_STR));
+    QApplication::setApplicationDisplayName(QString::fromStdWString(SUGOI_APP_DISPLAY_NAME_STR));
+    QApplication::setApplicationVersion(QString::fromStdWString(SUGOI_VERSION_STR));
+    QApplication::setOrganizationName(QString::fromStdWString(SUGOI_COMPANY_NAME_STR));
+    QApplication::setOrganizationDomain(QString::fromStdWString(SUGOI_COMPANY_URL_STR));
 
 #ifdef QT_HAS_NETWORK
-    SugoiApplication instance(argc, argv, true, SugoiApplication::Mode::SecondaryNotification);
+    SingleApplication instance(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
 #else
-    SugoiApplication instance(argc, argv);
+    QApplication instance(argc, argv);
 #endif
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QString::fromStdWString(SUGOI_COMMENTS_STR));
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument(QStringLiteral("name"), SugoiApplication::translate("main", "The name of the option you want to enable."));
-    parser.addPositionalArgument(QStringLiteral("value"), SugoiApplication::translate("main", "The value of the option, if it has."));
+    parser.addPositionalArgument(QStringLiteral("name"), QApplication::translate("main", "The name of the option you want to enable."));
+    parser.addPositionalArgument(QStringLiteral("value"), QApplication::translate("main", "The value of the option, if it has."));
 
     QCommandLineOption regAllOption(QStringLiteral("regall"),
-                                        SugoiApplication::translate("main", "Register all media file types."));
+                                        QApplication::translate("main", "Register all media file types."));
     parser.addOption(regAllOption);
     QCommandLineOption regVideoOption(QStringLiteral("regvideo"),
-                                      SugoiApplication::translate("main", "Register video media file types."));
+                                      QApplication::translate("main", "Register video media file types."));
     parser.addOption(regVideoOption);
     QCommandLineOption regAudioOption(QStringLiteral("regaudio"),
-                                      SugoiApplication::translate("main", "Register audio media file types."));
+                                      QApplication::translate("main", "Register audio media file types."));
     parser.addOption(regAudioOption);
     QCommandLineOption unregAllOption(QStringLiteral("unregall"),
-                                      SugoiApplication::translate("main", "Unregister all media file types."));
+                                      QApplication::translate("main", "Unregister all media file types."));
     parser.addOption(unregAllOption);
     QCommandLineOption unregVideoOption(QStringLiteral("unregvideo"),
-                                    SugoiApplication::translate("main", "Unregister video media file types."));
+                                    QApplication::translate("main", "Unregister video media file types."));
     parser.addOption(unregVideoOption);
     QCommandLineOption unregAudioOption(QStringLiteral("unregaudio"),
-                                    SugoiApplication::translate("main", "Unregister audio media file types."));
+                                    QApplication::translate("main", "Unregister audio media file types."));
     parser.addOption(unregAudioOption);
     QCommandLineOption exitOption(QStringLiteral("exit"),
-                         SugoiApplication::translate("main", "Terminate all running Sugoi Player instances."));
+                         QApplication::translate("main", "Terminate all running Sugoi Player instances."));
     parser.addOption(exitOption);
     QCommandLineOption closeOption(QStringLiteral("close"),
-                         SugoiApplication::translate("main", "Terminate all running Sugoi Player instances."));
+                         QApplication::translate("main", "Terminate all running Sugoi Player instances."));
     parser.addOption(closeOption);
     QCommandLineOption quitOption(QStringLiteral("quit"),
-                         SugoiApplication::translate("main", "Terminate all running Sugoi Player instances."));
+                         QApplication::translate("main", "Terminate all running Sugoi Player instances."));
     parser.addOption(quitOption);
     QCommandLineOption newInstanceOption(QStringLiteral("newinstance"),
-                                   SugoiApplication::translate("main", "Create a new Sugoi Player instance."));
+                                   QApplication::translate("main", "Create a new Sugoi Player instance."));
     parser.addOption(newInstanceOption);
     QCommandLineOption fileOption(QStringList() << QStringLiteral("f") << QStringLiteral("file"),
-                                  SugoiApplication::translate("main",
+                                  QApplication::translate("main",
                                                 "Play the given url <url>. It can be a local file or a web url."),
-                                  SugoiApplication::translate("main", "url"));
+                                  QApplication::translate("main", "url"));
     parser.addOption(fileOption);
 
     parser.process(instance);
@@ -164,14 +162,8 @@ int main(int argc, char *argv[])
         QString path = parser.value(fileOption);
         command = checkFilePathValidation(path);
     }
-    QString path = SugoiApplication::arguments().at(SugoiApplication::arguments().count() - 1);
+    QString path = QApplication::arguments().at(QApplication::arguments().count() - 1);
     command = checkFilePathValidation(path);
-
-    if (singleInstance)
-    {
-        instance.sendMessage(command.toUtf8());
-        return 0;
-    }
 
     // Qt sets the locale in the QApplication constructor, but libmpv requires
     // the LC_NUMERIC category to be set to "C", so change it back.
@@ -186,45 +178,44 @@ int main(int argc, char *argv[])
 
     MainWindow mainWindow;
     mainWindow.initMainWindow();
-    mainWindow.show();
-    mainWindow.openFileFromCmd(command);
 
 #ifdef QT_HAS_NETWORK
     if (instance.isSecondary())
     {
         AllowSetForegroundWindow(static_cast<DWORD>(instance.primaryPid()));
-        instance.sendMessage(command.toUtf8());
-        return 0;
+        if (!command.isEmpty()) instance.sendMessage(command.toUtf8());
+        if (singleInstance) return 0;
     }
+
     if (instance.isPrimary())
     {
         QObject::connect(
-        &instance,
-        &SugoiApplication::receivedMessage,
-        [=, &mainWindow](int pid, const QByteArray& msg)
-        {
-            Q_UNUSED(pid)
-            QString message(msg);
-            if (message.isEmpty()) return;
-            if (message == QStringLiteral("exit")
-                    || message == QStringLiteral("quit")
-                    || message == QStringLiteral("close"))
-            {
-                mainWindow.close();
-                return;
-            }
-            mainWindow.bringToFront();
-            mainWindow.openFileFromCmd(message);
-        });
+                    &instance,
+                    &SingleApplication::receivedMessage,
+                    [=, &mainWindow](int pid, const QByteArray& msg)
+                    {
+                        Q_UNUSED(pid)
+                        QString message(msg);
+                        if (message.isEmpty()) return;
+                        if (message == QStringLiteral("exit")
+                             || message == QStringLiteral("quit")
+                             || message == QStringLiteral("close"))
+                        {
+                            mainWindow.close();
+                            return;
+                         }
+                         mainWindow.bringToFront();
+                         mainWindow.openFileFromCmd(message);
+                     });
     }
+
+    mainWindow.show();
+    mainWindow.openFileFromCmd(command);
+
+    return SingleApplication::exec();
+#else
+    mainWindow.show();
+    mainWindow.openFileFromCmd(command);
+    return QApplication::exec();
 #endif
-
-    HANDLE mutexHandle = CreateMutex(NULL, FALSE, reinterpret_cast<const wchar_t *>(QString::fromStdWString(SUGOI_APP_MUTEX_STR).utf16()));
-
-    int exec = -1;
-    exec = SugoiApplication::exec();
-
-    CloseHandle(mutexHandle);
-
-    return exec;
 }
