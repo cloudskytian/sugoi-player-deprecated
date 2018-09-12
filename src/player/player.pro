@@ -52,7 +52,7 @@ INSTALLS += target qmfiles skinfiles licensefiles
 
 LIBS += \
     -lUser32 -lShell32 -lKernel32 -lDwmapi \
-    -L$${LIB_DIR} -lmpv -lwinsparkle
+    -L$${LIB_DIR} -lmpv
 
 INCLUDEPATH += $$PWD/../../include
 DEPENDPATH += $$PWD/../../include

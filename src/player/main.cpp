@@ -63,12 +63,6 @@ int main(int argc, char *argv[])
     parser.addPositionalArgument(QStringLiteral("name"), SugoiApplication::translate("main", "The name of the option you want to enable."));
     parser.addPositionalArgument(QStringLiteral("value"), SugoiApplication::translate("main", "The value of the option, if it has."));
 
-    QCommandLineOption autoStartOption(QStringLiteral("autostart"),
-                  SugoiApplication::translate("main", "Make Sugoi Player auto start. Quick start mode only."));
-    parser.addOption(autoStartOption);
-    QCommandLineOption noAutoStartOption(QStringLiteral("noautostart"),
-                                      SugoiApplication::translate("main", "Disable Sugoi Player auto start."));
-    parser.addOption(noAutoStartOption);
     QCommandLineOption regAllOption(QStringLiteral("regall"),
                                         SugoiApplication::translate("main", "Register all media file types."));
     parser.addOption(regAllOption);
@@ -111,33 +105,6 @@ int main(int argc, char *argv[])
 
     QString command = QString();
 
-    if (parser.isSet(autoStartOption))
-    {
-#ifdef Q_OS_WIN64
-        QString filePath = QStringLiteral("SugoiGuard64.exe");
-#else
-        QString filePath = QStringLiteral("SugoiGuard.exe");
-#endif
-        filePath = SugoiApplication::applicationDirPath() + QDir::separator() + filePath;
-        if (!QFileInfo::exists(filePath))
-        {
-            return -1;
-        }
-        QString fileParam = QString();
-        if (!Util::setAutoStart(QDir::toNativeSeparators(filePath), fileParam))
-        {
-            return -1;
-        }
-        return 0;
-    }
-    if (parser.isSet(noAutoStartOption))
-    {
-        if (!Util::disableAutoStart())
-        {
-            return -1;
-        }
-        return 0;
-    }
     if (parser.isSet(regAllOption))
     {
         FileAssoc fileAssoc;
@@ -246,15 +213,13 @@ int main(int argc, char *argv[])
                 mainWindow.close();
                 return;
             }
-            mainWindow.raise();
-            mainWindow.activateWindow();
+            mainWindow.bringToFront();
             mainWindow.openFileFromCmd(message);
         });
     }
 #endif
 
-    HANDLE mutexHandle = CreateMutex(NULL, FALSE
-                     , reinterpret_cast<const wchar_t *>(QString::fromStdWString(SUGOI_APP_MUTEX_STR).utf16()));
+    HANDLE mutexHandle = CreateMutex(NULL, FALSE, reinterpret_cast<const wchar_t *>(QString::fromStdWString(SUGOI_APP_MUTEX_STR).utf16()));
 
     int exec = -1;
     exec = SugoiApplication::exec();
