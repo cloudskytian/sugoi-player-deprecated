@@ -17,12 +17,10 @@
 #include "ui/jumpdialog.h"
 #include "ui/preferencesdialog.h"
 #include "ui/screenshotdialog.h"
-#include "ui/sysinfodialog.h"
 #include "widgets/dimdialog.h"
 #include "mpvwidget.h"
 #include "overlayhandler.h"
 #include "util.h"
-#include "winsparkle.h"
 #include "sugoi-player-version.h"
 
 void SugoiEngine::SugoiMpv(QStringList &args)
@@ -368,18 +366,15 @@ void SugoiEngine::SugoiBugReport(QStringList &args)
 void SugoiEngine::SugoiUpdate(QStringList &args)
 {
     if(args.empty())
-        win_sparkle_check_update_with_ui();
-    else
-    {
+        return;
 #ifdef Q_OS_WIN
-        QString arg = args.front();
-        args.pop_front();
-        if(arg == "youtube-dl")
-            QProcess::startDetached("youtube-dl.exe", {"--update"});
-        else
+    QString arg = args.front();
+    args.pop_front();
+    if(arg == "youtube-dl")
+        QProcess::startDetached("youtube-dl.exe", {"--update"});
+    else
 #endif
-            InvalidParameter(args.join(' '));
-    }
+        InvalidParameter(args.join(' '));
 }
 
 void SugoiEngine::SugoiOpen(QStringList &args)
@@ -700,17 +695,6 @@ void SugoiEngine::About(const QString& what)
         qApp->aboutQt();
     else
         InvalidParameter(what);
-}
-
-void SugoiEngine::SugoiSysInfo(QStringList &args)
-{
-    if(args.empty())
-    {
-        SysInfoDialog sysInfoDialog;
-        sysInfoDialog.exec();
-    }
-    else
-        InvalidParameter(args.join(' '));
 }
 
 void SugoiEngine::SugoiQuit(QStringList &args)

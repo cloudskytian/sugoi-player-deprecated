@@ -201,7 +201,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Compiler</source>
-        <translation>编译器</translation>
+        <translation type="vanished">编译器</translation>
     </message>
     <message>
         <source>Commit ID</source>
@@ -233,7 +233,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>WinSparkle version</source>
-        <translation>WinSparkle 版本</translation>
+        <translation type="vanished">WinSparkle 版本</translation>
     </message>
     <message>
         <source>Update Log</source>
@@ -1497,7 +1497,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Sugoi Player is running in background now, click the trayicon to bring Sugoi Player to foreground.</source>
-        <translation>Sugoi Player 正在后台运行，点击通知栏图标以显示主窗口。</translation>
+        <translation type="vanished">Sugoi Player 正在后台运行，点击通知栏图标以显示主窗口。</translation>
     </message>
     <message>
         <source>Enable/Disable hardware decoding. Make sure you have a powerful GPU and player is running under it if you want to enable this.</source>
@@ -1833,7 +1833,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Tray Icon</source>
-        <translation>托盘图标</translation>
+        <translation type="vanished">托盘图标</translation>
     </message>
     <message>
         <source>&amp;Hide Popup</source>
@@ -2069,7 +2069,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>V</source>
-        <translation>冗长</translation>
+        <translation type="vanished">冗长</translation>
     </message>
     <message>
         <source>Debug</source>
@@ -2109,7 +2109,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>&amp;Hide popup messages</source>
-        <translation>隐藏弹出消息/通知(&amp;H)</translation>
+        <translation type="vanished">隐藏弹出消息/通知(&amp;H)</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -2137,19 +2137,19 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Video preview is SLOW. Enable this will increase CPU and memory usage, and the player may also get a little stutters.</source>
-        <translation>视频预览是十分缓慢的。开启此功能将会增加 CPU 和内存的使用，并且播放器可能会变得有些卡顿。</translation>
+        <translation type="vanished">视频预览是十分缓慢的。开启此功能将会增加 CPU 和内存的使用，并且播放器可能会变得有些卡顿。</translation>
     </message>
     <message>
         <source>Video Preview</source>
-        <translation>视频预览</translation>
+        <translation type="vanished">视频预览</translation>
     </message>
     <message>
         <source>Only preview key frames will make decode much more faster.</source>
-        <translation>只预览关键帧会大大加快解码速度。</translation>
+        <translation type="vanished">只预览关键帧会大大加快解码速度。</translation>
     </message>
     <message>
         <source>Only preview key frames</source>
-        <translation>只预览关键帧</translation>
+        <translation type="vanished">只预览关键帧</translation>
     </message>
     <message>
         <source>Allow run in background when playing music</source>
@@ -2177,7 +2177,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Quick start mode</source>
-        <translation>快速启动模式</translation>
+        <translation type="vanished">快速启动模式</translation>
     </message>
     <message>
         <source>Sugoi Player will show a thin progress bar if the seek bar is hidden if you enable this.</source>
@@ -2189,19 +2189,19 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Sugoi Player will always stay in background and auto starts when the system starts if you enable this.</source>
-        <translation>如果你开启此选项，播放器将会常驻后台，并且将开机自启，请考虑周全后再做出选择。</translation>
+        <translation type="vanished">如果你开启此选项，播放器将会常驻后台，并且将开机自启，请考虑周全后再做出选择。</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>更新</translation>
+        <translation type="vanished">更新</translation>
     </message>
     <message>
         <source>Auto update Sugoi Player</source>
-        <translation>自动更新 Sugoi Player</translation>
+        <translation type="vanished">自动更新 Sugoi Player</translation>
     </message>
     <message>
         <source>Auto update streaming support</source>
-        <translation>自动更新流媒体支持</translation>
+        <translation type="vanished">自动更新流媒体支持</translation>
     </message>
     <message>
         <source>Skins</source>
@@ -2246,6 +2246,10 @@ Note: Value must be from %0 - %1</source>
     <message>
         <source>IMPORTANT: You will need a powerful GPU to enable hardware decoding.</source>
         <translation>重要须知：你需要一个性能强劲的显卡来启用硬件解码。</translation>
+    </message>
+    <message>
+        <source>Verbose</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2977,7 +2981,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>show system information</source>
-        <translation>显示系统信息</translation>
+        <translation type="vanished">显示系统信息</translation>
     </message>
     <message>
         <source>[qt]</source>
@@ -3012,59 +3016,59 @@ Note: Value must be from %0 - %1</source>
     <name>SysInfoDialog</name>
     <message>
         <source>System Information</source>
-        <translation>系统信息</translation>
+        <translation type="vanished">系统信息</translation>
     </message>
     <message>
         <source>Use the following to provide more detailed information about your system to bug reports:</source>
-        <translation>使用以下关于系统的详细信息来报告问题：</translation>
+        <translation type="vanished">使用以下关于系统的详细信息来报告问题：</translation>
     </message>
     <message>
         <source>&amp;Copy to Clipboard</source>
-        <translation>复制到剪贴板(&amp;C)</translation>
+        <translation type="vanished">复制到剪贴板(&amp;C)</translation>
     </message>
     <message>
         <source>&amp;OK</source>
-        <translation>确定(&amp;O)</translation>
+        <translation type="vanished">确定(&amp;O)</translation>
     </message>
     <message>
         <source>Build ABI</source>
-        <translation>构建 ABI</translation>
+        <translation type="vanished">构建 ABI</translation>
     </message>
     <message>
         <source>Build CPU Architecture</source>
-        <translation>构建时 CPU 架构</translation>
+        <translation type="vanished">构建时 CPU 架构</translation>
     </message>
     <message>
         <source>Current CPU Architecture</source>
-        <translation>当前 CPU 架构</translation>
+        <translation type="vanished">当前 CPU 架构</translation>
     </message>
     <message>
         <source>Kernel Type</source>
-        <translation>内核类型</translation>
+        <translation type="vanished">内核类型</translation>
     </message>
     <message>
         <source>Kernel Version</source>
-        <translation>内核版本</translation>
+        <translation type="vanished">内核版本</translation>
     </message>
     <message>
         <source>Machine Host Name</source>
-        <translation>主机名称</translation>
+        <translation type="vanished">主机名称</translation>
     </message>
     <message>
         <source>Pretty Product Name</source>
-        <translation>产品名称</translation>
+        <translation type="vanished">产品名称</translation>
     </message>
     <message>
         <source>Product Type</source>
-        <translation>产品类型</translation>
+        <translation type="vanished">产品类型</translation>
     </message>
     <message>
         <source>Product Version</source>
-        <translation>产品版本</translation>
+        <translation type="vanished">产品版本</translation>
     </message>
     <message>
         <source>Windows Version</source>
-        <translation>Windows 版本</translation>
+        <translation type="vanished">Windows 版本</translation>
     </message>
 </context>
 <context>
@@ -3162,6 +3166,57 @@ Version: %0</source>
     <message>
         <source>Done. Restarting...</source>
         <translation type="vanished">完成，正在重新启动……</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>The name of the option you want to enable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The value of the option, if it has.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Register all media file types.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Register video media file types.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Register audio media file types.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unregister all media file types.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unregister video media file types.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unregister audio media file types.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Terminate all running Sugoi Player instances.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create a new Sugoi Player instance.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play the given url &lt;url&gt;. It can be a local file or a web url.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>url</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

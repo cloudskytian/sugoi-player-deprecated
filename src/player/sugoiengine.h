@@ -396,15 +396,6 @@ private:
           }
          }
         },
-        {"sys_info",
-         {&SugoiEngine::SugoiSysInfo,
-          {
-           QString(),
-           tr("show system information"),
-           QString()
-          }
-         }
-        },
         {"about",
          {&SugoiEngine::SugoiAbout,
           {
@@ -470,7 +461,6 @@ private:
     void SugoiMsgLevel(QStringList&);
     void SugoiQuit(QStringList&);
     void SugoiBugReport(QStringList&);
-    void SugoiSysInfo(QStringList&);
 public:
     void Open();
     void OpenLocation();

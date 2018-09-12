@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
     }
     if (parser.isSet(exitOption) || parser.isSet(closeOption) || parser.isSet(quitOption))
     {
-        instance.sendMessage(QStringLiteral("exit"));
+        instance.sendMessage("exit");
         return 0;
     }
     if (parser.isSet(fileOption))
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
         QObject::connect(
         &instance,
         &SugoiApplication::receivedMessage,
-        [=, &mainWindow](int pid, QByteArray msg)
+        [=, &mainWindow](int pid, const QByteArray& msg)
         {
             Q_UNUSED(pid)
             QString message(msg);
