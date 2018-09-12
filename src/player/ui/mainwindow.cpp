@@ -14,9 +14,6 @@
 #include <QTime>
 #include <QUrl>
 #include <QCursor>
-#ifdef QT_HAS_CONCURRENT
-#include <QtConcurrent>
-#endif
 #include <QApplication>
 #include <QTranslator>
 #include <QResizeEvent>
@@ -1657,11 +1654,7 @@ void MainWindow::connectOtherSignalsAndSlots()
                         sugoi->qtTranslator = nullptr;
                     }
                     sugoi->qtTranslator = new QTranslator();
-#ifdef _STATIC_BUILD
-                    QString langPath = QApplication::applicationDirPath() + QDir::separator() + QString::fromLatin1("translations");
-#else
                     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-#endif
                     if (sugoi->qtTranslator->load(QString("qt_%0").arg(l), langPath))
                     {
                         qApp->installTranslator(sugoi->qtTranslator);

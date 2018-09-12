@@ -309,11 +309,7 @@ void PreferencesDialog::PopulateSkinFiles()
 void PreferencesDialog::PopulateLangs()
 {
     // open the language directory
-#ifdef _STATIC_BUILD
-    QString langPath = QApplication::applicationDirPath() + QDir::separator() + QString::fromLatin1("translations");
-#else
     QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-#endif
     QDir dir(langPath);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
     dir.setSorting(QDir::Name);

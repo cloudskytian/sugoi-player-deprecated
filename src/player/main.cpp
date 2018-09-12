@@ -1,8 +1,4 @@
-﻿#ifdef _STATIC_BUILD
-#include "sugoilib.h"
-#endif
-
-#include "ui/mainwindow.h"
+﻿#include "ui/mainwindow.h"
 
 #include <QFileInfo>
 #include <QMimeDatabase>
@@ -41,11 +37,7 @@ QString checkFilePathValidation(const QString &filePath)
     return QString();
 }
 
-#ifdef _STATIC_BUILD
-int sugoiAppMain(int argc, char *argv[])
-#else
 int main(int argc, char *argv[])
-#endif
 {
     qInstallMessageHandler(Util::messagesOutputToFile);
 
@@ -59,7 +51,7 @@ int main(int argc, char *argv[])
     SugoiApplication::setOrganizationDomain(QString::fromStdWString(SUGOI_COMPANY_URL_STR));
 
 #ifdef QT_HAS_NETWORK
-    SugoiApplication instance(argc, argv, true, Mode::SecondaryNotification);
+    SugoiApplication instance(argc, argv, true, SugoiApplication::Mode::SecondaryNotification);
 #else
     SugoiApplication instance(argc, argv);
 #endif
@@ -121,10 +113,6 @@ int main(int argc, char *argv[])
 
     if (parser.isSet(autoStartOption))
     {
-#ifdef _STATIC_BUILD
-        QString filePath = SugoiApplication::applicationFilePath();
-        QString fileParam = QStringLiteral("--guard");
-#else
 #ifdef Q_OS_WIN64
         QString filePath = QStringLiteral("SugoiGuard64.exe");
 #else
@@ -136,7 +124,6 @@ int main(int argc, char *argv[])
             return -1;
         }
         QString fileParam = QString();
-#endif
         if (!Util::setAutoStart(QDir::toNativeSeparators(filePath), fileParam))
         {
             return -1;
@@ -215,10 +202,8 @@ int main(int argc, char *argv[])
 
     if (singleInstance)
     {
-        if (instance.sendMessage(command))
-        {
-            return 0;
-        }
+        instance.sendMessage(command.toUtf8());
+        return 0;
     }
 
     // Qt sets the locale in the QApplication constructor, but libmpv requires
@@ -238,22 +223,9 @@ int main(int argc, char *argv[])
     mainWindow.openFileFromCmd(command);
 
 #ifdef QT_HAS_NETWORK
-    QObject::connect(&instance, &SugoiApplication::messageReceived,
-                     [=, &mainWindow](const QString &message)
-                     {
-                         QString filePath(message);
-                         if (message == QStringLiteral("exit")
-                                 || message == QStringLiteral("quit")
-                                 || message == QStringLiteral("close"))
-                         {
-                             mainWindow.close();
-                             return;
-                         }
-                         mainWindow.openFileFromCmd(filePath);
-                     });
     if (instance.isSecondary())
     {
-        AllowSetForegroundWindow(static_cast<DWORD>(instance.getPrimaryPid()));
+        AllowSetForegroundWindow(static_cast<DWORD>(instance.primaryPid()));
         instance.sendMessage(command.toUtf8());
         return 0;
     }
@@ -261,10 +233,22 @@ int main(int argc, char *argv[])
     {
         QObject::connect(
         &instance,
-        &SugoiApplication::instanceStarted,
-        [=, &instance]()
+        &SugoiApplication::receivedMessage,
+        [=, &mainWindow](int pid, QByteArray msg)
         {
-            instance::setActiveWindow(mainWindow);
+            Q_UNUSED(pid)
+            QString message(msg);
+            if (message.isEmpty()) return;
+            if (message == QStringLiteral("exit")
+                    || message == QStringLiteral("quit")
+                    || message == QStringLiteral("close"))
+            {
+                mainWindow.close();
+                return;
+            }
+            mainWindow.raise();
+            mainWindow.activateWindow();
+            mainWindow.openFileFromCmd(message);
         });
     }
 #endif
