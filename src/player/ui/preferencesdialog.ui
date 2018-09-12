@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>490</width>
-    <height>440</height>
+    <width>830</width>
+    <height>451</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -78,105 +78,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_2">
-           <property name="title">
-            <string>Tray Icon</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_3">
-            <item>
-             <widget class="QCheckBox" name="hidePopupCheckBox">
-              <property name="text">
-               <string>&amp;Hide popup messages</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_9">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>Video preview is SLOW. Enable this will increase CPU and memory usage, and the player may also get a little stutters.</string>
-           </property>
-           <property name="title">
-            <string>Video Preview</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_11">
-            <item>
-             <widget class="QCheckBox" name="keyFrameCheckBox">
-              <property name="toolTip">
-               <string>Only preview key frames will make decode much more faster.</string>
-              </property>
-              <property name="text">
-               <string>Only preview key frames</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_10">
-           <property name="title">
-            <string>Update</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_13">
-            <item>
-             <widget class="QCheckBox" name="autoUpdatePlayerCheckBox">
-              <property name="text">
-               <string>Auto update Sugoi Player</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="autoUpdateStreamingSupportCheckBox">
-              <property name="text">
-               <string>Auto update streaming support</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_6">
-           <property name="title">
-            <string>Language</string>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QComboBox" name="langComboBox">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_9">
-         <item>
           <widget class="QGroupBox" name="groupBox_4">
            <property name="title">
             <string>File Associations</string>
@@ -229,6 +130,29 @@
               </property>
               <property name="checked">
                <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <item>
+          <widget class="QGroupBox" name="groupBox_6">
+           <property name="title">
+            <string>Language</string>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QComboBox" name="langComboBox">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
              </widget>
             </item>
@@ -318,19 +242,6 @@
               </property>
               <property name="text">
                <string>Allow run in background when playing music</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="quickStartCheckBox">
-              <property name="toolTip">
-               <string>Sugoi Player will always stay in background and auto starts when the system starts if you enable this.</string>
-              </property>
-              <property name="text">
-               <string>Quick start mode</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -790,6 +701,9 @@
        </item>
        <item>
         <widget class="QGroupBox" name="groupBox_12">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="title">
           <string>Renderer</string>
          </property>
@@ -899,8 +813,6 @@
   <tabstop>alwaysRadioButton</tabstop>
   <tabstop>playingRadioButton</tabstop>
   <tabstop>neverRadioButton</tabstop>
-  <tabstop>groupBox_2</tabstop>
-  <tabstop>hidePopupCheckBox</tabstop>
   <tabstop>langComboBox</tabstop>
   <tabstop>alwaysAssocCheckBox</tabstop>
   <tabstop>recentCheckBox</tabstop>

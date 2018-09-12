@@ -39,9 +39,7 @@ QString AboutDialog::compilerText_HTML()
                      .arg(tr("Version")).arg(QString::fromStdWString(SUGOI_VERSION_STR))
                      .arg(tr("Architecture")).arg(QSysInfo::buildCpuArchitecture())
                      .arg(tr("libmpv version")).arg(QString::fromStdWString(LIBMPV_VERSION_STR))
-                     .arg(tr("Qt version")).arg(QString::fromLatin1(QT_VERSION_STR))
-                     .arg(tr("WinSparkle version")).arg(QString::fromLatin1(WIN_SPARKLE_VERSION_STRING))
-                     .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
+                     .arg(tr("Qt version")).arg(QString::fromLatin1(QT_VERSION_STR));
 #else
     static QString text = QString::fromLatin1("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6<br /><b>%7</b>: %8<br /><b>%9</b>: %10<br /><b>%11</b>: %12<br /><b>%13</b>: %14<br /><b>%15</b>: %16<br /><b>%17</b>: %18<br /><b>%19</b>: %20<br /><b>%21</b>: %22</p>")
                      .arg(tr("Version")).arg(QString::fromStdWString(SUGOI_VERSION_STR))
@@ -52,9 +50,7 @@ QString AboutDialog::compilerText_HTML()
                      .arg(tr("Commit message")).arg(QString::fromStdWString(SUGOI_COMMIT_MESSAGE_STR))
                      .arg(tr("Architecture")).arg(QSysInfo::buildCpuArchitecture())
                      .arg(tr("libmpv version")).arg(QString::fromStdWString(LIBMPV_VERSION_STR))
-                     .arg(tr("Qt version")).arg(QString::fromLatin1(QT_VERSION_STR))
-                     .arg(tr("WinSparkle version")).arg(QString::fromLatin1(WIN_SPARKLE_VERSION_STRING))
-                     .arg(tr("Compiler")).arg(QString::fromLatin1("MSVC ") + QString::number(_MSC_FULL_VER));
+                     .arg(tr("Qt version")).arg(QString::fromLatin1(QT_VERSION_STR));
 #endif
     return text;
 }

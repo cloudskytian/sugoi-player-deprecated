@@ -23,7 +23,7 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PreferencesDialog),
     sugoi(sugoi),
-    screenshotDir("")
+    screenshotDir(QLatin1String(""))
 {
     ui->setupUi(this);
 
@@ -37,15 +37,13 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     PopulateSkinFiles();
 
     QString ontop = sugoi->window->getOnTop();
-    if(ontop == "never")
+    if(ontop == QLatin1String("never"))
         ui->neverRadioButton->setChecked(true);
-    else if(ontop == "playing")
+    else if(ontop == QLatin1String("playing"))
         ui->playingRadioButton->setChecked(true);
-    else if(ontop == "always")
+    else if(ontop == QLatin1String("always"))
         ui->alwaysRadioButton->setChecked(true);
     ui->resumeCheckBox->setChecked(sugoi->window->getResume());
-    ui->groupBox_2->setChecked(sugoi->window->getTrayIconVisible());
-    ui->hidePopupCheckBox->setChecked(sugoi->window->getHidePopup());
     ui->langComboBox->setCurrentIndex(ui->langComboBox->findData(sugoi->window->getLang()));
     int autofit = sugoi->window->getAutoFit();
     ui->autoFitCheckBox->setChecked((bool)autofit);
@@ -58,11 +56,7 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     screenshotDir = QDir::toNativeSeparators(sugoi->mpv->getScreenshotDir());
     ui->templateLineEdit->setText(sugoi->mpv->getScreenshotTemplate());
     ui->msgLvlComboBox->setCurrentIndex(ui->msgLvlComboBox->findData(sugoi->mpv->getMsgLevel()));
-    ui->groupBox_9->setChecked(sugoi->window->getShowVideoPreview());
     ui->backgroundNotAskCheckBox->setChecked(sugoi->window->getAllowRunInBackground());
-    ui->quickStartCheckBox->setChecked(sugoi->window->getQuickStartMode());
-    ui->autoUpdatePlayerCheckBox->setChecked(sugoi->window->getAutoUpdatePlayer());
-    ui->autoUpdateStreamingSupportCheckBox->setChecked(sugoi->window->getAutoUpdateStreamingSupport());
     ui->styleSheetFilesComboBox->setCurrentIndex(ui->styleSheetFilesComboBox->findText(sugoi->window->getSkinFile()));
 
     // add shortcuts
@@ -197,7 +191,7 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
             });
 
     connect(ui->infoWidget, &QTableWidget::doubleClicked,
-            [=](const QModelIndex &index)
+            [=](QModelIndex index)
             {
                 int i = index.row();
                 SelectKey(false,
@@ -221,9 +215,6 @@ PreferencesDialog::~PreferencesDialog()
     if (result() == QDialog::Accepted)
     {
         sugoi->window->setSkinFile(ui->styleSheetFilesComboBox->currentText());
-        sugoi->window->setAutoUpdatePlayer(ui->autoUpdatePlayerCheckBox->isChecked());
-        sugoi->window->setAutoUpdateStreamingSupport(ui->autoUpdateStreamingSupportCheckBox->isChecked());
-        sugoi->window->setQuickStartMode(ui->quickStartCheckBox->isChecked());
         sugoi->window->setAllowRunInBackground(ui->backgroundNotAskCheckBox->isChecked());
         sugoi->window->setPauseWhenMinimized(ui->pauseWhenMinimizedCheckBox->isChecked());
         sugoi->window->setShowFullscreenIndicator(ui->showFullscreenIndicatorCheckBox->isChecked());
@@ -231,15 +222,12 @@ PreferencesDialog::~PreferencesDialog()
         sugoi->window->setAlwaysCheckFileAssoc(ui->alwaysAssocCheckBox->isChecked());
         sugoi->window->setResume(ui->resumeCheckBox->isChecked());
         if(ui->neverRadioButton->isChecked())
-            sugoi->window->setOnTop("never");
+            sugoi->window->setOnTop(QStringLiteral("never"));
         else if(ui->playingRadioButton->isChecked())
-            sugoi->window->setOnTop("playing");
+            sugoi->window->setOnTop(QStringLiteral("playing"));
         else if(ui->alwaysRadioButton->isChecked())
-            sugoi->window->setOnTop("always");
-        sugoi->window->setTrayIconVisible(ui->groupBox_2->isChecked());
-        sugoi->window->setHidePopup(ui->hidePopupCheckBox->isChecked());
+            sugoi->window->setOnTop(QStringLiteral("always"));
         sugoi->window->setLang(ui->langComboBox->currentData().toString());
-        sugoi->window->setShowVideoPreview(ui->groupBox_9->isChecked());
         if(ui->autoFitCheckBox->isChecked())
             sugoi->window->setAutoFit(ui->comboBox->currentText().left(ui->comboBox->currentText().length()-1).toInt());
         else
@@ -301,7 +289,7 @@ void PreferencesDialog::PopulateSkinFiles()
     }
     for (int i = 0; i < fileCount; ++i)
     {
-        QFileInfo fi = fileList.at(i);
+        const QFileInfo& fi = fileList.at(i);
         ui->styleSheetFilesComboBox->addItem(fi.completeBaseName(), QDir::toNativeSeparators(fi.absoluteFilePath()));
     }
 }
@@ -321,35 +309,35 @@ void PreferencesDialog::PopulateLangs()
     }
     for (int i = 0; i < fileCount; ++i)
     {
-        QFileInfo fi = fileList.at(i);
+        const QFileInfo& fi = fileList.at(i);
         QString fileName = fi.completeBaseName();
-        if (fileName.startsWith(QString::fromLatin1("qt"), Qt::CaseInsensitive))
+        if (fileName.startsWith(QLatin1String("qt"), Qt::CaseInsensitive))
         {
             continue;
         }
-        QString lang = fileName.mid(fileName.indexOf("_") + 1);
+        QString lang = fileName.mid(fileName.indexOf(QLatin1String("_")) + 1);
         lang = lang.replace('-', '_');
         QLocale locale(lang);
         ui->langComboBox->addItem(locale.nativeLanguageName(), lang);
     }
     if (ui->langComboBox->count() > 0)
     {
-        ui->langComboBox->insertItem(0, tr("auto"), QString::fromLatin1("auto"));
+        ui->langComboBox->insertItem(0, tr("auto"), QLatin1String("auto"));
     }
 }
 
 void PreferencesDialog::PopulateMsgLvls()
 {
     ui->msgLvlComboBox->clear();
-    ui->msgLvlComboBox->addItem(tr("No"), QString::fromLatin1("no"));
-    ui->msgLvlComboBox->addItem(tr("Fatal"), QString::fromLatin1("fatal"));
-    ui->msgLvlComboBox->addItem(tr("Error"), QString::fromLatin1("error"));
-    ui->msgLvlComboBox->addItem(tr("Warn"), QString::fromLatin1("warn"));
-    ui->msgLvlComboBox->addItem(tr("Info"), QString::fromLatin1("info"));
-    ui->msgLvlComboBox->addItem(tr("Status"), QString::fromLatin1("status"));
-    ui->msgLvlComboBox->addItem(tr("V"), QString::fromLatin1("v"));
-    ui->msgLvlComboBox->addItem(tr("Debug"), QString::fromLatin1("debug"));
-    ui->msgLvlComboBox->addItem(tr("Trace"), QString::fromLatin1("trace"));
+    ui->msgLvlComboBox->addItem(tr("No"), QLatin1String("no"));
+    ui->msgLvlComboBox->addItem(tr("Fatal"), QLatin1String("fatal"));
+    ui->msgLvlComboBox->addItem(tr("Error"), QLatin1String("error"));
+    ui->msgLvlComboBox->addItem(tr("Warn"), QLatin1String("warn"));
+    ui->msgLvlComboBox->addItem(tr("Info"), QLatin1String("info"));
+    ui->msgLvlComboBox->addItem(tr("Status"), QLatin1String("status"));
+    ui->msgLvlComboBox->addItem(tr("Verbose"), QLatin1String("verbose"));
+    ui->msgLvlComboBox->addItem(tr("Debug"), QLatin1String("debug"));
+    ui->msgLvlComboBox->addItem(tr("Trace"), QLatin1String("trace"));
     ui->msgLvlComboBox->setCurrentIndex(5);
 }
 
@@ -367,7 +355,7 @@ void PreferencesDialog::PopulateShortcuts()
     sortLock->unlock();
 }
 
-void PreferencesDialog::AddRow(QString first, QString second, QString third)
+void PreferencesDialog::AddRow(const QString& first, const QString& second, const QString& third)
 {
     bool locked = sortLock->tryLock();
     ui->infoWidget->insertRow(numberOfShortcuts);
@@ -379,7 +367,7 @@ void PreferencesDialog::AddRow(QString first, QString second, QString third)
         sortLock->unlock();
 }
 
-void PreferencesDialog::ModifyRow(int row, QString first, QString second, QString third)
+void PreferencesDialog::ModifyRow(int row, const QString& first, const QString& second, const QString& third)
 {
     bool locked = sortLock->tryLock();
     ui->infoWidget->item(row, 0)->setText(first);

@@ -87,7 +87,6 @@ HEADERS += \
     $$PWD/recent.h \
     $$PWD/fileassoc.h \
     $$PWD/widgets/progressindicatorbar.h \
-    $$PWD/ui/sysinfodialog.h \
     $$PWD/skinmanager.h \
     $$PWD/mpvwidget.h \
     $$PWD/ui/cframelesswindow.h
@@ -119,7 +118,6 @@ SOURCES += \
     $$PWD/configmanager.cpp \
     $$PWD/fileassoc.cpp \
     $$PWD/widgets/progressindicatorbar.cpp \
-    $$PWD/ui/sysinfodialog.cpp \
     $$PWD/skinmanager.cpp \
     $$PWD/mpvwidget.cpp \
     $$PWD/ui/cframelesswindow.cpp
@@ -132,5 +130,4 @@ FORMS += \
     $$PWD/ui/mainwindow.ui \
     $$PWD/ui/preferencesdialog.ui \
     $$PWD/ui/screenshotdialog.ui \
-    $$PWD/ui/keydialog.ui \
-    $$PWD/ui/sysinfodialog.ui
+    $$PWD/ui/keydialog.ui

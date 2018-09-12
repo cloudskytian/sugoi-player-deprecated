@@ -27,8 +27,8 @@ protected:
     void PopulateLangs();
     void PopulateMsgLvls();
     void PopulateShortcuts();
-    void AddRow(QString first, QString second, QString third);
-    void ModifyRow(int row, QString first, QString second, QString third);
+    void AddRow(const QString& first, const QString& second, const QString& third);
+    void ModifyRow(int row, const QString &first, const QString &second, const QString &third);
     void RemoveRow(int row);
     void SelectKey(bool add, QPair<QString, QPair<QString, QString>> init = (QPair<QString, QPair<QString, QString>>()));
 
