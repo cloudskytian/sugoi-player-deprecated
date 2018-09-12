@@ -495,9 +495,6 @@
       <addaction name="actionOnline_Help"/>
       <addaction name="action_Report_bugs"/>
       <addaction name="separator"/>
-      <addaction name="action_System_Information"/>
-      <addaction name="separator"/>
-      <addaction name="action_Check_for_Updates"/>
       <addaction name="actionUpdate_Streaming_Support"/>
       <addaction name="separator"/>
       <addaction name="actionAbout_Sugoi_Player"/>
