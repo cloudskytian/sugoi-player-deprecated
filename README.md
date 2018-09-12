@@ -92,7 +92,7 @@ https://github.com/wangwenx190/Sugoi-Player/releases.
 
 ## Changelog
 
-See [**doc/CHANGELOG.md**](/doc/CHANGELOG.md) for more information.
+See [**doc/changelog.md**](/doc/changelog.md) for more information.
 
 
 ## Compilation
