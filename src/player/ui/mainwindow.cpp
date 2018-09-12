@@ -22,6 +22,10 @@
 #include <QKeyEvent>
 #include <QEvent>
 
+#ifdef QT_HAS_CONCURRENT
+#include <QtConcurrent>
+#endif
+
 #ifdef Q_OS_WIN
 #include <qt_windows.h>
 #ifdef QT_HAS_WINEXTRAS
@@ -1657,7 +1661,13 @@ void MainWindow::connectOtherSignalsAndSlots()
             {
                 if (!filePath.isEmpty())
                 {
+#ifdef QT_HAS_CONCURRENT
+                    QtConcurrent::run([=]{
+#endif
                     mpv->LoadFile(filePath);
+#ifdef QT_HAS_CONCURRENT
+                    });
+#endif
                 }
             });
 
