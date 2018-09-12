@@ -52,12 +52,7 @@ public:
     bool getShowFullscreenIndicator() { return showFullscreenIndicator; }
     bool getOSDShowLocalTime()   { return osdShowLocalTime; }
     bool getPauseWhenMinimized() { return pauseWhenMinimized; }
-    bool getShowVideoPreview()   { return showVideoPreview; }
     bool getAllowRunInBackground() { return allowRunInBackground; }
-    bool getQuickStartMode()     { return quickStartMode; }
-    bool getTrayIconVisible()    { return trayIconVisible; }
-    bool getAutoUpdatePlayer()   { return autoUpdatePlayer; }
-    bool getAutoUpdateStreamingSupport() { return autoUpdateStreamingSupport; }
     QString getSkinFile()        { return skinFile; }
 
     Ui::MainWindow *ui = nullptr;

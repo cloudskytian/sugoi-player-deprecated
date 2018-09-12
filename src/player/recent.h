@@ -1,9 +1,7 @@
-﻿#include <utility>
+﻿#ifndef RECENT_H
+#define RECENT_H
 
 #include <utility>
-
-#ifndef RECENT_H
-#define RECENT_H
 
 #include <QString>
 

@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QHash>
 
-class QSystemTrayIcon;
 class QTranslator;
 
 class MainWindow;
@@ -23,8 +22,6 @@ public:
     MpvWidget      *mpv = nullptr;
     OverlayHandler *overlay = nullptr;
     DimDialog      *dimDialog = nullptr;
-
-    QSystemTrayIcon *sysTrayIcon = nullptr;
 
     QTranslator     *translator = nullptr;
     QTranslator     *qtTranslator = nullptr;

@@ -3,7 +3,6 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QTranslator>
-#include <QSystemTrayIcon>
 
 #include "ui/mainwindow.h"
 #include "ui_mainwindow.h"
@@ -16,21 +15,14 @@ SugoiEngine::SugoiEngine(QObject *parent):
     QObject(parent),
     window(static_cast<MainWindow*>(parent)),
     mpv(window->ui->mpvFrame),
-    overlay(new OverlayHandler(this)),
-    sysTrayIcon(new QSystemTrayIcon(QIcon(":/images/player.svg"), this))
+    overlay(new OverlayHandler(this))
 {
-    if(Util::DimLightsSupported())
-        dimDialog = new DimDialog(window, nullptr);
-    else
-    {
-        dimDialog = nullptr;
-        window->ui->action_Dim_Lights->setEnabled(false);
-    }
+    dimDialog = new DimDialog(window, nullptr);
 
     connect(mpv, &MpvWidget::messageSignal,
-            [=](QString msg)
+            [=](const QString& msg)
             {
-                Print(msg, "mpv");
+                Print(msg, QStringLiteral("mpv"));
             });
 }
 
@@ -39,7 +31,6 @@ SugoiEngine::~SugoiEngine()
     delete translator;
     delete qtTranslator;
     delete dimDialog;
-    delete sysTrayIcon;
     delete overlay;
 }
 
@@ -47,10 +38,10 @@ void SugoiEngine::Command(const QString& command)
 {
     if(command == QString())
         return;
-    QStringList args = command.split(" ");
+    QStringList args = command.split(QStringLiteral(" "));
     if(!args.empty())
     {
-        if(args.front() == "sugoi") // implicitly understood
+        if(args.front() == QLatin1String("sugoi")) // implicitly understood
             args.pop_front();
 
         if(!args.empty())
@@ -65,7 +56,7 @@ void SugoiEngine::Command(const QString& command)
                 InvalidCommand(args.join(' '));
         }
         else
-            RequiresParameters("sugoi");
+            RequiresParameters(QStringLiteral("sugoi"));
     }
     else
         InvalidCommand(args.join(' '));
@@ -73,8 +64,9 @@ void SugoiEngine::Command(const QString& command)
 
 void SugoiEngine::Print(const QString& what, const QString& who)
 {
-    QString out = QString("[%0]: %1").arg(who, what);
-    (qStdout() << out).flush();
+    QString out = QStringLiteral("[%0]: %1").arg(who, what);
+    QTextStream r{stdout};
+    (r << out).flush();
     window->ui->outputTextEdit->moveCursor(QTextCursor::End);
     window->ui->outputTextEdit->insertPlainText(out);
 }

@@ -11,46 +11,41 @@
 void SugoiEngine::LoadSettings()
 {
     QSettings settings(Util::SettingsLocation(), QSettings::IniFormat);
-    window->setAlwaysCheckFileAssoc(settings.value(QString::fromLatin1("alwaysCheckFileAssoc"), true).toBool());
-    QString regType = settings.value(QString::fromLatin1("fileAssoc"), QString::fromLatin1("all")).toString();
-    if (regType == QString::fromLatin1("all"))
+    window->setAlwaysCheckFileAssoc(settings.value(QStringLiteral("alwaysCheckFileAssoc"), true).toBool());
+    QString regType = settings.value(QStringLiteral("fileAssoc"), QStringLiteral("all")).toString();
+    if (regType == QStringLiteral("all"))
     {
         window->setFileAssocType(FileAssoc::reg_type::ALL);
     }
-    else if (regType == QString::fromLatin1("video"))
+    else if (regType == QStringLiteral("video"))
     {
         window->setFileAssocType(FileAssoc::reg_type::VIDEO_ONLY);
     }
-    else if (regType == QString::fromLatin1("audio"))
+    else if (regType == QStringLiteral("audio"))
     {
         window->setFileAssocType(FileAssoc::reg_type::AUDIO_ONLY);
     }
-    else if (regType == QString::fromLatin1("none"))
+    else if (regType == QStringLiteral("none"))
     {
         window->setFileAssocType(FileAssoc::reg_type::NONE);
     }
-    window->setSkinFile(settings.value(QString::fromLatin1("skin"), QString::fromLatin1("Default")).toString());
-    window->setAutoUpdatePlayer(settings.value(QString::fromLatin1("autoUpdatePlayer"), true).toBool());
-    window->setAutoUpdateStreamingSupport(settings.value(QString::fromLatin1("autoUpdateStreamingSupport"), true).toBool());
-    window->setQuickStartMode(settings.value(QString::fromLatin1("quickStartMode"), true).toBool());
-    window->setAllowRunInBackground(settings.value(QString::fromLatin1("allowRunInBackground"), false).toBool());
-    window->setShowVideoPreview(settings.value(QString::fromLatin1("showVideoPreview"), false).toBool());
-    window->setPauseWhenMinimized(settings.value(QString::fromLatin1("pauseWhenMinimized"), true).toBool());
-    window->setShowFullscreenIndicator(settings.value(QString::fromLatin1("showFullscreenIndicator"), true).toBool());
-    window->setOSDShowLocalTime(settings.value(QString::fromLatin1("osdShowLocalTime"), true).toBool());
-    window->setOnTop(settings.value(QString::fromLatin1("onTop"), QString::fromLatin1("never")).toString());
-    window->setAutoFit(settings.value(QString::fromLatin1("autoFit"), 100).toInt());
-    window->setTrayIconVisible(settings.value(QString::fromLatin1("trayIcon"), true).toBool());
-    window->setHidePopup(settings.value(QString::fromLatin1("hidePopup"), false).toBool());
-    window->setRemaining(settings.value(QString::fromLatin1("remaining"), true).toBool());
-    window->ui->splitter->setNormalPosition(settings.value(QString::fromLatin1("splitter"), window->ui->splitter->max()*1.0/8).toInt());
-    window->setDebug(settings.value(QString::fromLatin1("debug"), false).toBool());
-    //window->ui->hideFilesButton->setChecked(!settings.value(QString::fromLatin1("showAll"), true).toBool());
+    window->setSkinFile(settings.value(QStringLiteral("skin"), QStringLiteral("Default")).toString());
+    window->setAllowRunInBackground(settings.value(QStringLiteral("allowRunInBackground"), false).toBool());
+    window->setPauseWhenMinimized(settings.value(QStringLiteral("pauseWhenMinimized"), true).toBool());
+    window->setShowFullscreenIndicator(settings.value(QStringLiteral("showFullscreenIndicator"), true).toBool());
+    window->setOSDShowLocalTime(settings.value(QStringLiteral("osdShowLocalTime"), true).toBool());
+    window->setOnTop(settings.value(QStringLiteral("onTop"), QStringLiteral("never")).toString());
+    window->setAutoFit(settings.value(QStringLiteral("autoFit"), 100).toInt());
+    window->setHidePopup(settings.value(QStringLiteral("hidePopup"), false).toBool());
+    window->setRemaining(settings.value(QStringLiteral("remaining"), true).toBool());
+    window->ui->splitter->setNormalPosition(settings.value(QStringLiteral("splitter"), window->ui->splitter->max()*1.0/8).toInt());
+    window->setDebug(settings.value(QStringLiteral("debug"), false).toBool());
+    //window->ui->hideFilesButton->setChecked(!settings.value(QStringLiteral("showAll"), true).toBool());
     //root["showAll"] = true;
-    window->setScreenshotDialog(settings.value(QString::fromLatin1("screenshotDialog"), true).toBool());
+    window->setScreenshotDialog(settings.value(QStringLiteral("screenshotDialog"), true).toBool());
     window->recent.clear();
 
-    int size = settings.beginReadArray(QString::fromLatin1("recent"));
+    int size = settings.beginReadArray(QStringLiteral("recent"));
     if (size > 0)
     {
         QList<Recent> recents;
@@ -58,13 +53,13 @@ void SugoiEngine::LoadSettings()
         {
             settings.setArrayIndex(i);
             Recent recent;
-            recent.path = settings.value(QString::fromLatin1("path"), QString()).toString();
+            recent.path = settings.value(QStringLiteral("path"), QString()).toString();
             if (recent.path.isEmpty())
             {
                 continue;
             }
-            recent.title = settings.value(QString::fromLatin1("title"), QString()).toString();
-            recent.time = settings.value(QString::fromLatin1("time"), 0).toInt();
+            recent.title = settings.value(QStringLiteral("title"), QString()).toString();
+            recent.time = settings.value(QStringLiteral("time"), 0).toInt();
             recents.append(recent);
         }
         if (recents.count() > 1)
@@ -92,29 +87,29 @@ void SugoiEngine::LoadSettings()
     }
     settings.endArray();
 
-    window->setMaxRecent(settings.value(QString::fromLatin1("maxRecent"), 100).toInt());
-    window->setResume(settings.value(QString::fromLatin1("resume"), true).toBool());
-    window->setHideAllControls(settings.value(QString::fromLatin1("hideAllControls"), false).toBool());
-    window->setLang(settings.value(QString::fromLatin1("lang"), QString::fromLatin1("auto")).toString());
+    window->setMaxRecent(settings.value(QStringLiteral("maxRecent"), 100).toInt());
+    window->setResume(settings.value(QStringLiteral("resume"), true).toBool());
+    window->setHideAllControls(settings.value(QStringLiteral("hideAllControls"), false).toBool());
+    window->setLang(settings.value(QStringLiteral("lang"), QStringLiteral("auto")).toString());
 
     window->UpdateRecentFiles();
 
     input = default_input;
 
-    size = settings.beginReadArray(QString::fromLatin1("input"));
+    size = settings.beginReadArray(QStringLiteral("input"));
     if (size > 0)
     {
         for (int i = 0; i < size; ++i)
         {
             settings.setArrayIndex(i);
-            QString key = settings.value(QString::fromLatin1("key"), QString()).toString();
+            QString key = settings.value(QStringLiteral("key"), QString()).toString();
             if (key.isEmpty())
             {
                 continue;
             }
             input[key] = QPair<QString, QString>{
-                settings.value(QString::fromLatin1("command"), QString()).toString(),
-                settings.value(QString::fromLatin1("comment"), QString()).toString()
+                settings.value(QStringLiteral("command"), QString()).toString(),
+                settings.value(QStringLiteral("comment"), QString()).toString()
             };
         }
     }
@@ -122,29 +117,29 @@ void SugoiEngine::LoadSettings()
 
     window->MapShortcuts();
 
-    settings.beginGroup(QString::fromLatin1("mpv"));
-    mpv->fileFullPath = settings.value(QString::fromLatin1("lastFile"), QString::fromLatin1(".")).toString();
-    mpv->Volume(settings.value(QString::fromLatin1("volume"), 100).toInt());
-    mpv->Speed(settings.value(QString::fromLatin1("speed"), 1.0).toDouble());
-    mpv->Hwdec(settings.value(QString::fromLatin1("hwdec"), true).toBool());
-    //mpv->Vo(settings.value(QString::fromLatin1("vo"), QString::fromLatin1("opengl-cb")).toString());
-    mpv->ScreenshotFormat(settings.value(QString::fromLatin1("screenshot-format"), QString::fromLatin1("png")).toString());
-    mpv->ScreenshotTemplate(settings.value(QString::fromLatin1("screenshot-template"), QString::fromLatin1("screenshot%#04n")).toString());
-    mpv->ScreenshotDirectory(settings.value(QString::fromLatin1("screenshot-directory"), Util::SnapDirLocation()).toString());
-    mpv->MsgLevel(settings.value(QString::fromLatin1("msg-level"), QString::fromLatin1("status")).toString());
+    settings.beginGroup(QStringLiteral("mpv"));
+    mpv->fileFullPath = settings.value(QStringLiteral("lastFile"), QStringLiteral(".")).toString();
+    mpv->Volume(settings.value(QStringLiteral("volume"), 100).toInt());
+    mpv->Speed(settings.value(QStringLiteral("speed"), 1.0).toDouble());
+    mpv->Hwdec(settings.value(QStringLiteral("hwdec"), true).toBool());
+    //mpv->Vo(settings.value(QStringLiteral("vo"), QStringLiteral("opengl-cb")).toString());
+    mpv->ScreenshotFormat(settings.value(QStringLiteral("screenshot-format"), QStringLiteral("png")).toString());
+    mpv->ScreenshotTemplate(settings.value(QStringLiteral("screenshot-template"), QStringLiteral("screenshot%#04n")).toString());
+    mpv->ScreenshotDirectory(settings.value(QStringLiteral("screenshot-directory"), Util::SnapDirLocation()).toString());
+    mpv->MsgLevel(settings.value(QStringLiteral("msg-level"), QStringLiteral("status")).toString());
 
-    size = settings.beginReadArray(QString::fromLatin1("options"));
+    size = settings.beginReadArray(QStringLiteral("options"));
     if (size > 0)
     {
         for (int i = 0; i < size; ++i)
         {
             settings.setArrayIndex(i);
-            QString key = settings.value(QString::fromLatin1("key"), QString()).toString();
+            QString key = settings.value(QStringLiteral("key"), QString()).toString();
             if (key.isEmpty())
             {
                 continue;
             }
-            mpv->setOption(key, settings.value(QString::fromLatin1("value"), QString()).toString());
+            mpv->setOption(key, settings.value(QStringLiteral("value"), QString()).toString());
         }
     }
     settings.endArray();
@@ -155,57 +150,52 @@ void SugoiEngine::LoadSettings()
 void SugoiEngine::SaveSettings()
 {
     QSettings settings(Util::SettingsLocation(), QSettings::IniFormat);
-    settings.setValue(QString::fromLatin1("alwaysCheckFileAssoc"), window->getAlwaysCheckFileAssoc());
-    QString regType = QString::fromLatin1("all");
+    settings.setValue(QStringLiteral("alwaysCheckFileAssoc"), window->getAlwaysCheckFileAssoc());
+    QString regType = QStringLiteral("all");
     if (window->getFileAssocType() == FileAssoc::reg_type::VIDEO_ONLY)
     {
-        regType = QString::fromLatin1("video");
+        regType = QStringLiteral("video");
     }
     else if (window->getFileAssocType() == FileAssoc::reg_type::AUDIO_ONLY)
     {
-        regType = QString::fromLatin1("audio");
+        regType = QStringLiteral("audio");
     }
     else if (window->getFileAssocType() == FileAssoc::reg_type::NONE)
     {
-        regType = QString::fromLatin1("none");
+        regType = QStringLiteral("none");
     }
-    settings.setValue(QString::fromLatin1("skin"), window->getSkinFile());
-    settings.setValue(QString::fromLatin1("autoUpdatePlayer"), window->getAutoUpdatePlayer());
-    settings.setValue(QString::fromLatin1("autoUpdateStreamingSupport"), window->getAutoUpdateStreamingSupport());
-    settings.setValue(QString::fromLatin1("quickStartMode"), window->getQuickStartMode());
-    settings.setValue(QString::fromLatin1("allowRunInBackground"), window->getAllowRunInBackground());
-    settings.setValue(QString::fromLatin1("showVideoPreview"), window->getShowVideoPreview());
-    settings.setValue(QString::fromLatin1("pauseWhenMinimized"), window->getPauseWhenMinimized());
-    settings.setValue(QString::fromLatin1("showFullscreenIndicator"), window->getShowFullscreenIndicator());
-    settings.setValue(QString::fromLatin1("osdShowLocalTime"), window->getOSDShowLocalTime());
-    settings.setValue(QString::fromLatin1("fileAssoc"), regType);
-    settings.setValue(QString::fromLatin1("onTop"), window->onTop);
-    settings.setValue(QString::fromLatin1("autoFit"), window->autoFit);
-    settings.setValue(QString::fromLatin1("trayIcon"), window->getTrayIconVisible());
-    settings.setValue(QString::fromLatin1("hidePopup"), window->hidePopup);
-    settings.setValue(QString::fromLatin1("remaining"), window->remaining);
+    settings.setValue(QStringLiteral("skin"), window->getSkinFile());
+    settings.setValue(QStringLiteral("allowRunInBackground"), window->getAllowRunInBackground());
+    settings.setValue(QStringLiteral("pauseWhenMinimized"), window->getPauseWhenMinimized());
+    settings.setValue(QStringLiteral("showFullscreenIndicator"), window->getShowFullscreenIndicator());
+    settings.setValue(QStringLiteral("osdShowLocalTime"), window->getOSDShowLocalTime());
+    settings.setValue(QStringLiteral("fileAssoc"), regType);
+    settings.setValue(QStringLiteral("onTop"), window->onTop);
+    settings.setValue(QStringLiteral("autoFit"), window->autoFit);
+    settings.setValue(QStringLiteral("hidePopup"), window->hidePopup);
+    settings.setValue(QStringLiteral("remaining"), window->remaining);
     int pos = (window->ui->splitter->position() == 0 ||
                                     window->ui->splitter->position() == window->ui->splitter->max()) ?
                                     window->ui->splitter->normalPosition() :
                                     window->ui->splitter->position();
-    settings.setValue(QString::fromLatin1("splitter"), pos);
+    settings.setValue(QStringLiteral("splitter"), pos);
     //root["showAll"] = true; //!window->ui->hideFilesButton->isChecked();
-    settings.setValue(QString::fromLatin1("screenshotDialog"), window->screenshotDialog);
-    settings.setValue(QString::fromLatin1("debug"), window->debug);
-    settings.setValue(QString::fromLatin1("maxRecent"), window->maxRecent);
-    settings.setValue(QString::fromLatin1("lang"), window->lang);
-    settings.setValue(QString::fromLatin1("resume"), window->resume);
-    settings.setValue(QString::fromLatin1("hideAllControls"), window->hideAllControls);
+    settings.setValue(QStringLiteral("screenshotDialog"), window->screenshotDialog);
+    settings.setValue(QStringLiteral("debug"), window->debug);
+    settings.setValue(QStringLiteral("maxRecent"), window->maxRecent);
+    settings.setValue(QStringLiteral("lang"), window->lang);
+    settings.setValue(QStringLiteral("resume"), window->resume);
+    settings.setValue(QStringLiteral("hideAllControls"), window->hideAllControls);
 
     if (!window->recent.isEmpty())
     {
-        settings.beginWriteArray(QString::fromLatin1("recent"));
+        settings.beginWriteArray(QStringLiteral("recent"));
         for (int i = 0; i < window->recent.size(); ++i)
         {
             settings.setArrayIndex(i);
-            settings.setValue(QString::fromLatin1("path"), QDir::toNativeSeparators(window->recent.at(i).path));
-            settings.setValue(QString::fromLatin1("title"), window->recent.at(i).title);
-            settings.setValue(QString::fromLatin1("time"), window->recent.at(i).time);
+            settings.setValue(QStringLiteral("path"), QDir::toNativeSeparators(window->recent.at(i).path));
+            settings.setValue(QStringLiteral("title"), window->recent.at(i).title);
+            settings.setValue(QStringLiteral("time"), window->recent.at(i).time);
         }
         settings.endArray();
     }
@@ -232,28 +222,28 @@ void SugoiEngine::SaveSettings()
     }
     if (!input_array.isEmpty())
     {
-        settings.beginWriteArray(QString::fromLatin1("input"));
+        settings.beginWriteArray(QStringLiteral("input"));
         int i = 0;
         for (auto input_iter = input_array.begin(); input_iter != input_array.end(); ++input_iter)
         {
             settings.setArrayIndex(i);
-            settings.setValue(QString::fromLatin1("key"), input_iter.key());
-            settings.setValue(QString::fromLatin1("command"), input_iter->first);
-            settings.setValue(QString::fromLatin1("comment"), input_iter->second);
+            settings.setValue(QStringLiteral("key"), input_iter.key());
+            settings.setValue(QStringLiteral("command"), input_iter->first);
+            settings.setValue(QStringLiteral("comment"), input_iter->second);
             ++i;
         }
         settings.endArray();
     }
 
-    settings.beginGroup(QString::fromLatin1("mpv"));
-    settings.setValue(QString::fromLatin1("lastFile"), QDir::toNativeSeparators(mpv->fileFullPath));
-    settings.setValue(QString::fromLatin1("hwdec"), mpv->hwdec);
-    settings.setValue(QString::fromLatin1("volume"), mpv->volume);
-    settings.setValue(QString::fromLatin1("speed"), mpv->speed);
-    settings.setValue(QString::fromLatin1("vo"), mpv->vo);
-    settings.setValue(QString::fromLatin1("screenshot-format"), mpv->screenshotFormat);
-    settings.setValue(QString::fromLatin1("screenshot-template"), mpv->screenshotTemplate);
-    settings.setValue(QString::fromLatin1("screenshot-directory"), QDir::toNativeSeparators(mpv->screenshotDir));
-    settings.setValue(QString::fromLatin1("msg-level"), mpv->msgLevel);
+    settings.beginGroup(QStringLiteral("mpv"));
+    settings.setValue(QStringLiteral("lastFile"), QDir::toNativeSeparators(mpv->fileFullPath));
+    settings.setValue(QStringLiteral("hwdec"), mpv->hwdec);
+    settings.setValue(QStringLiteral("volume"), mpv->volume);
+    settings.setValue(QStringLiteral("speed"), mpv->speed);
+    settings.setValue(QStringLiteral("vo"), mpv->vo);
+    settings.setValue(QStringLiteral("screenshot-format"), mpv->screenshotFormat);
+    settings.setValue(QStringLiteral("screenshot-template"), mpv->screenshotTemplate);
+    settings.setValue(QStringLiteral("screenshot-directory"), QDir::toNativeSeparators(mpv->screenshotDir));
+    settings.setValue(QStringLiteral("msg-level"), mpv->msgLevel);
     settings.endGroup();
 }
