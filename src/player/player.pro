@@ -1,3 +1,7 @@
+TEMPLATE = app
+
+RC_FILE += player.rc
+
 DEFINES += QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x050000
 
 QT += gui widgets
@@ -95,7 +99,7 @@ HEADERS += \
     $$PWD/ui/cframelesswindow.h
 
 SOURCES += \
-    $$PWD/playermain.cpp \
+    $$PWD/main.cpp \
     $$PWD/sugoiengine.cpp \
     $$PWD/sugoicommands.cpp \
     $$PWD/overlayhandler.cpp \

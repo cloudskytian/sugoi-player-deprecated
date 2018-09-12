@@ -40,6 +40,7 @@ MpvWidget::MpvWidget(QWidget *parent, Qt::WindowFlags f, SugoiEngine *se) : QOpe
     setOption(QStringLiteral("input-cursor"), QStringLiteral("no")); // no mouse handling
     setOption(QStringLiteral("cursor-autohide"), QStringLiteral("no")); // no cursor-autohide, we handle that
     setOption(QStringLiteral("ytdl"), QStringLiteral("yes")); // youtube-dl support
+    setOption(QStringLiteral("sub-auto"), QStringLiteral("fuzzy")); // Automatic subfile detection
 
     mpv_observe_property(mpv, 0, "duration", MPV_FORMAT_DOUBLE);
     mpv_observe_property(mpv, 0, "time-pos", MPV_FORMAT_DOUBLE);
