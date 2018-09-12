@@ -118,7 +118,7 @@ Create a file named **build.user.bat** in **`C:\Sugoi-Player\`** (just for examp
 ```bat
 @ECHO OFF
 SET "_QT_DIR_32=C:\Qt\Qt5.12.0\5.12.0\msvc2017"
-SET "_VC_BAT_PATH==C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
+SET "_VC_BAT_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
 SET "_JOM_DIR=C:\Qt\Qt5.12.0\tools\qtcreator\bin"
 ```
 
@@ -129,7 +129,7 @@ SET "_JOM_DIR=C:\Qt\Qt5.12.0\tools\qtcreator\bin"
    1. Download Git from https://git-for-windows.github.io/ and install.
    2. Open Git bash and run:
       ```text
-      git clone https://github.com/wangwenx190/Sugoi-Player.git
+      git clone --recursive https://github.com/wangwenx190/Sugoi-Player.git
       ```
 2. Open the solution file **sugoi-player.pro**. Change the solution's configuration to **Release** (in the toolbar).
 3. Press <kbd>Ctrl</kbd> + <kbd>B</kbd> or click **Build** to build the solution.
