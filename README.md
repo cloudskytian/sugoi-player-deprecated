@@ -98,7 +98,7 @@ See [**doc/changelog.md**](/doc/changelog.md) for more information.
 ## Compilation
 
 
-### Part A: Requirements
+### Part I: Requirements
 
 - [Visual Studio 2017](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) (Only the build tools are needed, but you can also install the full IDE. The community edition is also fine)
   - [**Windows 10 SDK**](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk) (I recommend download the ISO image from this website instead of installing it from the VS installer. Remember to install the CDB debugger while you are installing the Win10 SDK if you want to use Qt Creator)
@@ -112,49 +112,48 @@ See [**doc/changelog.md**](/doc/changelog.md) for more information.
 Using the **latest** version is highly recommended.
 
 
-### Part B: Prepare the environment
+### Part II: Download and compile the source code
 
-Create a file named **build.user.bat** in **`C:\Sugoi-Player\`** (just for example, it could be placed in anywhere you like) containing the following entries, adapted for your system:
-```bat
-@ECHO OFF
-SET "_QT_DIR_32=C:\Qt\Qt5.12.0\5.12.0\msvc2017"
-SET "_VC_BAT_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"
-SET "_JOM_DIR=C:\Qt\Qt5.12.0\tools\qtcreator\bin"
-```
-
-
-### Part C: Download and compile the source code
-
-1. Use Git to clone Sugoi Player's repository to **`C:\Sugoi-Player\`** (just for example, it could be anywhere you like).
+1. Use Git to clone Sugoi Player's repository to **`C:\projects\sugoi-player`** (just for example, it could be anywhere you like).
    1. Download Git from https://git-for-windows.github.io/ and install.
    2. Open Git bash and run:
       ```text
       git clone --recursive https://github.com/wangwenx190/Sugoi-Player.git
       ```
-2. Open the solution file **sugoi-player.pro**. Change the solution's configuration to **Release** (in the toolbar).
-3. Press <kbd>Ctrl</kbd> + <kbd>B</kbd> or click **Build** to build the solution.
-4. You now have **Sugoi[64].exe** and **iconlib.dll** under **"bin[64]/Release"**.
-
-**NOTES**
-
-- Alternatively, you can use **build.bat** that can build everything for you.
-- How to generate Visual Studio solution file through qmake:
+2. Open command line shell
    ```bat
-   REM Open cmd, call qtenv2.bat in your Qt bin dir
-   REM For example:
-   CALL "C:\Qt\Qt5.12.0\5.12.0\msvc2017\bin\qtenv2.bat"
-   REM Then call vcvarsall.bat x64 or vcvarsall.bat x86 in your VC build dir
-   REM For example:
    CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
-   REM If your project TEMPLATE is "subdirs", use this:
-   REM qmake -r -tp vc xxx.pro
-   REM Other templates use this:
-   REM qmake -tp vc xxx.pro
-   REM xxx.pro is your .pro file
-   REM For example:
-   qmake -r -tp vc sugoi-player.pro
-   REM Now you have the .sln file. Open it using VS.
+   CALL "C:\Qt\Qt5.12.0\5.12.0\msvc2017\bin\qtenv2.bat"
+   CD /D "C:\projects\sugoi-player"
+   qmake "sugoi-player.pro" -spec win32-msvc "CONFIG+=release"
+   jom qmake_all
+   jom && jom install
    ```
+3. If your application is linked against shared libraries of Qt
+   ```bat
+   windeployqt Sugoi.exe
+   ```
+4. You can also use Visual Studio or Qt Creator to compile it.
+
+**NOTE**
+
+How to generate Visual Studio solution file through qmake:
+  ```bat
+  REM Open cmd, call qtenv2.bat in your Qt bin dir
+  REM For example:
+  CALL "C:\Qt\Qt5.12.0\5.12.0\msvc2017\bin\qtenv2.bat"
+  REM Then call vcvarsall.bat x64 or vcvarsall.bat x86 in your VC build dir
+  REM For example:
+  CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
+  REM If your project TEMPLATE is "subdirs", use this:
+  REM qmake -r -tp vc xxx.pro
+  REM Other templates use this:
+  REM qmake -tp vc xxx.pro
+  REM xxx.pro is your .pro file
+  REM For example:
+  qmake -r -tp vc sugoi-player.pro
+  REM Now you have the .sln file. Open it using VS.
+  ```
 
 
 ## Bug reports & Feature requests

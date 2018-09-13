@@ -12,13 +12,13 @@ class LocationDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit LocationDialog(QString path, QWidget *parent = nullptr);
+    explicit LocationDialog(const QString& path, QWidget *parent = nullptr);
     ~LocationDialog() override;
 
-    static QString getUrl(QString path, QWidget *parent = nullptr);
+    static QString getUrl(const QString& path, QWidget *parent = nullptr);
 
 private slots:
-    void validate(QString input);
+    void validate(const QString& input);
 
 private:
     Ui::LocationDialog *ui;

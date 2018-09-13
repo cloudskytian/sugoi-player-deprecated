@@ -42,6 +42,8 @@ CONFIG(debug, debug|release) {
     TARGET = $$join(TARGET,,,d)
 }
 
+DESTDIR = $$BIN_DIR
+
 target.path = $$BIN_DIR
 
 qmfiles.files = $$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm $$PWD/translations/*.qm

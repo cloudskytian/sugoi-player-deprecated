@@ -42,7 +42,7 @@ protected:
 private slots:
     void onTitleBarDestroyed();
 public:
-    void setContentsMargins(const QMargins &margins);
+    void setContentsMargins(QMargins margins);
     void setContentsMargins(int left, int top, int right, int bottom);
     QMargins contentsMargins() const;
     QRect contentsRect() const;

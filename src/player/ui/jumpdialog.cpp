@@ -54,12 +54,12 @@ void JumpDialog::validate()
 
     if(time < maxTime)
     {
-        ui->validEntryLabel->setPixmap(QPixmap(":/images/exists.svg"));
+        ui->validEntryLabel->setPixmap(QPixmap(QStringLiteral(":/images/exists.svg")));
         ui->okButton->setEnabled(true);
     }
     else
     {
-        ui->validEntryLabel->setPixmap(QPixmap(":/images/not_exists.svg"));
+        ui->validEntryLabel->setPixmap(QPixmap(QStringLiteral(":/images/not_exists.svg")));
         ui->okButton->setEnabled(false);
     }
 }

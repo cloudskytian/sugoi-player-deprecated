@@ -1,7 +1,9 @@
+﻿#include <utility>
+
 #include "inputdialog.h"
 #include "ui_inputdialog.h"
 
-InputDialog::InputDialog(QString prompt, QString title, const std::function<bool (QString)> &_validation, QWidget *parent) :
+InputDialog::InputDialog(const QString& prompt, const QString& title, const std::function<bool (QString)> &_validation, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::InputDialog),
     validation(_validation)
@@ -23,16 +25,15 @@ InputDialog::~InputDialog()
     delete ui;
 }
 
-QString InputDialog::getInput(QString prompt, QString title, const std::function<bool (QString)> &validation, QWidget *parent)
+QString InputDialog::getInput(const QString& prompt, const QString& title, const std::function<bool (QString)> &validation, QWidget *parent)
 {
     InputDialog dialog(prompt, title, validation, parent);
     if(dialog.exec() == QDialog::Accepted)
         return dialog.ui->inputLineEdit->text();
-    else
-        return "";
+    return QLatin1String("");
 }
 
-void InputDialog::validate(QString input)
+void InputDialog::validate(const QString& input)
 {
-    ui->okButton->setEnabled(input != "" && validation(input));
+    ui->okButton->setEnabled(input != QLatin1String("") && validation(input));
 }

@@ -216,14 +216,8 @@ int main(int argc, char *argv[])
                         mainWindow.openFileFromCmd(message);
                      });
     }
-
-    mainWindow.show();
-    mainWindow.openFileFromCmd(command);
-
-    return SingleApplication::exec();
-#else
+#endif
     mainWindow.show();
     mainWindow.openFileFromCmd(command);
     return QApplication::exec();
-#endif
 }

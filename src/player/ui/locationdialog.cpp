@@ -6,7 +6,7 @@
 
 #include "util.h"
 
-LocationDialog::LocationDialog(QString path, QWidget *parent) :
+LocationDialog::LocationDialog(const QString& path, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LocationDialog)
 {
@@ -33,25 +33,24 @@ LocationDialog::~LocationDialog()
     delete ui;
 }
 
-QString LocationDialog::getUrl(QString path, QWidget *parent)
+QString LocationDialog::getUrl(const QString& path, QWidget *parent)
 {
     LocationDialog dialog(path, parent);
     if(dialog.exec() == QDialog::Accepted)
         return dialog.ui->urlEdit->text();
-    else
-        return QString();
+    return QString();
 }
 
-void LocationDialog::validate(QString input)
+void LocationDialog::validate(const QString& input)
 {
     if(Util::IsValidLocation(input))
     {
-        ui->validEntryLabel->setPixmap(QPixmap(":/images/exists.svg"));
+        ui->validEntryLabel->setPixmap(QPixmap(QStringLiteral(":/images/exists.svg")));
         ui->okButton->setEnabled(true);
     }
     else
     {
-        ui->validEntryLabel->setPixmap(QPixmap(":/images/not_exists.svg"));
+        ui->validEntryLabel->setPixmap(QPixmap(QStringLiteral(":/images/not_exists.svg")));
         ui->okButton->setEnabled(false);
     }
 }

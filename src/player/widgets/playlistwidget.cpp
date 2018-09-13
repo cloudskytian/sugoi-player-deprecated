@@ -41,7 +41,7 @@ void PlaylistWidget::AttachEngine(SugoiEngine *sugoi)
             });
 
     connect(sugoi->mpv, &MpvWidget::fileChanged,
-            [=](QString f)
+            [=](const QString& f)
             {
                 if(newPlaylist)
                 {
@@ -62,7 +62,7 @@ void PlaylistWidget::AttachEngine(SugoiEngine *sugoi)
             });
 
     connect(this, &PlaylistWidget::doubleClicked,
-            [=](const QModelIndex &i)
+            [=](QModelIndex i)
             {
                 PlayIndex(i.row());
             });
@@ -300,7 +300,7 @@ void PlaylistWidget::DeleteFromDisk(QListWidgetItem *item)
             subf.remove();
     }
     // check and remove all external subtitle files in the video
-    for(auto track : sugoi->mpv->getFileInfo().tracks)
+    for(const auto& track : sugoi->mpv->getFileInfo().tracks)
     {
         if(track.external)
         {

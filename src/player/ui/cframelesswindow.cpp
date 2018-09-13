@@ -1,24 +1,23 @@
 ﻿#include "cframelesswindow.h"
 
 #ifdef Q_OS_WIN
-#include <Windows.h>
-#include <WinUser.h>
+#include <windows.h>
+//#include <WinUser.h>
 #include <windowsx.h>
 #include <dwmapi.h>
-#include <objidl.h>
-#include <gdiplus.h>
-#include <GdiPlusColor.h>
+//#include <objidl.h>
+//#include <gdiplus.h>
+//#include <GdiPlusColor.h>
 
 CFramelessWindow::CFramelessWindow(QWidget *parent)
-    : QWidget(parent),
-      m_titlebar(Q_NULLPTR),
-      m_borderWidth(5),
-      m_bJustMaximized(false),
-      m_bResizeable(true)
+    : QWidget(parent)
 {
-    setWindowFlag(Qt::Window,true);
-    setWindowFlag(Qt::FramelessWindowHint, true);
-    setWindowFlag(Qt::WindowSystemMenuHint, true);
+//    setWindowFlag(Qt::Window,true);
+//    setWindowFlag(Qt::FramelessWindowHint, true);
+//    setWindowFlag(Qt::WindowSystemMenuHint, true);
+//    setWindowFlag() is not avaliable before Qt v5.9, so we should use setWindowFlags instead
+
+    setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowSystemMenuHint);
 
     setResizeable(m_bResizeable);
 }
@@ -28,19 +27,21 @@ void CFramelessWindow::setResizeable(bool resizeable)
     bool visible = isVisible();
     m_bResizeable = resizeable;
     if (m_bResizeable){
-        setWindowFlag(Qt::WindowMaximizeButtonHint);
+        setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+//        setWindowFlag(Qt::WindowMaximizeButtonHint);
 
         //此行代码可以带回Aero效果，同时也带回了标题栏和边框,在nativeEvent()会再次去掉标题栏
         //
         //this line will get titlebar/thick frame/Aero back, which is exactly what we want
         //we will get rid of titlebar and thick frame again in nativeEvent() later
-        HWND hwnd = (HWND)this->winId();
+        auto hwnd = reinterpret_cast<HWND>(this->winId());
         DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
         ::SetWindowLong(hwnd, GWL_STYLE, style | WS_MAXIMIZEBOX | WS_THICKFRAME | WS_CAPTION);
     }else{
-        setWindowFlag(Qt::WindowMaximizeButtonHint,false);
+        setWindowFlags(windowFlags() & ~Qt::WindowMaximizeButtonHint);
+//        setWindowFlag(Qt::WindowMaximizeButtonHint,false);
 
-        HWND hwnd = (HWND)this->winId();
+        auto hwnd = reinterpret_cast<HWND>(this->winId());
         DWORD style = ::GetWindowLong(hwnd, GWL_STYLE);
         ::SetWindowLong(hwnd, GWL_STYLE, style & ~WS_MAXIMIZEBOX & ~WS_CAPTION);
     }
@@ -84,7 +85,7 @@ void CFramelessWindow::addIgnoreWidget(QWidget* widget)
 
 bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
-    MSG* msg = (MSG *)message;
+    auto* msg = reinterpret_cast<MSG *>(message);
     switch (msg->message)
     {
     case WM_NCCALCSIZE:
@@ -180,12 +181,11 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
         {
             *result = HTCAPTION;
             return true;
-        }else{
-            if (m_whiteList.contains(child))
-            {
-                *result = HTCAPTION;
-                return true;
-            }
+        }
+        if (m_whiteList.contains(child))
+        {
+            *result = HTCAPTION;
+            return true;
         }
         return false;
     } //end case WM_NCHITTEST
@@ -227,7 +227,7 @@ bool CFramelessWindow::nativeEvent(const QByteArray &eventType, void *message, l
     }
 }
 
-void CFramelessWindow::setContentsMargins(const QMargins &margins)
+void CFramelessWindow::setContentsMargins(QMargins margins)
 {
     QWidget::setContentsMargins(margins+m_frames);
     m_margins = margins;

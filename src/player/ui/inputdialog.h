@@ -13,13 +13,13 @@ class InputDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit InputDialog(QString prompt, QString title, const std::function<bool (QString)> &validation, QWidget *parent = nullptr);
+    explicit InputDialog(const QString& prompt, const QString& title, const std::function<bool (QString)> &validation, QWidget *parent = nullptr);
     ~InputDialog() override;
 
-    static QString getInput(QString prompt, QString title, const std::function<bool (QString)> &validation, QWidget *parent = nullptr);
+    static QString getInput(const QString& prompt, const QString& title, const std::function<bool (QString)> &validation, QWidget *parent = nullptr);
 
 private slots:
-    void validate(QString input);
+    void validate(const QString& input);
 
 private:
     Ui::InputDialog *ui;

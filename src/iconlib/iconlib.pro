@@ -23,5 +23,7 @@ CONFIG(debug, debug|release) {
     TARGET = $$join(TARGET,,,d)
 }
 
+DESTDIR = $$BIN_DIR
+
 target.path = $$BIN_DIR
 INSTALLS += target

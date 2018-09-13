@@ -15,7 +15,7 @@ DimDialog::DimDialog(MainWindow *window, QWidget *parent) :
 {
     setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
     setWindowOpacity(.6);
-    setStyleSheet("background-color: black;");
+    setStyleSheet(QStringLiteral("background-color: black;"));
 
 //    connect(qApp, &QApplication::focusWindowChanged,
 //            [=](QWindow *focusWindow)
