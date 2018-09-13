@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/wangwenx190/sugoi-player-deprecated"><img src="src/sugoi/resources/player.svg" alt="Sugoi Player" width="256" height="256"/></a><br>
+  <a href="https://github.com/wangwenx190/sugoi-player-deprecated"><img src="src/player/resources/player.svg" alt="Sugoi Player" width="256" height="256"/></a><br>
   <a href="https://github.com/wangwenx190/sugoi-player-deprecated">Sugoi Player</a>
 </h1>
 
