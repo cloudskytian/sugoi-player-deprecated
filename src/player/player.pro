@@ -57,9 +57,7 @@ licensefiles.path = $$BIN_DIR/licenses
 
 INSTALLS += target qmfiles skinfiles licensefiles
 
-LIBS += \
-    -lUser32 -lShell32 -lKernel32 -lDwmapi \
-    -L$${LIB_DIR} -lmpv
+LIBS += -lUser32 -lShell32 -lKernel32 -lDwmapi -L$${LIB_DIR} -lmpv
 
 INCLUDEPATH += $$PWD/../../include
 DEPENDPATH += $$PWD/../../include
@@ -69,72 +67,72 @@ RESOURCES += $$PWD/resources.qrc
 TRANSLATIONS += $$PWD/translations/sugoi_zh_CN.ts
 
 HEADERS += \
-    $$PWD/sugoiengine.h \
-    $$PWD/mpvtypes.h \
-    $$PWD/overlayhandler.h \
-    $$PWD/overlay.h \
-    $$PWD/util.h \
-    $$PWD/widgets/customlabel.h \
-    $$PWD/widgets/customlineedit.h \
-    $$PWD/widgets/customslider.h \
-    $$PWD/widgets/customsplitter.h \
-    $$PWD/widgets/dimdialog.h \
-    $$PWD/widgets/indexbutton.h \
-    $$PWD/widgets/openbutton.h \
-    $$PWD/widgets/playlistwidget.h \
-    $$PWD/widgets/seekbar.h \
-    $$PWD/ui/aboutdialog.h \
-    $$PWD/ui/inputdialog.h \
-    $$PWD/ui/jumpdialog.h \
-    $$PWD/ui/locationdialog.h \
-    $$PWD/ui/mainwindow.h \
-    $$PWD/ui/preferencesdialog.h \
-    $$PWD/ui/screenshotdialog.h \
-    $$PWD/ui/keydialog.h \
-    $$PWD/recent.h \
-    $$PWD/fileassoc.h \
-    $$PWD/widgets/progressindicatorbar.h \
-    $$PWD/skinmanager.h \
-    $$PWD/mpvwidget.h \
-    $$PWD/ui/cframelesswindow.h
+    sugoiengine.h \
+    mpvtypes.h \
+    overlayhandler.h \
+    overlay.h \
+    util.h \
+    widgets/customlabel.h \
+    widgets/customlineedit.h \
+    widgets/customslider.h \
+    widgets/customsplitter.h \
+    widgets/dimdialog.h \
+    widgets/indexbutton.h \
+    widgets/openbutton.h \
+    widgets/playlistwidget.h \
+    widgets/seekbar.h \
+    ui/aboutdialog.h \
+    ui/inputdialog.h \
+    ui/jumpdialog.h \
+    ui/locationdialog.h \
+    ui/mainwindow.h \
+    ui/preferencesdialog.h \
+    ui/screenshotdialog.h \
+    ui/keydialog.h \
+    recent.h \
+    fileassoc.h \
+    widgets/progressindicatorbar.h \
+    skinmanager.h \
+    mpvwidget.h \
+    ui/cframelesswindow.h
 
 SOURCES += \
-    $$PWD/main.cpp \
-    $$PWD/sugoiengine.cpp \
-    $$PWD/sugoicommands.cpp \
-    $$PWD/overlayhandler.cpp \
-    $$PWD/util.cpp \
-    $$PWD/widgets/customlabel.cpp \
-    $$PWD/widgets/customlineedit.cpp \
-    $$PWD/widgets/customslider.cpp \
-    $$PWD/widgets/customsplitter.cpp \
-    $$PWD/widgets/dimdialog.cpp \
-    $$PWD/widgets/indexbutton.cpp \
-    $$PWD/widgets/openbutton.cpp \
-    $$PWD/widgets/playlistwidget.cpp \
-    $$PWD/widgets/seekbar.cpp \
-    $$PWD/ui/aboutdialog.cpp \
-    $$PWD/ui/inputdialog.cpp \
-    $$PWD/ui/jumpdialog.cpp \
-    $$PWD/ui/locationdialog.cpp \
-    $$PWD/ui/mainwindow.cpp \
-    $$PWD/ui/preferencesdialog.cpp \
-    $$PWD/ui/screenshotdialog.cpp \
-    $$PWD/ui/keydialog.cpp \
-    $$PWD/overlay.cpp \
-    $$PWD/configmanager.cpp \
-    $$PWD/fileassoc.cpp \
-    $$PWD/widgets/progressindicatorbar.cpp \
-    $$PWD/skinmanager.cpp \
-    $$PWD/mpvwidget.cpp \
-    $$PWD/ui/cframelesswindow.cpp
+    main.cpp \
+    sugoiengine.cpp \
+    sugoicommands.cpp \
+    overlayhandler.cpp \
+    util.cpp \
+    widgets/customlabel.cpp \
+    widgets/customlineedit.cpp \
+    widgets/customslider.cpp \
+    widgets/customsplitter.cpp \
+    widgets/dimdialog.cpp \
+    widgets/indexbutton.cpp \
+    widgets/openbutton.cpp \
+    widgets/playlistwidget.cpp \
+    widgets/seekbar.cpp \
+    ui/aboutdialog.cpp \
+    ui/inputdialog.cpp \
+    ui/jumpdialog.cpp \
+    ui/locationdialog.cpp \
+    ui/mainwindow.cpp \
+    ui/preferencesdialog.cpp \
+    ui/screenshotdialog.cpp \
+    ui/keydialog.cpp \
+    overlay.cpp \
+    configmanager.cpp \
+    fileassoc.cpp \
+    widgets/progressindicatorbar.cpp \
+    skinmanager.cpp \
+    mpvwidget.cpp \
+    ui/cframelesswindow.cpp
 
 FORMS += \
-    $$PWD/ui/aboutdialog.ui \
-    $$PWD/ui/inputdialog.ui \
-    $$PWD/ui/jumpdialog.ui \
-    $$PWD/ui/locationdialog.ui \
-    $$PWD/ui/mainwindow.ui \
-    $$PWD/ui/preferencesdialog.ui \
-    $$PWD/ui/screenshotdialog.ui \
-    $$PWD/ui/keydialog.ui
+    ui/aboutdialog.ui \
+    ui/inputdialog.ui \
+    ui/jumpdialog.ui \
+    ui/locationdialog.ui \
+    ui/mainwindow.ui \
+    ui/preferencesdialog.ui \
+    ui/screenshotdialog.ui \
+    ui/keydialog.ui

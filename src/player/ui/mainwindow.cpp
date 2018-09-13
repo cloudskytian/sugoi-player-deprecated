@@ -1571,7 +1571,10 @@ void MainWindow::connectOtherSignalsAndSlots()
                     }
                     sugoi->qtTranslator = new QTranslator();
                     QString langPath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("translations");
-                    QDir qmDir(langPath);
+                    QDir qmDir;
+                    qmDir.setPath(langPath);
+                    if (!qmDir.exists()) langPath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("languages");
+                    qmDir.setPath(langPath);
                     if (!qmDir.exists()) langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
                     if (sugoi->qtTranslator->load(QStringLiteral("qt_%0").arg(l), langPath))
                     {
