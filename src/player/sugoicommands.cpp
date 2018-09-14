@@ -21,14 +21,13 @@
 #include "mpvwidget.h"
 #include "overlayhandler.h"
 #include "util.h"
-#include "sugoi-player-version.h"
 
 void SugoiEngine::SugoiMpv(QStringList &args)
 {
     if(!args.empty())
         mpv->command(args);
     else
-        RequiresParameters("mpv");
+        RequiresParameters(QStringLiteral("mpv"));
 }
 
 void SugoiEngine::SugoiSh(QStringList &args)
@@ -42,7 +41,7 @@ void SugoiEngine::SugoiSh(QStringList &args)
         connect(p, &QProcess::readyRead,
                 [=]
                 {
-                    Print(p->readAll(), QString("%0(%1))").arg(p->program(), QString::number(quintptr(p))));
+                    Print(p->readAll(), QStringLiteral("%0(%1))").arg(p->program(), QString::number(quintptr(p))));
                 });
 //        connect(p, &QProcess::finished,
 //                [=](int, QProcess::ExitStatus)
@@ -51,13 +50,13 @@ void SugoiEngine::SugoiSh(QStringList &args)
 //                });
     }
     else
-        RequiresParameters("mpv");
+        RequiresParameters(QStringLiteral("mpv"));
 }
 
 void SugoiEngine::SugoiNew(QStringList &args)
 {
     if(args.empty())
-        QProcess::startDetached(QApplication::applicationFilePath(), QStringList() << QString::fromLatin1("--newinstance"));
+        QProcess::startDetached(QApplication::applicationFilePath(), QStringList() << QStringLiteral("--newinstance"));
     else
         InvalidParameter(args.join(' '));
 }
@@ -98,7 +97,7 @@ void SugoiEngine::SugoiAddSubtitles(QStringList &args)
     if(args.empty())
     {
         trackFile = QFileDialog::getOpenFileName(window, tr("Open Subtitle File"), mpv->getPath(),
-                                                 QString("%0 (%1)").arg(tr("Subtitle Files"), Mpv::subtitle_filetypes.join(" ")),
+                                                 QStringLiteral("%0 (%1)").arg(tr("Subtitle Files"), Mpv::subtitle_filetypes.join(QStringLiteral(" "))),
                                                  nullptr, QFileDialog::DontUseSheet);
     }
     else
@@ -113,7 +112,7 @@ void SugoiEngine::SugoiAddAudio(QStringList &args)
     if(args.empty())
     {
         trackFile = QFileDialog::getOpenFileName(window, tr("Open Audio File"), mpv->getPath(),
-                                                 QString("%0 (%1)").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" ")),
+                                                 QStringLiteral("%0 (%1)").arg(tr("Audio Files"), Mpv::audio_filetypes.join(QStringLiteral(" "))),
                                                  nullptr, QFileDialog::DontUseSheet);
     }
     else
@@ -130,7 +129,7 @@ void SugoiEngine::SugoiScreenshot(QStringList &args)
     {
         QString arg = args.front();
         args.pop_front();
-        if(args.empty() && arg == "subtitles")
+        if(args.empty() && arg == QLatin1String("subtitles"))
             Screenshot(true);
         else
             InvalidParameter(arg);
@@ -192,7 +191,7 @@ void SugoiEngine::SugoiPlaylist(QStringList &args)
     {
         QString arg = args.front();
         args.pop_front();
-        if(arg == "play")
+        if(arg == QLatin1String("play"))
         {
             if(args.empty())
                 window->ui->playlistWidget->PlayIndex(window->ui->playlistWidget->currentRow());
@@ -211,7 +210,7 @@ void SugoiEngine::SugoiPlaylist(QStringList &args)
                     InvalidParameter(args.join(' '));
             }
         }
-        else if(arg == "select")
+        else if(arg == QLatin1String("select"))
         {
             if(args.empty())
                 window->ui->playlistWidget->SelectIndex(window->ui->playlistWidget->CurrentIndex());
@@ -232,27 +231,27 @@ void SugoiEngine::SugoiPlaylist(QStringList &args)
         }
         else if(args.empty())
         {
-            if(arg == "remove")
+            if(arg == QLatin1String("remove"))
             {
                 if(window->isPlaylistVisible() && !window->ui->inputLineEdit->hasFocus() && !window->ui->searchBox->hasFocus())
                     window->ui->playlistWidget->RemoveIndex(window->ui->playlistWidget->currentRow());
             }
-            else if(arg == "shuffle")
+            else if(arg == QLatin1String("shuffle"))
                 window->ui->playlistWidget->Shuffle();
-            else if(arg == "toggle")
+            else if(arg == QLatin1String("toggle"))
                 window->ShowPlaylist(!window->isPlaylistVisible());
-            else if(arg == "full")
+            else if(arg == QLatin1String("full"))
                 window->HideAlbumArt(window->ui->action_Hide_Album_Art->isChecked());
             else
                 InvalidParameter(arg);
         }
-        else if(arg == "repeat")
+        else if(arg == QLatin1String("repeat"))
         {
             arg = args.front();
             args.pop_front();
             if(args.empty())
             {
-                if(arg == "off")
+                if(arg == QLatin1String("off"))
                 {
                     if(window->ui->action_Off->isChecked())
                     {
@@ -260,7 +259,7 @@ void SugoiEngine::SugoiPlaylist(QStringList &args)
                         window->ui->action_Playlist->setChecked(false);
                     }
                 }
-                else if(arg == "this")
+                else if(arg == QLatin1String("this"))
                 {
                     if(window->ui->action_This_File->isChecked())
                     {
@@ -268,7 +267,7 @@ void SugoiEngine::SugoiPlaylist(QStringList &args)
                         window->ui->action_Playlist->setChecked(false);
                     }
                 }
-                else if(arg == "playlist")
+                else if(arg == QLatin1String("playlist"))
                 {
                     if(window->ui->action_Playlist->isChecked())
                     {
@@ -286,7 +285,7 @@ void SugoiEngine::SugoiPlaylist(QStringList &args)
             InvalidParameter(arg);
     }
     else
-        RequiresParameters("Sugoi playlist");
+        RequiresParameters(QStringLiteral("Sugoi playlist"));
 }
 
 void SugoiEngine::SugoiJump(QStringList &args)
@@ -350,7 +349,7 @@ void SugoiEngine::SugoiPreferences(QStringList &args)
 void SugoiEngine::SugoiOnlineHelp(QStringList &args)
 {
     if(args.empty())
-        QDesktopServices::openUrl(QUrl(QString::fromStdWString(SUGOI_SUPPORT_URL_STR)));
+        QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/wangwenx190/sugoi-player-deprecated")));
     else
         InvalidParameter(args.join(' '));
 }
@@ -358,7 +357,7 @@ void SugoiEngine::SugoiOnlineHelp(QStringList &args)
 void SugoiEngine::SugoiBugReport(QStringList &args)
 {
     if(args.empty())
-        QDesktopServices::openUrl(QUrl(QString::fromStdWString(SUGOI_BUG_REPORT_URL_STR)));
+        QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/wangwenx190/sugoi-player-deprecated/issues")));
     else
         InvalidParameter(args.join(' '));
 }
@@ -370,8 +369,8 @@ void SugoiEngine::SugoiUpdate(QStringList &args)
 #ifdef Q_OS_WIN
     QString arg = args.front();
     args.pop_front();
-    if(arg == "youtube-dl")
-        QProcess::startDetached("youtube-dl.exe", {"--update"});
+    if(arg == QLatin1String("youtube-dl"))
+        QProcess::startDetached(QStringLiteral("youtube-dl.exe"), {"--update"});
     else
 #endif
         InvalidParameter(args.join(' '));
@@ -389,10 +388,10 @@ void SugoiEngine::Open()
 {
     mpv->LoadFile(QFileDialog::getOpenFileName(window,
                    tr("Open File"), QFileInfo(mpv->getFileFullPath()).absolutePath(),
-                   QString("%0 (%1);;").arg(tr("Media Files"), Mpv::media_filetypes.join(" "))+
-                   QString("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(" "))+
-                   QString("%0 (%1);;").arg(tr("Audio Files"), Mpv::audio_filetypes.join(" "))+
-                   QString("%0 (*.*)").arg(tr("All Files")),
+                   QStringLiteral("%0 (%1);;").arg(tr("Media Files"), Mpv::media_filetypes.join(QStringLiteral(" ")))+
+                   QStringLiteral("%0 (%1);;").arg(tr("Video Files"), Mpv::video_filetypes.join(QStringLiteral(" ")))+
+                   QStringLiteral("%0 (%1);;").arg(tr("Audio Files"), Mpv::audio_filetypes.join(QStringLiteral(" ")))+
+                   QStringLiteral("%0 (*.*)").arg(tr("All Files")),
                    nullptr, QFileDialog::DontUseSheet));
 }
 
@@ -545,7 +544,7 @@ void SugoiEngine::SugoiVolume(QStringList &args)
             InvalidParameter(args.join(' '));
     }
     else
-        RequiresParameters("volume");
+        RequiresParameters(QStringLiteral("volume"));
 }
 
 void SugoiEngine::SugoiSpeed(QStringList &args)
@@ -566,7 +565,7 @@ void SugoiEngine::SugoiSpeed(QStringList &args)
             InvalidParameter(args.join(' '));
     }
     else
-        RequiresParameters("speed");
+        RequiresParameters(QStringLiteral("speed"));
 }
 
 void SugoiEngine::SugoiFullScreen(QStringList &args)
@@ -593,7 +592,7 @@ void SugoiEngine::SugoiHideAllControls(QStringList &args)
         {
             for(auto i = input.begin(); i != input.end(); ++i)
             {
-                if(i->first == "hide_all_controls")
+                if(i->first == QLatin1String("hide_all_controls"))
                 {
                     mpv->ShowText(tr("Press %0 to show all controls again").arg(i.key()));
                     break;
@@ -633,7 +632,7 @@ void SugoiEngine::SugoiHelp(QStringList &args)
         int len, max_len = 22;
         for(auto command = SugoiCommandMap.begin(); command != SugoiCommandMap.end(); ++command)
         {
-            QString str = QString("  %0 %1").arg(command.key(), command->second[0]);
+            QString str = QStringLiteral("  %0 %1").arg(command.key(), command->second[0]);
             len = str.length();
             while(len++ <= max_len)
                 str += ' ';
@@ -652,11 +651,11 @@ void SugoiEngine::SugoiHelp(QStringList &args)
             {
                 Print(tr("usage: %0 %1").arg(arg, command->second[0]));
                 Print(tr("description:"));
-                Print(QString("  %0").arg(command->second[1]));
+                Print(QStringLiteral("  %0").arg(command->second[1]));
                 if(command->second.length() > 2 && command->second[2] != QString())
                 {
                     Print(tr("advanced:"));
-                    Print(QString("  %0").arg(command->second[2]));
+                    Print(QStringLiteral("  %0").arg(command->second[2]));
                 }
             }
             else
@@ -684,14 +683,14 @@ void SugoiEngine::SugoiMsgLevel(QStringList &args)
             InvalidParameter(args.join(' '));
     }
     else
-        RequiresParameters("msg_level");
+        RequiresParameters(QStringLiteral("msg_level"));
 }
 
 void SugoiEngine::About(const QString& what)
 {
     if(what == QString())
         AboutDialog::about(window);
-    else if(what == "qt")
+    else if(what == QLatin1String("qt"))
         qApp->aboutQt();
     else
         InvalidParameter(what);
