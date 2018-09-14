@@ -2,12 +2,11 @@ TEMPLATE = lib
 CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += c++11
+win32: CONFIG += dll
 HEADERS += iconlib.h
 SOURCES += iconlib.cpp
 
-include($$PWD/../../version.pri)
-
-win32: RC_ICONS = $$PWD/../player/resources/player.ico
+win32: RC_FILE = iconlib.rc
 
 TARGET = iconlib
 

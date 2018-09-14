@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
-CONFIG += ordered
-SUBDIRS += src/iconlib src/player
+win32: SUBDIRS += src/iconlib
+SUBDIRS += src/player

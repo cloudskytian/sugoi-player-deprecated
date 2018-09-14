@@ -6,8 +6,6 @@
 #include <QSysInfo>
 #include <QCoreApplication>
 
-#include <mpv/client.h>
-
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AboutDialog)
@@ -34,10 +32,9 @@ void AboutDialog::about(QWidget *parent)
 
 QString AboutDialog::compilerText_HTML()
 {
-    return QStringLiteral("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6<br /><b>%7</b>: %8</p>")
+    return QStringLiteral("<p><b>%1</b>: %2<br /><b>%3</b>: %4<br /><b>%5</b>: %6</p>")
             .arg(tr("Version")).arg(QStringLiteral(SUGOI_VERSION))
             .arg(tr("Architecture")).arg(QSysInfo::buildCpuArchitecture())
-            .arg(tr("libmpv version")).arg(QString::number(mpv_client_api_version()))
             .arg(tr("Qt version")).arg(QStringLiteral(QT_VERSION_STR));
 }
 

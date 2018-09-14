@@ -205,23 +205,23 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>Commit ID</source>
-        <translation>提交 ID</translation>
+        <translation type="vanished">提交 ID</translation>
     </message>
     <message>
         <source>Commit author</source>
-        <translation>提交作者</translation>
+        <translation type="vanished">提交作者</translation>
     </message>
     <message>
         <source>Commit author e-mail</source>
-        <translation>提交作者电子邮箱</translation>
+        <translation type="vanished">提交作者电子邮箱</translation>
     </message>
     <message>
         <source>Commit time</source>
-        <translation>提交时间</translation>
+        <translation type="vanished">提交时间</translation>
     </message>
     <message>
         <source>Commit message</source>
-        <translation>提交信息</translation>
+        <translation type="vanished">提交信息</translation>
     </message>
     <message>
         <source>Qt version</source>
@@ -229,7 +229,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     </message>
     <message>
         <source>libmpv version</source>
-        <translation>libmpv 版本</translation>
+        <translation type="vanished">libmpv 版本</translation>
     </message>
     <message>
         <source>WinSparkle version</source>
@@ -267,7 +267,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
         <source>&lt;p&gt;&lt;b&gt;Sugoi Player&lt;/b&gt; is a multimedia player based on &lt;b&gt;libmpv&lt;/b&gt; and &lt;b&gt;Qt&lt;/b&gt; for Microsoft Windows 7+.&lt;/p&gt;
 &lt;p&gt;People should know that &lt;b&gt;Sugoi Player&lt;/b&gt; is a fork of &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt;. &lt;b&gt;Baka MPlayer&lt;/b&gt; is a free and open source, cross-platform, &lt;b&gt;libmpv&lt;/b&gt; based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows. Thanks to the great work of &lt;b&gt;Baka MPlayer&lt;/b&gt;&apos;s original developers. Without their hard work, there won&apos;t be &lt;b&gt;Sugoi Player&lt;/b&gt; anymore. I really appreciate &lt;b&gt;godly-devotion&lt;/b&gt; (Creator/UX Designer/Programmer), &lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt; (Lead Programmer/Website Host) and their team.&lt;/p&gt;
 &lt;p&gt;Home Page: &lt;a href=&apos;%1&apos;&gt;%2&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Sugoi Player&lt;/b&gt; 是一款基于 &lt;b&gt;libmpv&lt;/b&gt; 和 &lt;b&gt;Qt&lt;/b&gt; 开发的多媒体播放器。它是专门针对 Microsoft Windows 7 及更新版本的操作系统设计的。&lt;/p&gt;
+        <translation type="vanished">&lt;p&gt;&lt;b&gt;Sugoi Player&lt;/b&gt; 是一款基于 &lt;b&gt;libmpv&lt;/b&gt; 和 &lt;b&gt;Qt&lt;/b&gt; 开发的多媒体播放器。它是专门针对 Microsoft Windows 7 及更新版本的操作系统设计的。&lt;/p&gt;
 &lt;p&gt;您应了解 &lt;b&gt;Sugoi Player&lt;/b&gt; 是基于 &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt; 二次开发而成的。&lt;b&gt;Baka MPlayer&lt;/b&gt; 是一个自由开源跨平台的基于 &lt;b&gt;libmpv&lt;/b&gt; 的多媒体播放器。简单的设计致力于为观看视频提供一个整洁，简单，愉快的环境。感谢 &lt;b&gt;Baka MPlayer&lt;/b&gt; 开发团队的杰出工作。没有他们的辛勤付出，就没有 &lt;b&gt;Sugoi Player&lt;/b&gt; 的诞生。我真的十分感激 &lt;b&gt;godly-devotion&lt;/b&gt;（播放器的创造者/界面设计/编码），&lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt;（绝大多数的编码工作/网站建设及维护） 和他们的团队的贡献。&lt;/p&gt;
 &lt;p&gt;官方网站：&lt;a href=&apos;%1&apos;&gt;%2&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
@@ -366,6 +366,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
 &lt;h3&gt;翻译&lt;/h3&gt;
 &lt;h4&gt;简体中文&lt;/h4&gt;
 &lt;p&gt;amazingfate, Antares95, wangwenx190&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;b&gt;Sugoi Player&lt;/b&gt; is a free multimedia player based on &lt;b&gt;libmpv&lt;/b&gt; and &lt;b&gt;Qt&lt;/b&gt; for Microsoft Windows 7+.&lt;/p&gt;
+&lt;p&gt;People should know that &lt;b&gt;Sugoi Player&lt;/b&gt; is a fork of &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt;. &lt;b&gt;Baka MPlayer&lt;/b&gt; is a free and open source, cross-platform, &lt;b&gt;libmpv&lt;/b&gt; based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows. Thanks to the great work of &lt;b&gt;Baka MPlayer&lt;/b&gt;&apos;s original developers. Without their hard work, there won&apos;t be &lt;b&gt;Sugoi Player&lt;/b&gt; anymore. I really appreciate &lt;b&gt;godly-devotion&lt;/b&gt; (Creator/UX Designer/Programmer), &lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt; (Lead Programmer/Website Host) and their team.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

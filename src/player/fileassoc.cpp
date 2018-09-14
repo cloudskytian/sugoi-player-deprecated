@@ -221,54 +221,34 @@ bool FileAssoc::add_type(const QString &mime_type, const QString &perceived_type
 #ifdef _DEBUG
     return true;
 #endif
-    if (regType == FileAssoc::reg_type::NONE)
-    {
-        return false;
-    }
+    if (regType == FileAssoc::reg_type::NONE) return false;
     if (regType == FileAssoc::reg_type::VIDEO_ONLY)
-    {
-        if (perceived_type == QStringLiteral("audio"))
-        {
-            return false;
-        }
-    }
+        if (perceived_type == QStringLiteral("audio")) return false;
     if (regType == FileAssoc::reg_type::AUDIO_ONLY)
-    {
-        if (perceived_type == QStringLiteral("video"))
-        {
-            return false;
-        }
-    }
+        if (perceived_type == QStringLiteral("video")) return false;
     // Add ProgId
     const QString prog_id = QStringLiteral("io.SugoiPlayer") + extension;
     QString iconPath = QLatin1Char('"') + QCoreApplication::applicationFilePath() + QStringLiteral("\",0");
-    const QString iconLibPath = QCoreApplication::applicationDirPath() + QLatin1Char('/') + QStringLiteral("iconlib.dll");
-    QLibrary iconLib;
-    iconLib.setFileName(iconLibPath);
-    if (iconLib.load())
+    QString iconLibName = QStringLiteral("iconlib.dll");
+    QLibrary iconLib(iconLibName);
+    if (!iconLib.load())
     {
-        typedef int (*GetIconIndex)(LPCTSTR);
-        GetIconIndex iconIndex = (GetIconIndex)iconLib.resolve("GetIconIndex");
-        if (iconIndex)
-        {
-            int index = iconIndex(reinterpret_cast<const wchar_t *>(extension.utf16()));
-            index = index > -1 ? index : 0;
-            QString str = QString::number(index);
-            str = str.remove(QStringLiteral("\""));
-            iconPath = QLatin1Char('"') + iconLibPath + QStringLiteral("\",") + str;
-        }
+        iconLibName = QStringLiteral("iconlib1.dll");
+        iconLib.setFileName(iconLibName);
     }
-    if (!add_progid(prog_id, friendly_name, iconPath))
-    {
-        return false;
-    }
-
+    if (!iconLib.load()) return false;
+    typedef int (*GetIconIndex)(LPCTSTR);
+    GetIconIndex iconIndex = (GetIconIndex)iconLib.resolve("GetIconIndex");
+    if (iconIndex == nullptr) return false;
+    int index = iconIndex(reinterpret_cast<const wchar_t *>(extension.utf16()));
+    index = index > -1 ? index : 0;
+    QString str = QString::number(index);
+    str = str.remove(QStringLiteral("\""));
+    const QString iconLibPath = QCoreApplication::applicationDirPath() + QLatin1Char('/') + iconLibName;
+    iconPath = QLatin1Char('"') + iconLibPath + QStringLiteral("\",") + str;
+    if (!add_progid(prog_id, friendly_name, iconPath)) return false;
     // Add extensions
-    if (!update_extension(extension, prog_id, mime_type, perceived_type))
-    {
-        return false;
-    }
-
+    if (!update_extension(extension, prog_id, mime_type, perceived_type)) return false;
     return true;
 }
 
