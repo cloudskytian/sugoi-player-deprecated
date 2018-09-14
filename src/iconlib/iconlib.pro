@@ -1,14 +1,13 @@
 TEMPLATE = lib
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG += dll c++11
-RC_FILE += iconlib.rc
+CONFIG += c++11
 HEADERS += iconlib.h
 SOURCES += iconlib.cpp
 
-exists($$PWD/../../ci_version.h) {
-    DEFINES += CI
-}
+include($$PWD/../../version.pri)
+
+win32: RC_ICONS = $$PWD/../player/resources/player.ico
 
 TARGET = iconlib
 
@@ -20,7 +19,7 @@ contains(QT_ARCH, x86_64) {
 }
 
 CONFIG(debug, debug|release) {
-    TARGET = $$join(TARGET,,,d)
+    win32: TARGET = $$join(TARGET,,,d)
 }
 
 DESTDIR = $$BIN_DIR

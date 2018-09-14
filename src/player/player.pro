@@ -1,6 +1,8 @@
 TEMPLATE = app
 
-RC_FILE += player.rc
+include($$PWD/../../version.pri)
+
+win32: RC_ICONS = resources/player.ico
 
 DEFINES += QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x050000
 
@@ -25,10 +27,6 @@ CONFIG -= app_bundle
 
 TARGET = Sugoi
 
-exists($$PWD/../../ci_version.h) {
-    DEFINES += CI
-}
-
 BIN_DIR = $$PWD/../../bin
 LIB_DIR = $$PWD/../../lib
 
@@ -39,7 +37,7 @@ contains(QT_ARCH, x86_64) {
 }
 
 CONFIG(debug, debug|release) {
-    TARGET = $$join(TARGET,,,d)
+    win32: TARGET = $$join(TARGET,,,d)
 }
 
 DESTDIR = $$BIN_DIR
@@ -57,14 +55,14 @@ licensefiles.path = $$BIN_DIR/licenses
 
 INSTALLS += target qmfiles skinfiles licensefiles
 
-LIBS += -lUser32 -lShell32 -lKernel32 -lDwmapi -L$${LIB_DIR} -lmpv
+win32: LIBS += -lUser32 -lShell32 -lKernel32 -lDwmapi -L$${LIB_DIR} -lmpv
 
 INCLUDEPATH += $$PWD/../../include
 DEPENDPATH += $$PWD/../../include
 
-RESOURCES += $$PWD/resources.qrc
+RESOURCES += resources.qrc
 
-TRANSLATIONS += $$PWD/translations/sugoi_zh_CN.ts
+TRANSLATIONS += translations/sugoi_zh_CN.ts
 
 HEADERS += \
     sugoiengine.h \

@@ -12,7 +12,6 @@
 #include <windows.h>
 #endif
 
-#include "sugoi-player-version.h"
 #include "util.h"
 #include "fileassoc.h"
 #include "mpvtypes.h"
@@ -42,11 +41,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
-    QApplication::setApplicationName(QString::fromStdWString(SUGOI_APP_NAME_STR));
-    QApplication::setApplicationDisplayName(QString::fromStdWString(SUGOI_APP_DISPLAY_NAME_STR));
-    QApplication::setApplicationVersion(QString::fromStdWString(SUGOI_VERSION_STR));
-    QApplication::setOrganizationName(QString::fromStdWString(SUGOI_COMPANY_NAME_STR));
-    QApplication::setOrganizationDomain(QString::fromStdWString(SUGOI_COMPANY_URL_STR));
+    QApplication::setApplicationName(QStringLiteral("Sugoi Player"));
+    QApplication::setApplicationDisplayName(QStringLiteral("Sugoi Player"));
+    QApplication::setApplicationVersion(QStringLiteral(SUGOI_VERSION));
+    QApplication::setOrganizationName(QStringLiteral("wangwenx190"));
+    QApplication::setOrganizationDomain(QStringLiteral("https://wangwenx190.github.io/"));
 
 #ifdef QT_HAS_NETWORK
     SingleApplication instance(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
@@ -55,7 +54,7 @@ int main(int argc, char *argv[])
 #endif
 
     QCommandLineParser parser;
-    parser.setApplicationDescription(QString::fromStdWString(SUGOI_COMMENTS_STR));
+    parser.setApplicationDescription(QStringLiteral("A free multimedia player for Windows based on libmpv and Qt."));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addPositionalArgument(QStringLiteral("name"), QApplication::translate("main", "The name of the option you want to enable."));
