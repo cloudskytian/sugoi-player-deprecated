@@ -49,9 +49,9 @@ There are many mpv front-ends in the world, some of them are truly great, I hope
 
 ## Snapshots
 
-![mainwindow](/doc/images/mainwindow.png)
+![mainwindow](/doc/images/mainwindow.jpg)
 
-![playing](/doc/images/playing.png)
+![playing](/doc/images/playing.jpg)
 
 
 ## Features
