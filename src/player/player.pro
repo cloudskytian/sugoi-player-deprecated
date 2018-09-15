@@ -1,6 +1,26 @@
+lessThan(QT_MAJOR_VERSION, 5) {
+    message("Cannot build Sugoi Player with Qt version $${QT_VERSION}")
+    error("Use at least Qt 5.6.3")
+}
+
+!versionAtLeast(QT_VERSION, "5.6.3") {
+    message("Cannot build Sugoi Player with Qt version $${QT_VERSION}")
+    error("Use at least Qt 5.6.3")
+}
+
+# This allows Sugoi Player to use up to 3 GB on 32-bit systems and 4 GB on
+# 64-bit systems, rather than being limited to just 2 GB.
+win32-g++* {
+    QMAKE_LFLAGS += -Wl,--large-address-aware
+} else:win32 {
+    QMAKE_LFLAGS += /LARGEADDRESSAWARE
+}
+
 TEMPLATE = app
 
-include($$PWD/../../version.pri)
+isEmpty(ROOT): ROOT = $$PWD/../..
+
+include($$ROOT/version.pri)
 
 win32: RC_ICONS = resources/player.ico
 
@@ -12,7 +32,7 @@ qtHaveModule(concurrent) {
     QT += concurrent
     DEFINES += QT_HAS_CONCURRENT
 }
-qtHaveModule(winextras) {
+win32:qtHaveModule(winextras) {
     QT += winextras
     DEFINES += QT_HAS_WINEXTRAS
 }
@@ -27,38 +47,83 @@ CONFIG -= app_bundle
 
 TARGET = Sugoi
 
-BIN_DIR = $$PWD/../../bin
-LIB_DIR = $$PWD/../../lib
+BIN_DIR = $$ROOT/build/bin
+win32: LIB_DIR = $$ROOT/lib
 
 contains(QT_ARCH, x86_64) {
     TARGET = $$join(TARGET,,,64)
     BIN_DIR = $$join(BIN_DIR,,,64)
-    LIB_DIR = $$join(LIB_DIR,,,64)
+    win32: LIB_DIR = $$join(LIB_DIR,,,64)
 }
 
 CONFIG(debug, debug|release) {
     win32: TARGET = $$join(TARGET,,,d)
+    unix: TARGET = $$join(TARGET,,,_debug)
 }
 
 DESTDIR = $$BIN_DIR
+OBJECTS_DIR = $$DESTDIR/../obj
+MOC_DIR = $$DESTDIR/../moc
+RCC_DIR = $$DESTDIR/../rcc
+UI_DIR = $$DESTDIR/../ui
 
 target.path = $$BIN_DIR
 
+win32 {
+    qtlibfiles.path = $$BIN_DIR
+    qtlibfiles.commands += $$quote(\"$$[QT_INSTALL_BINS]\\windeployqt.exe\" --force --compiler-runtime --plugindir \"$${BIN_DIR}\\plugins\" \"$${BIN_DIR}\\$${TARGET}.exe\")
+    qtlibfiles.commands += $$quote(echo [Paths] > \"$${BIN_DIR}\\qt.conf\")
+    qtlibfiles.commands += $$quote(echo Prefix=. >> \"$${BIN_DIR}\\qt.conf\")
+    qtlibfiles.commands += $$quote(echo Binaries=. >> \"$${BIN_DIR}\\qt.conf\")
+    qtlibfiles.commands += $$quote(echo Libraries=. >> \"$${BIN_DIR}\\qt.conf\")
+    qtlibfiles.commands += $$quote(echo Plugins=plugins >> \"$${BIN_DIR}\\qt.conf\")
+    qtlibfiles.commands += $$quote(echo Imports=imports >> \"$${BIN_DIR}\\qt.conf\")
+    qtlibfiles.commands += $$quote(echo Qml2Imports=qml >> \"$${BIN_DIR}\\qt.conf\")
+    qtlibfiles.commands += $$quote(echo Translations=translations >> \"$${BIN_DIR}\\qt.conf\")
+    qtlibfiles.commands  = $$join(qtlibfiles.commands,$$escape_expand(\\n\\t))
+}
+
 qmfiles.files = $$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm $$PWD/translations/*.qm
 qmfiles.path = $$BIN_DIR/translations
+win32: qmfiles.depends = qtlibfiles
 
 skinfiles.files = $$PWD/stylesheets/*.css
 skinfiles.path = $$BIN_DIR/stylesheets
 
-licensefiles.files = $$PWD/../../doc/licenses/*
-licensefiles.path = $$BIN_DIR/licenses
+3rdpartylicenses.files = $$ROOT/doc/licenses/*
+3rdpartylicenses.path = $$BIN_DIR/licenses
 
-INSTALLS += target qmfiles skinfiles licensefiles
+sugoilicense.file = $$ROOT/LICENSE.md
+sugoilicense.path = $$BIN_DIR
 
-win32: LIBS += -lUser32 -lShell32 -lKernel32 -lDwmapi -L$${LIB_DIR} -lmpv
+INSTALLS += target qmfiles skinfiles 3rdpartylicenses sugoilicense
+win32: INSTALLS += qtlibfiles
 
-INCLUDEPATH += $$PWD/../../include
-DEPENDPATH += $$PWD/../../include
+win32 {
+    LIBS += -lUser32 -lShell32 -lKernel32 -lDwmapi -L$${LIB_DIR} -lmpv
+    INCLUDEPATH += $$ROOT/include
+    DEPENDPATH += $$ROOT/include
+}
+
+unix {
+    QT_CONFIG -= no-pkg-config
+    CONFIG += link_pkgconfig
+    PKGCONFIG += mpv
+}
+
+unix:!macx {
+    qtHaveModule(x11extras): QT += x11extras
+}
+
+CONFIG(update_translations) {
+    isEmpty(lupdate): lupdate = lupdate
+    system($$lupdate \"$${_PRO_FILE_}\")
+}
+
+CONFIG(release_translations) {
+    isEmpty(lrelease): lrelease = lrelease
+    system($$lrelease \"$${_PRO_FILE_}\")
+}
 
 RESOURCES += resources.qrc
 

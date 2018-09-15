@@ -10,7 +10,7 @@ win32: RC_FILE = iconlib.rc
 
 TARGET = iconlib
 
-BIN_DIR = $$PWD/../../bin
+BIN_DIR = $$PWD/../../build/bin
 
 contains(QT_ARCH, x86_64) {
     TARGET = $$join(TARGET,,,64)
@@ -19,6 +19,7 @@ contains(QT_ARCH, x86_64) {
 
 CONFIG(debug, debug|release) {
     win32: TARGET = $$join(TARGET,,,d)
+    unix: TARGET = $$join(TARGET,,,_debug)
 }
 
 DESTDIR = $$BIN_DIR
