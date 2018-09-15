@@ -1,5 +1,4 @@
-﻿#ifndef CFRAMELESSWINDOW_H
-#define CFRAMELESSWINDOW_H
+﻿#pragma once
 
 #include <QWidget>
 
@@ -62,5 +61,3 @@ private:
 };
 
 #endif
-
-#endif // CFRAMELESSWINDOW_H

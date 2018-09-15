@@ -16,7 +16,9 @@
 //#include <QFile>
 //#include <QFileInfo>
 
+#ifdef Q_OS_WIN
 #include <windows.h>
+#endif
 
 namespace Util {
 
@@ -34,7 +36,11 @@ QString SettingsLocation()
 
 void ShowInFolder(const QString& path, const QString& file)
 {
+#ifdef Q_OS_WIN
     QProcess::startDetached(QStringLiteral("explorer.exe"), QStringList{"/select,", path+file});
+#else
+    return;
+#endif
 }
 
 QStringList supportedMimeTypes()
@@ -109,6 +115,7 @@ QStringList supportedSuffixes()
     return mSupportedSuffixes;
 }
 
+#ifdef Q_OS_WIN
 bool executeProgramWithAdministratorPrivilege(const QString &exePath, const QString &exeParam)
 {
     if (exePath.isEmpty())
@@ -138,6 +145,7 @@ bool executeProgramWithAdministratorPrivilege(const QString &exePath, const QStr
     }
     return true;
 }
+#endif
 
 /*QStringList externalFilesToLoad(const QFile &originalMediaFile, const QString &fileType)
 {

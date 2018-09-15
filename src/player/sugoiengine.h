@@ -1,5 +1,4 @@
-﻿#ifndef SUGOIENGINE_H
-#define SUGOIENGINE_H
+﻿#pragma once
 
 #include <QObject>
 #include <QHash>
@@ -473,5 +472,3 @@ public:
     void About(const QString& what = QString());
     void Quit();
 };
-
-#endif // SUGOIENGINE_H

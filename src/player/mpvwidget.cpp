@@ -381,12 +381,12 @@ void MpvWidget::SetEngine(SugoiEngine *engine)
     sugoi = engine;
 }
 
-void MpvWidget::LoadFile(QString f)
+void MpvWidget::LoadFile(const QString& f)
 {
-    PlayFile(LoadPlaylist(std::move(f)));
+    PlayFile(LoadPlaylist(f));
 }
 
-QString MpvWidget::LoadPlaylist(QString f)
+QString MpvWidget::LoadPlaylist(const QString& f)
 {
     if(f == QString()) // ignore empty file name
         return QString();
@@ -747,9 +747,9 @@ void MpvWidget::Interpolate(bool interpolate)
     ShowText(tr("Motion Interpolation: %0").arg(interpolate ? tr("enabled") : tr("disabled")));
 }
 
-void MpvWidget::Vo(QString o)
+void MpvWidget::Vo(const QString& o)
 {
-    setVo(std::move(o));
+    setVo(o);
     setOption(QStringLiteral("vo"), vo);
 }
 

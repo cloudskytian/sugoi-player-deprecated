@@ -1,5 +1,4 @@
-﻿#ifndef CUSTOMSPLITTER_H
-#define CUSTOMSPLITTER_H
+﻿#pragma once
 
 #include <QSplitter>
 
@@ -24,5 +23,3 @@ signals:
 private:
     int normalPos;
 };
-
-#endif // CUSTOMSPLITTER_H

@@ -1,5 +1,4 @@
-﻿#ifndef INPUTDIALOG_H
-#define INPUTDIALOG_H
+﻿#pragma once
 
 #include <QDialog>
 
@@ -25,5 +24,3 @@ private:
     Ui::InputDialog *ui;
     const std::function<bool (QString)> &validation;
 };
-
-#endif // INPUTDIALOG_H

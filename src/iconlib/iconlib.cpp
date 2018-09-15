@@ -3,16 +3,6 @@
 
 #include "iconlib.h"
 
-int main()
-{
-    return 0;
-}
-
-extern "C" __declspec(dllexport) UINT GetIconLibVersion()
-{
-    return ICON_LIB_VERSION;
-}
-
 extern "C" __declspec(dllexport) int GetIconIndex(LPCTSTR ext)
 {
     int iconIndex = -1;

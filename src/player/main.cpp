@@ -10,10 +10,10 @@
 
 #ifdef Q_OS_WIN
 #include <windows.h>
+#include "fileassoc.h"
 #endif
 
 #include "util.h"
-#include "fileassoc.h"
 #include "mpvtypes.h"
 
 #ifdef QT_HAS_NETWORK
@@ -102,6 +102,7 @@ int main(int argc, char *argv[])
 
     QString command = QString();
 
+#ifdef Q_OS_WIN
     if (parser.isSet(regAllOption))
     {
         FileAssoc fileAssoc;
@@ -147,6 +148,7 @@ int main(int argc, char *argv[])
         fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::AUDIO_ONLY);
         return 0;
     }
+#endif
     if (parser.isSet(newInstanceOption))
     {
         singleInstance = false;

@@ -1,6 +1,6 @@
-﻿#include <utility>
+﻿#include "seekbar.h"
 
-#include "seekbar.h"
+#include <utility>
 
 #include <QTime>
 #include <QToolTip>

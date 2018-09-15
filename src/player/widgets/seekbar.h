@@ -1,5 +1,4 @@
-﻿#ifndef SEEKBAR_H
-#define SEEKBAR_H
+﻿#pragma once
 
 #include "customslider.h"
 
@@ -24,5 +23,3 @@ private:
     bool tickReady;
     int totalTime;
 };
-
-#endif // SEEKBAR_H

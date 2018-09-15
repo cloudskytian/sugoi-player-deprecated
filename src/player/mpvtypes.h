@@ -1,5 +1,4 @@
-﻿#ifndef MPVTYPES_H
-#define MPVTYPES_H
+﻿#pragma once
 
 #include <QMetaType>
 #include <QString>
@@ -82,6 +81,3 @@ Q_DECLARE_METATYPE(Mpv::Track)
 Q_DECLARE_METATYPE(Mpv::VideoParams)
 Q_DECLARE_METATYPE(Mpv::AudioParams)
 Q_DECLARE_METATYPE(Mpv::FileInfo)
-
-
-#endif // MPVTYPES_H

@@ -1,5 +1,4 @@
-﻿#ifndef OVERLAY_H
-#define OVERLAY_H
+﻿#pragma once
 
 #include <QObject>
 
@@ -19,5 +18,3 @@ private:
     QImage *canvas;
     QTimer *timer;
 };
-
-#endif // OVERLAY_H

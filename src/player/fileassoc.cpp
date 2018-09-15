@@ -1,5 +1,7 @@
 ﻿#include "fileassoc.h"
 
+#ifdef Q_OS_WIN
+
 #include <QSettings>
 #include <QCoreApplication>
 #include <QFileInfo>
@@ -8,6 +10,8 @@
 
 #include <Windows.h>
 #include <Shlobj.h>
+
+typedef int (*GetIconIndex)(LPCTSTR);
 
 FileAssoc::FileAssoc(QObject *parent) : QObject(parent)
 {
@@ -237,7 +241,6 @@ bool FileAssoc::add_type(const QString &mime_type, const QString &perceived_type
         iconLib.setFileName(iconLibName);
     }
     if (!iconLib.load()) return false;
-    typedef int (*GetIconIndex)(LPCTSTR);
     GetIconIndex iconIndex = (GetIconIndex)iconLib.resolve("GetIconIndex");
     if (iconIndex == nullptr) return false;
     int index = iconIndex(reinterpret_cast<const wchar_t *>(extension.utf16()));
@@ -495,3 +498,5 @@ bool FileAssoc::registerMediaFiles(FileAssoc::reg_type type)
 
     return true;
 }
+
+#endif

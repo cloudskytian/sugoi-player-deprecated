@@ -1,5 +1,4 @@
-﻿#ifndef PLAYLISTWIDGET_H
-#define PLAYLISTWIDGET_H
+﻿#pragma once
 
 #include <QListWidget>
 
@@ -44,5 +43,3 @@ private:
     QString file, suffix;
     bool newPlaylist, refresh, showAll;
 };
-
-#endif // PLAYLISTWIDGET_H

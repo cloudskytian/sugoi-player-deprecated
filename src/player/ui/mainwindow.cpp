@@ -135,6 +135,7 @@ void MainWindow::MapShortcuts()
     for (auto & iter : tmp) iter->setShortcut(QKeySequence());
 }
 
+#ifdef Q_OS_WIN
 void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
 {
     const QString path = QCoreApplication::applicationFilePath();
@@ -171,6 +172,7 @@ void MainWindow::SetFileAssoc(FileAssoc::reg_type type, bool showUI)
         }
     }
 }
+#endif
 
 static bool canHandleDrop(const QDragEnterEvent *event)
 {
@@ -1573,9 +1575,16 @@ void MainWindow::connectOtherSignalsAndSlots()
                     QString langPath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("translations");
                     QDir qmDir;
                     qmDir.setPath(langPath);
-                    if (!qmDir.exists()) langPath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("languages");
-                    qmDir.setPath(langPath);
-                    if (!qmDir.exists()) langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+                    if (!qmDir.exists())
+                    {
+                        langPath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("languages");
+                        qmDir.setPath(langPath);
+                    }
+                    if (!qmDir.exists())
+                    {
+                        langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+                        qmDir.setPath(langPath);
+                    }
                     if (sugoi->qtTranslator->load(QStringLiteral("qt_%0").arg(l), langPath))
                     {
                         qApp->installTranslator(sugoi->qtTranslator);

@@ -1,5 +1,4 @@
-﻿#ifndef KEYDIALOG_H
-#define KEYDIALOG_H
+﻿#pragma once
 
 #include <QDialog>
 
@@ -24,5 +23,3 @@ private:
     Ui::KeyDialog *ui;
     bool add;
 };
-
-#endif // KEYDIALOG_H

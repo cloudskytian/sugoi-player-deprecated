@@ -1,5 +1,4 @@
-﻿#ifndef PREFERENCESDIALOG_H
-#define PREFERENCESDIALOG_H
+﻿#pragma once
 
 #include <QDialog>
 #include <QPair>
@@ -51,5 +50,3 @@ private:
         QTableWidget *parent;
     } *sortLock;
 };
-
-#endif // PREFERENCESDIALOG_H

@@ -3,7 +3,9 @@
 #include "ui/mainwindow.h"
 #include "mpvwidget.h"
 #include "ui_mainwindow.h"
+#ifdef Q_OS_WIN
 #include "fileassoc.h"
+#endif
 
 #include <QDir>
 #include <QSettings>
@@ -11,6 +13,7 @@
 void SugoiEngine::LoadSettings()
 {
     QSettings settings(Util::SettingsLocation(), QSettings::IniFormat);
+#ifdef Q_OS_WIN
     window->setAlwaysCheckFileAssoc(settings.value(QStringLiteral("alwaysCheckFileAssoc"), true).toBool());
     QString regType = settings.value(QStringLiteral("fileAssoc"), QStringLiteral("all")).toString();
     if (regType == QStringLiteral("all"))
@@ -29,6 +32,7 @@ void SugoiEngine::LoadSettings()
     {
         window->setFileAssocType(FileAssoc::reg_type::NONE);
     }
+#endif
     window->setSkinFile(settings.value(QStringLiteral("skin"), QStringLiteral("Default")).toString());
     window->setAllowRunInBackground(settings.value(QStringLiteral("allowRunInBackground"), false).toBool());
     window->setPauseWhenMinimized(settings.value(QStringLiteral("pauseWhenMinimized"), true).toBool());
@@ -150,6 +154,7 @@ void SugoiEngine::LoadSettings()
 void SugoiEngine::SaveSettings()
 {
     QSettings settings(Util::SettingsLocation(), QSettings::IniFormat);
+#ifdef Q_OS_WIN
     settings.setValue(QStringLiteral("alwaysCheckFileAssoc"), window->getAlwaysCheckFileAssoc());
     QString regType = QStringLiteral("all");
     if (window->getFileAssocType() == FileAssoc::reg_type::VIDEO_ONLY)
@@ -164,6 +169,7 @@ void SugoiEngine::SaveSettings()
     {
         regType = QStringLiteral("none");
     }
+#endif
     settings.setValue(QStringLiteral("skin"), window->getSkinFile());
     settings.setValue(QStringLiteral("allowRunInBackground"), window->getAllowRunInBackground());
     settings.setValue(QStringLiteral("pauseWhenMinimized"), window->getPauseWhenMinimized());

@@ -3,7 +3,7 @@ lessThan(QT_MAJOR_VERSION, 5) {
     error("Use at least Qt 5.6.3")
 }
 
-!versionAtLeast(QT_VERSION, "5.6.3") {
+!versionAtLeast(QT_VERSION, 5.6.3) {
     message("Cannot build Sugoi Player with Qt version $${QT_VERSION}")
     error("Use at least Qt 5.6.3")
 }
@@ -153,7 +153,6 @@ HEADERS += \
     ui/screenshotdialog.h \
     ui/keydialog.h \
     recent.h \
-    fileassoc.h \
     widgets/progressindicatorbar.h \
     skinmanager.h \
     mpvwidget.h \
@@ -184,11 +183,15 @@ SOURCES += \
     ui/keydialog.cpp \
     overlay.cpp \
     configmanager.cpp \
-    fileassoc.cpp \
     widgets/progressindicatorbar.cpp \
     skinmanager.cpp \
     mpvwidget.cpp \
     ui/cframelesswindow.cpp
+
+win32 {
+    HEADERS += fileassoc.h
+    SOURCES += fileassoc.cpp
+}
 
 FORMS += \
     ui/aboutdialog.ui \

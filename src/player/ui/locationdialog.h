@@ -1,5 +1,4 @@
-﻿#ifndef LOCATIONDIALOG_H
-#define LOCATIONDIALOG_H
+﻿#pragma once
 
 #include <QDialog>
 
@@ -23,5 +22,3 @@ private slots:
 private:
     Ui::LocationDialog *ui;
 };
-
-#endif // LOCATIONDIALOG_H

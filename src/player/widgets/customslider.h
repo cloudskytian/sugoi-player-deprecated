@@ -1,5 +1,4 @@
-﻿#ifndef CUSTOMSLIDER_H
-#define CUSTOMSLIDER_H
+﻿#pragma once
 
 #include <QSlider>
 
@@ -15,5 +14,3 @@ public slots:
 protected:
     void mousePressEvent(QMouseEvent *event) override;
 };
-
-#endif // CUSTOMSLIDER_H

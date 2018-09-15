@@ -1,5 +1,4 @@
-﻿#ifndef RECENT_H
-#define RECENT_H
+﻿#pragma once
 
 #include <utility>
 
@@ -23,5 +22,3 @@ struct Recent
     QString path, title;
     int time;
 };
-
-#endif // RECENT_H

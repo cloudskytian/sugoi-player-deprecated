@@ -1,5 +1,4 @@
-﻿#ifndef UTIL_H
-#define UTIL_H
+﻿#pragma once
 
 #include <QTextStream>
 
@@ -13,8 +12,9 @@ namespace Util {
 
 QStringList supportedMimeTypes();
 QStringList supportedSuffixes();
+#ifdef Q_OS_WIN
 bool executeProgramWithAdministratorPrivilege(const QString &exePath, const QString &exeParam);
-
+#endif
 //QStringList externalFilesToLoad(const QFile &originalMediaFile, const QString &fileType);
 //QStringList externalFilesToLoad(const QFileInfo &originalMediaFile, const QString &fileType);
 
@@ -37,6 +37,5 @@ bool IsValidLocation(const QString& loc);
 QString MonospaceFont();
 QString FormatNumberWithAmpersand(int val, int length);
 QString ShortenPathToParent(const Recent &recent);
-}
 
-#endif // UTIL_H
+}

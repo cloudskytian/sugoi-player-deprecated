@@ -1,5 +1,4 @@
-﻿#ifndef SKINMANAGER_H
-#define SKINMANAGER_H
+﻿#pragma once
 
 #include <QObject>
 
@@ -27,5 +26,3 @@ private:
     QString curSkinName;
     QString curSkinPath;
 };
-
-#endif // SKINMANAGER_H

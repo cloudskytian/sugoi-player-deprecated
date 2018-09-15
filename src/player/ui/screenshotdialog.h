@@ -1,5 +1,4 @@
-﻿#ifndef SCREENSHOTDIALOG_H
-#define SCREENSHOTDIALOG_H
+﻿#pragma once
 
 #include <QDialog>
 
@@ -23,5 +22,3 @@ private:
     bool &always,
          &screenshot;
 };
-
-#endif // SCREENSHOTDIALOG_H

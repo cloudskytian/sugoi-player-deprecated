@@ -5,7 +5,9 @@
 #include "ui/mainwindow.h"
 #include "mpvwidget.h"
 #include "ui/keydialog.h"
+#ifdef Q_OS_WIN
 #include "fileassoc.h"
+#endif
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -104,6 +106,7 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
                 QDesktopServices::openUrl(QUrl::fromLocalFile(folderPath));
             });
 
+#ifdef Q_OS_WIN
     connect(ui->updateAssocButton, &QPushButton::clicked,
             [=]
             {
@@ -126,6 +129,7 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
                 }
                 sugoi->window->SetFileAssoc(regType, false);
             });
+#endif
 
     connect(ui->autoFitCheckBox, &QCheckBox::clicked,
             [=](bool b)
@@ -239,7 +243,7 @@ PreferencesDialog::~PreferencesDialog()
         sugoi->mpv->ScreenshotTemplate(ui->templateLineEdit->text());
         sugoi->mpv->MsgLevel(ui->msgLvlComboBox->currentData().toString());
         sugoi->window->MapShortcuts();
-
+#ifdef Q_OS_WIN
         FileAssoc::reg_state regState;
         if (ui->assocVideoCheckBox->isChecked() && ui->assocAudioCheckBox->isChecked())
         {
@@ -258,7 +262,7 @@ PreferencesDialog::~PreferencesDialog()
         {
             ui->updateAssocButton->clicked();
         }
-
+#endif
         sugoi->SaveSettings();
     }
     else
@@ -297,8 +301,19 @@ void PreferencesDialog::PopulateSkinFiles()
 void PreferencesDialog::PopulateLangs()
 {
     // open the language directory
-    QString langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
-    QDir dir(langPath);
+    QString langPath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("translations");
+    QDir dir;
+    dir.setPath(langPath);
+    if (!dir.exists())
+    {
+        langPath = QApplication::applicationDirPath() + QDir::separator() + QStringLiteral("languages");
+        dir.setPath(langPath);
+    }
+    if (!dir.exists())
+    {
+        langPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+        dir.setPath(langPath);
+    }
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
     dir.setSorting(QDir::Name);
     QFileInfoList fileList = dir.entryInfoList();

@@ -1,5 +1,4 @@
-﻿#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+﻿#pragma once
 
 #include <utility>
 
@@ -9,7 +8,9 @@
 
 #include "ui/cframelesswindow.h"
 #include "recent.h"
+#ifdef Q_OS_WIN
 #include "fileassoc.h"
+#endif
 #include "widgets/progressindicatorbar.h"
 
 #if defined(Q_OS_WIN) && defined(QT_HAS_WINEXTRAS)
@@ -46,9 +47,11 @@ public:
     bool getResume()           { return resume; }
     bool getHideAllControls()  { return hideAllControls; }
     bool isFullScreenMode()    { return hideAllControls || isFullScreen(); }
+#ifdef Q_OS_WIN
     FileAssoc::reg_type getFileAssocType() { return regType; }
     FileAssoc::reg_state getFileAssocState() { return regState; }
     bool getAlwaysCheckFileAssoc() { return alwaysCheckFileAssoc; }
+#endif
     bool getShowFullscreenIndicator() { return showFullscreenIndicator; }
     bool getOSDShowLocalTime()   { return osdShowLocalTime; }
     bool getPauseWhenMinimized() { return pauseWhenMinimized; }
@@ -60,7 +63,9 @@ public:
 
 public slots:
     void MapShortcuts();
+#ifdef Q_OS_WIN
     void SetFileAssoc(FileAssoc::reg_type type = FileAssoc::reg_type::ALL, bool showUI = false);
+#endif
     void initMainWindow();
     void bringToFront();
 
@@ -110,9 +115,11 @@ private:
     MpvWidget *mpv = nullptr;
     ProgressIndicatorBar *fullscreenProgressIndicator = nullptr;
     bool showFullscreenIndicator = true;
+#ifdef Q_OS_WIN
     FileAssoc::reg_type  regType;
     FileAssoc::reg_state regState;
     bool alwaysCheckFileAssoc = true;
+#endif
     bool pauseWhenMinimized = true;
     bool osdShowLocalTime = true;
     bool allowRunInBackground = true;
@@ -193,5 +200,3 @@ signals:
     void skinFileChanged(const QString &);
     void playlistChanged(const QStringList &);
 };
-
-#endif // MAINWINDOW_H

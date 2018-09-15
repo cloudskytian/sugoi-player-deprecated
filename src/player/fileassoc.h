@@ -1,7 +1,8 @@
-﻿#ifndef FILEASSOC_H
-#define FILEASSOC_H
+﻿#pragma once
 
 #include <QObject>
+
+#ifdef Q_OS_WIN
 
 class FileAssoc : public QObject
 {
@@ -43,4 +44,4 @@ private slots:
     bool add_type(const QString &mime_type, const QString &perceived_type, const QString &friendly_name, const QString &extension);
 };
 
-#endif // FILEASSOC_H
+#endif

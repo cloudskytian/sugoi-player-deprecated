@@ -1,5 +1,4 @@
-﻿#ifndef DIMWIDGET_H
-#define DIMWIDGET_H
+﻿#pragma once
 
 #include <QDialog>
 
@@ -23,5 +22,3 @@ signals:
 private:
     MainWindow *window;
 };
-
-#endif // DIMWIDGET_H

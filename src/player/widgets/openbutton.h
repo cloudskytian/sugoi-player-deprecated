@@ -1,5 +1,4 @@
-﻿#ifndef OPENBUTTON_H
-#define OPENBUTTON_H
+﻿#pragma once
 
 #include <QPushButton>
 
@@ -17,5 +16,3 @@ signals:
     void MiddleClick();
     void RightClick();
 };
-
-#endif // OPENBUTTON_H

@@ -1,5 +1,4 @@
-﻿#ifndef MPVWIDGET_H
-#define MPVWIDGET_H
+﻿#pragma once
 
 #include <utility>
 
@@ -59,8 +58,8 @@ protected:
 public Q_SLOTS:
     void SetEngine(SugoiEngine *engine);
 
-    void LoadFile(QString);
-    QString LoadPlaylist(QString);
+    void LoadFile(const QString &);
+    QString LoadPlaylist(const QString &);
     bool PlayFile(const QString&);
 
     void AddOverlay(int id, int x, int y, const QString& file, int offset, int w, int h);
@@ -104,7 +103,7 @@ public Q_SLOTS:
 
     void Deinterlace(bool);
     void Interpolate(bool);
-    void Vo(QString);
+    void Vo(const QString &);
 
     void MsgLevel(const QString& level);
 
@@ -238,5 +237,3 @@ private:
     mpv_handle *mpv;
     mpv_render_context *mpv_gl;
 };
-
-#endif // MPVWIDGET_H

@@ -1,5 +1,4 @@
-﻿#ifndef CUSTOMLABEL_H
-#define CUSTOMLABEL_H
+﻿#pragma once
 
 #include <QLabel>
 
@@ -15,5 +14,3 @@ protected:
 signals:
     void clicked();
 };
-
-#endif // CUSTOMLABEL_H

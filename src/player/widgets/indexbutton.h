@@ -1,5 +1,4 @@
-﻿#ifndef INDEXBUTTON_H
-#define INDEXBUTTON_H
+﻿#pragma once
 
 #include <QPushButton>
 
@@ -21,5 +20,3 @@ protected:
 private:
     int index;
 };
-
-#endif // INDEXBUTTON_H

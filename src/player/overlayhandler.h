@@ -1,5 +1,4 @@
-﻿#ifndef OVERLAYHANDLER_H
-#define OVERLAYHANDLER_H
+﻿#pragma once
 
 #include <QObject>
 #include <QHash>
@@ -39,5 +38,3 @@ private:
         max_overlay,
         overlay_id;
 };
-
-#endif // OVERLAYHANDLER_H

@@ -1,5 +1,4 @@
-﻿#ifndef JUMPDIALOG_H
-#define JUMPDIALOG_H
+﻿#pragma once
 
 #include <QDialog>
 
@@ -25,5 +24,3 @@ private:
 
     int time, maxTime;
 };
-
-#endif // JUMPDIALOG_H

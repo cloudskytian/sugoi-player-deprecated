@@ -1,5 +1,4 @@
-﻿#ifndef CUSTOMLINEEDIT_H
-#define CUSTOMLINEEDIT_H
+﻿#pragma once
 
 #include <QLineEdit>
 
@@ -15,5 +14,3 @@ protected:
 signals:
     void submitted(QString);
 };
-
-#endif // CUSTOMLINEEDIT_H
