@@ -16,6 +16,20 @@ win32-g++* {
     QMAKE_LFLAGS += /LARGEADDRESSAWARE
 }
 
+# Enable Whole Program Optimization and Link Time Code Generation
+win32:!win32-g++* {
+    QMAKE_CFLAGS_RELEASE   += -GL
+    QMAKE_CXXFLAGS_RELEASE += -GL
+    QMAKE_LFLAGS_RELEASE   += /LTCG
+}
+
+win32-icc {
+    QMAKE_CFLAGS_RELEASE = $$replace(QMAKE_CFLAGS_RELEASE, O2, O3)
+    QMAKE_CXXFLAGS_RELEASE = $$replace(QMAKE_CXXFLAGS_RELEASE, O2, O3)
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO = $$replace(QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO = $$replace(QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
+}
+
 TEMPLATE = app
 
 isEmpty(ROOT): ROOT = $$PWD/../..
@@ -72,14 +86,14 @@ target.path = $$BIN_DIR
 win32 {
     qtlibfiles.path = $$BIN_DIR
     qtlibfiles.commands += $$quote(\"$$[QT_INSTALL_BINS]\\windeployqt.exe\" --force --compiler-runtime --plugindir \"$${BIN_DIR}\\plugins\" \"$${BIN_DIR}\\$${TARGET}.exe\")
-    qtlibfiles.commands += $$quote(echo [Paths] > \"$${BIN_DIR}\\qt.conf\")
-    qtlibfiles.commands += $$quote(echo Prefix=. >> \"$${BIN_DIR}\\qt.conf\")
-    qtlibfiles.commands += $$quote(echo Binaries=. >> \"$${BIN_DIR}\\qt.conf\")
-    qtlibfiles.commands += $$quote(echo Libraries=. >> \"$${BIN_DIR}\\qt.conf\")
-    qtlibfiles.commands += $$quote(echo Plugins=plugins >> \"$${BIN_DIR}\\qt.conf\")
-    qtlibfiles.commands += $$quote(echo Imports=imports >> \"$${BIN_DIR}\\qt.conf\")
-    qtlibfiles.commands += $$quote(echo Qml2Imports=qml >> \"$${BIN_DIR}\\qt.conf\")
-    qtlibfiles.commands += $$quote(echo Translations=translations >> \"$${BIN_DIR}\\qt.conf\")
+    #qtlibfiles.commands += $$quote(echo [Paths] > \"$${BIN_DIR}\\qt.conf\")
+    #qtlibfiles.commands += $$quote(echo Prefix=. >> \"$${BIN_DIR}\\qt.conf\")
+    #qtlibfiles.commands += $$quote(echo Binaries=. >> \"$${BIN_DIR}\\qt.conf\")
+    #qtlibfiles.commands += $$quote(echo Libraries=. >> \"$${BIN_DIR}\\qt.conf\")
+    #qtlibfiles.commands += $$quote(echo Plugins=plugins >> \"$${BIN_DIR}\\qt.conf\")
+    #qtlibfiles.commands += $$quote(echo Imports=imports >> \"$${BIN_DIR}\\qt.conf\")
+    #qtlibfiles.commands += $$quote(echo Qml2Imports=qml >> \"$${BIN_DIR}\\qt.conf\")
+    #qtlibfiles.commands += $$quote(echo Translations=translations >> \"$${BIN_DIR}\\qt.conf\")
     qtlibfiles.commands  = $$join(qtlibfiles.commands,$$escape_expand(\\n\\t))
 }
 

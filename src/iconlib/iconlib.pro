@@ -6,6 +6,20 @@ win32: CONFIG += dll
 HEADERS += iconlib.h
 SOURCES += iconlib.cpp
 
+# Enable Whole Program Optimization and Link Time Code Generation
+win32:!win32-g++* {
+    QMAKE_CFLAGS_RELEASE   += -GL
+    QMAKE_CXXFLAGS_RELEASE += -GL
+    QMAKE_LFLAGS_RELEASE   += /LTCG
+}
+
+win32-icc {
+    QMAKE_CFLAGS_RELEASE = $$replace(QMAKE_CFLAGS_RELEASE, O2, O3)
+    QMAKE_CXXFLAGS_RELEASE = $$replace(QMAKE_CXXFLAGS_RELEASE, O2, O3)
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO = $$replace(QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO = $$replace(QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
+}
+
 win32: RC_FILE = iconlib.rc
 
 TARGET = iconlib
