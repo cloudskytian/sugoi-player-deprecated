@@ -62,7 +62,10 @@ MainWindow::MainWindow(QWidget *parent) : CFramelessWindow(parent)
     ui->setupUi(this);
 
     setMinimumSize(size());
-#ifndef Q_OS_LINUX
+
+#ifdef Q_OS_LINUX
+    ui->titleBarWidget->hide();
+#else
     setTitleBar(ui->titleBarWidget);
     addIgnoreWidget(ui->windowTitleLabel);
     setContentsMargins(0, 0, 0, 0);
@@ -579,10 +582,12 @@ void MainWindow::FullScreen(bool fs)
     else
     {
         setWindowState(oldState);
+#ifndef Q_OS_LINUX
         if (!ui->titleBarWidget->isVisible())
         {
             ui->titleBarWidget->show();
         }
+#endif
         if (ui->menuBarWidget && !ui->menuBarWidget->isVisible())
         {
             ui->menuBarWidget->show();

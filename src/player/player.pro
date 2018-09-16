@@ -99,15 +99,20 @@ win32 {
     DEPENDPATH += $$ROOT/include
 }
 
+macx {
+    LIBS += framework Cocoa
+    OBJECTIVE_SOURCES += ui/cframelesswindow.mm
+}
+
 unix {
     QT_CONFIG -= no-pkg-config
     CONFIG += link_pkgconfig
     PKGCONFIG += mpv
 }
 
-unix:!macx {
-    qtHaveModule(x11extras): QT += x11extras
-}
+#unix:!macx {
+    #qtHaveModule(x11extras): QT += x11extras
+#}
 
 CONFIG(update_translations) {
     isEmpty(lupdate): lupdate = lupdate
