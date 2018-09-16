@@ -16,7 +16,7 @@
 #include "util.h"
 #include "mpvtypes.h"
 
-#ifdef QT_HAS_NETWORK
+#if defined(QT_HAS_NETWORK) && defined(Q_OS_WIN)
 #include <SingleApplication.h>
 #endif
 
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName(QStringLiteral("wangwenx190"));
     QApplication::setOrganizationDomain(QStringLiteral("https://wangwenx190.github.io/"));
 
-#ifdef QT_HAS_NETWORK
+#if defined(QT_HAS_NETWORK) && defined(Q_OS_WIN)
     SingleApplication instance(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
 #else
     QApplication instance(argc, argv);
@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
     parser.addPositionalArgument(QStringLiteral("name"), QApplication::translate("main", "The name of the option you want to enable."));
     parser.addPositionalArgument(QStringLiteral("value"), QApplication::translate("main", "The value of the option, if it has."));
 
+#ifdef Q_OS_WIN
     QCommandLineOption regAllOption(QStringLiteral("regall"),
                                         QApplication::translate("main", "Register all media file types."));
     parser.addOption(regAllOption);
@@ -78,6 +79,7 @@ int main(int argc, char *argv[])
     QCommandLineOption unregAudioOption(QStringLiteral("unregaudio"),
                                     QApplication::translate("main", "Unregister audio media file types."));
     parser.addOption(unregAudioOption);
+#ifdef QT_HAS_NETWORK
     QCommandLineOption exitOption(QStringLiteral("exit"),
                          QApplication::translate("main", "Terminate all running Sugoi Player instances."));
     parser.addOption(exitOption);
@@ -90,19 +92,21 @@ int main(int argc, char *argv[])
     QCommandLineOption newInstanceOption(QStringLiteral("newinstance"),
                                    QApplication::translate("main", "Create a new Sugoi Player instance."));
     parser.addOption(newInstanceOption);
+#endif
+#endif
     QCommandLineOption fileOption(QStringList() << QStringLiteral("f") << QStringLiteral("file"),
                                   QApplication::translate("main",
                                                 "Play the given url <url>. It can be a local file or a web url."),
                                   QApplication::translate("main", "url"));
     parser.addOption(fileOption);
 
-    parser.process(instance);
-
-    bool singleInstance = true;
+    parser.process(instance);    
 
     QString command = QString();
 
 #ifdef Q_OS_WIN
+    bool singleInstance = true;
+
     if (parser.isSet(regAllOption))
     {
         FileAssoc fileAssoc;
@@ -148,7 +152,6 @@ int main(int argc, char *argv[])
         fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::AUDIO_ONLY);
         return 0;
     }
-#endif
     if (parser.isSet(newInstanceOption))
     {
         singleInstance = false;
@@ -158,6 +161,7 @@ int main(int argc, char *argv[])
         instance.sendMessage("exit");
         return 0;
     }
+#endif
     if (parser.isSet(fileOption))
     {
         QString path = parser.value(fileOption);
@@ -180,7 +184,7 @@ int main(int argc, char *argv[])
     MainWindow mainWindow;
     mainWindow.initMainWindow();
 
-#ifdef QT_HAS_NETWORK
+#if defined(QT_HAS_NETWORK) && defined(Q_OS_WIN)
     if (instance.isSecondary())
     {
         AllowSetForegroundWindow(static_cast<DWORD>(instance.primaryPid()));

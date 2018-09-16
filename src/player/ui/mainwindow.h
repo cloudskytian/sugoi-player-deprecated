@@ -169,9 +169,11 @@ public slots:
     void setDebug(bool b)            { emit debugChanged(debug = b); }
     void setResume(bool b)           { emit resumeChanged(resume = b); }
     void setHideAllControls(bool b)  { emit hideAllControlsChanged(hideAllControls = b); }
+#ifdef Q_OS_WIN
     void setFileAssocType(const FileAssoc::reg_type t) { emit fileAssocTypeChanged(regType = t); }
     void setFileAssocState(const FileAssoc::reg_state s) { emit fileAssocStateChanged(regState = s); }
     void setAlwaysCheckFileAssoc(bool b) { emit alwaysCheckFileAssocChanged(alwaysCheckFileAssoc = b); }
+#endif
     void setPauseWhenMinimized(bool b) { emit pauseWhenMinimizedChanged(pauseWhenMinimized = b); }
     void setShowFullscreenIndicator(bool b) { emit showFullscreenIndicatorChanged(showFullscreenIndicator = b); }
     void setOSDShowLocalTime(bool b)  { emit osdShowLocalTimeChanged(osdShowLocalTime = b); }
@@ -190,9 +192,11 @@ signals:
     void resumeChanged(bool);
     void hideAllControlsChanged(bool);
     void openFileFromCmd(const QString &);
+#ifdef Q_OS_WIN
     void fileAssocTypeChanged(FileAssoc::reg_type);
     void fileAssocStateChanged(FileAssoc::reg_state);
     void alwaysCheckFileAssocChanged(bool);
+#endif
     void pauseWhenMinimizedChanged(bool);
     void showFullscreenIndicatorChanged(bool);
     void osdShowLocalTimeChanged(bool);
