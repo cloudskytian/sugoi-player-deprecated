@@ -60,4 +60,8 @@ private:
     bool m_bResizeable = true;
 };
 
+#elif defined(Q_OS_LINUX)
+
+#define CFramelessWindow QWidget;
+
 #endif

@@ -149,7 +149,8 @@ HEADERS += \
     recent.h \
     widgets/progressindicatorbar.h \
     skinmanager.h \
-    mpvwidget.h
+    mpvwidget.h \
+    ui/cframelesswindow.h
 
 SOURCES += \
     main.cpp \
@@ -178,21 +179,12 @@ SOURCES += \
     configmanager.cpp \
     widgets/progressindicatorbar.cpp \
     skinmanager.cpp \
-    mpvwidget.cpp
+    mpvwidget.cpp \
+    ui/cframelesswindow.cpp
 
 win32 {
-    HEADERS += \
-        fileassoc.h \
-        ui/cframelesswindow.h
-
-    SOURCES += \
-        fileassoc.cpp \
-        ui/cframelesswindow.cpp
-}
-
-macx {
-    HEADERS += ui/cframelesswindow.h
-    SOURCES += ui/cframelesswindow.cpp
+    HEADERS += fileassoc.h
+    SOURCES += fileassoc.cpp
 }
 
 FORMS += \

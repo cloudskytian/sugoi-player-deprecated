@@ -62,10 +62,11 @@ MainWindow::MainWindow(QWidget *parent) : CFramelessWindow(parent)
     ui->setupUi(this);
 
     setMinimumSize(size());
-
+#ifndef Q_OS_LINUX
     setTitleBar(ui->titleBarWidget);
     addIgnoreWidget(ui->windowTitleLabel);
     setContentsMargins(0, 0, 0, 0);
+#endif
 
 #if defined(Q_OS_UNIX) || defined(Q_OS_LINUX)
     // update streaming support disabled on unix platforms
