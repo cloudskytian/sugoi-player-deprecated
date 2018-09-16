@@ -34,3 +34,14 @@ win32-icc* {
     QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO                          *= $$QMAKE_CXXFLAGS_LTCG
     QMAKE_LFLAGS_RELEASE                                           *= $$QMAKE_LFLAGS_LTCG
 }
+
+win32-clang* {
+    #isEmpty(QMAKE_CFLAGS_LTCG): QMAKE_CFLAGS_LTCG     = -GL
+    #isEmpty(QMAKE_CXXFLAGS_LTCG): QMAKE_CXXFLAGS_LTCG = $$QMAKE_CFLAGS_LTCG
+    isEmpty(QMAKE_LFLAGS_LTCG): QMAKE_LFLAGS_LTCG     = /LTCG
+    #QMAKE_CFLAGS_RELEASE                             *= $$QMAKE_CFLAGS_LTCG
+    #QMAKE_CXXFLAGS_RELEASE                           *= $$QMAKE_CXXFLAGS_LTCG
+    #QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO              *= $$QMAKE_CFLAGS_LTCG
+    #QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO            *= $$QMAKE_CXXFLAGS_LTCG
+    QMAKE_LFLAGS_RELEASE                             *= $$QMAKE_LFLAGS_LTCG
+}
