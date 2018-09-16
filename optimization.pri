@@ -1,0 +1,34 @@
+# This allows our program to use up to 3 GB memory on 32-bit systems and
+# 4 GB memory on 64-bit systems, rather than being limited to just 2 GB.
+win32-g++* {
+    QMAKE_LFLAGS *= -Wl,--large-address-aware
+} else:win32 {
+    QMAKE_LFLAGS *= /LARGEADDRESSAWARE
+}
+
+# Enable Whole Program Optimization and Link Time Code Generation
+win32-msvc* {
+    isEmpty(QMAKE_CFLAGS_LTCG): QMAKE_CFLAGS_LTCG     = -GL
+    isEmpty(QMAKE_CXXFLAGS_LTCG): QMAKE_CXXFLAGS_LTCG = $$QMAKE_CFLAGS_LTCG
+    isEmpty(QMAKE_LFLAGS_LTCG): QMAKE_LFLAGS_LTCG     = /LTCG
+    QMAKE_CFLAGS_RELEASE                             *= $$QMAKE_CFLAGS_LTCG
+    QMAKE_CXXFLAGS_RELEASE                           *= $$QMAKE_CXXFLAGS_LTCG
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO              *= $$QMAKE_CFLAGS_LTCG
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO            *= $$QMAKE_CXXFLAGS_LTCG
+    QMAKE_LFLAGS_RELEASE                             *= $$QMAKE_LFLAGS_LTCG
+}
+
+win32-icc* {
+    QMAKE_CFLAGS_RELEASE                              = $$replace(QMAKE_CFLAGS_RELEASE, O2, O3)
+    QMAKE_CXXFLAGS_RELEASE                            = $$replace(QMAKE_CXXFLAGS_RELEASE, O2, O3)
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO               = $$replace(QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO             = $$replace(QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
+    isEmpty(QMAKE_CFLAGS_LTCG): QMAKE_CFLAGS_LTCG     = -Qipo
+    isEmpty(QMAKE_CXXFLAGS_LTCG): QMAKE_CXXFLAGS_LTCG = $$QMAKE_CFLAGS_LTCG
+    isEmpty(QMAKE_LFLAGS_LTCG): QMAKE_LFLAGS_LTCG     = $$QMAKE_CFLAGS_LTCG
+    QMAKE_CFLAGS_RELEASE                             *= $$QMAKE_CFLAGS_LTCG
+    QMAKE_CXXFLAGS_RELEASE                           *= $$QMAKE_CXXFLAGS_LTCG
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO              *= $$QMAKE_CFLAGS_LTCG
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO            *= $$QMAKE_CXXFLAGS_LTCG
+    QMAKE_LFLAGS_RELEASE                             *= $$QMAKE_LFLAGS_LTCG
+}

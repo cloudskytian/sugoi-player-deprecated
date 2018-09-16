@@ -8,40 +8,13 @@ lessThan(QT_MAJOR_VERSION, 5) {
     error("Use at least Qt 5.6.3")
 }
 
-# This allows Sugoi Player to use up to 3 GB on 32-bit systems and 4 GB on
-# 64-bit systems, rather than being limited to just 2 GB.
-win32-g++* {
-    QMAKE_LFLAGS += -Wl,--large-address-aware
-} else:win32 {
-    QMAKE_LFLAGS += /LARGEADDRESSAWARE
-}
-
-# Enable Whole Program Optimization and Link Time Code Generation
-win32-msvc* {
-    QMAKE_CFLAGS_RELEASE                  += -GL
-    QMAKE_CXXFLAGS_RELEASE                += -GL
-    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO   += -GL
-    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO += -GL
-    QMAKE_LFLAGS_RELEASE                  += /LTCG
-}
-
-win32-icc* {
-    QMAKE_CFLAGS_RELEASE                   = $$replace(QMAKE_CFLAGS_RELEASE, O2, O3)
-    QMAKE_CXXFLAGS_RELEASE                 = $$replace(QMAKE_CXXFLAGS_RELEASE, O2, O3)
-    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO    = $$replace(QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
-    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO  = $$replace(QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
-    QMAKE_CFLAGS_RELEASE                  += -Qipo
-    QMAKE_CXXFLAGS_RELEASE                += -Qipo
-    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO   += -Qipo
-    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO += -Qipo
-    QMAKE_LFLAGS_RELEASE                  += -Qipo
-}
-
 TEMPLATE = app
 
 isEmpty(ROOT): ROOT = $$PWD/../..
 
 include($$ROOT/version.pri)
+
+include($$ROOT/optimization.pri)
 
 win32: RC_ICONS = resources/player.ico
 
@@ -63,7 +36,7 @@ qtHaveModule(network) {
     DEFINES += QT_HAS_NETWORK QAPPLICATION_CLASS=QApplication
 }
 
-CONFIG += c++11
+CONFIG *= c++11
 CONFIG -= app_bundle
 
 TARGET = Sugoi

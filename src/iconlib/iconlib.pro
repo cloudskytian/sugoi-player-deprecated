@@ -1,37 +1,20 @@
 TEMPLATE = lib
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG += c++11
-win32: CONFIG += dll
+CONFIG *= c++11
+win32: CONFIG *= dll
 HEADERS += iconlib.h
 SOURCES += iconlib.cpp
 
-# Enable Whole Program Optimization and Link Time Code Generation
-win32-msvc* {
-    QMAKE_CFLAGS_RELEASE                  += -GL
-    QMAKE_CXXFLAGS_RELEASE                += -GL
-    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO   += -GL
-    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO += -GL
-    QMAKE_LFLAGS_RELEASE                  += /LTCG
-}
+isEmpty(ROOT): ROOT = $$PWD/../..
 
-win32-icc* {
-    QMAKE_CFLAGS_RELEASE                   = $$replace(QMAKE_CFLAGS_RELEASE, O2, O3)
-    QMAKE_CXXFLAGS_RELEASE                 = $$replace(QMAKE_CXXFLAGS_RELEASE, O2, O3)
-    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO    = $$replace(QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
-    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO  = $$replace(QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO, O2, O3)
-    QMAKE_CFLAGS_RELEASE                  += -Qipo
-    QMAKE_CXXFLAGS_RELEASE                += -Qipo
-    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO   += -Qipo
-    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO += -Qipo
-    QMAKE_LFLAGS_RELEASE                  += -Qipo
-}
+include($$ROOT/optimization.pri)
 
 win32: RC_FILE = iconlib.rc
 
 TARGET = iconlib
 
-BIN_DIR = $$PWD/../../build/bin
+BIN_DIR = $$ROOT/build/bin
 
 contains(QT_ARCH, x86_64) {
     TARGET = $$join(TARGET,,,64)
