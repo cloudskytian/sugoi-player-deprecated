@@ -370,7 +370,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA</transl
     <message>
         <source>&lt;p&gt;&lt;b&gt;Sugoi Player&lt;/b&gt; is a free multimedia player based on &lt;b&gt;libmpv&lt;/b&gt; and &lt;b&gt;Qt&lt;/b&gt; for Microsoft Windows 7+.&lt;/p&gt;
 &lt;p&gt;People should know that &lt;b&gt;Sugoi Player&lt;/b&gt; is a fork of &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt;. &lt;b&gt;Baka MPlayer&lt;/b&gt; is a free and open source, cross-platform, &lt;b&gt;libmpv&lt;/b&gt; based multimedia player. Its simple design reflects the idea for an uncluttered, simple, and enjoyable environment for watching tv shows. Thanks to the great work of &lt;b&gt;Baka MPlayer&lt;/b&gt;&apos;s original developers. Without their hard work, there won&apos;t be &lt;b&gt;Sugoi Player&lt;/b&gt; anymore. I really appreciate &lt;b&gt;godly-devotion&lt;/b&gt; (Creator/UX Designer/Programmer), &lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt; (Lead Programmer/Website Host) and their team.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;&lt;b&gt;Sugoi Player&lt;/b&gt; 是一款基于 &lt;b&gt;libmpv&lt;/b&gt; 和 &lt;b&gt;Qt&lt;/b&gt; 开发的免费的多媒体播放器。它是专门针对 Microsoft Windows 7 及更新版本的操作系统设计的。&lt;/p&gt;
+&lt;p&gt;您应了解 &lt;b&gt;Sugoi Player&lt;/b&gt; 是基于 &lt;a href=&apos;https://github.com/u8sand/Baka-MPlayer&apos;&gt;&lt;b&gt;Baka MPlayer&lt;/b&gt;&lt;/a&gt; 二次开发而成的。&lt;b&gt;Baka MPlayer&lt;/b&gt; 是一个自由开源跨平台的基于 &lt;b&gt;libmpv&lt;/b&gt; 的多媒体播放器。简单的设计致力于为观看视频提供一个整洁，简单，愉快的环境。感谢 &lt;b&gt;Baka MPlayer&lt;/b&gt; 开发团队的杰出工作。没有他们的辛勤付出，就没有 &lt;b&gt;Sugoi Player&lt;/b&gt; 的诞生。我真的十分感激 &lt;b&gt;godly-devotion&lt;/b&gt;（播放器的创造者/界面设计/编码），&lt;a href=&apos;https://github.com/u8sand&apos;&gt;&lt;b&gt;u8sand&lt;/b&gt;&lt;/a&gt;（绝大多数的编码工作/网站建设及维护） 和他们的团队的贡献。&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -2254,7 +2255,7 @@ Note: Value must be from %0 - %1</source>
     </message>
     <message>
         <source>Verbose</source>
-        <translation type="unfinished"></translation>
+        <translation>冗余的</translation>
     </message>
 </context>
 <context>
@@ -3177,51 +3178,51 @@ Version: %0</source>
     <name>main</name>
     <message>
         <source>The name of the option you want to enable.</source>
-        <translation type="unfinished"></translation>
+        <translation>您想启用的选项的名字。</translation>
     </message>
     <message>
         <source>The value of the option, if it has.</source>
-        <translation type="unfinished"></translation>
+        <translation>该选项的值，如果有的话。</translation>
     </message>
     <message>
         <source>Register all media file types.</source>
-        <translation type="unfinished"></translation>
+        <translation>关联所有媒体文件。</translation>
     </message>
     <message>
         <source>Register video media file types.</source>
-        <translation type="unfinished"></translation>
+        <translation>关联视频文件。</translation>
     </message>
     <message>
         <source>Register audio media file types.</source>
-        <translation type="unfinished"></translation>
+        <translation>关联音频文件。</translation>
     </message>
     <message>
         <source>Unregister all media file types.</source>
-        <translation type="unfinished"></translation>
+        <translation>取消所有媒体文件的关联。</translation>
     </message>
     <message>
         <source>Unregister video media file types.</source>
-        <translation type="unfinished"></translation>
+        <translation>取消关联视频文件。</translation>
     </message>
     <message>
         <source>Unregister audio media file types.</source>
-        <translation type="unfinished"></translation>
+        <translation>取消关联音频文件。</translation>
     </message>
     <message>
         <source>Terminate all running Sugoi Player instances.</source>
-        <translation type="unfinished"></translation>
+        <translation>结束所有正在运行的播放器实例。</translation>
     </message>
     <message>
         <source>Create a new Sugoi Player instance.</source>
-        <translation type="unfinished"></translation>
+        <translation>创建一个新的播放器实例。</translation>
     </message>
     <message>
         <source>Play the given url &lt;url&gt;. It can be a local file or a web url.</source>
-        <translation type="unfinished"></translation>
+        <translation>播放指定的 url &lt;url&gt;。它可以是一个本地文件或者一个网址。</translation>
     </message>
     <message>
         <source>url</source>
-        <translation type="unfinished"></translation>
+        <translation>地址</translation>
     </message>
 </context>
 </TS>
