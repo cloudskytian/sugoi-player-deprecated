@@ -45,3 +45,20 @@ win32-clang* {
     #QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO            *= $$QMAKE_CXXFLAGS_LTCG
     QMAKE_LFLAGS_RELEASE                             *= $$QMAKE_LFLAGS_LTCG
 }
+
+linux-g++* {
+    isEmpty(QMAKE_CFLAGS_OPTIMIZE): QMAKE_CFLAGS_OPTIMIZE           = -O2
+    isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL): QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
+    QMAKE_CFLAGS_RELEASE                                            = $$replace(QMAKE_CFLAGS_RELEASE, $$QMAKE_CFLAGS_OPTIMIZE, $$QMAKE_CFLAGS_OPTIMIZE_FULL)
+    QMAKE_CXXFLAGS_RELEASE                                          = $$replace(QMAKE_CXXFLAGS_RELEASE, $$QMAKE_CFLAGS_OPTIMIZE, $$QMAKE_CFLAGS_OPTIMIZE_FULL)
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO                             = $$replace(QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO, $$QMAKE_CFLAGS_OPTIMIZE, $$QMAKE_CFLAGS_OPTIMIZE_FULL)
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO                           = $$replace(QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO, $$QMAKE_CFLAGS_OPTIMIZE, $$QMAKE_CFLAGS_OPTIMIZE_FULL)
+    isEmpty(QMAKE_CFLAGS_LTCG): QMAKE_CFLAGS_LTCG                   = -flto -fno-fat-lto-objects
+    isEmpty(QMAKE_CXXFLAGS_LTCG): QMAKE_CXXFLAGS_LTCG               = $$QMAKE_CFLAGS_LTCG
+    isEmpty(QMAKE_LFLAGS_LTCG): QMAKE_LFLAGS_LTCG                   = $$QMAKE_CFLAGS_LTCG -fuse-linker-plugin
+    QMAKE_CFLAGS_RELEASE                                           *= $$QMAKE_CFLAGS_LTCG
+    QMAKE_CXXFLAGS_RELEASE                                         *= $$QMAKE_CXXFLAGS_LTCG
+    QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO                            *= $$QMAKE_CFLAGS_LTCG
+    QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO                          *= $$QMAKE_CXXFLAGS_LTCG
+    QMAKE_LFLAGS_RELEASE                                           *= $$QMAKE_LFLAGS_LTCG
+}

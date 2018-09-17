@@ -30,7 +30,7 @@ win32:qtHaveModule(winextras) {
     QT += winextras
     DEFINES += QT_HAS_WINEXTRAS
 }
-win32:qtHaveModule(network) {
+qtHaveModule(network) {
     QT += network
     include($$PWD/../3rdparty/singleapplication/singleapplication.pri)
     DEFINES += QT_HAS_NETWORK QAPPLICATION_CLASS=QApplication

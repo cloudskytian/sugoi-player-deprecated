@@ -16,8 +16,8 @@
 #include "util.h"
 #include "mpvtypes.h"
 
-#if defined(QT_HAS_NETWORK) && defined(Q_OS_WIN)
-#include <SingleApplication.h>
+#ifdef QT_HAS_NETWORK
+#include <singleapplication.h>
 #endif
 
 QString checkFilePathValidation(const QString &filePath)
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName(QStringLiteral("wangwenx190"));
     QApplication::setOrganizationDomain(QStringLiteral("https://wangwenx190.github.io/"));
 
-#if defined(QT_HAS_NETWORK) && defined(Q_OS_WIN)
+#ifdef QT_HAS_NETWORK
     SingleApplication instance(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
 #else
     QApplication instance(argc, argv);
@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
     QCommandLineOption unregAudioOption(QStringLiteral("unregaudio"),
                                     QApplication::translate("main", "Unregister audio media file types."));
     parser.addOption(unregAudioOption);
+#endif
 #ifdef QT_HAS_NETWORK
     QCommandLineOption exitOption(QStringLiteral("exit"),
                          QApplication::translate("main", "Terminate all running Sugoi Player instances."));
@@ -93,7 +94,6 @@ int main(int argc, char *argv[])
                                    QApplication::translate("main", "Create a new Sugoi Player instance."));
     parser.addOption(newInstanceOption);
 #endif
-#endif
     QCommandLineOption fileOption(QStringList() << QStringLiteral("f") << QStringLiteral("file"),
                                   QApplication::translate("main",
                                                 "Play the given url <url>. It can be a local file or a web url."),
@@ -104,9 +104,9 @@ int main(int argc, char *argv[])
 
     QString command = QString();
 
-#ifdef Q_OS_WIN
     bool singleInstance = true;
 
+#ifdef Q_OS_WIN
     if (parser.isSet(regAllOption))
     {
         FileAssoc fileAssoc;
@@ -152,6 +152,7 @@ int main(int argc, char *argv[])
         fileAssoc.unregisterMediaFiles(FileAssoc::reg_type::AUDIO_ONLY);
         return 0;
     }
+#endif
     if (parser.isSet(newInstanceOption))
     {
         singleInstance = false;
@@ -161,7 +162,6 @@ int main(int argc, char *argv[])
         instance.sendMessage("exit");
         return 0;
     }
-#endif
     if (parser.isSet(fileOption))
     {
         QString path = parser.value(fileOption);
@@ -184,10 +184,12 @@ int main(int argc, char *argv[])
     MainWindow mainWindow;
     mainWindow.initMainWindow();
 
-#if defined(QT_HAS_NETWORK) && defined(Q_OS_WIN)
+#ifdef QT_HAS_NETWORK
     if (instance.isSecondary())
     {
+#ifdef Q_OS_WIN
         AllowSetForegroundWindow(static_cast<DWORD>(instance.primaryPid()));
+#endif
         if (command.isEmpty())
             instance.sendMessage("show");
         else
@@ -221,8 +223,9 @@ int main(int argc, char *argv[])
                         mainWindow.openFileFromCmd(message);
                      });
     }
-#endif
+#else
     mainWindow.show();
     mainWindow.openFileFromCmd(command);
+#endif
     return QApplication::exec();
 }
