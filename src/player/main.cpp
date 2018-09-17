@@ -223,9 +223,8 @@ int main(int argc, char *argv[])
                         mainWindow.openFileFromCmd(message);
                      });
     }
-#else
+#endif
     mainWindow.show();
     mainWindow.openFileFromCmd(command);
-#endif
     return QApplication::exec();
 }
