@@ -175,7 +175,9 @@ void SugoiEngine::SaveSettings()
     settings.setValue(QStringLiteral("pauseWhenMinimized"), window->getPauseWhenMinimized());
     settings.setValue(QStringLiteral("showFullscreenIndicator"), window->getShowFullscreenIndicator());
     settings.setValue(QStringLiteral("osdShowLocalTime"), window->getOSDShowLocalTime());
+#ifdef Q_OS_WIN
     settings.setValue(QStringLiteral("fileAssoc"), regType);
+#endif
     settings.setValue(QStringLiteral("onTop"), window->onTop);
     settings.setValue(QStringLiteral("autoFit"), window->autoFit);
     settings.setValue(QStringLiteral("hidePopup"), window->hidePopup);

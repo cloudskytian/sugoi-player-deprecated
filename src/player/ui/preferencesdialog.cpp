@@ -65,6 +65,9 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     saved = sugoi->input;
     PopulateShortcuts();
 
+#ifndef Q_OS_WIN
+    ui->groupBox_4->setEnabled(false);
+#else
     if (sugoi->window->getFileAssocType() == FileAssoc::reg_type::ALL)
     {
         ui->assocVideoCheckBox->setChecked(true);
@@ -87,7 +90,7 @@ PreferencesDialog::PreferencesDialog(SugoiEngine *sugoi, QWidget *parent) :
     }
 
     ui->alwaysAssocCheckBox->setChecked(sugoi->window->getAlwaysCheckFileAssoc());
-
+#endif
     ui->pauseWhenMinimizedCheckBox->setChecked(sugoi->window->getPauseWhenMinimized());
 
     ui->showFullscreenIndicatorCheckBox->setChecked(sugoi->window->getShowFullscreenIndicator());
@@ -223,7 +226,9 @@ PreferencesDialog::~PreferencesDialog()
         sugoi->window->setPauseWhenMinimized(ui->pauseWhenMinimizedCheckBox->isChecked());
         sugoi->window->setShowFullscreenIndicator(ui->showFullscreenIndicatorCheckBox->isChecked());
         sugoi->window->setOSDShowLocalTime(ui->osdShowLocalTimeCheckBox->isChecked());
+#ifdef Q_OS_WIN
         sugoi->window->setAlwaysCheckFileAssoc(ui->alwaysAssocCheckBox->isChecked());
+#endif
         sugoi->window->setResume(ui->resumeCheckBox->isChecked());
         if(ui->neverRadioButton->isChecked())
             sugoi->window->setOnTop(QStringLiteral("never"));

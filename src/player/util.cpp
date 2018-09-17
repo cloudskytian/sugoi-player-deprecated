@@ -39,6 +39,8 @@ void ShowInFolder(const QString& path, const QString& file)
 #ifdef Q_OS_WIN
     QProcess::startDetached(QStringLiteral("explorer.exe"), QStringList{"/select,", path+file});
 #else
+    Q_UNUSED(path)
+    Q_UNUSED(file)
     return;
 #endif
 }

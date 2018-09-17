@@ -1856,7 +1856,7 @@ void MainWindow::initMainWindow()
     ui->actionPlay_Previous_File->setShortcuts({ui->actionPlay_Previous_File->shortcut(), QKeySequence(Qt::Key_MediaPrevious)});
 
     sugoi->LoadSettings();
-
+#ifdef Q_OS_WIN
     FileAssoc fileAssoc;
     setFileAssocState(fileAssoc.getMediaFilesRegisterState());
     if (getAlwaysCheckFileAssoc())
@@ -1866,6 +1866,7 @@ void MainWindow::initMainWindow()
             SetFileAssoc(getFileAssocType(), true);
         }
     }
+#endif
 }
 
 void MainWindow::bringToFront()
