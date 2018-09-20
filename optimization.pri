@@ -1,10 +1,7 @@
 # This allows our program to use up to 3 GB memory on 32-bit systems and
 # 4 GB memory on 64-bit systems, rather than being limited to just 2 GB.
-win32-g++* {
-    QMAKE_LFLAGS *= -Wl,--large-address-aware
-} else:win32 {
-    QMAKE_LFLAGS *= /LARGEADDRESSAWARE
-}
+win32-g++*|linux-g++*|macx-g++*:     QMAKE_LFLAGS *= -Wl,--large-address-aware
+win32-msvc*|win32-icc*|win32-clang*: QMAKE_LFLAGS *= /LARGEADDRESSAWARE
 
 # Enable Whole Program Optimization and Link Time Code Generation
 win32-msvc* {
