@@ -3218,11 +3218,11 @@ Version: %0</source>
     </message>
     <message>
         <source>Play the given url &lt;url&gt;. It can be a local file or a web url.</source>
-        <translation>播放指定的 url &lt;url&gt;。它可以是一个本地文件或者一个网址。</translation>
+        <translation type="vanished">播放指定的 url &lt;url&gt;。它可以是一个本地文件或者一个网址。</translation>
     </message>
     <message>
         <source>url</source>
-        <translation>地址</translation>
+        <translation type="vanished">地址</translation>
     </message>
 </context>
 </TS>

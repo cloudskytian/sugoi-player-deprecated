@@ -1677,16 +1677,17 @@ void MainWindow::connectOtherSignalsAndSlots()
     connect(this, &MainWindow::openFileFromCmd,
             [=](const QString &filePath)
             {
-                if (!filePath.isEmpty())
-                {
+                if (filePath.isEmpty())
+                    return;
+                if (!QFileInfo::exists(filePath))
+                    return;
 #ifdef QT_HAS_CONCURRENT
-                    QtConcurrent::run([=]{
+                QtConcurrent::run([=]{
 #endif
-                    mpv->LoadFile(filePath);
+                mpv->LoadFile(filePath);
 #ifdef QT_HAS_CONCURRENT
-                    });
+                });
 #endif
-                }
             });
 
     connect(this, &MainWindow::onTopChanged,

@@ -31,7 +31,7 @@ QString checkFilePathValidation(const QString &filePath)
             return filePath;
         }
     }
-    return QString();
+    return QStringLiteral("invalid");
 }
 
 int main(int argc, char *argv[])
@@ -94,12 +94,6 @@ int main(int argc, char *argv[])
                                    QApplication::translate("main", "Create a new Sugoi Player instance."));
     parser.addOption(newInstanceOption);
 #endif
-    QCommandLineOption fileOption(QStringList() << QStringLiteral("f") << QStringLiteral("file"),
-                                  QApplication::translate("main",
-                                                "Play the given url <url>. It can be a local file or a web url."),
-                                  QApplication::translate("main", "url"));
-    parser.addOption(fileOption);
-
     parser.process(instance);    
 
     QString command = QString();
@@ -162,11 +156,6 @@ int main(int argc, char *argv[])
         instance.sendMessage("exit");
         return 0;
     }
-    if (parser.isSet(fileOption))
-    {
-        QString path = parser.value(fileOption);
-        command = checkFilePathValidation(path);
-    }
     QString path = QApplication::arguments().at(QApplication::arguments().count() - 1);
     command = checkFilePathValidation(path);
 
@@ -190,11 +179,9 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN
         AllowSetForegroundWindow(static_cast<DWORD>(instance.primaryPid()));
 #endif
-        if (command.isEmpty())
-            instance.sendMessage("show");
-        else
-            instance.sendMessage(command.toUtf8());
-        if (singleInstance) return 0;
+        instance.sendMessage(command.toUtf8());
+        if (singleInstance)
+            return 0;
     }
 
     if (instance.isPrimary())
@@ -206,12 +193,6 @@ int main(int argc, char *argv[])
                     {
                         Q_UNUSED(pid)
                         QString message(msg);
-                        if (message.isEmpty()) return;
-                        if (message == QStringLiteral("show"))
-                        {
-                            mainWindow.bringToFront();
-                            return;
-                        }
                         if (message == QStringLiteral("exit")
                              || message == QStringLiteral("quit")
                              || message == QStringLiteral("close"))
