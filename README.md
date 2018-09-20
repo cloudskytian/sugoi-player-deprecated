@@ -9,7 +9,6 @@
 
 ---
 
-* [External links](#external-links)
 * [Overview](#overview)
 * [Snapshots](#snapshots)
 * [Features](#features)
@@ -23,13 +22,6 @@
 * [License](#license)
 * [Contact](#contact)
 * [Donation](#donation)
-
-
-## External links
-
-* [Wiki](https://github.com/wangwenx190/Sugoi-Player/wiki)
-* [FAQ](https://github.com/wangwenx190/Sugoi-Player/wiki/FAQ)
-* [MPV Manual](http://mpv.io/manual/master/)
 
 
 ## Overview
@@ -69,7 +61,7 @@ There are many mpv front-ends in the world, some of them are truly great, I hope
 
 ## System requirements
 
-- Microsoft Windows 7 or later (64 bit os is highly recommended).
+- Microsoft Windows 7 or later (64 bit operating system is highly recommended).
 - A somewhat capable CPU. Hardware decoding might help if the CPU is too slow to
   decode video in realtime, but must be explicitly enabled with the `--hwdec`
   option.
@@ -81,13 +73,13 @@ There are many mpv front-ends in the world, some of them are truly great, I hope
 
 **NOTE**
 
-Sugoi Player is only tested on the latest 64 bit Windows 10 Pro stable edition (that's my work environment). I am very sorry that I don't known whether Sugoi Player works well or not on other platforms. You have to compile Sugoi Player yourself to get the correct binary files for Linux and macOS. The source code is some sort of compatible, but you need to change a little bit.
+Sugoi Player has been tested on the latest version of Windows 10 and Ubuntu. I am very sorry that I don't known whether Sugoi Player works well or not on other platforms. You have to compile Sugoi Player yourself to get the correct binary files for macOS and other platforms. The source code is some sort of compatible, but you may need to change a little bit.
 
 
 ## Downloads
 
 For official builds and third-party packages please see
-https://github.com/wangwenx190/Sugoi-Player/releases.
+https://github.com/wangwenx190/sugoi-player-deprecated/releases.
 
 
 ## Changelog
@@ -98,7 +90,9 @@ See [**doc/changelog.md**](/doc/changelog.md) for more information.
 ## Compilation
 
 
-### Part I: Requirements
+### Windows
+
+#### Requirements
 
 - [Visual Studio 2017](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=15) (Only the build tools are needed, but you can also install the full IDE. The community edition is also fine)
   - [**Windows 10 SDK**](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk) (I recommend download the ISO image from this website instead of installing it from the VS installer. Remember to install the CDB debugger while you are installing the Win10 SDK if you want to use Qt Creator)
@@ -112,13 +106,13 @@ See [**doc/changelog.md**](/doc/changelog.md) for more information.
 Using the **latest** version is highly recommended.
 
 
-### Part II: Download and compile the source code
+#### Download and compile the source code
 
 1. Use Git to clone Sugoi Player's repository to **`C:\projects\sugoi-player`** (just for example, it could be anywhere you like).
    1. Download Git from https://git-for-windows.github.io/ and install.
    2. Open Git bash and run:
       ```text
-      git clone --recursive https://github.com/wangwenx190/Sugoi-Player.git
+      git clone --recursive https://github.com/wangwenx190/sugoi-player-deprecated.git
       ```
 2. Open command line shell
    ```bat
@@ -155,10 +149,18 @@ How to generate Visual Studio solution file through qmake:
   REM Now you have the .sln file. Open it using VS.
   ```
 
+### Linux
+
+#### Requirements
+
+- gcc
+- qt5
+- libmpv-dev
+- pkg-config
 
 ## Bug reports & Feature requests
 
-Please use the [**issues tracker**](https://github.com/wangwenx190/Sugoi-Player/issues) provided by GitHub to send us bug reports or feature requests. Follow the template's instructions or the issue
+Please use the [**issues tracker**](https://github.com/wangwenx190/sugoi-player-deprecated/issues) provided by GitHub to send us bug reports or feature requests. Follow the template's instructions or the issue
 will likely be ignored or closed as invalid.
 
 
