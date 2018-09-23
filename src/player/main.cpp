@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     QApplication::setApplicationDisplayName(QStringLiteral("Sugoi Player"));
     QApplication::setApplicationVersion(QStringLiteral(SUGOI_VERSION));
     QApplication::setOrganizationName(QStringLiteral("wangwenx190"));
-    QApplication::setOrganizationDomain(QStringLiteral("https://wangwenx190.github.io/"));
+    QApplication::setOrganizationDomain(QStringLiteral("wangwenx190.github.io"));
 
 #ifdef QT_HAS_NETWORK
     SingleApplication instance(argc, argv, true, SingleApplication::Mode::SecondaryNotification);
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
                                    QApplication::translate("main", "Create a new Sugoi Player instance."));
     parser.addOption(newInstanceOption);
 #endif
-    parser.process(instance);    
+    parser.process(instance);
 
     QString command = QString();
 
