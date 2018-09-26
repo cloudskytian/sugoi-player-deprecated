@@ -116,12 +116,12 @@ unix {
 
 CONFIG(update_translations) {
     isEmpty(lupdate): lupdate = lupdate
-    system($$lupdate \"$${_PRO_FILE_}\")
+    system("$${lupdate} -no-obsolete $${_PRO_FILE_}")
 }
 
 CONFIG(release_translations) {
     isEmpty(lrelease): lrelease = lrelease
-    system($$lrelease \"$${_PRO_FILE_}\")
+    system("$${lrelease} -nounfinished -removeidentical $${_PRO_FILE_}")
 }
 
 RESOURCES += resources.qrc
