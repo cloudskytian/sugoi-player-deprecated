@@ -100,7 +100,7 @@ win32 {
 }
 
 macx {
-    LIBS += framework Cocoa
+    LIBS += -framework Cocoa
     OBJECTIVE_SOURCES += ui/cframelesswindow.mm
 }
 
