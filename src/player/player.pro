@@ -14,8 +14,6 @@ isEmpty(ROOT): ROOT = $$PWD/../..
 
 include($$ROOT/version.pri)
 
-include($$ROOT/optimization.pri)
-
 win32: RC_ICONS = resources/player.ico
 
 DEFINES += QT_DEPRECATED_WARNINGS QT_DISABLE_DEPRECATED_BEFORE=0x050000
