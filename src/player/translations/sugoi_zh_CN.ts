@@ -202,7 +202,7 @@
     </message>
     <message>
         <source>Aspect &amp;Ratio</source>
-        <translation>高宽比(&amp;R)</translation>
+        <translation>宽高比(&amp;R)</translation>
     </message>
     <message>
         <source>Subtitle &amp;Track</source>
